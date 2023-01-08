@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(Y/DEn2MCiPqx3GfV8q8W/+TcKr//4NF3/I18lgc/1/MS8qY9C/xvWSBQWaHbe7ipTp0Pw8jjnyrcKCuwJP+eEtiNQDx+ymk1UEgi+4LMSp5+e/U5RN6d8BNnmtVnPAj4el8MJTyuAlQ8MyrxsiPUeQ==)
-    username: admin
-    password: challenge66
+    url: ENC(9k7QepKSWmA//A/tX34dwV7RWD3+buTUqzuBgMMV/IzuCxanhOqI3hBkF97a17ylP5XzNQd7kvEF03SUNYgZ9wCO/0uons9qBjuWqw5NY3kf97Akyk9nn8UrBtZbdq4M+GW11k+adBA=)
+    username: ENC(xspPILIAzHK+xciWhlmMVQ==)
+    password: ENC(sX8vFMX8vHZldLvVu2TFMjKnev0JaZFK)
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -19,8 +19,8 @@ jasypt:
     bean: jasyptStringEncryptor
 mail:
   address:
-    admin: 141000Lee@gmail.com # ??? ?? ?? ? ??
+    admin: ENC(JGBa0PpOXdYVZnt2VnvjmfjIiFzJzEsEMUU9EOaxGt0=)
 jwt:
-  key: ${JWT_SECRET_KEY} # ??? ?? ??
+  key: ENC(9d9nAF96s1rYf4Aaq9yt/FPLZ2f24RkPpmWouKdl6q/+6/NsYLqtRrNaMjc3PjXhk7Wpt/Wn86Dp4RMLUONneCGFbnacoFoF)
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 600
