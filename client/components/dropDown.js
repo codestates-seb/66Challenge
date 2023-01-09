@@ -27,7 +27,7 @@ export function DropDown() {
   useEffect(() => {
     //만약 글을 작성한 사람이면 isPostUser를 true 값으로 바꿔준다.
     //setIsPostuser(true);
-  }, []);
+  });
   return (
     <div className="flex flex-col absolute right-3 top-5 w-20 items-end">
       <MdExpandMore
