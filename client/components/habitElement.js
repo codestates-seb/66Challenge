@@ -27,7 +27,7 @@ export const HabitElement = ({ habitImage, habitTitle, habitBody }) => {
         />
       </div>
       <div className="habit-element-title font-bold mb-[5px]">{habitTitle}</div>
-      <div className="habit-element-body text-ellipsis overflow-hidden break-words line-clamp-3 ">
+      <div className="habit-element-body text-ellipsis overflow-hidden break-words line-clamp-2 ">
         {habitBody}
       </div>
     </div>

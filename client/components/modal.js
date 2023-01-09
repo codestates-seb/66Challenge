@@ -6,29 +6,31 @@ ToDo 3. 모달 안의 Input Element 등의 content는 사용할 때 자식 요�
 ToDo 4. 모달창 내 하단 버튼을 클릭했을 떄의 Click Event를 onClick={}으로 넣어주셔야 합니다.
 ToDo 5. 모달창 내 하단 버튼의 이름을 buttonName으로 넣어주셔야 합니다.
 < example >
-<button className="cursor-pointer" onClick={(_) => setModalOpen(true)}>
+<button className="cursor-pointer" onClick={(_) => setIsOpen(true)}>
   모달창을 열립니다
 </button>
-{isModalOpen && (
+{isOpen && (
   <Modal
-    isOpen={isModalOpen}
-    setIsOpen={setIsModalOpen}
+    isOpen={isOpen}
+    setIsOpen={setIsOpen}
     buttonName="Submit"
-    onClick={() => console.log('모달창 내 버튼을 통해 실행하고자 하는 함수!')}
+    onClick={() =>
+      console.log('모달창 내 버튼을 통해 실행하고자 하는 함수!')
+    }
   >
     <form>
       <input type="checkbox" id="agreecheck" />
       <label htmlFor="agreecheck">
-        작성해주신 인증글 내 사진이 인증글 게시판에 업로드 됨에 동의합니다.
+        작성해주신 인증글 내 사진이 인증글 게시판에 업로드 됨에
+        동의합니다.
       </label>
     </form>
   </Modal>
-)} 
+)}
 * <------  사용하시기 전에 꼭 읽어주세요! ------> *
 */
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { IoClose } from 'react-icons/io5';
 
 export const Modal = ({ isOpen, setIsOpen, buttonName, onClick, children }) => {
   const closeModalHandler = () => {
@@ -47,9 +49,9 @@ export const Modal = ({ isOpen, setIsOpen, buttonName, onClick, children }) => {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="modal-veiw-close-button h-5 flex justify-end items-center">
-            <FontAwesomeIcon
+            <IoClose
               className="cursor-pointer p-2.5 -mr-2.5 -mt-2.5"
-              icon={faXmark}
+              size="36"
               onClick={closeModalHandler}
             />
           </div>
