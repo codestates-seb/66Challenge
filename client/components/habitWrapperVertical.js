@@ -8,26 +8,26 @@ ToDo 1. HabitWrapper를 사용하는 컴포넌트에서 habitWrapperTitle, habit
           각각의 배열 요소들은 해당 Habit에 대한 habitImage(이미지), habitTitle, habitBody를 담고 있는 객체입니다.)
 
 < example >
-<HabitWrapperHorizontal habitWrapperData={habitWrapperData} />
+<HabitWrapperVertical habitWrapperData={habitWrapperData} />
 * <------  사용하시기 전에 꼭 읽어주세요! ------> *
 */
 
 import { HabitElement } from './habitElement';
 
-export const HabitWrapperHorizontal = ({
+export const HabitWrapperVertical = ({
   habitWrapperTitle,
   habitWrapperData,
 }) => {
   return (
-    <div className="habit-wrapper-horizontal p-4">
+    <div className="habit-wrapper-Vertical p-4">
       <h3 className="habit-wrapper-title mb-5 text-xl font-semibold">
         {habitWrapperTitle}
       </h3>
       <div className="habit-wrapper-content">
-        <ul className="habit-wrapper-list flex overflow-x-scroll flex-nowrap gap-x-4 scrollbar-hide">
+        <ul className="habit-wrapper-list grid gap-4 grid-cols-2">
           {habitWrapperData.map((el) => {
             return (
-              <li className="habit-element flex-[0_0_auto] w-[140px] ">
+              <li className="habit-element">
                 <HabitElement {...el} />
               </li>
             );
