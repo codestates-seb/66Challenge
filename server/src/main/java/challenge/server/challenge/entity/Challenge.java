@@ -1,5 +1,6 @@
 package challenge.server.challenge.entity;
 
+import challenge.server.audit.BaseTimeEntity;
 import challenge.server.auth.entity.Auth;
 import challenge.server.habit.entity.Habit;
 import challenge.server.review.entity.Review;
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Challenge {
+public class Challenge extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long challengeId;

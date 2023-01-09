@@ -1,5 +1,6 @@
 package challenge.server.report.entity;
 
+import challenge.server.audit.BaseTimeEntity;
 import challenge.server.auth.entity.Auth;
 import challenge.server.habit.entity.Habit;
 import challenge.server.review.entity.Review;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Report {
+public class Report extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportId;
