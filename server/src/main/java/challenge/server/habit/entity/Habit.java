@@ -8,6 +8,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class Habit {
     private String title;
     private String subTitle;
     private String body;
-    private Timestamp authStartTime;
-    private Timestamp authEndTime;
+    private LocalDateTime authStartTime;
+    private LocalDateTime authEndTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID")
