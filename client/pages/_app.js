@@ -1,4 +1,5 @@
 import '../styles/globals.css';
+
 import { BottomNav } from '../components/bottomNav/bottomNav';
 
 function MyApp({ Component, pageProps }) {
