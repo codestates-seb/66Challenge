@@ -10,6 +10,10 @@ module.exports = {
         mainColor: '#494949',
         subColor: '#F89500',
         iconColor: 'white',
+        'gray-pink': '#999999',
+        'gray-border': '#929292',
+        'sky-pink': '#f4caf8',
+        'light-green': '#9de3b2',
       },
       fontFamily: {
         sans: ['Noto Sans KR', 'sans-serif'],
