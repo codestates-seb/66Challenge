@@ -1,5 +1,7 @@
 package challenge.server.user.service;
 
+import challenge.server.exception.BusinessLogicException;
+import challenge.server.exception.ExceptionCode;
 import challenge.server.helper.event.UserRegistrationApplicationEvent;
 import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.user.entity.User;
