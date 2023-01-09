@@ -3,9 +3,11 @@ package challenge.server.habit.entity;
 import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.report.entity.Report;
+import challenge.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

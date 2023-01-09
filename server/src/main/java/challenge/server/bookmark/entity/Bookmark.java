@@ -1,6 +1,7 @@
 package challenge.server.bookmark.entity;
 
 import challenge.server.habit.entity.Habit;
+import challenge.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;

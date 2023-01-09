@@ -3,6 +3,7 @@ package challenge.server.report.entity;
 import challenge.server.auth.entity.Auth;
 import challenge.server.habit.entity.Habit;
 import challenge.server.review.entity.Review;
+import challenge.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;

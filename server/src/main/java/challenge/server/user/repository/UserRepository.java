@@ -1,5 +1,6 @@
 package challenge.server.user.repository;
 
+import challenge.server.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
