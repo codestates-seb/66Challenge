@@ -29,6 +29,7 @@
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.2",
     "autoprefixer": "^10.4.13",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.26.0",

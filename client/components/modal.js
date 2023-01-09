@@ -6,6 +6,9 @@ ToDo 3. 모달 안의 Input Element 등의 content는 사용할 때 자식 요�
 ToDo 4. 모달창 내 하단 버튼을 클릭했을 떄의 Click Event를 onClick={}으로 넣어주셔야 합니다.
 ToDo 5. 모달창 내 하단 버튼의 이름을 buttonName으로 넣어주셔야 합니다.
 < example >
+<button className="cursor-pointer" onClick={(_) => setModalOpen(true)}>
+  모달창을 열립니다
+</button>
 {isModalOpen && (
   <Modal
     isOpen={isModalOpen}
@@ -53,7 +56,7 @@ export const Modal = ({ isOpen, setIsOpen, buttonName, onClick, children }) => {
           <div className="modal-content pt-5 pb-5">{children}</div>
           <div className="modal-veiw-bottom-button-block flex justify-center items-center">
             <button
-              className="modal-veiw-bottom-button py-2 px-3 rounded bg-emerald-300 hover:bg-emerald-400"
+              className="modal-veiw-bottom-button py-2 px-3 rounded bg-black hover:bg-stone-700 text-white"
               onClick={() => {
                 closeModalHandler();
                 onClick && onClick();
