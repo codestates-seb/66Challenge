@@ -7,9 +7,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        mainColor: '#F4CAF8',
-        subColor: '#9DE3B2',
-        textColor: 'white',
+        mainColor: '#494949',
+        subColor: '#F89500',
+        iconColor: 'white',
       },
       fontFamily: {
         sans: ['Noto Sans KR', 'sans-serif'],
@@ -24,9 +24,14 @@ module.exports = {
           '50%': { transform: 'scale(1.25)' },
           '100%': { transform: 'scale(1)' },
         },
+        dropDown: {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(-50)' },
+        },
       },
       animation: {
         bookMark: 'bookMark 1s ease-in-out ',
+        dropDown: 'dropDown 1s ease',
       },
     },
   },
