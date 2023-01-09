@@ -2,7 +2,6 @@ package challenge.server.user.service;
 
 import challenge.server.helper.event.UserRegistrationApplicationEvent;
 import challenge.server.security.utils.CustomAuthorityUtils;
-import challenge.server.user.entity.User;
 import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
