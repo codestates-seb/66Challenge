@@ -1,5 +1,6 @@
 package challenge.server.user.entity;
 
+import challenge.server.audit.BaseTimeEntity;
 import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.habit.entity.Habit;
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "USERS")
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;

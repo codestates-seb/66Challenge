@@ -1,5 +1,6 @@
 package challenge.server.review.entity;
 
+import challenge.server.audit.BaseTimeEntity;
 import challenge.server.challenge.entity.Challenge;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Review {
+public class Review extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
