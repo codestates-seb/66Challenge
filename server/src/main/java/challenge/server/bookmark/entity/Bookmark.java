@@ -1,5 +1,6 @@
 package challenge.server.bookmark.entity;
 
+import challenge.server.audit.BaseTimeEntity;
 import challenge.server.habit.entity.Habit;
 import challenge.server.user.entity.User;
 import lombok.*;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Bookmark {
+public class Bookmark extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookmarkId;

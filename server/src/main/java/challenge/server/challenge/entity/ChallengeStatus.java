@@ -1,5 +1,6 @@
 package challenge.server.challenge.entity;
 
+import challenge.server.audit.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class ChallengeStatus {
+public class ChallengeStatus extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long challengeStatusId;
