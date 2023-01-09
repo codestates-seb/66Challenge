@@ -1,0 +1,32 @@
+spring:
+  # h2.console.enabled: true => h2 console 사용 설정 (=웹 브라우저에서 h2 콘솔 사용 가능)
+  # h2.console.enabled.path: /h2 => h2 console 사용 경로 url 설정(고정)
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  # datasource.url: jdbc:h2:mem:test => jdbc url 을 설정(고정)
+  datasource:
+    url: jdbc:h2:mem:test
+  # spring.sql.init.data-locations: classpath*:db/h2/schema.sql
+  #  => 데이터베이스 사용 시, 해당 경로(src/main/resources/db/h2/)에 있는 .sql 파일(schema.sql)을 자동으로 실행시킴
+  #  => .sql 파일(schema.sql)의 스크립트를 읽어서 DB(h2)의 테이블을 자동으로 생성시킴.
+  ##  => JPA 를 사용할 땐, 굳이 필요할까?
+  sql:
+    init:
+      schema-locations: classpath*:db/h2/schema.sql
+    # 실행된 쿼리를 확인하고 싶을 때 사용.
+    jpa:
+      show_sql: true
+  # HTTP responses 의 charset encoding 을 강제하는 설정. 해당 설정을 사용할 땐, charset 설정도 같이 사용. default 값은 true
+  ## => Http 의 요청, 응답 헤더의 Content-type 에 해당 charset 의 정보가 담겨져 있음.
+  server:
+    servlet:
+      encoding:
+        force-response: true
+  logging:
+    level:
+      org:
+        springframework:
+          orm:
+            jpa: DEBUG
