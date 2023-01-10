@@ -27,6 +27,10 @@ public class User extends BaseTimeEntity {
     private String username;
 
     // JWT 구현 시 추가
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
+    // JWT 구현 시 추가
     public void setUserId(Long userId) {
         this.userId = userId;
     }
@@ -66,8 +70,4 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Challenge> challenges = new ArrayList<>();
-
-    // JWT 구현 시 추가
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
 }
