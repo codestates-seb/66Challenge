@@ -21,8 +21,15 @@ public class UserDto {
 
         // todo 패스워드 유효성 검사 프론트와 합의해서 별도 validation annotation 만들기
         @NotBlank
-        @Password
+//        @Password
         private String password;
     }
 
+    @Getter
+    @AllArgsConstructor
+    public static class Response {
+        private Long userId;
+        private String email;
+        private String username;
+    }
 }
