@@ -26,6 +26,31 @@ public class User extends BaseTimeEntity {
     private String password;
     private String username;
 
+    // JWT 구현 시 추가
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    // JWT 구현 시 추가
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    // JWT 구현 시 추가
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    // JWT 구현 시 추가
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    // JWT 구현 시 추가
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERS_STATUS_ID")
     private UserStatus userStatus;
@@ -42,6 +67,7 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Challenge> challenges = new ArrayList<>();
 
+    // JWT 구현 시 추가
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 }
