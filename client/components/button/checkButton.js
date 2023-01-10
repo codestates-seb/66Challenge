@@ -18,7 +18,7 @@ export const CheckButton = (props) => {
   return (
     <button
       onClick={props.onClick}
-      className="text-white bg-light-green border-2 rounded p-2"
+      className="text-white bg-checkButton border-2 rounded px-4 py-2"
     >
       {props.buttonName}
     </button>

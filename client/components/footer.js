@@ -1,51 +1,109 @@
-import { AiOutlineFacebook } from 'react-icons/ai';
-import { BsInstagram } from 'react-icons/bs';
-import { SlArrowRight } from 'react-icons/sl';
+import { BsGithub } from 'react-icons/bs';
+import { SiNotion } from 'react-icons/si';
+import { SiTypescript } from 'react-icons/si';
+import { TbBrandNextjs } from 'react-icons/tb';
+import { SiTailwindcss } from 'react-icons/si';
+import { IoLogoPwa } from 'react-icons/io5';
+import { GrMysql } from 'react-icons/gr';
 
 export const Footer = () => {
+  const FeMemberData = [
+    { id: 1, name: '박정우(팀장)', gitUrl: 'https://github.com/jwParkDev' },
+    { id: 2, name: '김동규', gitUrl: 'https://github.com/rbaam' },
+    { id: 3, name: '배성진', gitUrl: 'https://github.com/Menat91' },
+    { id: 4, name: '하수환', gitUrl: 'https://github.com/hasuhwan' },
+  ];
+
+  const BeMemberData = [
+    { id: 1, name: '강은영', gitUrl: 'https://github.com/greenkey20' },
+    { id: 2, name: '김찬빈', gitUrl: 'https://github.com/dev-jambin' },
+    { id: 3, name: '선우예림', gitUrl: 'https://github.com/yerimsw' },
+  ];
+
+  const FeMemberList = FeMemberData.map((member) => {
+    return (
+      <div id={member.id}>
+        <div className="flex">
+          <span className="mr-3">{member.name}</span>
+          <a href={member.gitUrl}>
+            <BsGithub className="h-5 w-5" />
+          </a>
+        </div>
+      </div>
+    );
+  });
+
+  const BeMemberList = BeMemberData.map((member) => {
+    return (
+      <div id={member.id}>
+        <div className="flex">
+          <span className="mr-3">{member.name}</span>
+          <a href={member.gitUrl}>
+            <BsGithub className="h-5 w-5" />
+          </a>
+        </div>
+      </div>
+    );
+  });
+
   return (
-    <div className="bg-neutral-100 text-center text-sm">
-      <h4 className="text-sm font-bold py-4 dark:text-white">(주)펫프렌즈</h4>
-      <div>
-        <p className="font-medium text-teal-600">대표이사: 코드스테이츠</p>
-        <p className="font-medium text-teal-600">사업자번호: 175-82-00190</p>
-        <p className="font-medium text-teal-600">개인정보보호책임자: 배성진</p>
-        <div>
-          <a className="font-medium text-teal-600 pr-2">이용약관</a>
-          <a className="font-medium text-teal-600">개인정보처리방침</a>
-        </div>
-      </div>
-      <div>
-        <div className="pt-3">
-          <span className="text-teal-600">고객센터: </span>
-          <span className="cursor-pointer text-blue-600">031-123-4567</span>
-        </div>
-        <div>
-          <p className="cursor-pointer text-blue-600">codestates@gmail.com </p>
-        </div>
-      </div>
-      <div className="py-2 mx-36">
-        <div className="my-2 flex justify-center">
-          <span className="cursor-pointer text-gray-pink flex  border-2 rounded-lg px-2">
-            제휴 입점 및 기타문의
-            <div className="pl-1">
-              <SlArrowRight className="w-3 h-3 inline align-middle" />
+    <>
+      <div className="bg-footerColor text-center text-sm">
+        <h4 className="text-base font-bold py-4 dark:text-white">
+          금동약사여래입상
+        </h4>
+        <div className="flex justify-center">
+          <div className="mx-2">
+            <h4 className="font-semibold mb-2 text-footerMemberTextColor">
+              FE
+            </h4>
+            <div className="font-medium text-footerMemberTextColor">
+              {FeMemberList}
             </div>
-          </span>
-        </div>
-        <div className="my-2 flex justify-center">
-          <span className="cursor-pointer text-gray-pink flex  border-2 rounded-lg px-2">
-            펫프렌즈 회사소개
-            <div className="pl-1">
-              <SlArrowRight className="w-3 h-3 inline align-middle" />
+          </div>
+          <div className="mx-2">
+            <h4 className="font-semibold mb-2 text-footerMemberTextColor">
+              BE
+            </h4>
+            <div className="font-medium text-footerMemberTextColor">
+              {BeMemberList}
             </div>
-          </span>
+          </div>
+        </div>
+        <div className="text-footerMemberTextColor my-2">
+          제작기간: 2023.01.03 ~ 2023.02.03
+        </div>
+
+        <div className="text-gray-pink border-2 rounded-lg px-2 my-2">
+          <p className="text-gray-pink my-1">Made by these</p>
+          <ul className="flex justify-center my-3">
+            <li className="mx-2">
+              <SiTypescript className="w-6 h-6" />
+            </li>
+            <li className="mx-2">
+              <TbBrandNextjs className="w-6 h-6" />
+            </li>
+            <li className="mx-2">
+              <SiTailwindcss className="w-6 h-6" />
+            </li>
+            <li className="mx-2">
+              <IoLogoPwa className="w-6 h-6" />
+            </li>
+            <li className="mx-2">
+              <GrMysql className="w-6 h-6" />
+            </li>
+          </ul>
+        </div>
+
+        <div className="flex justify-center">
+          <a href="https://github.com/codestates-seb/seb41_main_028">
+            <BsGithub className="cursor-pointer mb-6 mx-2 w-6 h-7 text-gray-pink" />
+          </a>
+          <a href="https://www.notion.so/codestates/5aaf9053ee9c41bfb866e9ac4f4763ea">
+            <SiNotion className="cursor-pointer mb-6 mx-2 w-6 h-7 text-gray-pink" />
+          </a>
         </div>
       </div>
-      <div className="flex justify-center">
-        <AiOutlineFacebook className="cursor-pointer mb-10 mx-2 w-6 h-7 text-gray-pink" />
-        <BsInstagram className="cursor-pointer mb-10 mx-2 w-6 h-7 text-gray-pink" />
-      </div>
-    </div>
+    </>
   );
 };

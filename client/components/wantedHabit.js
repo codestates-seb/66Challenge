@@ -17,12 +17,10 @@ import { SlArrowRight } from 'react-icons/sl';
 export const WantedHabit = (props) => {
   return (
     <div className="w-80 cursor-pointer" onClick={props.onClick}>
-      <div className="w-full only:flex place-content-between border-2 border-black dark:border-white">
-        <span className="p-2 font-bold dark:text-white" onClick={props.onClick}>
-          찜한 습관
-        </span>
+      <div className="p-2 font-bold  w-full only:flex place-content-between border-2 border-black dark:text-white dark:border-white">
+        찜한 습관
         <div className="pr-5">
-          <SlArrowRight className="inline align-bottom dark:bg-white" />
+          <SlArrowRight className="inline align-middle dark:bg-white" />
         </div>
       </div>
     </div>

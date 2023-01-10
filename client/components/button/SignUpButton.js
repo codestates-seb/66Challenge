@@ -14,10 +14,10 @@
 
 // <------  사용하시기 전에 꼭 읽어주세요! ------>
 
-export const SkyPinkButton = (props) => {
+export const SignUpButton = (props) => {
   return (
     <button
-      className="text-white bg-sky-pink border-2 rounded p-2"
+      className="text-white bg-signUpButton rounded px-4 py-2"
       onClick={props.onClick}
     >
       {props.buttonName}
