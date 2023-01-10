@@ -19,7 +19,7 @@ module.exports = {
       backgroundColor: {
         footerColor: '#F5F5F5',
         checkButton: '#f89500',
-        signUpButton: 'black'
+        signUpButton: 'black',
       },
       fontFamily: {
         sans: ['Noto Sans KR', 'sans-serif'],
