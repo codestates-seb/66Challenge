@@ -204,6 +204,7 @@ export default function SignUp() {
           <input
             type="checkbox"
             className="w-5 h-5 rounded-full border mr-3 accent-subColor"
+            onClick={checkHandle}
           />
           <span className="block text-mainColor text-[12px] font-semibold ">
             (필수) 본인은 66일 습관 챌린지 준비가 되었다.
