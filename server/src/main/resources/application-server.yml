@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(Wtjg9OW9Vj1sFhFZwAIPLv9fq4WEjizOS7AG+KWPSMKccZK07ikUYe73+uCBRLlXu9k7DctAOn5XGHItKXped7qSwjF2W9VqiPDVmgmMVXbdBM2uqJev/5oWgW9PKUuTdfSba6v26vpcb42WswgdwIqoV8KI7joMB184GQhc43qf3DREB1KSaG6w5p9tc5Oey90wm7MKqQChqGH61gzPYw==)
+    username: ENC(xspPILIAzHK+xciWhlmMVQ==)
+    password: ENC(sX8vFMX8vHZldLvVu2TFMjKnev0JaZFK)
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true  # SQL pretty print
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+mail:
+  address:
+    admin: ENC(JGBa0PpOXdYVZnt2VnvjmfjIiFzJzEsEMUU9EOaxGt0=)
+jwt:
+  key: ENC(9d9nAF96s1rYf4Aaq9yt/FPLZ2f24RkPpmWouKdl6q/+6/NsYLqtRrNaMjc3PjXhk7Wpt/Wn86Dp4RMLUONneCGFbnacoFoF)
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 600
