@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - devBack # devBack 브랜치에 push event 발생할 때 배포 자동화.
+    paths:
+      - server/** # 다음 디렉토리 내 push event 발생 시에만 배포 자동화.
+      - .github/**
 
 permissions:
   contents: read
@@ -14,6 +17,10 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./server # run 작업 경로를 server 디렉토리로 설정.
 
     steps:
       - uses: actions/checkout@v3
@@ -30,6 +37,7 @@ jobs:
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
           arguments: build
+          build-root-directory: ./server
 
       # build 후 프로젝트를 압축.
       - name: Make zip file
