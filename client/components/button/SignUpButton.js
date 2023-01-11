@@ -6,7 +6,7 @@
 // <예시> 아래의 코드를 주석을 해제하고 중괄호를 지운 뒤 사용해보세요
 
 {
-  /* <SkyPinkButton
+  /* <SignUpButton
   buttonName="테스트"
   onClick={() => console.log('버튼의 클릭이벤트로 전해지는 함수')}
 /> */
