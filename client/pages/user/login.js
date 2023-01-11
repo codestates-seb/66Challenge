@@ -61,7 +61,7 @@ const Login = () => {
         <img src="/image/logo/logoVertical.svg" />
       </div>
       <div
-        className={`speech-bubble relative bg-mainColor text-white px-[14px] py-[6px] text-[12px] rounded-[12px] animate-speechBubble mb-[10px] ${speechBubleBefore} ${speechBubleAfter}`}
+        className={`speech-bubble relative bg-mainColor text-white px-[14px] py-[6px] text-[12px] leading-[14px] rounded-[12px] animate-speechBubble mb-[10px] ${speechBubleBefore} ${speechBubleAfter}`}
       >
         5초만에 빠른 회원가입
       </div>
@@ -88,13 +88,13 @@ const Login = () => {
           })}
         >
           <div className="email-input-wrapper flex flex-col mb-5 h-[80px]">
-            <label htmlFor="email" className="text-l font-semibold mb-1">
+            <label htmlFor="email" className="text-base font-semibold mb-1">
               이메일
             </label>
             <input
               type="text"
               id="email"
-              className={`h-[35px] text-[16px] w-full rounded-md px-2 ${
+              className={`h-[35px] text-base w-full rounded-md px-2 pt-[5px] ${
                 emailVerify ? 'border' : 'border-subColor border-2'
               } focus:border-mainColor duration-500 outline-0 mb-1`}
               placeholder="이메일을 입력해주세요."
@@ -113,14 +113,14 @@ const Login = () => {
             )}
           </div>
           <div className="password-input-wrapper flex flex-col mb-5 h-[80px]">
-            <label htmlFor="password" className="text-l font-semibold mb-1">
+            <label htmlFor="password" className="text-base font-semibold mb-1">
               비밀번호
             </label>
             <div className="relative">
               <input
                 type={passwordView ? 'text' : 'password'}
                 id="password"
-                className={`border h-[35px] text-[16px] w-full rounded-md px-2 pr-[30px] focus:border-mainColor duration-500 outline-0 mb-1`}
+                className={`border h-[35px] text-base w-full rounded-md px-2 pt-[5px] pr-[30px] focus:border-mainColor duration-500 outline-0 mb-1`}
                 {...register('password')}
                 autoComplete="on"
                 placeholder="비밀번호를 입력해주세요"
@@ -136,13 +136,13 @@ const Login = () => {
         </form>
         <div className="button-wrapper flex justify-between">
           <button
-            className="signup-button w-[100px] py-2.5 px-5 border rounded"
+            className="signup-button w-[120px] text-base py-2.5 px-5 border rounded"
             onClick={signupButtonClick}
           >
             Sign Up
           </button>
           <button
-            className="login-button w-[100px] bg-[#222222] text-white py-2.5 px-5 border rounded"
+            className="login-button w-[120px] text-base bg-[#222222] text-white py-2.5 px-5 border rounded"
             type="submit"
           >
             Login
