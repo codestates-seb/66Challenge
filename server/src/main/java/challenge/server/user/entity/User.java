@@ -13,23 +13,30 @@ import java.util.List;
 
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Setter
 @Table(name = "USERS")
 @Entity
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false) // todo 길이 제약조건 협의
     private String password;
+
+    @Column(nullable = false, unique = true)
     private String username;
 
     // JWT 구현 시 추가
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
+    /*
     // JWT 구현 시 추가
     public void setUserId(Long userId) {
         this.userId = userId;
@@ -54,6 +61,7 @@ public class User extends BaseTimeEntity {
     public void setRoles(List<String> roles) {
         this.roles = roles;
     }
+     */
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERS_STATUS_ID")

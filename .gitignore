@@ -1,3 +1,10 @@
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
 # Created by https://www.toptal.com/developers/gitignore/api/java,macos,windows,react
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,macos,windows,react
 

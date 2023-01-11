@@ -15,24 +15,29 @@ spring:
   sql:
     init:
       schema-locations: classpath*:db/h2/schema.sql
-    # 실행된 쿼리를 확인하고 싶을 때 사용.
-    jpa:
-      show_sql: true
-  # HTTP responses 의 charset encoding 을 강제하는 설정. 해당 설정을 사용할 땐, charset 설정도 같이 사용. default 값은 true
-  ## => Http 의 요청, 응답 헤더의 Content-type 에 해당 charset 의 정보가 담겨져 있음.
-  server:
-    servlet:
-      encoding:
-        force-response: true
-  logging:
-    level:
-      org:
-        springframework:
-          orm:
-            jpa: DEBUG
+  # 실행된 쿼리를 확인하고 싶을 때 사용.
+  jpa:
+    hibernate:
+      ddl-auto: create # todo 팀원분들과 상의!
+    show_sql: true
+    properties:
+      hibernate:
+        format_sql: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+# HTTP responses 의 charset encoding 을 강제하는 설정. 해당 설정을 사용할 땐, charset 설정도 같이 사용. default 값은 true
+## => Http 의 요청, 응답 헤더의 Content-type 에 해당 charset 의 정보가 담겨져 있음.
+server:
+  servlet:
+    encoding:
+      force-response: true
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
