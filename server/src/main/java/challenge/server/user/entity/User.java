@@ -13,6 +13,7 @@ import java.util.List;
 
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "USERS")
@@ -21,9 +22,46 @@ public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false) // todo 길이 제약조건 협의
     private String password;
+
+    @Column(nullable = false, unique = true)
     private String username;
+
+    // JWT 구현 시 추가
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
+    /*
+    // JWT 구현 시 추가
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    // JWT 구현 시 추가
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    // JWT 구현 시 추가
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    // JWT 구현 시 추가
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    // JWT 구현 시 추가
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+     */
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERS_STATUS_ID")
@@ -40,7 +78,4 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Challenge> challenges = new ArrayList<>();
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
 }

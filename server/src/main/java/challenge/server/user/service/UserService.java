@@ -7,9 +7,11 @@ import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.user.entity.User;
 import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -18,19 +20,25 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final ApplicationEventPublisher publisher; // todo 회원 가입 시 이메일 전송 관련
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
 
+//    @Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
     public User createUser(User user) {
-//        verifyExistUser(user.getEmail()); // todo User 엔티티 작성
+        //log.info("-------- createUser 중복 회원 검사 --------");
+        //System.out.println(user.getEmail());
+        verifyExistUser(user.getEmail()); // todo User 엔티티 작성
 
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
 
         List<String> roles = authorityUtils.createRoles(user.getEmail());
+        //log.info("-------- createUser roles --------");
+        //System.out.println(roles); // 2023.1.11(수) 3h40 포스트맨 일반 회원 가입 테스트 시 [USER]
         user.setRoles(roles);
 
         User savedUser = userRepository.save(user);

@@ -13,7 +13,9 @@ spring:
     properties:
       hibernate:
         format_sql: true  # SQL pretty print
-
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
@@ -21,6 +23,6 @@ mail:
   address:
     admin: ENC(JGBa0PpOXdYVZnt2VnvjmfjIiFzJzEsEMUU9EOaxGt0=)
 jwt:
-  key: ENC(9d9nAF96s1rYf4Aaq9yt/FPLZ2f24RkPpmWouKdl6q/+6/NsYLqtRrNaMjc3PjXhk7Wpt/Wn86Dp4RMLUONneCGFbnacoFoF)
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 600
+  key: ENC(9d9nAF96s1rYf4Aaq9yt/FPLZ2f24RkPpmWouKdl6q/+6/NsYLqtRrNaMjc3PjXhk7Wpt/Wn86Dp4RMLUONneCGFbnacoFoF)
