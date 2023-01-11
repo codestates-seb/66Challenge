@@ -30,3 +30,6 @@ spring:
         springframework:
           orm:
             jpa: DEBUG
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
