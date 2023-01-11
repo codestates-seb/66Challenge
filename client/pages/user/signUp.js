@@ -15,18 +15,18 @@ export default function SignUp() {
 
   const [itemsClassName, setItemsClassName] = useState({
     emailInput:
-      'border h-[30px] text-[12px] w-full rounded-md px-2 focus:border-mainColor duration-500 outline-0 mb-1',
+      'border h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1',
     userNameInput:
-      'border h-[30px] text-[12px] w-full rounded-md px-2 focus:border-mainColor duration-500 outline-0 mb-1',
+      'border h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1',
     passwordInput:
-      'border h-[30px] text-[12px] w-full rounded-md px-2 focus:border-mainColor duration-500 outline-0 mb-1',
+      'border h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1',
     passwordCheckInput:
-      'border h-[30px] text-[12px] w-full rounded-md px-2 focus:border-mainColor duration-500 outline-0 mb-1',
+      'border h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1',
   });
   const inputDefaultClassName =
-    'border h-[30px] text-[12px] w-full rounded-md px-2 focus:border-mainColor duration-500 outline-0 mb-1';
+    'border h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1';
   const inputFailClassName =
-    'border border-subColor h-[30px] text-[12px] w-full rounded-md px-2 focus:border-mainColor duration-500 outline-0 mb-1';
+    'border border-subColor h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1';
   const passwordRegExp =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,12}$/;
   const emailRegExp =
@@ -71,21 +71,19 @@ export default function SignUp() {
   const onError = (e) => {
     console.log(e);
   };
+
+  const labelDefaultClassName = 'text-base font-semibold mb-1';
   return (
-    <div className="siginUpContatiner w-full h-screen flex flex-col items-center justify-center px-5">
-      <img src="/image/logo.svg" className="mb-6" />
+    <div className="siginUpContatiner w-[300px] h-screen flex flex-col items-center justify-center mx-auto">
+      <img src="/image/logo.svg" className="mb-[40px]" />
       <form
         className="signUpForm w-full flex flex-col items-center"
         onSubmit={handleSubmit(signUpHandle, onError)}
       >
-        <div className="signUpUserEmailBox flex flex-col w-full h-16 mb-3 ">
-          <label
-            className="text-[12px] h-[12px] font-semibold  mb-2"
-            htmlFor="userEmail"
-          >
+        <div className="signUpUserEmailBox flex flex-col w-full h-[80px] mb-5 ">
+          <label className={labelDefaultClassName} htmlFor="userEmail">
             이메일
           </label>
-
           <input
             className={itemsClassName.emailInput}
             id="userEmail"
@@ -101,23 +99,19 @@ export default function SignUp() {
             required
           />
           {verify.emailVerify === 'fail' ? (
-            <span className="block text-subColor text-[10px] h-[10px] ">
+            <span className="block text-subColor text-[13px] h-[13px] ">
               올바른 이메일 주소를 입력해주세요.
             </span>
           ) : verify.emailVerify === 'overlap' ? (
-            <span className="block text-subColor text-[10px] h-[10px] ">
+            <span className="block text-subColor text-[13px] h-[13px] ">
               중복된 이메일 주소 입니다.
             </span>
           ) : null}
         </div>
-        <div className="signUpUserNameBox flex flex-col w-full h-16 mb-3 ">
-          <label
-            className="text-[12px] h-[12px] font-semibold  mb-2"
-            htmlFor="userName"
-          >
+        <div className="signUpUserNameBox flex flex-col w-full h-[80px] mb-5 ">
+          <label className={labelDefaultClassName} htmlFor="userName">
             닉네임
           </label>
-
           <input
             className={itemsClassName.userNameInput}
             id="userName"
@@ -133,23 +127,19 @@ export default function SignUp() {
             required
           />
           {verify.userNameVerify === 'fail' ? (
-            <span className="block text-subColor text-[10px] h-[10px] ">
+            <span className="block text-subColor text-[13px] h-[13px] ">
               닉네임은 영어/한국어/숫자 중 사용하여 2~20자 입니다.
             </span>
           ) : verify.userNameVerify === 'overlap' ? (
-            <span className="block text-subColor text-[10px] h-[10px] ">
+            <span className="block text-subColor text-[13px] h-[13px] ">
               중복된 닉네임 입니다.
             </span>
           ) : null}
         </div>
-        <div className="signUpPasswordBox flex flex-col w-full h-16 mb-3 ">
-          <label
-            className="text-[12px] h-[12px] font-semibold  mb-2"
-            htmlFor="password"
-          >
+        <div className="signUpPasswordBox flex flex-col w-full h-[80px] mb-5 ">
+          <label className={labelDefaultClassName} htmlFor="password">
             비밀번호
           </label>
-
           <input
             className={itemsClassName.passwordInput}
             id="password"
@@ -166,16 +156,13 @@ export default function SignUp() {
             required
           />
           {verify.passwordVerify === 'fail' ? (
-            <span className="block text-subColor text-[10px] h-[10px] justify-self-end">
+            <span className="block text-subColor text-[13px] h-[13px] justify-self-end">
               영문/숫자/특수문자 혼합 8~12자 입니다.
             </span>
           ) : null}
         </div>
-        <div className="signUpPasswordCheckBox flex flex-col w-full h-16 mb-4">
-          <label
-            className="text-[12px] h-[12px] font-semibold  mb-2"
-            htmlFor="passwordCheck"
-          >
+        <div className="signUpPasswordCheckBox flex flex-col w-full h-[80px] mb-4">
+          <label className={labelDefaultClassName} htmlFor="passwordCheck">
             비밀번호 확인
           </label>
           <input
@@ -194,26 +181,29 @@ export default function SignUp() {
             required
           />
           {verify.passwordCheckVerify === 'fail' ? (
-            <span className="block text-subColor text-[10px] h-[10px] ">
+            <span className="block text-subColor text-[13px] h-[13px] ">
               비밀번호가 일치하지 않습니다.
             </span>
           ) : null}
         </div>
-
         <div className="flex items-center w-full mb-6">
           <input
+            id="agreeCheck"
             type="checkbox"
             className="w-5 h-5 rounded-full border mr-3 accent-subColor"
             onClick={checkHandle}
           />
-          <span className="block text-mainColor text-[12px] font-semibold ">
+          <label
+            htmlFor="agreeCheck"
+            className="block text-mainColor text-[14px] font-semibold "
+          >
             (필수) 본인은 66일 습관 챌린지 준비가 되었다.
-          </span>
+          </label>
         </div>
         <input
           type="submit"
           value="Sign Up"
-          className="border h-[35px] text-[14px] font-semibold w-full rounded-md px-2 bg-mainColor text-iconColor duration-500 outline-0 mb-1 disabled:opacity-20"
+          className="border py-2.5 px-5 text-base font-semibold w-full rounded-md bg-mainColor text-iconColor duration-500 outline-0 mb-1 disabled:opacity-20"
           disabled={!Object.values(verify).every((el) => el === 'success')}
         />
       </form>
