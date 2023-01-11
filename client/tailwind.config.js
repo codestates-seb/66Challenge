@@ -18,6 +18,9 @@ module.exports = {
       fontFamily: {
         sans: ['Noto Sans KR', 'sans-serif'],
       },
+      fontSize: {
+        base: '16px',
+      },
       translate: {
         42: '10.5rem',
         56: '14rem',
