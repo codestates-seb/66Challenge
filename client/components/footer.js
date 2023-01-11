@@ -23,8 +23,8 @@ export const Footer = () => {
   const FeMemberList = FeMemberData.map((member) => {
     return (
       <div id={member.id}>
-        <div className="flex">
-          <span className="mr-3">{member.name}</span>
+        <div className="flex justify-between">
+          <span className="text-gray-pink"> {member.name}</span>
           <a href={member.gitUrl}>
             <BsGithub className="h-5 w-5" />
           </a>
@@ -36,8 +36,9 @@ export const Footer = () => {
   const BeMemberList = BeMemberData.map((member) => {
     return (
       <div id={member.id}>
-        <div className="flex">
-          <span className="mr-3">{member.name}</span>
+        <div className="flex justify-between">
+          <span className="text-gray-pink"> {member.name}</span>
+
           <a href={member.gitUrl}>
             <BsGithub className="h-5 w-5" />
           </a>
@@ -49,28 +50,24 @@ export const Footer = () => {
   return (
     <>
       <div className="bg-footerColor text-center text-sm">
-        <h4 className="text-base font-bold py-4 dark:text-white">
-          금동약사여래입상
+        <h4 className="text-gray-pink text-base font-bold py-4 dark:text-white">
+          66 Challenge
         </h4>
         <div className="flex justify-center">
-          <div className="mx-2">
-            <h4 className="font-semibold mb-2 text-footerMemberTextColor">
-              FE
-            </h4>
+          <div className="mx-2 w-28">
+            <h4 className="font-semibold mb-2 text-gray-pink">FE</h4>
             <div className="font-medium text-footerMemberTextColor">
               {FeMemberList}
             </div>
           </div>
-          <div className="mx-2">
-            <h4 className="font-semibold mb-2 text-footerMemberTextColor">
-              BE
-            </h4>
+          <div className="mx-2 w-28">
+            <h4 className="font-semibold mb-2 text-gray-pink">BE</h4>
             <div className="font-medium text-footerMemberTextColor">
               {BeMemberList}
             </div>
           </div>
         </div>
-        <div className="text-footerMemberTextColor my-2">
+        <div className="text-gray-pink my-2">
           제작기간: 2023.01.03 ~ 2023.02.03
         </div>
 
