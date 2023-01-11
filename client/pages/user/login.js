@@ -50,6 +50,8 @@ const Login = () => {
     }
   };
 
+  console.log(emailVerify);
+
   const speechBubleBefore =
     'before:absolute before:bottom-[-12px] before:border-[5px] before:border-transparent before:left-2/4 before:border-t-[7px] before:border-t-mainColor before:translate-y-[-100%] before:border-b-0 before:translate-x-[-50%]';
   const speechBubleAfter =
