@@ -23,6 +23,13 @@ public class ChallengeStatus extends BaseTimeEntity {
     @OneToMany(mappedBy = "status", cascade = CascadeType.ALL)
     private List<Challenge> challenges = new ArrayList<>();
 
+    public void addChallenge(List<Challenge> challenges) {
+        if (this.challenges != null) {
+            this.challenges.addAll(challenges);
+        }
+        else this.challenges = challenges;
+    }
+
     public enum Type {
         CHALLENGE(1),
         SUCCESS(2),
