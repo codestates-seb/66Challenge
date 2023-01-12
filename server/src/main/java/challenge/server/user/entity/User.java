@@ -6,6 +6,7 @@ import challenge.server.challenge.entity.Challenge;
 import challenge.server.habit.entity.Habit;
 import challenge.server.report.entity.Report;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, updatable = false, unique = true)
     private String email;
 
     @Column(length = 255, nullable = false)
@@ -65,8 +66,11 @@ public class User extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERS_STATUS_ID")
+    @ColumnDefault("ACTIVE") // todo default 값 어떻게 부여할지 방법 잘 모르겠음
     private UserStatus userStatus;
 
+    // todo 회원 탈퇴/강퇴 시 찜하기, 신고 내역, challenges(+인증 내역, 후기)은 삭제 + 해당 회원이 개설한 habit은 놔두나?
+    // todo 회원 상태를 3(banned)으로 바꾸는 조건/event 정의/구현?
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
