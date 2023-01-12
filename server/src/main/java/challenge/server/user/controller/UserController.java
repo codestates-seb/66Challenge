@@ -74,7 +74,7 @@ public class UserController {
     @PatchMapping("/{user-id}")
     public ResponseEntity patchUser(@PathVariable("user-id") @Positive Long userId) {
 //        User updateUser = userService.updateUser(userId);
-//        return new ResponseEntity<>();
+        return new ResponseEntity<>(createDetailResponseDto(), HttpStatus.OK);
     }
 
     private UserDto.SimpleResponse createSimpleResponseDto() {
