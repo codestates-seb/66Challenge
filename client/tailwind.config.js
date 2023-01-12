@@ -32,8 +32,8 @@ module.exports = {
           '100%': { transform: 'scale(1)' },
         },
         dropDown: {
-          '0%': { transform: 'translateY(0)' },
-          '100%': { transform: 'translateY(-50)' },
+          '0%': { transform: 'translateY(-100%) ' },
+          '100%': { transform: 'translateY(0) ' },
         },
         speechBubble: {
           '0%': { top: '-3px' },
@@ -46,7 +46,7 @@ module.exports = {
       },
       animation: {
         bookMark: 'bookMark 1s ease-in-out ',
-        dropDown: 'dropDown 1s ease',
+        dropDown: 'dropDown .2s ease',
         speechBubble: 'speechBubble 1.8s ease-in-out Infinite',
       },
     },
