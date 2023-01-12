@@ -75,7 +75,7 @@ const Header = () => {
   }, [last, pageTitle]);
 
   const LeftSide = () => {
-    // 폰트 정해야함
+    // 폰트 정해야함 혹은 타이포그래피?
     function Logo() {
       return (
         <Link
