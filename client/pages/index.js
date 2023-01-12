@@ -14,7 +14,7 @@ export default function Home() {
   };
 
   return (
-    <main>
+    <div>
       <SlideBanner bannerCont={slideData} />
       <div className="main-category px-[20px]">
         <ul className="main-category-list grid grid-cols-5 my-[20px]">
@@ -59,6 +59,6 @@ export default function Home() {
           habitWrapperData={habitWrapperData}
         />
       </div>
-    </main>
+    </div>
   );
 }

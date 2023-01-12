@@ -67,7 +67,7 @@ export default function SignUp() {
   };
   const labelDefaultClassName = 'text-base font-semibold mb-1';
   return (
-    <div className="siginUpContatiner w-full h-screen flex flex-col px-10 items-center justify-center mx-auto pb-[70px]">
+    <div className="siginUpContatiner w-full h-screen flex flex-col px-10 items-center justify-center mx-auto">
       <img src="/image/logo.svg" className="mb-[40px]" />
       <form
         className="signUpForm w-full flex flex-col items-center"

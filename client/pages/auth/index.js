@@ -68,7 +68,7 @@ export default function Auth() {
     console.log(e);
   };
   return (
-    <div className="h-screen w-full px-10 flex flex-col pt-5 pb-[70px] overvflow-y-scroll scrollbar-hide">
+    <div className="h-screen w-full px-10 flex flex-col pt-5 overvflow-y-scroll scrollbar-hide">
       <div className="mb-4 w-full">
         <span className="font-bold text-base">내가 진행중인 습관</span>
       </div>
