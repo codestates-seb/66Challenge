@@ -1,14 +1,14 @@
 /* 
 * <------  사용하시기 전에 꼭 읽어주세요! ------> *
+ToDo 1. 사용하시는 컴포넌트에서 props로 imgFile setImgFile, uploadController 넘겨주셔야 합니다.
 
 * <------  사용하시기 전에 꼭 읽어주세요! ------> *
 */
 
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { MdOutlineDriveFolderUpload } from 'react-icons/md';
 
-export const FileUploader = () => {
-  const [imgFile, setImgFile] = useState('');
+export const FileUploader = ({ imgFile, setImgFile, uploadController }) => {
   const imgRef = useRef();
 
   const saveImgFile = () => {
@@ -17,6 +17,7 @@ export const FileUploader = () => {
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setImgFile(reader.result);
+      uploadController();
     };
   };
   return (
@@ -46,7 +47,6 @@ export const FileUploader = () => {
         accept="image/*"
         ref={imgRef}
         onChange={saveImgFile}
-        capture="gallery"
       />
     </div>
   );

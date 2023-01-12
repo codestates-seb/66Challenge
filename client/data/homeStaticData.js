@@ -21,52 +21,52 @@ export const slideData = [
 
 export const categoryData = [
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '운동',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '식습관',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '학습',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '일상생활',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '취미',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '셀프케어',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '에코',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '마음챙김',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '기타',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '전체보기',
     cateLink: '',
   },
@@ -74,24 +74,28 @@ export const categoryData = [
 
 export const habitWrapperData = [
   {
+    habitId: '1',
     habitImage: '/image/running.png',
     habitTitle: '달리기 3km',
     habitBody:
       '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
   },
   {
+    habitId: '2',
     habitImage: '/image/running.png',
     habitTitle: '달리기 3km',
     habitBody:
       '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
   },
   {
+    habitId: '3',
     habitImage: '/image/running.png',
     habitTitle: '달리기 3km',
     habitBody:
       '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
   },
   {
+    habitId: '4',
     habitImage: '/image/running.png',
     habitTitle: '달리기 3km',
     habitBody:
