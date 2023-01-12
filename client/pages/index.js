@@ -6,6 +6,7 @@ import {
 } from '../data/homeStaticData';
 import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
+import { FileUploader } from '../components/fileUploader';
 
 export default function Home() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function Home() {
               <li
                 className="main-category-item px-[9px] mt-[6px]"
                 onClick={(_) => cateIconClick(el.cateLink)}
+                key={el.cateTitle}
               >
                 <div className="main-category-icon">
                   <img
@@ -44,9 +46,9 @@ export default function Home() {
           className="w-full min-h-[250px]"
           src="https://www.youtube.com/embed/cdZZpaB2kDM"
           title="YouTube video player"
-          frameborder="0"
+          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
+          allowFullScreen
         ></iframe>
       </div>
       <div>
