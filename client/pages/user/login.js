@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
+import axios from 'axios';
 
 const Login = () => {
   const { register, handleSubmit, getValues, setFocus } = useForm();
@@ -23,14 +24,27 @@ const Login = () => {
 
   const passwordTypeChange = () => {
     setPasswordView(!passwordView);
+    setFocus('password');
   };
 
-  const loginButtonClick = (data) => {
+  const loginButtonClick = async (data) => {
     // ajax를 통해 server에 보낼 데이터
     if (emailVerify && data.email && data.password) {
-      console.log(data);
-      setEmailVerify(false);
-      setPasswordView(false);
+      await axios({
+        method: 'POST',
+        url: `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
+        data: {
+          ...data,
+        },
+      })
+        .then((res) => {
+          setEmailVerify(false);
+          setPasswordView(false);
+          router.push('/');
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     } else if (!emailVerify || !data.email) {
       alert('아이디와 비밀번호를 정확하게 입력해주세요.');
       setFocus('email');
@@ -41,11 +55,12 @@ const Login = () => {
   };
 
   const signupButtonClick = () => {
-    router.push('/user/signUp');
+    router.push('/user/signup');
   };
 
-  const emailInputElKeyEvent = (key) => {
-    if (['Enter', 'Tab'].includes(key)) {
+  const emailInputElKeyEvent = (e) => {
+    e.preventDefault();
+    if (['Enter', 'Tab'].includes(e.key)) {
       setFocus('password');
     }
   };
@@ -97,8 +112,8 @@ const Login = () => {
                 emailVerify ? 'border' : 'border-subColor border-2'
               } focus:border-mainColor duration-500 outline-0 mb-1`}
               placeholder="이메일을 입력해주세요."
-              onKeyUp={(e) => {
-                emailInputElKeyEvent(e.key);
+              onKeyDown={(e) => {
+                emailInputElKeyEvent(e);
               }}
               {...register('email', {
                 onBlur: () =>
@@ -132,21 +147,22 @@ const Login = () => {
               </div>
             </div>
           </div>
+          <div className="button-wrapper flex justify-between">
+            <button
+              className="signup-button w-[120px] text-base py-2.5 px-5 border rounded"
+              onClick={signupButtonClick}
+              type="button"
+            >
+              Sign Up
+            </button>
+            <button
+              className="login-button w-[120px] text-base bg-[#222222] text-white py-2.5 px-5 border rounded"
+              type="submit"
+            >
+              Login
+            </button>
+          </div>
         </form>
-        <div className="button-wrapper flex justify-between">
-          <button
-            className="signup-button w-[120px] text-base py-2.5 px-5 border rounded"
-            onClick={signupButtonClick}
-          >
-            Sign Up
-          </button>
-          <button
-            className="login-button w-[120px] text-base bg-[#222222] text-white py-2.5 px-5 border rounded"
-            type="submit"
-          >
-            Login
-          </button>
-        </div>
       </div>
     </div>
   );
