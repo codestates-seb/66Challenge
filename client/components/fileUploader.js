@@ -23,7 +23,7 @@ export const FileUploader = () => {
   return (
     <form className="file-uploader-container">
       <label
-        className="file-uploader-label flex justify-center items-center w-[302px] mx-auto h-[202px] my-[20px] border rounded"
+        className="file-uploader-label flex justify-center items-center w-[302px] mx-auto h-[202px] border rounded"
         htmlFor="uploader-input"
       >
         {imgFile ? (
@@ -47,6 +47,7 @@ export const FileUploader = () => {
         accept="image/*"
         ref={imgRef}
         onChange={saveImgFile}
+        capture="gallery"
       />
     </form>
   );

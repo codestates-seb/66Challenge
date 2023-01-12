@@ -8,7 +8,7 @@ ToDo 1. HabitWrapper를 사용하는 컴포넌트에서 habitWrapperTitle, habit
           각각의 배열 요소들은 해당 Habit에 대한 habitImage(이미지), habitTitle, habitBody를 담고 있는 객체입니다.)
 
 < example >
-<HabitWrapperHorizontal habitWrapperData={habitWrapperData} />
+<HabitWrapperHorizontal habitWrapperTitle="" habitWrapperData={habitWrapperData} />
 * <------  사용하시기 전에 꼭 읽어주세요! ------> *
 */
 
