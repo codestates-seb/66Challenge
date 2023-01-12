@@ -86,24 +86,96 @@ public class UserDto {
         private String email;
         private String username;
         private int biggestNumOfChallengeHabitDays; // 회원이 진행 중인 challenge 중 가장 높은 진행일을 선택하여 'n일차' 출력
-        private List<Challenge> activeChallenges; // 회원이 참여중 + 참여 완료한 습관 목록을 서브타이틀(및 진행일수)로 표시 -> todo 이 정보를 담기 위한 별도의 객체가 필요한지?
-        private List<Category> activeCategories; // 진행 중인 습관들의 카테고리 정보 -> 진행 중인 습관의 분석 데이터를 선택하기 위한 카테고리 선택자
+        private List<ChallengeResponse> activeChallenges; // 회원이 참여중 + 참여 완료한 습관 목록을 서브타이틀(및 진행일수)로 표시 -> todo 이 정보를 담기 위한 별도의 객체가 필요한지?
+        private List<CategoryResponse> activeCategories; // 진행 중인 습관들의 카테고리 정보 -> 진행 중인 습관의 분석 데이터를 선택하기 위한 카테고리 선택자
         // 홍보 문구(오늘의 인용구 포함)
     }
+
+    /* 2023.1.12(목) 8h20 메모
+    (그 날의 인증 마감 시간 + 1분) 시점에
+    if (특정 회원의 인증 글 수 + 특정 회원의 wildcard 개수 != 오늘(인증했어야 하는) 날짜 - challenge 생성일 + 1)
+     if (해당 회원의 wildcard 개수 == 2) challenge 테이블의 challenge 상태를 fail로 변경
+     else 해당 회원의 wildcard 사용 내역 insert
+
+    challenge 테이블에서 특정 회원의 습관 형성 현황 조회
+    select c.challenge_id, c.user_id, c.habit_id, h.subtitle, count(auth_id) + count(wildcard_id)
+    from challenge c
+    left outer join habit h on c.habit_id = h.habit_id
+    left outer join auth a on c.challenge_id = a.challenge_id
+    left outer join wildcard w on c.challenge_id = w.challenge_id
+    where user_id == # && (challenge_status_id == 1 || challenge_status_id == 2)
+    group by challenge_id;
+
+    category 테이블에서 특정 회원이 참여/진행 중인 습관의 카테고리 조회
+    select ca.type
+    from category ca
+    left outer join habit h on ca.habit_id = h.habit_id
+    left outer join challenge c on h.habit_id = c.habit_id
+    where user_id == # && challenge_status_id == 1;
+     */
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    @NoArgsConstructor
+    public static class ChallengeResponse {
+        private Long challengeId;
+        private String habitSubTitle;
+        private int authDays;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    @NoArgsConstructor
+    public static class CategoryResponse {
+        private Long categoryId;
+        private String type;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    @NoArgsConstructor
+    public static class HabitResponse {
+        private Long habitId;
+        private String title;
+        private String body;
+        private Long categoryId;
+        // image
+    }
+    /* 특정 회원이 만든/host인 습관 조회
+    select h.habit_id, h.title, h.body, h.category_id,
+    from habit h
+    where h.host_id = #;
+
+    특정 회원이 찜한 습관 조회
+    select b.habit_id
+    from bookmark b
+    where b.user_id = #;
+
+    특정 회원이 host인 습관 중 해당 회원이 찜한 습관
+    select b.habit_id
+    from bookmark b
+    left join habit h
+    on b.habit_id = h.habit_id
+    where h.host_id = # && b.user_id = #;
+     */
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    @NoArgsConstructor
+    public static class SuccessHabitCertificate {
+        private Long challengeId;
+        private String username;
+        private String title;
+        private String createdAt;
+        private String completedAt;
+    }
+    /*
+    select
+
+     */
+
 }
-
-/* 2023.1.12(목) 8h20 메모
-(그 날의 인증 마감 시간 + 1분) 시점에
-if (특정 회원의 인증 글 수 + 특정 회원의 wildcard 개수 != 오늘(인증했어야 하는) 날짜 - challenge 생성일 + 1)
- if (해당 회원의 wildcard 개수 == 2) challenge 테이블의 challenge 상태를 fail로 변경
- else 해당 회원의 wildcard 사용 내역 insert
-
-challenge 테이블에서 특정 회원의 습관 형성 현황 조회
-select c.challenge_id, c.user_id, c.habit_id, h.subtitle, count(auth_id) + count(wildcard_id)
-from challenge c
-left outer join habit h on c.habit_id = h.habit_id
-left outer join auth a on c.challenge_id = a.challenge_id
-left outer join wildcard w on c.challenge_id = w.challenge_id
-where user_id == # && (challenge_status_id == 1 || challenge_status_id == 2)
-group by challenge_id
- */

@@ -66,7 +66,7 @@ public class UserController {
 //        User updateUser = userService.updateUser(userId);
 
         // API 통신용
-        return new ResponseEntity<>(createPatchResponseDto(), HttpStatus.OK); // todo 회원 정보 수정 후 어떤 화면으로 연결/이동하지?
+        return new ResponseEntity<>(createUserPatchResponseDto(), HttpStatus.OK); // todo 회원 정보 수정 후 어떤 화면으로 연결/이동하지?
     }
 
     @ApiOperation(value = "회원 개인 정보 통합 조회(마이페이지)")
@@ -78,7 +78,31 @@ public class UserController {
          */
 
         // API 통신용
-        return new ResponseEntity<>(createDetailResponseDto(), HttpStatus.OK);
+        return new ResponseEntity<>(createUserDetailResponseDto(), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "내가 진행 중인 습관의 카테고리 조회")
+    @GetMapping("/habits/{user-id}/category")
+    public ResponseEntity getActiveCategories(@PathVariable("user-id") @Positive Long userId) {
+        // API 통신용
+        List<UserDto.CategoryResponse> responseDtos = List.of(createCategoryResponseDto(), createCategoryResponseDto(), createCategoryResponseDto());
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "내가 만든 습관 조회")
+    @GetMapping("/habits/{user-id}/host")
+    public ResponseEntity getHostHabits(@PathVariable("user-id") @Positive Long userId) {
+        // API 통신용
+        List<UserDto.HabitResponse> responseDtos = List.of(createHabitResponseDto(), createHabitResponseDto());
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "인증서 발급")
+    @GetMapping("/{user_id}/habits/{habit-id}")
+    public ResponseEntity getSuccessHabitCertificate(@PathVariable("user-id") @Positive Long user_id,
+                                                     @PathVariable("habit-id") @Positive Long habit_id) {
+        // API 통신용
+        return new ResponseEntity<>(createSucessHabitCertificate(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "특정 습관 달성 회원 목록 조회(달성 시간 내림차순)")
@@ -86,12 +110,12 @@ public class UserController {
     public ResponseEntity getSuccessUsersByChallengeCreatedAtDesc(@Positive @RequestParam int page,
                                                                   @Positive @RequestParam int size) {
         // API 통신용
-        List<UserDto.SimpleResponse> responseDtos = List.of(createSimpleResponseDto(), createSimpleResponseDto(), createSimpleResponseDto());
+        List<UserDto.SimpleResponse> responseDtos = List.of(createUserSimpleResponseDto(), createUserSimpleResponseDto(), createUserSimpleResponseDto());
         return new ResponseEntity<>(responseDtos, HttpStatus.OK); // todo
     }
 
 
-    private UserDto.SimpleResponse createSimpleResponseDto() {
+    private UserDto.SimpleResponse createUserSimpleResponseDto() {
         return UserDto.SimpleResponse.builder()
                 .userId(1L)
                 .email("user1@gmail.com")
@@ -99,7 +123,7 @@ public class UserController {
                 .build();
     }
 
-    private UserDto.PatchResponse createPatchResponseDto() {
+    private UserDto.PatchResponse createUserPatchResponseDto() {
         return UserDto.PatchResponse.builder()
                 .userId(1L)
                 .username("유저no1")
@@ -107,15 +131,48 @@ public class UserController {
                 .build();
     }
 
-    private UserDto.DetailResponse createDetailResponseDto() {
+    private UserDto.DetailResponse createUserDetailResponseDto() {
         return UserDto.DetailResponse.builder()
                 .userId(1L)
                 .email("user1@gmail.com")
                 .username("user1번")
                 .biggestNumOfChallengeHabitDays(51)
-//                .challengeHabits(List.of(new Challenge(1L, 1L, 1L, null, "C"), new Challenge()))
-//                .successHabits()
+                .activeChallenges(List.of(createChallengeResponseDto(), createChallengeResponseDto(), createChallengeResponseDto(), createChallengeResponseDto()))
+                .activeCategories(List.of(createCategoryResponseDto()))
                 .build();
     }
 
+    private UserDto.ChallengeResponse createChallengeResponseDto() {
+        return UserDto.ChallengeResponse.builder()
+                .challengeId(1L)
+                .habitSubTitle("미라클모닝")
+                .authDays(32)
+                .build();
+    }
+
+    private UserDto.CategoryResponse createCategoryResponseDto() {
+        return UserDto.CategoryResponse.builder()
+                .categoryId(1L)
+                .type("HEALTH")
+                .build();
+    }
+
+    private UserDto.HabitResponse createHabitResponseDto() {
+        return UserDto.HabitResponse.builder()
+                .habitId(1L)
+                .title("새벽 4시30분 기상 - 미라클 모닝")
+                .body("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut euismod eu nulla sit amet pellentesque. Cras neque augue, laoreet vel blandit volutpat, convallis in velit. Nulla urna arcu, malesuada vel odio tempor, congue elementum est.")
+                .categoryId(1L)
+                .build();
+    }
+
+    private UserDto.SuccessHabitCertificate createSucessHabitCertificate() {
+        return UserDto.SuccessHabitCertificate.builder()
+                .challengeId(1L)
+                .username("유저no1")
+                .title("새벽 4시30분 기상 - 미라클 모닝")
+                .createdAt("2022-04-10")
+                .completedAt("2022-06-15")
+                .build();
+    }
 }
