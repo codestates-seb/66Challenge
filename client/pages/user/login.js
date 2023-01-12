@@ -29,15 +29,19 @@ const Login = () => {
 
   const loginButtonClick = async (data) => {
     // ajax를 통해 server에 보낼 데이터
-    if (emailVerify && data.email && data.password) {
+    const { email, password } = data;
+
+    if (emailVerify && email && password) {
       await axios({
         method: 'POST',
         url: `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
         data: {
-          ...data,
+          username: email,
+          password,
         },
       })
         .then((res) => {
+          console.log(res);
           setEmailVerify(false);
           setPasswordView(false);
           router.push('/');
@@ -45,11 +49,12 @@ const Login = () => {
         .catch((err) => {
           console.error(err);
         });
-    } else if (!emailVerify || !data.email) {
-      alert('아이디와 비밀번호를 정확하게 입력해주세요.');
+    } else if (!emailVerify || !emailRegExp.test(email)) {
+      setEmailVerify(false);
+      alert('이메일이 양식에 맞지 않습니다.');
       setFocus('email');
     } else {
-      alert('아이디와 비밀번호를 정확하게 입력해주세요.');
+      alert('이메일과 비밀번호를 정확하게 입력해주세요.');
       setFocus('password');
     }
   };
@@ -59,8 +64,8 @@ const Login = () => {
   };
 
   const emailInputElKeyEvent = (e) => {
-    e.preventDefault();
-    if (['Enter', 'Tab'].includes(e.key)) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
       setFocus('password');
     }
   };
@@ -70,7 +75,7 @@ const Login = () => {
     'after:absolute after:bottom-[-12px] after:border-[5px] after:border-transparent after:left-2/4 after:border-t-[7px] after:border-t-mainColor after:translate-y-[-100%] after:border-b-0 after:translate-x-[-50%]';
 
   return (
-    <div className="login-container w-[300px] h-screen mx-auto flex flex-col justify-center items-center pb-[40px]">
+    <div className="login-container w-[300px] mx-auto flex flex-col justify-center items-center pt-[100px]">
       <div className="logo flex justify-center w-full mb-[40px]">
         <img src="/image/logo/logoVertical.svg" />
       </div>
@@ -105,10 +110,11 @@ const Login = () => {
             <label htmlFor="email" className="text-base font-semibold mb-1">
               이메일
             </label>
+            <input hidden="hidden" />
             <input
               type="text"
               id="email"
-              className={`h-[35px] text-base w-full rounded-md px-2 pt-[5px] ${
+              className={`h-[35px] text-base w-full rounded-md px-2 pt-[2px] ${
                 emailVerify ? 'border' : 'border-subColor border-2'
               } focus:border-mainColor duration-500 outline-0 mb-1`}
               placeholder="이메일을 입력해주세요."
@@ -119,7 +125,7 @@ const Login = () => {
                 onBlur: () =>
                   emailVerifyOnBlur(emailRegExp.test(getValues('email'))),
               })}
-            ></input>
+            />
             {emailVerify || (
               <span className="block text-subColor text-[13px] h-[13px]">
                 올바른 이메일 주소를 입력해주세요.
@@ -134,7 +140,7 @@ const Login = () => {
               <input
                 type={passwordView ? 'text' : 'password'}
                 id="password"
-                className={`border h-[35px] text-base w-full rounded-md px-2 pt-[5px] pr-[30px] focus:border-mainColor duration-500 outline-0 mb-1`}
+                className={`border h-[35px] text-base w-full rounded-md px-2 pt-[2px] pr-[30px] focus:border-mainColor duration-500 outline-0 mb-1`}
                 {...register('password')}
                 autoComplete="on"
                 placeholder="비밀번호를 입력해주세요"

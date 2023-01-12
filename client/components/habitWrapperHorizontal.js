@@ -27,7 +27,10 @@ export const HabitWrapperHorizontal = ({
         <ul className="habit-wrapper-list flex overflow-x-scroll flex-nowrap gap-x-4 scrollbar-hide">
           {habitWrapperData.map((el) => {
             return (
-              <li className="habit-element flex-[0_0_auto] w-[140px] ">
+              <li
+                className="habit-element flex-[0_0_auto] w-[140px] "
+                key={el.habitId}
+              >
                 <HabitElement {...el} />
               </li>
             );
