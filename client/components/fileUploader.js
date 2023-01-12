@@ -20,7 +20,7 @@ export const FileUploader = () => {
     };
   };
   return (
-    <form className="file-uploader-container">
+    <div className="file-uploader-container">
       <label
         className="file-uploader-label flex justify-center items-center w-[302px] mx-auto h-[202px] border rounded"
         htmlFor="uploader-input"
@@ -48,6 +48,6 @@ export const FileUploader = () => {
         onChange={saveImgFile}
         capture="gallery"
       />
-    </form>
+    </div>
   );
 };

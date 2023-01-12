@@ -93,7 +93,7 @@ export default function SignUp() {
     console.log(e);
   };
   return (
-    <div className="siginUpContatiner w-full h-screen flex flex-col px-10 items-center pt-20  mx-auto relative pb-[70px]">
+    <div className="siginUpContatiner w-full h-screen flex flex-col px-10 items-center pt-20  mx-auto relative">
       <img src="/image/logo.svg" className="mb-[40px]" />
       <form
         className="signUpForm w-full flex flex-col items-center"
