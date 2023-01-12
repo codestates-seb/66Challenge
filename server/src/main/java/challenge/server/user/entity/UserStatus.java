@@ -24,8 +24,8 @@ public class UserStatus extends BaseTimeEntity {
     private List<User> users = new ArrayList<>();
 
     public enum Type {
-        ACTIVITY(1),
-        QUICK(2),
+        ACTIVE(1),
+        QUIT(2),
         BANNED(3);
 
         @Getter

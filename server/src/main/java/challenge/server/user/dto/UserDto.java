@@ -1,5 +1,7 @@
 package challenge.server.user.dto;
 
+import challenge.server.challenge.entity.Challenge;
+import challenge.server.habit.entity.Category;
 import challenge.server.habit.entity.Habit;
 import challenge.server.validator.Password;
 import lombok.AllArgsConstructor;
@@ -9,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,17 +28,37 @@ public class UserDto {
         const userNameRegExp = /[A-Za-z0-9가-힇]{2,20}/; 닉네임 = 영문자 또는 숫자 또는 한글 2~20글자
          */
         // 유효성 검사를 통해 회원 닉네임과 이메일 중복 여부를 확인
-        @NotBlank
         @Email
+        @NotBlank(message = "")
         private String email;
 
-        @NotBlank(message = "닉네임은 공백이 아니어야 합니다")
+        //@Pattern(regexp = "/[A-Za-z0-9가-힇]{2,20}/", message = "닉네임은 공백이 아니어야 하며, 영문자/숫자/한글 2~20글자로 이루어집니다.")
+        @NotBlank(message = "")
         private String username;
 
-        // todo 패스워드 유효성 검사 프론트와 합의해서 별도 validation annotation 만들기
-        @NotBlank
-//        @Password
+        // 패스워드 유효성 검사 프론트와 합의해서 별도 validation annotation 만들기
+        //@Password
+        @NotBlank(message = "")
         private String password;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    @NoArgsConstructor
+    public static class Patch {
+        private Long userId;
+
+        //@Pattern(regexp = "/[A-Za-z0-9가-힇]{2,20}/", message = "닉네임은 공백이 아니어야 하며, 영문자/숫자/한글 2~20글자로 이루어집니다.")
+        //@NotBlank
+        private String username;
+
+        //@Password
+        //@NotBlank(message = "")
+        private String password;
+
+        // todo 대소문자 구분 없이 active, quit, banned 3가지 중 1개 값만 가능한 조건 구현?
+//        private String userStatus;
     }
 
     @Getter
@@ -51,13 +75,24 @@ public class UserDto {
     @AllArgsConstructor
     @Builder
     @NoArgsConstructor
+    public static class PatchResponse {
+        private Long userId;
+        private String username;
+        private String password;
+//        private String userStatus;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    @NoArgsConstructor
     public static class DetailResponse {
         private Long userId;
         private String email;
         private String username;
         private int biggestNumOfChallengeHabitDays; // 회원이 진행 중인 challenge 중 가장 높은 진행일을 선택하여 'n일차' 출력
-        // 회원이 참여중 + 참여 완료한 습관 목록을 서브타이틀(및 진행일수)로 표시 -> todo 이 정보를 담기 위한 별도의 객체가 필요한지?
-        private List<Habit> activeCategories; // 진행 중인 습관들의 카테고리 정보 -> 진행 중인 습관의 분석 데이터를 선택하기 위한 카테고리 선택자
+        private List<Challenge> activeChallenges; // 회원이 참여중 + 참여 완료한 습관 목록을 서브타이틀(및 진행일수)로 표시 -> todo 이 정보를 담기 위한 별도의 객체가 필요한지?
+        private List<Category> activeCategories; // 진행 중인 습관들의 카테고리 정보 -> 진행 중인 습관의 분석 데이터를 선택하기 위한 카테고리 선택자
         // 홍보 문구(오늘의 인용구 포함)
     }
 }

@@ -6,6 +6,8 @@ import challenge.server.user.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,10 +43,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = delegateAccessToken(user);
         String refreshToken = delegateRefreshToken(user);
         response.setHeader("Authorization", "Bearer " + accessToken);
-        response.setHeader("Refresch", refreshToken);
-        response.setHeader("userId", String.valueOf(user.getUserId()));
+        response.setHeader("Refresh", refreshToken);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpStatus.OK.value());
 
-        this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
+        Map<String, Long> body = new HashMap<>();
+        body.put("userId", user.getUserId());
+
+        new ObjectMapper().writeValue(response.getOutputStream(), body);
     }
 
     private String delegateAccessToken(User user) {
