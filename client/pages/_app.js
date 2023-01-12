@@ -7,7 +7,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <HomeNav />
-      <Component {...pageProps} />
+      <main className="mb-[100px]">
+        <Component {...pageProps} />
+      </main>
       <BottomNav />
     </>
   );
