@@ -7,15 +7,6 @@ import {
 import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
 
-import { SlideBanner } from '../components/slideBanner';
-import {
-  slideData,
-  categoryData,
-  habitWrapperData,
-} from '../data/homeStaticData';
-import { useRouter } from 'next/router';
-import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
-
 export default function Home() {
   const router = useRouter();
   const cateIconClick = (url) => {
