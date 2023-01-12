@@ -6,7 +6,6 @@ import {
 } from '../data/homeStaticData';
 import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
-import { FileUploader } from '../components/fileUploader';
 
 export default function Home() {
   const router = useRouter();
