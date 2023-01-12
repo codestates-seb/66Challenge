@@ -29,7 +29,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
 
-    //    @Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
+    @Transactional
     public User createUser(User user) {
         //log.info("-------- createUser 중복 회원 검사 --------");
         //System.out.println(user.getEmail());
