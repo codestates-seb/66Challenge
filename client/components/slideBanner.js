@@ -44,7 +44,7 @@ export const SlideBanner = ({ bannerCont, t }) => {
         {bannerCont.map((el, idx) => {
           return (
             <li
-              className="sildebanner-background w-screen h-[200px] flex-[0_0_auto] flex flex-col justify-center items-center"
+              className={`sildebanner-background w-screen h-[200px] flex-[0_0_auto] flex flex-col justify-center items-center`}
               key={idx}
               onClick={(_) => bannerClickEvent(el.bannerLink)}
             >
