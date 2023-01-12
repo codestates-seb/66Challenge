@@ -26,10 +26,10 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false) // todo 길이 제약조건 협의
+    @Column(length = 12, nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true)
+    @Column(length = 20, nullable = false, unique = true)
     private String username;
 
     // JWT 구현 시 추가
