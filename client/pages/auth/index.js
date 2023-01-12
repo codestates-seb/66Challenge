@@ -78,7 +78,7 @@ export default function Auth() {
         ) : (
           dummyArr.map((el, index) => {
             return (
-              <div className=" w-1/2 h-1/2 p-2" key={index}>
+              <div className=" w-[120px] h-1/2 p-2" key={index}>
                 <span
                   className={`${
                     active === index ? 'bg-subColor' : 'bg-mainColor'

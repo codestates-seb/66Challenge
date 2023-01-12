@@ -2,20 +2,24 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { MdExpandMore } from 'react-icons/md';
+import {
+  getUsernameOverlapVerify,
+  patchUserInfo,
+} from '../../../module/functionModules';
 
 export default function SignUp() {
   const router = useRouter();
   const { register, handleSubmit, reset, getValues } = useForm({
-    defaultValues: { userName: '', password: '', passwordCheck: '' },
+    defaultValues: { username: '', password: '', passwordCheck: '' },
   });
   const [verify, setVerify] = useState({
-    userNameVerify: '',
+    usernameVerify: '',
     passwordVerify: '',
     passwordCheckVerify: '',
     agreeVerify: 'fail',
   });
   const [changeUserInfo, setChangeUserInfo] = useState({
-    userName: { boolean: false, className: '' },
+    username: { boolean: false, className: '' },
     password: { boolean: false, className: '' },
   });
   const inputDefaultClassName =
@@ -24,7 +28,7 @@ export default function SignUp() {
     'text-base flex w-full font-semibold mb-1 justify-between';
   const passwordRegExp =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,12}$/;
-  const userNameRegExp = /[A-Za-z0-9가-힇]{2,20}/;
+  const usernameRegExp = /[A-Za-z0-9가-힇]{2,20}/;
   const upArrow = 'rotate-180 duration-500';
   const downArrow = 'rotate-0';
   const arrowDirectionHandle = (type) => {
@@ -44,20 +48,16 @@ export default function SignUp() {
       reset({ [type]: '' });
     }
   };
-  const blurHandle = (verifyBoolean, verifyKey) => {
+  const blurHandle = async (verifyBoolean, verifyKey) => {
     if (verifyBoolean) {
-      //   if (verifyKey === 'emailVerify' || verifyKey === 'userNameVerify') {
-      //     //중복검사 호출
-      //     //중복 검사 확인 비동기 호출 후 통과하지 못하면
-      //     //     setVerify({ ...verify, [verifyKey]: 'overlap' });
-      //     //   setItemsClassName({
-      //     //     ...itemsClassName,
-      //     //     [type]: inputFailClassName,
-      //     //   });
-      //   } else {
-      setVerify({ ...verify, [verifyKey]: 'success' });
-
-      //   }
+      if (verifyKey === 'usernameVerify') {
+        const response = await getnOverlapVerify(getValues('username'));
+        // if (response === '중복이면') {
+        //   setVerify({ ...verify, [verifyKey]: 'overlap' });
+        // }
+      } else {
+        setVerify({ ...verify, [verifyKey]: 'success' });
+      }
     } else {
       setVerify({ ...verify, [verifyKey]: 'fail' });
     }
@@ -67,16 +67,16 @@ export default function SignUp() {
       ? setVerify({ ...verify, agreeVerify: 'success' })
       : setVerify({ ...verify, agreeVerify: 'fail' });
   };
-  const editUserInfoHandle = (data) => {
-    const { userName, password, passwordCheck } = data;
+  const editUserInfoHandle = async (data) => {
+    const { username, password, passwordCheck } = data;
     //회원 가입 비동기 함수 호출 부분 에러가 없다면 로그인 페이지로 연동할 것 그 후 리셋
-    if (userName === '') {
+    if (username === '') {
       //password만 보낼 것
     } else if (password === '') {
-      //userName만 보낼 것
+      //username만 보낼 것
     }
-    if (userNameRegExp.test(userName) === false && userName !== '') {
-      setVerify({ ...verify, userNameVerify: 'fail' });
+    if (usernameRegExp.test(username) === false && username !== '') {
+      setVerify({ ...verify, usernameVerify: 'fail' });
     }
     if (passwordRegExp.test(password) === false && password !== '') {
       setVerify({ ...verify, passwordVerify: 'fail' });
@@ -84,7 +84,7 @@ export default function SignUp() {
     if (password !== passwordCheck) {
       setVerify({ ...verify, passwordCheckVerify: 'fail' });
     } else {
-      //회원 가입 비동기 함수 호출 부분 에러가 없다면 로그인 페이지로 연동할 것 그 후 리셋
+      // const response=await patchUserInfo({cookie,userId,username,password});
       //reset();
     }
     console.log(data);
@@ -101,31 +101,31 @@ export default function SignUp() {
       >
         <div
           className={`signUpPasswordBox flex flex-col w-full ${
-            changeUserInfo.userName.boolean === false
+            changeUserInfo.username.boolean === false
               ? 'h-auto mb-1'
               : 'h-[80px] mb-5'
           }`}
         >
           <label
             className={labelDefaultClassName}
-            onClick={() => arrowDirectionHandle('userName')}
+            onClick={() => arrowDirectionHandle('username')}
           >
-            {changeUserInfo.userName.boolean === false
+            {changeUserInfo.username.boolean === false
               ? '닉네임 변경'
               : '새 닉네임'}
-            <MdExpandMore className={changeUserInfo.userName.className} />
+            <MdExpandMore className={changeUserInfo.username.className} />
           </label>
-          {changeUserInfo.userName.boolean === false ? null : (
+          {changeUserInfo.username.boolean === false ? null : (
             <input
               className={`${inputDefaultClassName} ${
-                verify.userNameVerify === 'fail' ? 'border-subColor' : null
+                verify.usernameVerify === 'fail' ? 'border-subColor' : null
               }`}
               placeholder="2~20자 이내로 입력해주세요"
-              {...register('userName', {
+              {...register('username', {
                 onBlur: () => {
                   blurHandle(
-                    userNameRegExp.test(getValues('userName')),
-                    'userNameVerify',
+                    usernameRegExp.test(getValues('username')),
+                    'usernameVerify',
                   );
                 },
               })}
@@ -133,11 +133,11 @@ export default function SignUp() {
             />
           )}
 
-          {verify.userNameVerify === 'fail' ? (
+          {verify.usernameVerify === 'fail' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
               닉네임은 영어/한국어/숫자 중 사용하여 2~20자 입니다.
             </span>
-          ) : verify.userNameVerify === 'overlap' ? (
+          ) : verify.usernameVerify === 'overlap' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
               중복된 닉네임 입니다.
             </span>
@@ -233,13 +233,13 @@ export default function SignUp() {
           disabled={
             !Object.values(verify).every((el) => el === 'success') &&
             !(
-              verify.userNameVerify === 'success' &&
+              verify.usernameVerify === 'success' &&
               verify.passwordVerify === '' &&
               verify.passwordCheckVerify === '' &&
               verify.agreeVerify === 'success'
             ) &&
             !(
-              verify.userNameVerify === '' &&
+              verify.usernameVerify === '' &&
               verify.passwordVerify === 'success' &&
               verify.passwordCheckVerify === 'success' &&
               verify.agreeVerify === 'success'

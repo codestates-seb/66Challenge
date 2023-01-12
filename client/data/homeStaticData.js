@@ -21,52 +21,52 @@ export const slideData = [
 
 export const categoryData = [
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '운동',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '식습관',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '학습',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '일상생활',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '취미',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '셀프케어',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '에코',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '마음챙김',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '기타',
     cateLink: '',
   },
   {
-    cateImgUrl: '/image/icon/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.svg',
     cateTitle: '전체보기',
     cateLink: '',
   },
