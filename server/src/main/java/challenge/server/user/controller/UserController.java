@@ -32,14 +32,12 @@ public class UserController {
     @ApiOperation(value = "회원 가입", notes = "Sign Up 버튼을 클릭할 경우 회원 가입 요청을 보냅니다.")
     @PostMapping
     public ResponseEntity postUser(@Valid @RequestBody UserDto.Post requestBody) {
-        /*
         User user = userMapper.userPostDtoToUser(requestBody);
         User createdUser = userService.createUser(user);
         return new ResponseEntity<>(userMapper.userToUserSimpleResponseDto(createdUser), HttpStatus.CREATED);
-         */
 
         // API 통신용
-        return new ResponseEntity<>(createSimpleResponseDto(), HttpStatus.CREATED);
+//        return new ResponseEntity<>(createSimpleResponseDto(), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "이메일 중복 여부 확인", notes = "true = 중복되는 이메일 존재 / false = 중복되는 이메일 없음")
