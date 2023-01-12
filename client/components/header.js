@@ -62,7 +62,6 @@ const Header = () => {
 
     function shareDetect() {
       if (pathArr.includes('detail')) {
-        // if (pathArr.includes('login')) { // 공유버튼 테스트용
         setIsCanShare(true);
       } else {
         setIsCanShare(false);
