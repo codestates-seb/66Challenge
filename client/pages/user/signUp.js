@@ -12,27 +12,14 @@ export default function SignUp() {
     passwordCheckVerify: '',
     agreeVerify: 'fail',
   });
-
-  const [itemsClassName, setItemsClassName] = useState({
-    emailInput:
-      'border h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1',
-    userNameInput:
-      'border h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1',
-    passwordInput:
-      'border h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1',
-    passwordCheckInput:
-      'border h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1',
-  });
   const inputDefaultClassName =
     'border h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1';
-  const inputFailClassName =
-    'border border-subColor h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1';
   const passwordRegExp =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,12}$/;
   const emailRegExp =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*[.][a-zA-Z]{2,3}$/;
   const userNameRegExp = /[A-Za-z0-9가-힇]{2,20}/;
-  const blurHandle = (verifyBoolean, verifyKey, type) => {
+  const blurHandle = (verifyBoolean, verifyKey) => {
     if (verifyBoolean) {
       //   if (verifyKey === 'emailVerify' || verifyKey === 'userNameVerify') {
       //     //중복검사 호출
@@ -44,17 +31,10 @@ export default function SignUp() {
       //     //   });
       //   } else {
       setVerify({ ...verify, [verifyKey]: 'success' });
-      setItemsClassName({
-        ...itemsClassName,
-        [type]: inputDefaultClassName,
-      });
+
       //   }
     } else {
       setVerify({ ...verify, [verifyKey]: 'fail' });
-      setItemsClassName({
-        ...itemsClassName,
-        [type]: inputFailClassName,
-      });
     }
   };
   const checkHandle = () => {
@@ -63,18 +43,31 @@ export default function SignUp() {
       : setVerify({ ...verify, agreeVerify: 'fail' });
   };
   const signUpHandle = (data) => {
-    const { userEmail, userName, password } = data;
-    //회원 가입 비동기 함수 호출 부분 에러가 없다면 로그인 페이지로 연동할 것 그 후 리셋
-    //reset();
+    const { userEmail, userName, password, passwordCheck } = data;
+
+    if (emailRegExp.test(userEmail) === false) {
+      setVerify({ ...verify, emailVerify: 'fail' });
+    }
+    if (userNameRegExp.test(userName) === false) {
+      setVerify({ ...verify, userNameVerify: 'fail' });
+    }
+    if (passwordRegExp.test(password) === false) {
+      setVerify({ ...verify, passwordVerify: 'fail' });
+    }
+    if (password !== passwordCheck) {
+      setVerify({ ...verify, passwordCheckVerify: 'fail' });
+    } else {
+      //회원 가입 비동기 함수 호출 부분 에러가 없다면 로그인 페이지로 연동할 것 그 후 리셋
+      //reset();
+    }
     console.log(data);
   };
   const onError = (e) => {
     console.log(e);
   };
-
   const labelDefaultClassName = 'text-base font-semibold mb-1';
   return (
-    <div className="siginUpContatiner w-[300px] h-screen flex flex-col items-center justify-center mx-auto">
+    <div className="siginUpContatiner w-full h-screen flex flex-col px-10 items-center justify-center mx-auto">
       <img src="/image/logo.svg" className="mb-[40px]" />
       <form
         className="signUpForm w-full flex flex-col items-center"
@@ -85,7 +78,9 @@ export default function SignUp() {
             이메일
           </label>
           <input
-            className={itemsClassName.emailInput}
+            className={`${inputDefaultClassName} ${
+              verify.emailVerify === 'fail' ? 'border-subColor' : null
+            }`}
             id="userEmail"
             placeholder="example@example.com"
             {...register('userEmail', {
@@ -93,7 +88,6 @@ export default function SignUp() {
                 blurHandle(
                   emailRegExp.test(getValues('userEmail')),
                   'emailVerify',
-                  'emailInput',
                 ),
             })}
             required
@@ -113,7 +107,9 @@ export default function SignUp() {
             닉네임
           </label>
           <input
-            className={itemsClassName.userNameInput}
+            className={`${inputDefaultClassName} ${
+              verify.userNameVerify === 'fail' ? 'border-subColor' : null
+            }`}
             id="userName"
             placeholder="2~20자 이내로 입력해주세요"
             {...register('userName', {
@@ -121,7 +117,6 @@ export default function SignUp() {
                 blurHandle(
                   userNameRegExp.test(getValues('userName')),
                   'userNameVerify',
-                  'userNameInput',
                 ),
             })}
             required
@@ -141,16 +136,18 @@ export default function SignUp() {
             비밀번호
           </label>
           <input
-            className={itemsClassName.passwordInput}
+            className={`${inputDefaultClassName} ${
+              verify.passwordVerify === 'fail' ? 'border-subColor' : null
+            }`}
             id="password"
             placeholder="영문/숫자/특수문자 혼합 8~12자"
+            autoComplete="off"
             type="password"
             {...register('password', {
               onBlur: () =>
                 blurHandle(
                   passwordRegExp.test(getValues('password')),
                   'passwordVerify',
-                  'passwordInput',
                 ),
             })}
             required
@@ -166,16 +163,18 @@ export default function SignUp() {
             비밀번호 확인
           </label>
           <input
-            className={itemsClassName.passwordCheckInput}
+            className={`${inputDefaultClassName} ${
+              verify.passwordCheckVerify === 'fail' ? 'border-subColor' : null
+            }`}
             id="passwordCheck"
             placeholder="비밀번호를 한번 더 입력해주세요"
+            autoComplete="off"
             type="password"
             {...register('passwordCheck', {
               onBlur: () =>
                 blurHandle(
                   getValues('password') === getValues('passwordCheck'),
                   'passwordCheckVerify',
-                  'passwordCheckInput',
                 ),
             })}
             required
@@ -190,12 +189,12 @@ export default function SignUp() {
           <input
             id="agreeCheck"
             type="checkbox"
-            className="w-5 h-5 rounded-full border mr-3 accent-subColor"
+            className="w-5 h-5 mr-3 accent-subColor"
             onClick={checkHandle}
           />
           <label
             htmlFor="agreeCheck"
-            className="block text-mainColor text-[14px] font-semibold "
+            className="block text-mainColor text-base font-semibold "
           >
             (필수) 본인은 66일 습관 챌린지 준비가 되었다.
           </label>

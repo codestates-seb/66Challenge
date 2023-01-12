@@ -50,7 +50,7 @@ export function MainBottomNav({ param }) {
       currentActive = 2;
     } else if (param === 'post') {
       currentActive = 3;
-    } else if (param === 'user') {
+    } else if (param === 'mypage') {
       currentActive = 4;
     }
     setActive(currentActive);
@@ -69,7 +69,7 @@ export function MainBottomNav({ param }) {
     }
   };
   return (
-    <div className="flex bg-mainColor h-[3rem] px-6  w-full fixed bottom-0 min-w[300px] justify-center">
+    <div className="flex bg-mainColor h-[50px] px-6  w-full fixed bottom-0 min-w[300px] justify-center">
       <ul className="flex relative items-center  justify-center">
         <span
           className={`bg-subColor duration-500 ${menus[active].dis} border-4 border-white h-14 w-14 absolute -top-7 -left-0 rounded-full `}
@@ -92,8 +92,8 @@ export function MainBottomNav({ param }) {
                 <span
                   className={` ${
                     active === i
-                      ? 'translate-y-4 duration-700 opacity-100 text-sm text-iconColor'
-                      : 'opacity-0 translate-y-10 text-iconColor text-sm'
+                      ? 'translate-y-4 duration-700 opacity-100 text-sm text-iconColor text-base'
+                      : 'opacity-0 translate-y-10 text-iconColor text-sm text-base'
                   }`}
                 >
                   {menu.name}

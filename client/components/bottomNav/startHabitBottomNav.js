@@ -30,7 +30,7 @@ export function StartHabitBottomNav() {
       )}
 
       <button
-        className="bg-mainColor h-4/5 w-3/4 rounded-lg ml-5 text-iconColor"
+        className="bg-mainColor h-4/5 w-3/4 rounded-lg ml-5 text-iconColor text-base"
         onClick={startHabitHandle}
       >
         Start

@@ -19,7 +19,6 @@ export const FileUploader = () => {
       setImgFile(reader.result);
     };
   };
-
   return (
     <div className="file-uploader-container">
       <label
@@ -27,7 +26,7 @@ export const FileUploader = () => {
         htmlFor="uploader-input"
       >
         {imgFile ? (
-          <div className="file-uploader-preview w-[300px] h-[200px]">
+          <div className="file-uploader-preview w-[400px] h-[200px]">
             <img
               className="object-contain w-full h-full"
               src={imgFile}
