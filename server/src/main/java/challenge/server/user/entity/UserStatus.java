@@ -20,8 +20,8 @@ public class UserStatus extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @OneToMany(mappedBy = "userStatus", cascade = CascadeType.ALL)
-    private List<User> users = new ArrayList<>();
+//    @OneToMany(mappedBy = "userStatus", cascade = CascadeType.ALL)
+//    private List<User> users = new ArrayList<>();
 
     public enum Type {
         ACTIVE(1),

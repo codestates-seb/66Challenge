@@ -60,6 +60,16 @@ public class UserDto {
     @AllArgsConstructor
     @Builder
     @NoArgsConstructor
+    public static class BanResponse {
+        private Long userId;
+        private User.Status status;
+    }
+
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    @NoArgsConstructor
     public static class SimpleResponse {
         private Long userId;
         private String email;
@@ -174,8 +184,13 @@ public class UserDto {
         private String completedAt;
     }
     /*
-    select
-
+    select c.challenge_id, u.username, h.title, c.created_at, c.created_at + 66days
+    from challenge c
+    left outer join users u
+    on c.user_id = u.user_id
+    left outer join habit h
+    on c.habit_id = h.habit_id
+    where c.user_id = # && c.habit_id = #
      */
 
 }
