@@ -7,11 +7,13 @@ import {
 } from 'react-icons/ai';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 export function MainBottomNav({ param }) {
   const [active, setActive] = useState(0);
   const router = useRouter();
   //로그인 여부 판단 할 근거가 필요함
-  const [isLogin, setIsLogin] = useState(true);
+  const { isLogin } = useSelector((state) => state.loginIdentity);
+
   const menus = [
     { name: 'Home', icon: <AiOutlineHome />, dis: 'translate-x-0', link: '/' },
     {

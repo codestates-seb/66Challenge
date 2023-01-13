@@ -31,20 +31,14 @@ const initialState = {
 export const loginIdentitySlice = createSlice({
   name: 'loginIdentitySlice',
   initialState,
-  reducers: {
-    setIsLogin: (state) => {
-      state.isLogin = true;
-    },
-  },
+
   extraReducers: (builder) => {
     builder.addCase(loginRequest.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.isLogin = true;
       state.userId = action.payload;
     });
   },
 });
-
-export const { setIsLogin } = loginIdentitySlice.actions;
-
-export default loginIdentitySlice.reducer;
 
 export { loginRequest };
