@@ -1,9 +1,7 @@
 package challenge.server.review.entity;
 
 import challenge.server.audit.BaseTimeEntity;
-import challenge.server.challenge.entity.Challenge;
 import challenge.server.habit.entity.Habit;
-import challenge.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,9 +20,8 @@ public class Review extends BaseTimeEntity {
     private int score;
     private String body;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HABIT_ID")
     private Habit habit;
 
-    private User user;
 }

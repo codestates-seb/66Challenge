@@ -5,6 +5,7 @@ import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.category.entity.Category;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.report.entity.Report;
+import challenge.server.review.entity.Review;
 import challenge.server.user.entity.User;
 import lombok.*;
 
@@ -45,4 +46,7 @@ public class Habit extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "habit", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Report> reports = new ArrayList<>();
+
+    @OneToMany(mappedBy = "habit", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 }
