@@ -13,7 +13,7 @@ const loginRequest = createAsyncThunk(
       }).then((res) => res);
 
       const jwtToken = response.headers.get('Authorization');
-      setCookie('accessJwtToken', jwtToken);
+      setCookie('accessJwtToken', jwtToken, { path: '/' });
 
       const userId = response.data.userId;
       return userId;

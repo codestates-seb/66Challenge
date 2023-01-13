@@ -35,29 +35,11 @@ const Login = () => {
     const username = data.email;
 
     if (emailVerify && email && password) {
-      const response = await dispatch(
-        loginRequest({ username, password }),
-      ).then((data) => {
+      await dispatch(loginRequest({ username, password })).then((data) => {
         setEmailVerify(false);
         setPasswordView(false);
         router.push('/');
       });
-
-      //   await axios({
-      //     method: 'POST',
-      //     url: `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
-      //     data: {
-      //       username: email,
-      //       password,
-      //     },
-      //   })
-      //     .then((res) => {
-      //       console.log(res);
-
-      //     })
-      //     .catch((err) => {
-      //       console.error(err);
-      //     });
     } else if (!emailVerify || !emailRegExp.test(email)) {
       setEmailVerify(false);
       alert('이메일이 양식에 맞지 않습니다.');
