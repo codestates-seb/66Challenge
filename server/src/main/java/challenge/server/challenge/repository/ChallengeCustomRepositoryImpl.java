@@ -10,23 +10,12 @@ import java.util.List;
 
 import static challenge.server.auth.entity.QAuth.auth;
 import static challenge.server.challenge.entity.QChallenge.challenge;
-import static challenge.server.challenge.entity.QChallengeStatus.challengeStatus;
 
 @Repository
 @RequiredArgsConstructor
 public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
-
-    @Override
-    public List<Challenge> findAllStatus(Long statusId) {
-        return jpaQueryFactory
-                .select(challenge)
-                .from(challengeStatus)
-                .where(challengeStatus.challengeStatusId.eq(statusId))
-                .leftJoin(challengeStatus.challenges, challenge)
-                .fetch();
-    }
 
     @Override
     public List<Auth> findAuthsByChallengeId(Long challengeId) {
