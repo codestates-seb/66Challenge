@@ -2,6 +2,7 @@ package challenge.server.habit.entity;
 
 import challenge.server.audit.BaseTimeEntity;
 import challenge.server.bookmark.entity.Bookmark;
+import challenge.server.category.entity.Category;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.report.entity.Report;
 import challenge.server.user.entity.User;
