@@ -64,10 +64,13 @@ public class User extends BaseTimeEntity {
     }
      */
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USERS_STATUS_ID")
-    @ColumnDefault("ACTIVE") // todo default 값 어떻게 부여할지 방법 잘 모르겠음
-    private UserStatus userStatus;
+    //    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "USERS_STATUS_ID")
+//    @ColumnDefault("ACTIVE") // todo default 값 어떻게 부여할지 방법 잘 모르겠음
+//    private UserStatus userStatus;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.ACTIVE;
 
     // todo 회원 탈퇴/강퇴 시 찜하기, 신고 내역, challenges(+인증 내역, 후기)은 삭제 + 해당 회원이 개설한 habit은 놔두나?
     // todo 회원 상태를 3(banned)으로 바꾸는 조건/event 정의/구현?
@@ -82,4 +85,17 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Challenge> challenges = new ArrayList<>();
+
+    public enum Status {
+        ACTIVE(1),
+        QUIT(2),
+        BANNED(3);
+
+        @Getter
+        private final int num;
+
+        Status(int num) {
+            this.num = num;
+        }
+    }
 }

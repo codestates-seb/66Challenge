@@ -16,6 +16,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -30,8 +33,8 @@ public class UserController {
     private final UserMapper userMapper;
 
     @ApiOperation(value = "이메일 중복 여부 확인", notes = "true 응답 = 중복되는 이메일 존재 / false 응답 = 중복되는 이메일 없음")
-    @GetMapping("/email/{email}/exists")
-    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable("email") String email) {
+    @GetMapping("/emails/check")
+    public ResponseEntity<Boolean> checkEmailDuplicate(@RequestParam @Email String email) {
 //        return new ResponseEntity<>(userService.verifyExistEmail(email), HttpStatus.OK);
 
         // API 통신용
@@ -40,8 +43,8 @@ public class UserController {
     }
 
     @ApiOperation(value = "회원 닉네임 중복 여부 확인", notes = "true 응답 = 중복되는 닉네임 존재 / false 응답 = 중복되는 닉네임 없음")
-    @GetMapping("/username/{username}/exists")
-    public ResponseEntity<Boolean> checkUsernameDuplicate(@PathVariable("username") String username) {
+    @GetMapping("/usernames/check")
+    public ResponseEntity<Boolean> checkUsernameDuplicate(@RequestParam @NotBlank String username) {
 //        return new ResponseEntity<>(userService.verifyExistUsername(username), HttpStatus.OK);
 
         // API 통신용
@@ -69,6 +72,13 @@ public class UserController {
         return new ResponseEntity<>(createUserPatchResponseDto(), HttpStatus.OK); // todo 회원 정보 수정 후 어떤 화면으로 연결/이동하지?
     }
 
+    @ApiOperation(value = "5회 이상 신고 당한 회원 정지")
+    @PatchMapping("/reports/{user-id}")
+    public ResponseEntity banUser(@PathVariable("user-id") @Positive Long userId) {
+        // API 통신용
+        return new ResponseEntity<>(createUserBanResponseDto(), HttpStatus.OK);
+    }
+
     @ApiOperation(value = "회원 개인 정보 통합 조회(마이페이지)")
     @GetMapping("/{user-id}")
     public ResponseEntity getUser(@PathVariable("user-id") @Positive Long userId) {
@@ -82,7 +92,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "내가 진행 중인 습관의 카테고리 조회")
-    @GetMapping("/habits/{user-id}/category")
+    @GetMapping("/habits/categories/{user-id}")
     public ResponseEntity getActiveCategories(@PathVariable("user-id") @Positive Long userId) {
         // API 통신용
         List<UserDto.CategoryResponse> responseDtos = List.of(createCategoryResponseDto(), createCategoryResponseDto(), createCategoryResponseDto());
@@ -90,7 +100,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "내가 만든 습관 조회")
-    @GetMapping("/habits/{user-id}/host")
+    @GetMapping("/habits/hosts/{user-id}")
     public ResponseEntity getHostHabits(@PathVariable("user-id") @Positive Long userId) {
         // API 통신용
         List<UserDto.HabitResponse> responseDtos = List.of(createHabitResponseDto(), createHabitResponseDto());
@@ -98,22 +108,37 @@ public class UserController {
     }
 
     @ApiOperation(value = "인증서 발급")
-    @GetMapping("/{user_id}/habits/{habit-id}")
-    public ResponseEntity getSuccessHabitCertificate(@PathVariable("user-id") @Positive Long user_id,
-                                                     @PathVariable("habit-id") @Positive Long habit_id) {
+    @GetMapping("/habits/{habit-id}/certificates/{user-id}")
+    public ResponseEntity getHabitCertificate(@PathVariable("habit-id") @Positive Long habit_id,
+                                              @PathVariable("user-id") @Positive Long user_id) {
         // API 통신용
         return new ResponseEntity<>(createSucessHabitCertificate(), HttpStatus.OK);
     }
 
+    /* 2023.1.13(금) 15h10 habit controller가 처리하는 것이 맞음!
     @ApiOperation(value = "특정 습관 달성 회원 목록 조회(달성 시간 내림차순)")
-    @GetMapping("/success")
-    public ResponseEntity getSuccessUsersByChallengeCreatedAtDesc(@Positive @RequestParam int page,
-                                                                  @Positive @RequestParam int size) {
+    @GetMapping("/challenges/success")
+    public ResponseEntity getSuccessUsers(@Positive @RequestParam int page,
+                                          @Positive @RequestParam int size) {
         // API 통신용
         List<UserDto.SimpleResponse> responseDtos = List.of(createUserSimpleResponseDto(), createUserSimpleResponseDto(), createUserSimpleResponseDto());
-        return new ResponseEntity<>(responseDtos, HttpStatus.OK); // todo
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
+     */
+
+    @ApiOperation(value = "비밀번호 일치 여부 확인", notes = "true 응답 = 비밀번호 일치 / false = 비밀번호 불일치")
+    @GetMapping("/passwords/check")
+    public ResponseEntity<Boolean> checkPasswordCorrect(@RequestParam @NotBlank String password) {
+        // API 통신용
+        return ResponseEntity.ok(true);
     }
 
+    @ApiOperation(value = "회원 탈퇴")
+    @DeleteMapping("{user-id}")
+    public ResponseEntity deleteUser(@PathVariable("user-id") @Positive Long userId) {
+        // API 통신용
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
     private UserDto.SimpleResponse createUserSimpleResponseDto() {
         return UserDto.SimpleResponse.builder()
@@ -128,6 +153,13 @@ public class UserController {
                 .userId(1L)
                 .username("유저no1")
                 .password("Abc12&defg")
+                .build();
+    }
+
+    private UserDto.BanResponse createUserBanResponseDto() {
+        return UserDto.BanResponse.builder()
+                .userId(1L)
+                .status(User.Status.BANNED)
                 .build();
     }
 
@@ -163,6 +195,7 @@ public class UserController {
                 .title("새벽 4시30분 기상 - 미라클 모닝")
                 .body("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut euismod eu nulla sit amet pellentesque. Cras neque augue, laoreet vel blandit volutpat, convallis in velit. Nulla urna arcu, malesuada vel odio tempor, congue elementum est.")
                 .categoryId(1L)
+                .hostUsername("유저no1")
                 .build();
     }
 
