@@ -8,10 +8,9 @@ import { wrapper, persistor } from '../ducks/store';
 import { PersistGate } from 'redux-persist/integration/react';
 
 function MyApp({ Component, pageProps }) {
-  console.log(wrapper);
   return (
-      <Header />
     <PersistGate persistor={persistor} loading={<div>loading...</div>}>
+      <Header />
       <HomeNav />
       <main className="pb-[100px]">
         <Component {...pageProps} />
