@@ -30,8 +30,6 @@ export const SlideBanner = ({ bannerCont, t }) => {
     router.push(bannerLink);
   };
 
-  console.log(slideIdx);
-
   const slideRef = useRef();
   useEffect(() => {
     slideRef.current.style.transition = 'all 0.5s ease-in-out';

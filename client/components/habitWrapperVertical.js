@@ -27,7 +27,7 @@ export const HabitWrapperVertical = ({
         <ul className="habit-wrapper-list grid gap-4 grid-cols-2">
           {habitWrapperData.map((el) => {
             return (
-              <li className="habit-element">
+              <li className="habit-element" key={el.habitId}>
                 <HabitElement {...el} />
               </li>
             );
