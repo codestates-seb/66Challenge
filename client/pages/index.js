@@ -1,61 +1,66 @@
 import { SlideBanner } from '../components/slideBanner';
+import {
+  slideData,
+  categoryData,
+  habitWrapperData,
+} from '../data/homeStaticData';
+import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
+import { FileUploader } from '../components/fileUploader';
 
 export default function Home() {
-  // const testData = [
-  //   {
-  //     bgImgUrl: '',
-  //     contText: 'test용 첫 번째 슬라이드입니다.',
-  //     contSubText: '여기는 부제가 들어가겠죠',
-  //     bannerLink: '',
-  //   },
-  //   {
-  //     bgImgUrl: '',
-  //     contText: 'test용 두 번째 슬라이드입니다.',
-  //     contSubText: '여기는 부제가 들어가겠죠',
-  //     bannerLink: '',
-  //   },
-  //   {
-  //     bgImgUrl: '',
-  //     contText: 'test용 세 번째 슬라이드입니다.',
-  //     contSubText: '여기는 부제가 들어가겠죠',
-  //     bannerLink: '',
-  //   },
-  // ];
-
-  const testData = [
-    {
-      habitImage: '/image/running.png',
-      habitTitle: '달리기 3km',
-      habitBody:
-        '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
-    },
-    {
-      habitImage: '/image/running.png',
-      habitTitle: '달리기 3km',
-      habitBody:
-        '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
-    },
-    {
-      habitImage: '/image/running.png',
-      habitTitle: '달리기 3km',
-      habitBody:
-        '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
-    },
-    {
-      habitImage: '/image/running.png',
-      habitTitle: '달리기 3km',
-      habitBody:
-        '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
-    },
-  ];
+  const router = useRouter();
+  const cateIconClick = (url) => {
+    router.push(url);
+  };
 
   return (
     <div>
-      <HabitWrapperHorizontal
-        habitWrapperTitle="실시간 인기 습관"
-        habitWrapperData={testData}
-      />
+      <SlideBanner bannerCont={slideData} />
+      <div className="main-category px-[20px]">
+        <ul className="main-category-list grid grid-cols-5 my-[20px]">
+          {categoryData.map((el, idx) => {
+            return (
+              <li
+                className="main-category-item px-[9px] mt-[6px]"
+                onClick={(_) => cateIconClick(el.cateLink)}
+                key={el.cateTitle}
+              >
+                <div className="main-category-icon">
+                  <img
+                    className="w-full"
+                    src={el.cateImgUrl}
+                    alt="category icon"
+                  />
+                </div>
+                <div className="main-category-title mt-[6px] mb-[13px] text-center">
+                  {el.cateTitle}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div className="main-video w-full h-full">
+        <iframe
+          className="w-full min-h-[250px]"
+          src="https://www.youtube.com/embed/cdZZpaB2kDM"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        ></iframe>
+      </div>
+      <div>
+        <HabitWrapperHorizontal
+          habitWrapperTitle="실시간 인기 습관"
+          habitWrapperData={habitWrapperData}
+        />
+        <HabitWrapperHorizontal
+          habitWrapperTitle="20대 여성이라면 필수!"
+          habitWrapperData={habitWrapperData}
+        />
+      </div>
     </div>
   );
 }

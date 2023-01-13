@@ -8,7 +8,7 @@ ToDo 1. HabitWrapper를 사용하는 컴포넌트에서 habitWrapperTitle, habit
           각각의 배열 요소들은 해당 Habit에 대한 habitImage(이미지), habitTitle, habitBody를 담고 있는 객체입니다.)
 
 < example >
-<HabitWrapperHorizontal habitWrapperData={habitWrapperData} />
+<HabitWrapperHorizontal habitWrapperTitle="" habitWrapperData={habitWrapperData} />
 * <------  사용하시기 전에 꼭 읽어주세요! ------> *
 */
 
@@ -27,7 +27,10 @@ export const HabitWrapperHorizontal = ({
         <ul className="habit-wrapper-list flex overflow-x-scroll flex-nowrap gap-x-4 scrollbar-hide">
           {habitWrapperData.map((el) => {
             return (
-              <li className="habit-element flex-[0_0_auto] w-[140px] ">
+              <li
+                className="habit-element flex-[0_0_auto] w-[140px] "
+                key={el.habitId}
+              >
                 <HabitElement {...el} />
               </li>
             );
