@@ -1,6 +1,7 @@
-package challenge.server.habit.entity;
+package challenge.server.category.entity;
 
 import challenge.server.audit.BaseTimeEntity;
+import challenge.server.habit.entity.Habit;
 import lombok.*;
 
 import javax.persistence.*;
