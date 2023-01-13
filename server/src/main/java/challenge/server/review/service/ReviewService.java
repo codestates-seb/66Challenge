@@ -41,12 +41,13 @@ public class ReviewService {
         reviewRepository.deleteById(reviewId);
     }
 
-    public void verfiyExistReview(Long challengeReId) {
-        Optional<Review> optionalReview = reviewRepository.findByChallengeChallengeId(challengeReId);
-        if (optionalReview.isPresent()) {
-            throw new BusinessLogicException(ExceptionCode.REVIEW_EXISTS);
-        }
-    }
+//    TODO Review - Habit 테이블 매핑으로 인한 수정 필요
+//    public void verfiyExistReview(Long challengeReId) {
+//        Optional<Review> optionalReview = reviewRepository.findByChallengeChallengeId(challengeReId);
+//        if (optionalReview.isPresent()) {
+//            throw new BusinessLogicException(ExceptionCode.REVIEW_EXISTS);
+//        }
+//    }
 
     public Review findVerifiedReview(Long reviewId) {
         return reviewRepository.findById(reviewId)
