@@ -1,6 +1,8 @@
 package challenge.server.report.controller;
 
 import challenge.server.report.dto.ReportDto;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,22 +12,38 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Api
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/reports")
 public class ReportController {
     // 신고 수정, 삭제 기능 X
+    @ApiOperation(value = "모든 신고 조회", notes = "관리자가 모든 신고 목록을 조회합니다.")
     @GetMapping
     public ResponseEntity getReports() {
-        List<ReportDto.Response> responses = List.of(createReportDto(),createReportDto(),createReportDto());
+        List<ReportDto.Response> responses = List.of(createHabitReportDto(),createAuthReportDto(),createReviewReportDto());
         return new ResponseEntity(responses, HttpStatus.OK);
     }
 
-    public ReportDto.Response createReportDto() {
-        return ReportDto.Response.builder()
-                .reportId(1L).reporter("신고자")
-                .postType("Review").postId(2L)
-                .type("ADVERTISEMENT").build();
+    public ReportDto.Response createHabitReportDto() {
+        return ReportDto.Response.builder().reportId(1L)
+                .postType("Habit").postId(1L)
+                .reporter(1L).reportType("ABUSE")
+                .build();
+    }
+
+    public ReportDto.Response createReviewReportDto() {
+        return ReportDto.Response.builder().reportId(1L)
+                .postType("Review").postId(1L)
+                .reporter(1L).reportType("ABUSE")
+                .build();
+    }
+
+    public ReportDto.Response createAuthReportDto() {
+        return ReportDto.Response.builder().reportId(1L)
+                .postType("Auth").postId(1L)
+                .reporter(1L).reportType("ABUSE")
+                .build();
     }
 
 }
