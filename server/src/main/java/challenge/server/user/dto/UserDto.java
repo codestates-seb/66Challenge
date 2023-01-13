@@ -1,9 +1,7 @@
 package challenge.server.user.dto;
 
 import challenge.server.challenge.entity.Challenge;
-import challenge.server.habit.entity.Category;
-import challenge.server.habit.entity.Habit;
-import challenge.server.validator.Password;
+import challenge.server.category.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,9 +9,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserDto {
