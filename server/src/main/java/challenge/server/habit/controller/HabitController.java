@@ -21,14 +21,14 @@ public class HabitController {
 
     // 습관 등록 - 상세 응답 DTO
     @PostMapping
-    public ResponseEntity createHabit() {
+    public ResponseEntity posteHabit() {
         HabitDto.ResponseDetail responseDto = createResponseDetailDto();
         return new ResponseEntity(responseDto, HttpStatus.CREATED);
     }
 
     // 습관 수정 - 상세 응답 DTO
     @PatchMapping("/{habit-id}")
-    public ResponseEntity changeHabit(@PathVariable("habit-id") @Positive Long habitId) {
+    public ResponseEntity patchHabit(@PathVariable("habit-id") @Positive Long habitId) {
         HabitDto.ResponseDetail responseDto = createResponseDetailDto();
         return new ResponseEntity(responseDto, HttpStatus.CREATED);
     }
@@ -42,37 +42,37 @@ public class HabitController {
 
     // 습관 조회 - 상세정보 탭 - 상세 응답 DTO
     @GetMapping("/{habit-id}")
-    public ResponseEntity findHabit(@PathVariable("habit-id") @Positive Long habitId) {
+    public ResponseEntity getHabit(@PathVariable("habit-id") @Positive Long habitId) {
         HabitDto.ResponseDetail responseDto = createResponseDetailDto();
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
     // 습관 조회 - 통계 탭 - 통계 DTO
     @GetMapping("/{habit-id}/statistics")
-    public ResponseEntity findHabitByStatistics(@PathVariable("habit-id") @Positive Long habitId) {
+    public ResponseEntity getHabitByStatistics(@PathVariable("habit-id") @Positive Long habitId) {
         // TODO 통계 테이블 설정 후 추가 예정
         return new ResponseEntity(HttpStatus.OK);
     }
 
     // 습관 조회 - 후기 탭 - Review 리스트 DTO(특정 습관id에 해당하는)
     @GetMapping("/{habit-id}/reviews")
-    public ResponseEntity findReviewsByHabit(@PathVariable("habit-id") @Positive Long habitId) {
+    public ResponseEntity getReviewsByHabit(@PathVariable("habit-id") @Positive Long habitId) {
         List<ReviewDto.Response> responses = List.of(createReviewResponseDto(),createReviewResponseDto());
         return new ResponseEntity(responses, HttpStatus.OK);
     }
 
     // 습관 조회 - 인증 탭 - Auth 리스트 DTO(특정 습관 id에 해당하는)
     @GetMapping("/{habit-id}/auths")
-    public ResponseEntity findAuthsByHabit(@PathVariable("habit-id") @Positive Long habitId) {
+    public ResponseEntity getAuthsByHabit(@PathVariable("habit-id") @Positive Long habitId) {
         List<AuthDto.Response> responses = List.of(createAuthResponseDto(), createAuthResponseDto());
         return new ResponseEntity(responses, HttpStatus.OK);
     }
 
-    // 습관 조회 - 인증 등록 - 상세 응답 DTO(인증 등록 후 습관 상세페이지로 리다이렉트 한다는 전제 하 - 추후 수정 가능)
+    // 습관 조회 - 인증 등록 - 상세 응답 DTO(인증 등록 후 습관 상세페이지의 인증 탭으로 리다이렉트 한다는 전제 하 - 추후 수정 가능)
     @PostMapping("/{habit-id}/auths")
-    public ResponseEntity createAuth(@PathVariable("habit-id") @Positive Long habitId) {
-        HabitDto.ResponseDetail responseDto = createResponseDetailDto();
-        return new ResponseEntity(responseDto, HttpStatus.CREATED);
+    public ResponseEntity postAuth(@PathVariable("habit-id") @Positive Long habitId) {
+        List<AuthDto.Response> responses = List.of(createAuthResponseDto(), createAuthResponseDto());
+        return new ResponseEntity(responses, HttpStatus.CREATED);
     }
 
 //    // 습관 검색(첫 화면 모두 조회) - 응답 DTO
@@ -85,7 +85,7 @@ public class HabitController {
 
     // 습관 검색(첫 화면 모두 / 키워드 조회) - 응답 DTO
     @GetMapping("/search")
-    public ResponseEntity findAllByKeyword(@RequestParam(required = false) String keyword,
+    public ResponseEntity getAllByKeyword(@RequestParam(required = false) String keyword,
                                            @RequestParam @Positive int page,
                                            @RequestParam @Positive int size) {
         // TODO 조회 방식에 따른 RequestParam 논의
@@ -95,7 +95,7 @@ public class HabitController {
 
     // 습관 검색(카테고리 조회) - 응답 DTO
     @GetMapping("/search/{category-id}")
-    public ResponseEntity findAllByCategory(@PathVariable("category-id") Long categoryId,
+    public ResponseEntity getAllByCategory(@PathVariable("category-id") Long categoryId,
                                             @RequestParam @Positive int page,
                                             @RequestParam @Positive int size) {
         List<HabitDto.Response> responses = List.of(createResponseDto(),createResponseDto(),createResponseDto(),createResponseDto());
