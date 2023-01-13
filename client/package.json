@@ -20,6 +20,8 @@
     "axios": "^1.2.2",
     "eslint": "^8.31.0",
     "next": "13.1.1",
+    "next-compose-plugins": "^2.2.1",
+    "next-pwa": "^5.6.0",
     "next-redux-wrapper": "^8.1.0",
     "prettier": "^2.8.1",
     "react": "18.2.0",
