@@ -29,17 +29,25 @@ public class Challenge extends BaseTimeEntity {
     @JoinColumn(name = "HABIT_ID")
     private Habit habit;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REVIEW_ID")
-    private Review review;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CHALLENGE_STATUS_ID")
-    private ChallengeStatus status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wildcard> wildcards = new ArrayList<>();
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Auth> auths = new ArrayList<>();
+
+    public enum Status {
+        CHALLENGE(1),
+        SUCCESS(2),
+        FAIL(3);
+
+        @Getter
+        private final int type;
+
+        Status(int type) {
+            this.type = type;
+        }
+    }
 }

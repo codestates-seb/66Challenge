@@ -44,9 +44,9 @@ public class ChallengeService {
     }
 
     // 특정 상태의 모든 챌린지 조회
-    public List<Challenge> findAllStatus(Long statusId) {
+    public List<Challenge> findAllStatus(String status) {
         // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
-        return challengeRepository.findAllStatus(statusId);
+        return challengeRepository.findAllByStatus(Challenge.Status.CHALLENGE);
     }
 
     public List<Challenge> findAll(int page, int size) {
