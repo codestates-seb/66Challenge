@@ -128,13 +128,13 @@ public class UserController {
 
     @ApiOperation(value = "비밀번호 일치 여부 확인", notes = "true 응답 = 비밀번호 일치 / false = 비밀번호 불일치")
     @GetMapping("/passwords/check")
-    public ResponseEntity<Boolean> checkPasswordCorrect(@RequestParam @NotBlank String password) {
+    public ResponseEntity<Boolean> checkPasswordCorrect(@Valid @RequestBody UserDto.CheckPassword requestBody) {
         // API 통신용
         return ResponseEntity.ok(true);
     }
 
     @ApiOperation(value = "회원 탈퇴")
-    @DeleteMapping("{user-id}")
+    @DeleteMapping("/{user-id}")
     public ResponseEntity deleteUser(@PathVariable("user-id") @Positive Long userId) {
         // API 통신용
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -193,9 +193,11 @@ public class UserController {
         return UserDto.HabitResponse.builder()
                 .habitId(1L)
                 .title("새벽 4시30분 기상 - 미라클 모닝")
+                .subTitle("아침루틴")
                 .body("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut euismod eu nulla sit amet pellentesque. Cras neque augue, laoreet vel blandit volutpat, convallis in velit. Nulla urna arcu, malesuada vel odio tempor, congue elementum est.")
-                .categoryId(1L)
-                .hostUsername("유저no1")
+//                .categoryId(1L)
+//                .hostUsername("유저no1")
+                .isBooked(true)
                 .build();
     }
 
