@@ -1,6 +1,9 @@
 package challenge.server.user.dto;
 
 import challenge.server.challenge.entity.Challenge;
+import challenge.server.habit.entity.Habit;
+import challenge.server.user.entity.User;
+import challenge.server.validator.Password;
 import challenge.server.category.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,6 +57,17 @@ public class UserDto {
 
         // todo 대소문자 구분 없이 active, quit, banned 3가지 중 1개 값만 가능한 조건 구현?
 //        private String userStatus;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    @NoArgsConstructor
+    public static class CheckPassword {
+        private Long userId;
+
+        //@Password
+        private String password;
     }
 
     @Getter
@@ -150,13 +164,18 @@ public class UserDto {
     public static class HabitResponse {
         private Long habitId;
         private String title;
+        private String subTitle;
         private String body;
-        private Long categoryId;
-        // image
+//        private Long categoryId;
+        private Boolean isBooked;
+//        private String hostUsername; // todo 현재 화면 정의서 상 습관 목록 및 상세 조회 페이지에 host 정보 없는데, 확인해보기
+        // image // todo 사진 저장 방식 결정 필요
     }
     /* 특정 회원이 만든/host인 습관 조회
-    select h.habit_id, h.title, h.body, h.category_id,
+    select h.habit_id, h.title, h.body, h.category_id, u.username,
     from habit h
+    left outer join challenge c
+    left outer join users u
     where h.host_id = #;
 
     특정 회원이 찜한 습관 조회
