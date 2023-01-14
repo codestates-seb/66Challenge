@@ -87,6 +87,7 @@ public class HabitController {
     @ApiOperation(value="습관 후기 등록")
     @PostMapping("/{habit-id}/reviews")
     public ResponseEntity postReview(@PathVariable("habit-id") @Positive Long habitId,
+                                     @RequestParam @Positive Long userId,
                                      @RequestBody @Valid ReviewDto.Post reviewPostDto) {
         ReviewDto.Response responseDto = createReviewResponseDto();
         return new ResponseEntity(responseDto, HttpStatus.CREATED);
@@ -130,6 +131,7 @@ public class HabitController {
     @ApiOperation(value="습관 인증 등록")
     @PostMapping("/{habit-id}/auths")
     public ResponseEntity postAuth(@PathVariable("habit-id") @Positive Long habitId,
+                                   @RequestParam @Positive Long challengeId,
                                    @RequestBody @Valid AuthDto.Post authPostDto) {
         AuthDto.Response responseDto = createAuthResponseDto();
         return new ResponseEntity(responseDto, HttpStatus.CREATED);
