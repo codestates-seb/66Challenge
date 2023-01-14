@@ -72,6 +72,7 @@ public class UserController {
         return new ResponseEntity<>(createUserPatchResponseDto(), HttpStatus.OK); // todo 회원 정보 수정 후 어떤 화면으로 연결/이동하지?
     }
 
+    // todo 관리자가 처리하거나, 또는 특정 조건이 만족되었을 때에 이벤트 발생시켜 처리
     @ApiOperation(value = "5회 이상 신고 당한 회원 정지")
     @PatchMapping("/reports/{user-id}")
     public ResponseEntity banUser(@PathVariable("user-id") @Positive Long userId) {
@@ -92,7 +93,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "내가 진행 중인 습관의 카테고리 조회")
-    @GetMapping("/habits/categories/{user-id}")
+    @GetMapping("/{user-id}/habits/categories")
     public ResponseEntity getActiveCategories(@PathVariable("user-id") @Positive Long userId) {
         // API 통신용
         List<UserDto.CategoryResponse> responseDtos = List.of(createCategoryResponseDto(), createCategoryResponseDto(), createCategoryResponseDto());
@@ -100,7 +101,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "내가 만든 습관 조회")
-    @GetMapping("/habits/hosts/{user-id}")
+    @GetMapping("/{user-id}/habits/hosts")
     public ResponseEntity getHostHabits(@PathVariable("user-id") @Positive Long userId) {
         // API 통신용
         List<UserDto.HabitResponse> responseDtos = List.of(createHabitResponseDto(), createHabitResponseDto());
@@ -108,7 +109,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "인증서 발급")
-    @GetMapping("/habits/{habit-id}/certificates/{user-id}")
+    @GetMapping("/{user-id}/habits/{habit-id}/certificates")
     public ResponseEntity getHabitCertificate(@PathVariable("habit-id") @Positive Long habit_id,
                                               @PathVariable("user-id") @Positive Long user_id) {
         // API 통신용
@@ -127,8 +128,9 @@ public class UserController {
      */
 
     @ApiOperation(value = "비밀번호 일치 여부 확인", notes = "true 응답 = 비밀번호 일치 / false = 비밀번호 불일치")
-    @GetMapping("/passwords/check")
-    public ResponseEntity<Boolean> checkPasswordCorrect(@Valid @RequestBody UserDto.CheckPassword requestBody) {
+    @GetMapping("/{user-id}/passwords/check")
+    public ResponseEntity<Boolean> checkPasswordCorrect(@PathVariable("user-id") @Positive Long userId,
+                                                        @Valid @RequestBody UserDto.CheckPassword requestBody) {
         // API 통신용
         return ResponseEntity.ok(true);
     }

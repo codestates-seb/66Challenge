@@ -64,8 +64,6 @@ public class UserDto {
     @Builder
     @NoArgsConstructor
     public static class CheckPassword {
-        private Long userId;
-
         //@Password
         private String password;
     }
