@@ -32,7 +32,7 @@ export const HomeNav = () => {
     )
   ) {
     return (
-      <nav className="home-navigation-bar border-b b-borderColor">
+      <nav className="home-navigation-bar border-b b-borderColor sticky top-[56px] z-50 bg-white">
         <ul className="home-navigation-list flex h-[40px] px-[20px]">
           {homeNav.map((el, idx) => {
             return (
