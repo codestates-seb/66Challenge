@@ -1,7 +1,14 @@
+import { useState } from 'react';
 import { HabitWrapperVertical } from '../../components/habitWrapperVertical';
-import { habitWrapperData } from '../../data/homeStaticData';
+import { useIntersection } from '../../hooks/useIntersection';
 
 const HotList = () => {
+  const [habitWrapperData, setHabitWrapperData] = useState([]);
+  const [page, setPage] = useState(0);
+  const url = 'http://localhost:4000/habitdata';
+
+  const [setTarget] = useIntersection(url, page, setPage, setHabitWrapperData);
+
   return (
     <div className="hotlist-container">
       <div>
@@ -9,6 +16,7 @@ const HotList = () => {
           habitWrapperTitle="실시간 인기 습관"
           habitWrapperData={habitWrapperData}
         />
+        <div ref={setTarget}></div>
       </div>
     </div>
   );
