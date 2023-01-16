@@ -1,7 +1,5 @@
 insert into category (type) values (1);
 insert into category (type) values (2);
-insert into user_status (type) values ('ACTIVE');
-insert into user_status (type) values ('QUIT');
 insert into users (email, password, username) values ('jpetran0@google.cn', 'Ju9skkz', 'bhellwing0');
 insert into users (email, password, username) values ('svanderwalt1@sciencedirect.com', 'SPLcH1AJRR', 'mcrighton1');
 insert into users (email, password, username) values ('jbaudacci2@twitpic.com', 'moMZriaon', 'mnormand2');
