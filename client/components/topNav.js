@@ -10,8 +10,6 @@ export const TopNav = () => {
   const activeNav = 'border-b-[3px] border-mainColor';
   const detailNavData = detailNavFunc(query.habitId);
 
-  console.log(pathname);
-
   const [page, setPage] = useState('');
   useEffect(() => {
     if (
@@ -22,8 +20,10 @@ export const TopNav = () => {
       setPage('home');
     } else if (pathname.includes('/habit/detail/[habitId]')) {
       setPage('detail');
+    } else {
+      setPage('');
     }
-  }, []);
+  }, [pathname]);
 
   if (page.length) {
     return (

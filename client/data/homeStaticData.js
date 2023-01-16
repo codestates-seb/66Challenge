@@ -23,42 +23,42 @@ export const categoryData = [
   {
     cateImgUrl: '/image/icons/exercise.png',
     cateTitle: '운동',
-    cateLink: '',
+    categoryId: '1',
   },
   {
     cateImgUrl: '/image/icons/food.png',
     cateTitle: '식습관',
-    cateLink: '',
+    categoryId: '2',
   },
   {
     cateImgUrl: '/image/icons/study.png',
     cateTitle: '학습',
-    cateLink: '',
+    categoryId: '3',
   },
   {
     cateImgUrl: '/image/icons/life.png',
     cateTitle: '일상생활',
-    cateLink: '',
+    categoryId: '4',
   },
   {
     cateImgUrl: '/image/icons/hobby.png',
     cateTitle: '취미',
-    cateLink: '',
+    categoryId: '5',
   },
   {
     cateImgUrl: '/image/icons/selfcare.png',
     cateTitle: '자기관리',
-    cateLink: '',
+    categoryId: '6',
   },
   {
     cateImgUrl: '/image/icons/eco.png',
     cateTitle: '환경',
-    cateLink: '',
+    categoryId: '7',
   },
   {
     cateImgUrl: '/image/icons/etc.png',
     cateTitle: '기타',
-    cateLink: '',
+    categoryId: '8',
   },
 ];
 
