@@ -55,15 +55,22 @@ public class HabitController {
     }
 
     // 습관 조회 - 상세정보 탭 - 습관 시작하기 - Challenge DTO
-    @ApiOperation(value = "습관 참여하기(시작하기)")
-    @PostMapping("/{habit-id}/challenges/{user-id}")
+    @ApiOperation(value = "챌린지 생성(습관 시작하기)", notes = "습관 시작하기 버튼을 클릭할 경우 생성됩니다.")
+    @PostMapping("/{habit-id}/challenges")
     public ResponseEntity postChallenge(@PathVariable("habit-id") @Positive Long habitId,
-                                        @PathVariable("user-id") @Positive Long userId) {
+                                        @RequestParam @Positive Long userId) {
         ChallengeDto.Response responseDto = createChallengeResponseDto();
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
-    // TODO 습관 포기하기 기능 유무
+    // 습관 조회 - 상세정보 탭 - 습관 상태 변경
+    @ApiOperation(value = "챌린지 상태 변경", notes = "CHALLENGE = 1 / SUCCESS = 2 / FAIL = 3")
+    @PatchMapping("/{habit-id}/challenges/{challenge-id}/status")
+    public ResponseEntity changeChallengeStatus(@PathVariable("challenge-id") @Positive Long challengeId,
+                                                @RequestParam("statusId") @Positive Long statusId) {
+        ChallengeDto.Response responseDto = createChallengeResponseDto();
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
 
     // 습관 조회 - 통계 탭 - 통계 DTO
     @ApiOperation(value = "습관 조회", notes = "습관 통계 탭을 눌러 확인합니다.")
@@ -113,8 +120,8 @@ public class HabitController {
     @ApiOperation(value="습관 후기 신고 등록")
     @PostMapping("/{habit-id}/reviews/{review-id}/reports")
     public ResponseEntity postReviewReport(@PathVariable("review-id") @Positive Long reviewId,
-                                           @RequestBody @Valid ReportDto.Post reviewReportPostDto) {
-        return new ResponseEntity(createReviewReportDto(), HttpStatus.OK);
+                                           @RequestBody @Valid ReportDto.ReviewPost reviewReportPostDto) {
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     // 습관 조회 - 인증 탭 - Auth 리스트 DTO(특정 습관 id에 해당하는)
@@ -127,49 +134,14 @@ public class HabitController {
         return new ResponseEntity(responses, HttpStatus.OK);
     }
 
-    // 습관 조회 - 인증 탭 - 인증 등록 - Auth DTO
-    @ApiOperation(value="습관 인증 등록")
-    @PostMapping("/{habit-id}/auths")
-    public ResponseEntity postAuth(@PathVariable("habit-id") @Positive Long habitId,
-                                   @RequestParam @Positive Long challengeId,
-                                   @RequestBody @Valid AuthDto.Post authPostDto) {
-        AuthDto.Response responseDto = createAuthResponseDto();
-        return new ResponseEntity(responseDto, HttpStatus.CREATED);
-    }
-
-    // 습관 조회 - 인증 탭 - 인증 수정 - Auth DTO
-    @ApiOperation(value="습관 인증 수정")
-    @PatchMapping("/{habit-id}/auths/{auth-id}")
-    public ResponseEntity patchAuth(@PathVariable("auth-id") @Positive Long authId,
-                                    @RequestBody @Valid AuthDto.Patch authPatchDto) {
-        AuthDto.Response responseDto = createAuthResponseDto();
-        return new ResponseEntity(responseDto, HttpStatus.CREATED);
-    }
-
-    // 습관 조회 - 인증 탭 - 인증 삭제
-    @ApiOperation(value="습관 인증 삭제")
-    @DeleteMapping("/{habit-id}/auths/{auth-id}")
-    public ResponseEntity deleteAuth(@PathVariable("auth-id") @Positive Long authId) {
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
-
     // 습관 조회 - 인증 탭 - 인증 신고
     @ApiOperation(value="습관 인증 신고 등록")
     @PostMapping("/{habit-id}/auths/{auth-id}/reports")
     public ResponseEntity postAuthReport(@PathVariable("auth-id") @Positive Long authId,
-                                         @RequestBody @Valid ReportDto.Post AuthReportPostDto) {
+                                         @RequestBody @Valid ReportDto.AuthPost AuthReportPostDto) {
 
-        return new ResponseEntity(createAuthReportDto(), HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
-
-
-//    // 습관 검색(첫 화면 모두 조회) - 응답 DTO
-//    @GetMapping("/search")
-//    public ResponseEntity findAll(@RequestParam @Positive int page,
-//                                  @RequestParam @Positive int size) {
-//
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
 
     // 습관 검색(첫 화면 모두 / 키워드 조회) - 응답 DTO
     @ApiOperation(value="습관 검색", notes = "keyword를 작성해 검색하거나, 작성하지 않으면 습관 목록을 전체 조회합니다.")
@@ -200,12 +172,21 @@ public class HabitController {
         return new ResponseEntity(body,HttpStatus.OK);
     }
 
+    // 습관 북마크 - 북마크 취소 메시지
+    @ApiOperation(value="북마크")
+    @DeleteMapping("/{habit-id}/bookmarks")
+    public ResponseEntity deleteBookmark(@PathVariable("habit-id") @Positive Long habitId,
+                                       @RequestParam @Positive Long userId) {
+        String body = "즐겨찾기에서 삭제 되었습니다.";
+        return new ResponseEntity(body,HttpStatus.NO_CONTENT);
+    }
+
     // 습관 신고 - 신고 접수 완료 메시지
     @ApiOperation(value="습관 신고 등록")
     @PostMapping("/{habit-id}/reports")
     public ResponseEntity postHabitReport(@PathVariable("habit-id") @Positive Long habitId,
-                                          @RequestBody @Valid ReportDto.Post habitReportPostDto) {
-        return new ResponseEntity(createHabitReportDto(), HttpStatus.CREATED);
+                                          @RequestBody @Valid ReportDto.HabitPost habitReportPostDto) {
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     // 응답 더미데이터 - 습관 상세 DTO
@@ -252,27 +233,5 @@ public class HabitController {
         return ChallengeDto.Response.builder()
                 .challengeId(1L).challenger("username")
                 .habitTitle("매일일기").status("CHALLENGE").build();
-    }
-
-    // 응답 더미데이터 - Report DTO (Habit, Review, Auth)
-    public ReportDto.Response createHabitReportDto() {
-        return ReportDto.Response.builder().reportId(1L)
-                .postType("Habit").postId(1L)
-                .reporter(1L).reportType("ABUSE")
-                .build();
-    }
-
-    public ReportDto.Response createReviewReportDto() {
-        return ReportDto.Response.builder().reportId(1L)
-                .postType("Review").postId(1L)
-                .reporter(1L).reportType("ABUSE")
-                .build();
-    }
-
-    public ReportDto.Response createAuthReportDto() {
-        return ReportDto.Response.builder().reportId(1L)
-                .postType("Auth").postId(1L)
-                .reporter(1L).reportType("ABUSE")
-                .build();
     }
 }
