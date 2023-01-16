@@ -6,6 +6,7 @@ import {
 } from '../data/homeStaticData';
 import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
+import Image from 'next/image';
 
 export default function Home() {
   const router = useRouter();
@@ -26,10 +27,12 @@ export default function Home() {
                 key={el.cateTitle}
               >
                 <div className="main-category-icon m-auto w-[70px] h-[70px] bg-slate-50 cursor-pointer rounded-xl flex justify-center items-center">
-                  <img
+                  <Image
                     className="w-[50px] h-[50px]"
                     src={el.cateImgUrl}
                     alt="category icon"
+                    width={500}
+                    height={500}
                   />
                 </div>
                 <div className="main-category-title text-sm mt-[6px] mb-[13px] font-medium text-center">

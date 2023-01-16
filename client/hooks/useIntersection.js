@@ -23,6 +23,10 @@ export function useIntersection(url, page, setPage, setHabitWrapperData) {
   };
 
   useEffect(() => {
+    setStop(false);
+  }, [url]);
+
+  useEffect(() => {
     let observer;
     if (target && !stop) {
       observer = new IntersectionObserver(onIntersect, {
@@ -31,7 +35,7 @@ export function useIntersection(url, page, setPage, setHabitWrapperData) {
       observer.observe(target);
     }
     return () => observer && observer.disconnect();
-  }, [target, isLoaded]);
+  }, [target, isLoaded, stop]);
 
   useEffect(() => {
     if (isLoaded && !stop) {
@@ -47,7 +51,7 @@ export function useIntersection(url, page, setPage, setHabitWrapperData) {
         }
       });
     }
-  }, [isLoaded]);
+  }, [isLoaded, stop]);
 
   return [setTarget];
 }
