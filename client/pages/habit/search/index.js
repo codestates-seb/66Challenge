@@ -13,7 +13,7 @@ export default function SearchHabit() {
 
   const [arrowDirection, setArrowDirection] = useState({
     className: '',
-    boolean: false,
+    boolean: router.query.categoryId !== undefined ? true : false,
   });
   const upArrow = 'rotate-180 duration-500';
   const downArrow = 'rotate-0';
@@ -45,16 +45,18 @@ export default function SearchHabit() {
     '기타',
   ];
   const categoryList = [
-    { categoryId: 0, name: 'all' },
-    { categoryId: 1, name: 'health' },
-    { categoryId: 2, name: 'eat' },
-    { categoryId: 3, name: 'study' },
-    { categoryId: 4, name: 'life' },
-    { categoryId: 5, name: 'self' },
-    { categoryId: 6, name: 'environment' },
-    { categoryId: 7, name: 'hobby' },
-    { categoryId: 8, name: 'extra' },
+    { categoryId: '0', name: 'all' },
+    { categoryId: '1', name: 'health' },
+    { categoryId: '2', name: 'eat' },
+    { categoryId: '3', name: 'study' },
+    { categoryId: '4', name: 'life' },
+    { categoryId: '5', name: 'self' },
+    { categoryId: '6', name: 'environment' },
+    { categoryId: '7', name: 'hobby' },
+    { categoryId: '8', name: 'extra' },
   ];
+  console.log('categoryId : ', router.query.categoryId);
+  console.log('active : ', active);
   const onSearchHandle = useCallback((e) => {
     setSearch(e.target.value);
   }, []);
@@ -73,7 +75,7 @@ export default function SearchHabit() {
     }
   };
   useEffect(() => {
-    if (active !== 0) {
+    if (active !== '0') {
       setDoing('category');
       setPage(0);
       setSearchHabits([]);
@@ -90,7 +92,7 @@ export default function SearchHabit() {
     <div className=" w-full overflow-y-scroll scrollbar-hide absolute flex flex-col items-center p-4 pb-[100px]">
       <form className="w-4/5 flex justify-center mt-3 mb-6 items-center relative">
         <input
-          className="w-full border border-mainColor rounded-full text-base h-[40px] px-3 focus:border-subColor outline-none"
+          className="w-full border border-mainColor rounded-full text-sm h-[40px] pl-3 pr-[40px] focus:border-subColor outline-none focus:shadow-[0_0_0.5rem] focus:shadow-subColor focus:outline-[1px] focus:outline-[#379fef];"
           autoComplete="off"
           placeholder="찾고자 하는 습관을 검색해주세요."
           value={search}
@@ -98,7 +100,7 @@ export default function SearchHabit() {
           required
         />
         <AiOutlineSearch
-          size="30"
+          size="22"
           className="absolute right-3"
           onClick={onSubmitHandle}
         />
@@ -107,7 +109,7 @@ export default function SearchHabit() {
         className="flex items-center w-full mb-3 pl-4"
         onClick={arrowDirectionHandle}
       >
-        <span className="text-base font-semibold mr-2 ">카테고리</span>
+        <span className="text-base font-semibold mr-2 mt-[2px]">카테고리</span>
         <MdExpandMore size={20} className={arrowDirection.className} />
       </div>
       <div
@@ -119,11 +121,11 @@ export default function SearchHabit() {
       >
         {categoryList.map((category, index) => {
           return (
-            <div className=" w-[100px] m-1 " key={index}>
+            <div className=" w-[100px] m-1" key={index}>
               <span
                 className={`${
-                  active === index ? 'bg-subColor' : 'bg-mainColor'
-                } w-full h-full rounded-full text-iconColor flex duration-300  justify-center items-center text-base`}
+                  active === String(index) ? 'bg-subColor' : 'bg-mainColor'
+                } w-full h-full rounded-full text-iconColor flex duration-300  justify-center items-center text-sm py-[5px]`}
                 onClick={() => {
                   setActive(category.categoryId);
                 }}

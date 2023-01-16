@@ -5,7 +5,7 @@ import {
   getUserEmailOverlapVerify,
   getUsernameOverlapVerify,
   postUserSignUp,
-} from '../../module/functionModules';
+} from '../../module/userFunctionMoudules';
 
 export default function SignUp() {
   const router = useRouter();

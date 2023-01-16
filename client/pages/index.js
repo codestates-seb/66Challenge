@@ -1,4 +1,5 @@
 import { SlideBanner } from '../components/slideBanner';
+import Iframe from 'react-iframe';
 import {
   slideData,
   categoryData,
@@ -10,8 +11,13 @@ import Image from 'next/image';
 
 export default function Home() {
   const router = useRouter();
-  const cateIconClick = (url) => {
-    router.push(url);
+  const cateIconClick = (categoryId) => {
+    router.push({
+      pathname: '/habit/search',
+      query: {
+        categoryId,
+      },
+    });
   };
 
   return (
@@ -23,7 +29,7 @@ export default function Home() {
             return (
               <li
                 className="main-category-item px-[9px] mt-[6px]"
-                onClick={(_) => cateIconClick(el.cateLink)}
+                onClick={(_) => cateIconClick(el.categoryId)}
                 key={el.cateTitle}
               >
                 <div className="main-category-icon m-auto w-[70px] h-[70px] bg-slate-50 cursor-pointer rounded-xl flex justify-center items-center">
@@ -44,14 +50,14 @@ export default function Home() {
         </ul>
       </div>
       <div className="main-video w-full h-full">
-        <iframe
+        <Iframe
           className="w-full min-h-[250px]"
           src="https://www.youtube.com/embed/cdZZpaB2kDM"
           title="YouTube video player"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
-        ></iframe>
+        ></Iframe>
       </div>
       <div>
         <HabitWrapperHorizontal
