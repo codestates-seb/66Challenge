@@ -155,34 +155,6 @@ public class UserDto {
         // 홍보 문구(오늘의 인용구 포함)
     }
 
-    /*
-
-    "activeCategories":
-     */
-
-    /* 2023.1.12(목) 8h20 메모
-    (그 날의 인증 마감 시간 + 1분) 시점에
-    if (특정 회원의 인증 글 수 + 특정 회원의 wildcard 개수 != 오늘(인증했어야 하는) 날짜 - challenge 생성일 + 1)
-     if (해당 회원의 wildcard 개수 == 2) challenge 테이블의 challenge 상태를 fail로 변경
-     else 해당 회원의 wildcard 사용 내역 insert
-
-    challenge 테이블에서 특정 회원의 습관 형성 현황 조회
-    select c.challenge_id, c.user_id, c.habit_id, h.subtitle, count(auth_id) + count(wildcard_id)
-    from challenge c
-    left outer join habit h on c.habit_id = h.habit_id
-    left outer join auth a on c.challenge_id = a.challenge_id
-    left outer join wildcard w on c.challenge_id = w.challenge_id
-    where user_id == # && (challenge_status_id == 1 || challenge_status_id == 2)
-    group by challenge_id;
-
-    category 테이블에서 특정 회원이 참여/진행 중인 습관의 카테고리 조회
-    select ca.type
-    from category ca
-    left outer join habit h on ca.habit_id = h.habit_id
-    left outer join challenge c on h.habit_id = c.habit_id
-    where user_id == # && challenge_status_id == 1;
-     */
-
     @Getter
     @AllArgsConstructor
     @Builder
@@ -211,30 +183,11 @@ public class UserDto {
         private String title;
         private String subTitle;
         private String body;
-//        private Long categoryId;
+        //        private Long categoryId;
         private Boolean isBooked;
 //        private String hostUsername; // todo 현재 화면 정의서 상 습관 목록 및 상세 조회 페이지에 host 정보 없는데, 확인해보기
         // image // todo 사진 저장 방식 결정 필요
     }
-    /* 특정 회원이 만든/host인 습관 조회
-    select h.habit_id, h.title, h.body, h.category_id, u.username,
-    from habit h
-    left outer join challenge c
-    left outer join users u
-    where h.host_id = #;
-
-    특정 회원이 찜한 습관 조회
-    select b.habit_id
-    from bookmark b
-    where b.user_id = #;
-
-    특정 회원이 host인 습관 중 해당 회원이 찜한 습관
-    select b.habit_id
-    from bookmark b
-    left join habit h
-    on b.habit_id = h.habit_id
-    where h.host_id = # && b.user_id = #;
-     */
 
     @Getter
     @AllArgsConstructor
@@ -247,14 +200,4 @@ public class UserDto {
         private String createdAt;
         private String completedAt;
     }
-    /*
-    select c.challenge_id, u.username, h.title, c.created_at, c.created_at + 66days
-    from challenge c
-    left outer join users u
-    on c.user_id = u.user_id
-    left outer join habit h
-    on c.habit_id = h.habit_id
-    where c.user_id = # && c.habit_id = #
-     */
-
 }
