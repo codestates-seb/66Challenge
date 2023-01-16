@@ -7,9 +7,9 @@ import { MdExpandMore } from 'react-icons/md';
 import { LoadingIndicator } from '../../../components/loadingIndicator';
 
 import { useRouter } from 'next/router';
+import { ScrollToTopButton } from '../../../components/scrollToTopButton';
 export default function SearchHabit() {
   const router = useRouter();
-  console.log(router.query.categoryId);
 
   const [arrowDirection, setArrowDirection] = useState({
     className: '',
@@ -85,8 +85,9 @@ export default function SearchHabit() {
       setUrl('http://localhost:4000/habitdata');
     }
   }, [active]);
+
   return (
-    <div className="h-screen w-full overflow-y-scroll scrollbar-hide absolute flex flex-col items-center p-4 pb-[100px]">
+    <div className=" w-full overflow-y-scroll scrollbar-hide absolute flex flex-col items-center p-4 pb-[100px]">
       <form className="w-4/5 flex justify-center mt-3 mb-6 items-center relative">
         <input
           className="w-full border border-mainColor rounded-full text-base h-[40px] px-3 focus:border-subColor outline-none"
@@ -133,21 +134,22 @@ export default function SearchHabit() {
           );
         })}
       </div>
-      {searchHabits.length === 0 ? (
-        <LoadingIndicator />
-      ) : (
-        <HabitWrapperVertical
-          habitWrapperTitle={
-            doing === 'all'
-              ? '전체 습관'
-              : doing === 'category'
-              ? `${categoryListKor[active]} 습관`
-              : `${search}에 대한 습관`
-          }
-          habitWrapperData={searchHabits}
-        />
-      )}
-
+      <div>
+        {searchHabits.length === 0 ? (
+          <LoadingIndicator />
+        ) : (
+          <HabitWrapperVertical
+            habitWrapperTitle={
+              doing === 'all'
+                ? '전체 습관'
+                : doing === 'category'
+                ? `${categoryListKor[active]} 습관`
+                : `${search}에 대한 습관`
+            }
+            habitWrapperData={searchHabits}
+          />
+        )}
+      </div>
       <div ref={setTarget} className="w-full  h-16"></div>
     </div>
   );
