@@ -7,7 +7,7 @@ const HabitDetail = () => {
   return (
     <div className="habit-detail-container">
       <div className="habit-detail-top">
-        <div></div>
+        <div>냥냥냥</div>
         <div></div>
       </div>
       <div className="habit-detail-middle"></div>

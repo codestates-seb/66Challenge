@@ -25,14 +25,14 @@ export default function Home() {
                 onClick={(_) => cateIconClick(el.cateLink)}
                 key={el.cateTitle}
               >
-                <div className="main-category-icon m-auto py-[12px] bg-slate-50 cursor-pointer rounded-xl flex justify-center">
+                <div className="main-category-icon m-auto w-[70px] h-[70px] bg-slate-50 cursor-pointer rounded-xl flex justify-center items-center">
                   <img
-                    className="w-[50px]"
+                    className="w-[50px] h-[50px]"
                     src={el.cateImgUrl}
                     alt="category icon"
                   />
                 </div>
-                <div className="main-category-title text-sm mt-[6px] mb-[13px] text-center">
+                <div className="main-category-title text-sm mt-[6px] mb-[13px] font-medium text-center">
                   {el.cateTitle}
                 </div>
               </li>
