@@ -5,10 +5,12 @@ import { HabitWrapperVertical } from '../../../components/habitWrapperVertical';
 import { useIntersection } from '../../../hooks/useIntersection';
 import { MdExpandMore } from 'react-icons/md';
 import { LoadingIndicator } from '../../../components/loadingIndicator';
+
 import { useRouter } from 'next/router';
 export default function SearchHabit() {
   const router = useRouter();
   console.log(router.query.categoryId);
+
   const [arrowDirection, setArrowDirection] = useState({
     className: '',
     boolean: false,
@@ -31,7 +33,6 @@ export default function SearchHabit() {
   );
   const [url, setUrl] = useState('http://localhost:4000/habitdata');
   const [setTarget] = useIntersection(url, page, setPage, setSearchHabits);
-
   const categoryListKor = [
     '전체',
     '운동',
