@@ -38,49 +38,59 @@ public class ChallengeController {
     private final ChallengeMapper mapper;
     private final AuthMapper authMapper;
 
-    @ApiOperation(value = "챌린지 조회")
-    @GetMapping("/{challenge-id}")
-    public ResponseEntity findChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
-        Challenge challenge = challengeService.findChallenge(challengeId);
+//    @ApiOperation(value = "챌린지 조회")
+//    @GetMapping("/{challenge-id}")
+//    public ResponseEntity findChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
+//        Challenge challenge = challengeService.findChallenge(challengeId);
+//
+//        return new ResponseEntity<>(mapper.toDto(challenge), HttpStatus.OK);
+//    }
 
-        return new ResponseEntity<>(mapper.toDto(challenge), HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "모든 챌린지 조회")
-    @GetMapping
-    public ResponseEntity findAll(@RequestParam @Positive int page,
-                                  @RequestParam @Positive int size) {
-        List<Challenge> findAll = challengeService.findAll(page, size);
-
-        return new ResponseEntity<>(mapper.toDtos(findAll), HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "도전중인 모든 챌린지 조회")
-    @GetMapping("/challenge")
-    public ResponseEntity findAllByChallenge(@RequestParam @Positive int page,
-                                          @RequestParam @Positive int size) {
-        List<Challenge> findAllByChallenge = challengeService.findAllStatus(CHALLENGE, page, size);
-
-        return new ResponseEntity<>(mapper.toDtos(findAllByChallenge), HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "성공한 모든 챌린지 조회")
-    @GetMapping("/success")
-    public ResponseEntity findAllBySuccess(@RequestParam @Positive int page,
+    @ApiOperation(value = "특정 회원의 모든 챌린지 조회")
+    @GetMapping("/users/{user-id}")
+    public ResponseEntity findChallenge(@PathVariable("user-id") @Positive Long userId,
+                                        @RequestParam @Positive int page,
                                         @RequestParam @Positive int size) {
-        List<Challenge> findAllBySuccess = challengeService.findAllStatus(SUCCESS, page, size);
+        List<Challenge> challenges = challengeService.findAllByUser(userId, page, size);
 
-        return new ResponseEntity<>(mapper.toDtos(findAllBySuccess), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.toDtos(challenges), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "실패한 모든 챌린지 조회")
-    @GetMapping("/fail")
-    public ResponseEntity findAllByFail(@RequestParam @Positive int page,
-                                          @RequestParam @Positive int size) {
-        List<Challenge> findAllByFail = challengeService.findAllStatus(FAIL, page, size);
+//    @ApiOperation(value = "모든 챌린지 조회")
+//    @GetMapping
+//    public ResponseEntity findAll(@RequestParam @Positive int page,
+//                                  @RequestParam @Positive int size) {
+//        List<Challenge> findAll = challengeService.findAll(page, size);
+//
+//        return new ResponseEntity<>(mapper.toDtos(findAll), HttpStatus.OK);
+//    }
 
-        return new ResponseEntity<>(mapper.toDtos(findAllByFail), HttpStatus.OK);
-    }
+//    @ApiOperation(value = "도전중인 모든 챌린지 조회")
+//    @GetMapping("/challenge")
+//    public ResponseEntity findAllByChallenge(@RequestParam @Positive int page,
+//                                          @RequestParam @Positive int size) {
+//        List<Challenge> findAllByChallenge = challengeService.findAllStatus(CHALLENGE, page, size);
+//
+//        return new ResponseEntity<>(mapper.toDtos(findAllByChallenge), HttpStatus.OK);
+//    }
+
+//    @ApiOperation(value = "성공한 모든 챌린지 조회")
+//    @GetMapping("/success")
+//    public ResponseEntity findAllBySuccess(@RequestParam @Positive int page,
+//                                        @RequestParam @Positive int size) {
+//        List<Challenge> findAllBySuccess = challengeService.findAllStatus(SUCCESS, page, size);
+//
+//        return new ResponseEntity<>(mapper.toDtos(findAllBySuccess), HttpStatus.OK);
+//    }
+
+//    @ApiOperation(value = "실패한 모든 챌린지 조회")
+//    @GetMapping("/fail")
+//    public ResponseEntity findAllByFail(@RequestParam @Positive int page,
+//                                          @RequestParam @Positive int size) {
+//        List<Challenge> findAllByFail = challengeService.findAllStatus(FAIL, page, size);
+//
+//        return new ResponseEntity<>(mapper.toDtos(findAllByFail), HttpStatus.OK);
+//    }
 
     @ApiOperation(value = "인증글 등록")
     @PostMapping("/{chaellenge-id}/auths")
@@ -103,24 +113,24 @@ public class ChallengeController {
         return new ResponseEntity<>(authMapper.toDto(updateAuth), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "인증글 조회")
-    @GetMapping("/{challenge-id}/auths/{auth-id}")
-    public ResponseEntity findAuth(@PathVariable("auth-id") @Positive Long authId) {
-        Auth auth = authService.findAuth(authId);
+//    @ApiOperation(value = "인증글 조회")
+//    @GetMapping("/{challenge-id}/auths/{auth-id}")
+//    public ResponseEntity findAuth(@PathVariable("auth-id") @Positive Long authId) {
+//        Auth auth = authService.findAuth(authId);
+//
+//        return new ResponseEntity<>(authMapper.toDto(auth), HttpStatus.OK);
+//    }
 
-        return new ResponseEntity<>(authMapper.toDto(auth), HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "특정 챌린지의 모든 인증글 조회")
-    @GetMapping("/{chaellenge-id}/auths")
-    public ResponseEntity findAuthsByChallenge(@PathVariable("chaellenge-id") @Positive Long challengeId,
-                                               @RequestParam @Positive int page,
-                                               @RequestParam @Positive int size) {
-        List<Auth> findAuths = authService.findAllByChallenge(challengeId, page, size); // 쿼리문 비교1
-        challengeService.findAuthsByChallengeId(challengeId);   // 쿼리문 비교2
-
-        return new ResponseEntity<>(authMapper.toDtos(findAuths), HttpStatus.CREATED);
-    }
+//    @ApiOperation(value = "특정 챌린지의 모든 인증글 조회")
+//    @GetMapping("/{chaellenge-id}/auths")
+//    public ResponseEntity findAuthsByChallenge(@PathVariable("chaellenge-id") @Positive Long challengeId,
+//                                               @RequestParam @Positive int page,
+//                                               @RequestParam @Positive int size) {
+//        List<Auth> findAuths = authService.findAllByChallenge(challengeId, page, size); // 쿼리문 비교1
+//        challengeService.findAuthsByChallengeId(challengeId);   // 쿼리문 비교2
+//
+//        return new ResponseEntity<>(authMapper.toDtos(findAuths), HttpStatus.CREATED);
+//    }
 
     @ApiOperation(value = "인증글 삭제")
     @DeleteMapping("/{challenge-id}/auths/{auth-id}")
@@ -130,11 +140,11 @@ public class ChallengeController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @ApiOperation(value = "특정 챌린지의 모든 와일드카드 조회")
-    @GetMapping("/{challenge-id}/wildcards")
-    public ResponseEntity findWildcardsByChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
-        List<Wildcard> wildcards = wildcardService.findAllByChallenge(challengeId);
-
-        return new ResponseEntity<>(mapper.toWildcardDtos(wildcards), HttpStatus.OK);
-    }
+//    @ApiOperation(value = "특정 챌린지의 모든 와일드카드 조회")
+//    @GetMapping("/{challenge-id}/wildcards")
+//    public ResponseEntity findWildcardsByChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
+//        List<Wildcard> wildcards = wildcardService.findAllByChallenge(challengeId);
+//
+//        return new ResponseEntity<>(mapper.toWildcardDtos(wildcards), HttpStatus.OK);
+//    }
 }
