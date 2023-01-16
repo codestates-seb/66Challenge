@@ -13,8 +13,7 @@ public interface ReviewMapper {
 
     Review toEntity(ReviewDto.Patch patchDto);
 
-    @Mapping(source = "user.username", target = "reviewer")
-    ReviewDto.Post toDto(Review review);
+    ReviewDto.Response toDto(Review review);
 
     List<ReviewDto.Response> toDtos(List<Review> reviews);
 }

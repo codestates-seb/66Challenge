@@ -51,8 +51,8 @@ public class ReviewService {
         reviewRepository.deleteById(reviewId);
     }
 
-    public void verfiyExistReview(Long habit, Long userId) {
-        Optional<Review> optionalReview = reviewRepository.findByHabitHabitIdAndUserUserId(habit, userId);
+    public void verfiyExistReview(Long habitId, Long userId) {
+        Optional<Review> optionalReview = reviewRepository.findByHabitHabitIdAndUserUserId(habitId, userId);
         if (optionalReview.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.REVIEW_EXISTS);
         }

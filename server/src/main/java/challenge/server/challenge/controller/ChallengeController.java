@@ -38,23 +38,6 @@ public class ChallengeController {
     private final ChallengeMapper mapper;
     private final AuthMapper authMapper;
 
-
-    @ApiOperation(value = "챌린지 성공")
-    @PatchMapping("/{challenge-id}/success")
-    public ResponseEntity challengeSuccess(@PathVariable("challenge-id") @Positive Long challengeId) {
-        Challenge challenge = challengeService.changeStatus(challengeId, SUCCESS);
-
-        return new ResponseEntity<>(mapper.toDto(challenge), HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "챌린지 실패")
-    @PatchMapping("/{challenge-id}/fail")
-    public ResponseEntity changeChallengeStatus(@PathVariable("challenge-id") @Positive Long challengeId) {
-        Challenge challenge = challengeService.changeStatus(challengeId, FAIL);
-
-        return new ResponseEntity<>(mapper.toDto(challenge), HttpStatus.OK);
-    }
-
     @ApiOperation(value = "챌린지 조회")
     @GetMapping("/{challenge-id}")
     public ResponseEntity findChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
@@ -76,16 +59,16 @@ public class ChallengeController {
     @GetMapping("/challenge")
     public ResponseEntity findAllByChallenge(@RequestParam @Positive int page,
                                           @RequestParam @Positive int size) {
-        List<Challenge> findAllByChallenge = challengeService.findAllStatus(CHALLENGE);
+        List<Challenge> findAllByChallenge = challengeService.findAllStatus(CHALLENGE, page, size);
 
         return new ResponseEntity<>(mapper.toDtos(findAllByChallenge), HttpStatus.OK);
     }
 
     @ApiOperation(value = "성공한 모든 챌린지 조회")
-    @GetMapping("/fail")
+    @GetMapping("/success")
     public ResponseEntity findAllBySuccess(@RequestParam @Positive int page,
                                         @RequestParam @Positive int size) {
-        List<Challenge> findAllBySuccess = challengeService.findAllStatus(SUCCESS);
+        List<Challenge> findAllBySuccess = challengeService.findAllStatus(SUCCESS, page, size);
 
         return new ResponseEntity<>(mapper.toDtos(findAllBySuccess), HttpStatus.OK);
     }
@@ -94,7 +77,7 @@ public class ChallengeController {
     @GetMapping("/fail")
     public ResponseEntity findAllByFail(@RequestParam @Positive int page,
                                           @RequestParam @Positive int size) {
-        List<Challenge> findAllByFail = challengeService.findAllStatus(FAIL);
+        List<Challenge> findAllByFail = challengeService.findAllStatus(FAIL, page, size);
 
         return new ResponseEntity<>(mapper.toDtos(findAllByFail), HttpStatus.OK);
     }
@@ -147,16 +130,8 @@ public class ChallengeController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @ApiOperation(value = "와일드카드 사용")
-    @PostMapping("/{challenge-id}/wildcards")
-    public ResponseEntity useWildcard(@PathVariable("challenge-id") @Positive Long challengeId) {
-        Wildcard wildcard = wildcardService.useWildcard(challengeId);
-
-        return new ResponseEntity<>(mapper.toDto(wildcard), HttpStatus.CREATED);
-    }
-
     @ApiOperation(value = "특정 챌린지의 모든 와일드카드 조회")
-    @PostMapping("/{challenge-id}/wildcards")
+    @GetMapping("/{challenge-id}/wildcards")
     public ResponseEntity findWildcardsByChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
         List<Wildcard> wildcards = wildcardService.findAllByChallenge(challengeId);
 

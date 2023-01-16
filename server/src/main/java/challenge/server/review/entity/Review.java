@@ -7,6 +7,7 @@ import challenge.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import java.util.Optional;
 
 @Builder
@@ -23,11 +24,13 @@ public class Review extends BaseTimeEntity {
     private int score;
     private String body;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HABIT_ID")
     private Habit habit;
-
-    private User user;
 
     public void changeReview(Review review) {
         Optional.ofNullable(review.getBody())

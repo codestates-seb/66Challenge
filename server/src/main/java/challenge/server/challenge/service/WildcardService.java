@@ -16,15 +16,12 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class WildcardService {
     private final WildcardRepository wildcardRepository;
-    private final ChallengeService challengeService;
 
     @Transactional
-    public Wildcard useWildcard(Long challengeId) {
-        Challenge challenge = challengeService.findChallenge(challengeId);
+    public Wildcard useWildcard(Challenge challenge) {
         Wildcard wildcard = Wildcard.builder().challenge(challenge).build();
-        Wildcard useWildcard = wildcardRepository.save(wildcard);
 
-        return useWildcard;
+        return wildcardRepository.save(wildcard);
     }
 
     public Wildcard findWildcard(Long wildcardId) {
@@ -32,8 +29,6 @@ public class WildcardService {
     }
 
     public List<Wildcard> findAllByChallenge(Long challengeId) {
-        challengeService.findVerifiedChallenge(challengeId);
-
         return wildcardRepository.findAllByChallengeChallengeId(challengeId);
     }
 
