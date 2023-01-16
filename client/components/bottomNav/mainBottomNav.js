@@ -56,7 +56,7 @@ export function MainBottomNav({ param }) {
       currentActive = 4;
     }
     setActive(currentActive);
-  }, []);
+  }, [param]);
 
   const onClickHandle = (link) => {
     //버튼 별 페이지 경로 작성 해야함.
@@ -64,7 +64,7 @@ export function MainBottomNav({ param }) {
     const linkBoolean = menus.slice(2).some((el) => {
       return el.link.includes(link);
     });
-    if (isLogin === false && linkBoolean === true) {
+    if (isLogin === false && linkBoolean === true && link !== '/') {
       router.push('/user/login');
     } else {
       router.push(link);

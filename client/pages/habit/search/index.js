@@ -5,7 +5,10 @@ import { HabitWrapperVertical } from '../../../components/habitWrapperVertical';
 import { useIntersection } from '../../../hooks/useIntersection';
 import { MdExpandMore } from 'react-icons/md';
 import { LoadingIndicator } from '../../../components/loadingIndicator';
-export default function SearchHabit({ categoryId }) {
+import { useRouter } from 'next/router';
+export default function SearchHabit() {
+  const router = useRouter();
+  console.log(router.query.categoryId);
   const [arrowDirection, setArrowDirection] = useState({
     className: '',
     boolean: false,
@@ -23,12 +26,10 @@ export default function SearchHabit({ categoryId }) {
   const [searchHabits, setSearchHabits] = useState([]);
   const [doing, setDoing] = useState('all');
   const [page, setPage] = useState(0);
-  const [active, setActive] = useState(0);
-  const [url, setUrl] = useState(
-    categoryId
-      ? `http://localhost:4000/categorydata/${categoryId}`
-      : 'http://localhost:4000/habitdata',
+  const [active, setActive] = useState(
+    router.query.categoryId !== undefined ? router.query.categoryId : 0,
   );
+  const [url, setUrl] = useState('http://localhost:4000/habitdata');
   const [setTarget] = useIntersection(url, page, setPage, setSearchHabits);
 
   const categoryListKor = [
@@ -85,7 +86,7 @@ export default function SearchHabit({ categoryId }) {
   }, [active]);
   return (
     <div className="h-screen w-full overflow-y-scroll scrollbar-hide absolute flex flex-col items-center p-4 pb-[100px]">
-      <form className="w-4/5 flex justify-center my-3 items-center relative">
+      <form className="w-4/5 flex justify-center mt-3 mb-6 items-center relative">
         <input
           className="w-full border border-mainColor rounded-full text-base h-[40px] px-3 focus:border-subColor outline-none"
           autoComplete="off"
@@ -100,9 +101,12 @@ export default function SearchHabit({ categoryId }) {
           onClick={onSubmitHandle}
         />
       </form>
-      <div className="flex items-center w-full " onClick={arrowDirectionHandle}>
-        <span className="text-base font-semibold">카테고리</span>
-        <MdExpandMore className={arrowDirection.className} />
+      <div
+        className="flex items-center w-full mb-3 pl-4"
+        onClick={arrowDirectionHandle}
+      >
+        <span className="text-base font-semibold mr-2 ">카테고리</span>
+        <MdExpandMore size={20} className={arrowDirection.className} />
       </div>
       <div
         className={
