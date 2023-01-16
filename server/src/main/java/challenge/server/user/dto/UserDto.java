@@ -82,6 +82,7 @@ public class UserDto {
         private String password;
     }
 
+    @ApiModel(value = "일정 회수 이상 신고 당한 회원 정지 처리 후 응답")
     @Getter
     @AllArgsConstructor
     @Builder

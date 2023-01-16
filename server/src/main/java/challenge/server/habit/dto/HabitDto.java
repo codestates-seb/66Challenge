@@ -1,11 +1,13 @@
 package challenge.server.habit.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 public class HabitDto {
     // TODO 이미지 파일 관리
 
+    @ApiModel(value = "습관 등록 요청 시 전달")
     @Getter
     @Setter
     public static class Post {
@@ -27,6 +29,7 @@ public class HabitDto {
         private String authEndTime;
     }
 
+    @ApiModel(value = "습관 수정 요청 시 전달")
     @Getter
     @Setter
     public static class Patch {
@@ -49,6 +52,7 @@ public class HabitDto {
     }
 
 
+    @ApiModel(value = "습관 간략 정보 조회 응답 시 전달")
     @Getter
     @AllArgsConstructor
     @Builder
@@ -66,6 +70,7 @@ public class HabitDto {
     //  private String photoUrl; 추후 Photo 테이블 결정 후 추가 예정
     }
 
+    @ApiModel(value = "습관 상세 정보 조회 응답 시 전달")
     @Getter
     @AllArgsConstructor
     @Builder

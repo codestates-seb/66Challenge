@@ -1,10 +1,12 @@
 package challenge.server.auth.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 public class AuthDto {
 
+    @ApiModel(value = "인증글 등록 요청 시 전달")
     @Getter
     @Setter
     public static class Post {
@@ -12,6 +14,7 @@ public class AuthDto {
         private String body;
     }
 
+    @ApiModel(value = "인증글 수정 요청 시 전달")
     @Getter
     @Setter
     public static class Patch {
@@ -21,6 +24,7 @@ public class AuthDto {
         private String body;
     }
 
+    @ApiModel(value = "인증글 조회 응답 시 전달")
     @Getter
     @AllArgsConstructor
     @Builder

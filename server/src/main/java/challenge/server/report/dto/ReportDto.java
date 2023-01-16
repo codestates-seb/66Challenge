@@ -1,9 +1,11 @@
 package challenge.server.report.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 public class ReportDto {
+    @ApiModel(value = "신고 등록 요청 시 전달")
     @Getter
     @Setter
     public static class Post {
@@ -17,6 +19,7 @@ public class ReportDto {
         private String reportType;
     }
 
+    @ApiModel(value = "신고 조회 요청 시 전달")
     @Getter
     @NoArgsConstructor
     @Builder

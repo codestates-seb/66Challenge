@@ -157,7 +157,7 @@ public class HabitController {
     @ApiOperation(value="습관 인증 신고 등록")
     @PostMapping("/{habit-id}/auths/{auth-id}/reports")
     public ResponseEntity postAuthReport(@PathVariable("auth-id") @Positive Long authId,
-                                         @RequestBody @Valid AuthDto.Post AuthReportPostDto) {
+                                         @RequestBody @Valid ReportDto.Post AuthReportPostDto) {
 
         return new ResponseEntity(createAuthReportDto(), HttpStatus.OK);
     }

@@ -1,10 +1,12 @@
 package challenge.server.review.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 public class ReviewDto {
 
+    @ApiModel(value = "후기 등록 요청 시 전달")
     @Getter
     @AllArgsConstructor
     @Builder
@@ -16,6 +18,7 @@ public class ReviewDto {
         private int score;
     }
 
+    @ApiModel(value = "후기 수정 요청 시 전달")
     @Getter
     @Setter
     public static class Patch {
@@ -27,6 +30,7 @@ public class ReviewDto {
         private int score;
     }
 
+    @ApiModel(value = "후기 조회 요청 시 전달")
     @Getter
     @AllArgsConstructor
     @Builder
