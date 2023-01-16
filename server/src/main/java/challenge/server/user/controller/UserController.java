@@ -73,12 +73,14 @@ public class UserController {
     }
 
     // todo 관리자가 처리하거나, 또는 특정 조건이 만족되었을 때에 이벤트 발생시켜 처리
+    /*
     @ApiOperation(value = "5회 이상 신고 당한 회원 정지")
     @PatchMapping("/reports/{user-id}")
     public ResponseEntity banUser(@PathVariable("user-id") @Positive Long userId) {
         // API 통신용
         return new ResponseEntity<>(createUserBanResponseDto(), HttpStatus.OK);
     }
+     */
 
     @ApiOperation(value = "회원 개인 정보 통합 조회(마이페이지)")
     @GetMapping("/{user-id}")
