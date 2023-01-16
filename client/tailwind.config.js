@@ -18,6 +18,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Noto Sans KR', 'sans-serif'],
+        web: ['Sofia Sans Condensed', 'sans-serif'],
       },
       fontSize: {
         base: '16px',
