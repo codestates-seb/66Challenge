@@ -25,14 +25,6 @@ public class BookmarkController {
      */
     private final HabitController habitController;
 
-    // 찜하기 수정 = 찜하기 해제/취소 -> todo 이 핸들러 메서드도 habit controller에 있어야 하는지(그럴 경우 end point = /{habit-id}/bookmarks/{bookmark-id}) 검토
-    @ApiOperation(value = "찜하기 취소")
-    @DeleteMapping("/{bookmark-id}")
-    public ResponseEntity deleteBookmark(@PathVariable("bookmark-id") @Positive Long bookmarkId) {
-        // API 통신용
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
-
     // 회원이 찜한 습관들의 목록 출력
     @ApiOperation(value = "회원이 찜한 습관들의 목록 출력")
     @GetMapping("/{user-id}")
