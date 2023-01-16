@@ -2,6 +2,7 @@ package challenge.server.challenge.dto;
 
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.challenge.entity.Wildcard;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 public class ChallengeDto {
 
+    @ApiModel(value = "챌린지 조회 응답 시 전달")
     @Getter
     @AllArgsConstructor
     @Builder
