@@ -10,7 +10,6 @@ export function BottomNav() {
   //경로 조건에 따른 nav bar 다르게 해야함. 페이지 작성 다되고나면 분할 예정
   // 로그인 페이지 회원가입 페이지는 nav bar 존재하지 않는다.
   const paramArr = pathname.split('/');
-  console.log(pathname);
   let param = '';
   if (pathname.includes('detail')) {
     param = 'detail';

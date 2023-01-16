@@ -140,7 +140,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 bg-white z-50">
-      <div className="box-border flex flex-row h-14 justify-between  border-b border-mainColor border-solid">
+      <div className="box-border flex flex-row h-14 justify-between ">
         <LeftSide />
         <MiddleSide />
         <RightSide />

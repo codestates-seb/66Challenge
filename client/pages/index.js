@@ -6,7 +6,6 @@ import {
 } from '../data/homeStaticData';
 import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
-import { FileUploader } from '../components/fileUploader';
 
 export default function Home() {
   const router = useRouter();
@@ -18,7 +17,7 @@ export default function Home() {
     <div>
       <SlideBanner bannerCont={slideData} />
       <div className="main-category px-[20px]">
-        <ul className="main-category-list grid grid-cols-5 my-[20px]">
+        <ul className="main-category-list grid grid-cols-4 my-[20px]">
           {categoryData.map((el, idx) => {
             return (
               <li
@@ -26,14 +25,14 @@ export default function Home() {
                 onClick={(_) => cateIconClick(el.cateLink)}
                 key={el.cateTitle}
               >
-                <div className="main-category-icon">
+                <div className="main-category-icon m-auto py-[12px] bg-slate-50 cursor-pointer rounded-xl flex justify-center">
                   <img
-                    className="w-full"
+                    className="w-[50px]"
                     src={el.cateImgUrl}
                     alt="category icon"
                   />
                 </div>
-                <div className="main-category-title mt-[6px] mb-[13px] text-center">
+                <div className="main-category-title text-sm mt-[6px] mb-[13px] text-center">
                   {el.cateTitle}
                 </div>
               </li>
