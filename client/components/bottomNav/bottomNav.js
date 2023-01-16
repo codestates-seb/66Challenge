@@ -23,7 +23,7 @@ export function BottomNav() {
     param = 'post';
   } else if (pathname.includes('mypage')) {
     param = 'mypage';
-  } else if (paramArr[1] === '') {
+  } else if (paramArr[1] === '' || pathname.includes('home')) {
     param = 'home';
   }
   if (
