@@ -7,7 +7,8 @@ import {
   IoArrowBack,
   IoShareSocialSharp,
 } from 'react-icons/io5';
-import Logo66 from '../public/SvgjsG2027 66x58.svg';
+import Image from 'next/image';
+import logo from '../public/image/66logo.png';
 
 const Header = () => {
   const router = useRouter();
@@ -81,8 +82,9 @@ const Header = () => {
           className="text-2xl flex flex-row justify-start items-center"
           href="/"
         >
-          <Logo66 className="ml-3 w-max h-max mb-2" />
-          <div className="text-base">CHALLENGE</div>
+          <Image src={logo} className="w-10 h-8 ml-2 mr-1" />
+          {/* <span className="text-3xl ml-2 mr-1">66</span> */}
+          <div className="text-base font-web">CHALLENGE</div>
         </Link>
       );
     }
@@ -140,6 +142,12 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 bg-white z-50">
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <div className="box-border flex flex-row h-14 justify-between ">
         <LeftSide />
         <MiddleSide />
