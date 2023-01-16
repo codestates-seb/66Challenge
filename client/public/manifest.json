@@ -1,0 +1,36 @@
+{
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "66 Challenge",
+  "short_name": "66 Challenge",
+  "description": "\uc88b\uc740 \uc2b5\uad00\uc744 \ub9cc\ub4e4\uc5b4\uac00\ub294 66\uc77c\uc758 \ub3c4\uc804\uc5d0 \ucc38\uc5ec\ud558\uc138\uc694!",
+  "icons": [
+    {
+      "src": "image/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "image/icons/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "image/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "image/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

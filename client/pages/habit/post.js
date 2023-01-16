@@ -1,15 +1,77 @@
 import { useForm } from 'react-hook-form';
 import { FileUploader } from '../../components/fileUploader';
+import { useState, useRef } from 'react';
 
 const Post = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, getValues, setFocus, reset } = useForm();
+  const [imgFile, setImgFile] = useState('');
+  const [verify, setVerify] = useState({
+    titleVerify: '',
+    subtitleVerify: '',
+    categoryVerify: '',
+    habitImageVerify: '',
+    bodyVerify: '',
+    authTimeVerify: 'success',
+    agreeVerify: 'fail',
+  });
+
+  const titleRegExp = /^[A-Za-z0-9가-힇\s]{5,20}$/;
+  const subtitleRegExp = /^[A-Za-z0-9가-힇\s]{5,10}$/;
+  const bodyRegExp = /^[A-Za-z0-9가-힇\s`~!@#$%^&*()-_=+]{100,}$/;
+
+  const blurHandle = (verifyBoolean, verifyKey) => {
+    if (verifyBoolean) {
+      setVerify({ ...verify, [verifyKey]: 'success' });
+    } else {
+      setVerify({ ...verify, [verifyKey]: 'fail' });
+    }
+  };
+
+  const postButtonClick = (data) => {
+    const { title, subtitle, body, category, authEndTime, authStartTime } =
+      data;
+
+    if (titleRegExp.test(title) === false) {
+      setVerify({ ...verify, titleVerify: 'fail' });
+    } else if (subtitleRegExp.test(subtitle) === false) {
+      setVerify({ ...verify, subtitleVerify: 'fail' });
+    } else if (category === 'default') {
+      setVerify({ ...verify, categoryVerify: 'fail' });
+    } else if (imgFile.length === 0) {
+      setVerify({ ...verify, habitImageVerify: 'fail' });
+    } else if (bodyRegExp.test(body) === false) {
+      setVerify({ ...verify, bodyVerify: 'fail' });
+    } else if (authStartTime < authEndTime === false) {
+      setVerify({ ...verify, authTimeVerify: 'fail' });
+    } else {
+      // 데이터 통신
+      // reset();
+    }
+  };
+
+  const InputElKeyEvent = (e, nextInput) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      setFocus(nextInput);
+    }
+  };
+
+  const checkHandle = () => {
+    verify.agreeVerify === 'fail'
+      ? setVerify({ ...verify, agreeVerify: 'success' })
+      : setVerify({ ...verify, agreeVerify: 'fail' });
+  };
+
+  const inputDefaultClassName =
+    'text-base w-full rounded-md px-2 pt-[2px] border focus:border-mainColor duration-500 outline-0 mb-1';
 
   return (
-    <div className="habit-post-container w-[300px] h-screen mx-auto flex flex-col my-[40px]">
+    <div className="habit-post-container w-[300px] mx-auto flex flex-col mt-[40px]">
       <form
         className="login-form"
         onSubmit={handleSubmit((data) => {
           try {
+            postButtonClick(data);
           } catch (err) {
             console.error(err);
           }
@@ -22,29 +84,50 @@ const Post = () => {
           <input
             type="text"
             id="title"
-            className={`h-[35px] text-base w-full rounded-md px-2 pt-[5px] border focus:border-mainColor duration-500 outline-0 mb-1`}
-            placeholder="습관명을 입력해주세요."
-            onKeyDown={(e) => {}}
+            className={`h-[35px] ${inputDefaultClassName}`}
+            placeholder="습관명을 5~20자 이내로 입력해주세요."
+            onKeyDown={(e) => {
+              InputElKeyEvent(e, 'subtitle');
+            }}
             {...register('title', {
-              onBlur: () => {},
+              onBlur: () => {
+                blurHandle(titleRegExp.test(getValues('title')), 'titleVerify');
+              },
             })}
-          ></input>
+          />
+          {verify.titleVerify === 'fail' ? (
+            <span className="block text-subColor text-[13px] h-[13px] ">
+              습관명을 5~20자 이내로 입력해주세요.
+            </span>
+          ) : null}
         </div>
 
         <div className="subtitle-input-wrapper flex flex-col mb-5 h-[80px]">
-          <label htmlFor="subTitle" className="text-base font-semibold mb-1">
+          <label htmlFor="subtitle" className="text-base font-semibold mb-1">
             부제
           </label>
           <input
             type="text"
-            id="subTitle"
-            className={`h-[35px] text-base w-full rounded-md px-2 pt-[5px] border focus:border-mainColor duration-500 outline-0 mb-1`}
-            placeholder="습관명을 입력해주세요."
-            onKeyDown={(e) => {}}
-            {...register('subTitle', {
-              onBlur: () => {},
+            id="subtitle"
+            className={`h-[35px] ${inputDefaultClassName}`}
+            placeholder="부제를 5~10자 이내로 입력해주세요."
+            onKeyDown={(e) => {
+              InputElKeyEvent(e, 'category');
+            }}
+            {...register('subtitle', {
+              onBlur: () => {
+                blurHandle(
+                  subtitleRegExp.test(getValues('subtitle')),
+                  'subtitleVerify',
+                );
+              },
             })}
-          ></input>
+          />
+          {verify.subtitleVerify === 'fail' ? (
+            <span className="block text-subColor text-[13px] h-[13px] ">
+              부제을 5~10자 이내로 입력해주세요.
+            </span>
+          ) : null}
         </div>
 
         <div className="category-input-wrapper flex flex-col mb-5 h-[80px]">
@@ -53,11 +136,15 @@ const Post = () => {
           </label>
           <select
             id="category"
-            className={`h-[35px] text-base w-full rounded-md px-2 pt-[5px] border bg-white focus:border-mainColor duration-500 outline-0 mb-1`}
+            className={`h-[35px] ${inputDefaultClassName} bg-white`}
             defaultValue="default"
-            onKeyDown={(e) => {}}
             {...register('category', {
-              onBlur: () => {},
+              onBlur: () => {
+                blurHandle(
+                  getValues('category') !== 'default',
+                  'categoryVerify',
+                );
+              },
             })}
           >
             <option value="default" disabled>
@@ -73,29 +160,55 @@ const Post = () => {
             <option value="mind">마음챙김</option>
             <option value="etc">기타</option>
           </select>
+          {verify.categoryVerify === 'fail' ? (
+            <span className="block text-subColor text-[13px] h-[13px] ">
+              카테고리를 선택해주세요.
+            </span>
+          ) : null}
         </div>
 
-        <div className="habit-image-input-wrapper flex flex-col mb-5">
+        <div className="habit-image-input-wrapper flex flex-col mb-5 min-h-[245px]">
           <div className="text-base font-semibold mb-1">습관 메인 사진</div>
-          <FileUploader />
+          <FileUploader
+            imgFile={imgFile}
+            setImgFile={setImgFile}
+            uploadController={() => {
+              setVerify({ ...verify, habitImageVerify: 'success' });
+              setFocus('body');
+            }}
+          />
+          {verify.habitImageVerify === 'fail' ? (
+            <span className="block text-subColor text-[13px] h-[13px] ">
+              습관을 잘 설명할 수 있는 이미지를 업로드 해주세요.
+            </span>
+          ) : null}
         </div>
 
-        <div className="body-input-wrapper flex flex-col mb-5 h-[145px]">
+        <div className="body-input-wrapper flex flex-col mb-5 min-h-[195px]">
           <label htmlFor="body" className="text-base font-semibold mb-1">
             습관 소개
           </label>
           <textarea
             id="body"
-            className={`h-[100px] text-base w-full rounded-md px-2 pt-[5px] border focus:border-mainColor duration-500 outline-0 mb-1`}
-            placeholder="습관에 대한 소개글을 작성해주세요."
-            onKeyDown={(e) => {}}
+            className={`min-h-[150px] ${inputDefaultClassName}`}
+            placeholder="습관에 대한 소개글을 최소 100자 이상 작성해주세요."
+            onKeyDown={(e) => {
+              InputElKeyEvent(e, 'authStartTime');
+            }}
             {...register('body', {
-              onBlur: () => {},
+              onBlur: () => {
+                blurHandle(bodyRegExp.test(getValues('body')), 'bodyVerify');
+              },
             })}
           ></textarea>
+          {verify.bodyVerify === 'fail' ? (
+            <span className="block text-subColor text-[13px] h-[13px] ">
+              습관에 대한 설명글을 작성해주세요.
+            </span>
+          ) : null}
         </div>
 
-        <div className="auth-time-input-wrapper flex flex-col mb-5">
+        <div className="auth-time-input-wrapper flex flex-col mb-5 min-h-[117px]">
           <label htmlFor="authTime" className="text-base font-semibold mb-1">
             인증 가능 시간
           </label>
@@ -104,31 +217,63 @@ const Post = () => {
               id="authTime"
               type="time"
               className={`h-[70px] text-base w-full rounded-tl-md text-center bg-slate-50 rounded-bl-md px-2 pt-[30px] border border-r-0 focus:border-mainColor focus:border-r outline-0 mb-1`}
-              value="00:00"
-              onKeyDown={(e) => {}}
-              {...register('body', {
-                onBlur: () => {},
+              defaultValue="00:00"
+              onKeyDown={(e) => {
+                InputElKeyEvent(e, 'authEndTime');
+              }}
+              {...register('authStartTime', {
+                onBlur: () => {
+                  blurHandle(
+                    getValues('authStartTime') < getValues('authEndTime'),
+                    'authTimeVerify',
+                  );
+                },
               })}
             ></input>
             <input
               type="time"
               className={`h-[70px] text-base w-full rounded-tr-md text-center bg-slate-50 rounded-br-md px-2 pt-[30px] border focus:border-mainColor outline-0 mb-1`}
-              value="23:59"
-              onKeyDown={(e) => {}}
-              {...register('body', {
-                onBlur: () => {},
+              defaultValue="23:59"
+              {...register('authEndTime', {
+                onBlur: () => {
+                  blurHandle(
+                    getValues('authStartTime') < getValues('authEndTime'),
+                    'authTimeVerify',
+                  );
+                },
               })}
             ></input>
-            <div className="absolute top-[10px] left-0 pl-[12px] ">
+            <div className="absolute top-[10px] text-[14px] font-semibold left-0 pl-[12px] ">
               시작시간
             </div>
-            <div className="absolute top-[10px] left-2/4 pl-[12px]">
+            <div className="absolute top-[10px] text-[14px] font-semibold left-2/4 pl-[12px]">
               종료시간
             </div>
           </div>
+          {verify.authTimeVerify === 'fail' ? (
+            <span className="block text-subColor text-[13px] h-[13px] ">
+              인증 시작시간은 종료시간 보다 이전이어야 합니다.
+            </span>
+          ) : null}
         </div>
 
-        <div className="button-wrapper flex justify-between">
+        <div className="flex w-full mb-6">
+          <input
+            id="agreeCheck"
+            type="checkbox"
+            className="w-5 h-5 mr-3 accent-subColor"
+            onClick={checkHandle}
+          />
+          <label
+            htmlFor="agreeCheck"
+            className="block text-mainColor text-base font-semibold "
+          >
+            (필수) 본 게시물은 선량한 풍속 및 기타 사회질서를 해치는 내용이
+            포함되어 있지 않음을 확인합니다.
+          </label>
+        </div>
+
+        <div className="button-wrapper flex justify-between pt-[15px]">
           <button
             className="signup-button w-[120px] text-base py-2.5 px-5 border rounded"
             type="button"
@@ -136,8 +281,9 @@ const Post = () => {
             취소하기
           </button>
           <button
-            className="login-button w-[120px] text-base bg-[#222222] text-white py-2.5 px-5 border rounded"
+            className="login-button w-[120px] text-base bg-[#222222] text-white py-2.5 px-5 border rounded disabled:opacity-20"
             type="submit"
+            disabled={!Object.values(verify).every((el) => el === 'success')}
           >
             등록하기
           </button>
