@@ -12,6 +12,7 @@ public class AuthDto {
     public static class Post {
         @ApiModelProperty(example = "인증글 내용")
         private String body;
+        // photo 테이블 구현 후 url 추가
     }
 
     @ApiModel(value = "인증글 수정 요청 시 전달")
@@ -22,6 +23,7 @@ public class AuthDto {
         private Long authId;
         @ApiModelProperty(example = "인증글 내용")
         private String body;
+        // photo 테이블 구현 후 url 추가
     }
 
     @ApiModel(value = "인증글 조회 응답 시 전달")
@@ -36,5 +38,6 @@ public class AuthDto {
         private String body;
         @ApiModelProperty(example = "인증글 등록일시")
         private String createdAt;
+        // photo 테이블 구현 후 url 추가
     }
 }

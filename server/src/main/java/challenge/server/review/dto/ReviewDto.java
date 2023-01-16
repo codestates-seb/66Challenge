@@ -10,7 +10,7 @@ public class ReviewDto {
     @Getter
     @AllArgsConstructor
     @Builder
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Post {
         @ApiModelProperty(example = "후기 내용")
         private String body;
@@ -20,7 +20,9 @@ public class ReviewDto {
 
     @ApiModel(value = "후기 수정 요청 시 전달")
     @Getter
-    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Patch {
         @ApiModelProperty(example = "1", value = "후기 식별자")
         private Long reviewId;
@@ -34,7 +36,7 @@ public class ReviewDto {
     @Getter
     @AllArgsConstructor
     @Builder
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Response {
         @ApiModelProperty(example = "1",value = "후기 식별자")
         private Long reviewId;
@@ -46,5 +48,7 @@ public class ReviewDto {
         private int score;
         @ApiModelProperty(example = "2023-01-11T00:39:38.155053",value = "후기 작성 일시")
         private String createdAt;
+        @ApiModelProperty(example = "2023-01-11T00:39:38.155053",value = "후기 수정 일시")
+        private String lastModifiedAt;
     }
 }

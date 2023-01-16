@@ -1,6 +1,9 @@
 package challenge.server.auth.controller;
 
 import challenge.server.auth.dto.AuthDto;
+import challenge.server.auth.entity.Auth;
+import challenge.server.auth.mapper.AuthMapper;
+import challenge.server.auth.service.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +22,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final AuthService authService;
+    private final AuthMapper mapper;
+
     @ApiOperation(value = "모든 인증글 조회")
     @GetMapping
     public ResponseEntity findAll(@RequestParam @Positive int page,
                                   @RequestParam @Positive int size) {
-        List<AuthDto.Response> responseDtos = List.of(createResponseDto(), createResponseDto());
-        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
-    }
+        List<Auth> findAll = authService.findAll(page, size);
 
-    public AuthDto.Response createResponseDto() {
-        return AuthDto.Response.builder().authId(1L).body("body")
-                .createdAt(LocalDateTime.now().toString()).build();
+        return new ResponseEntity<>(mapper.toDtos(findAll), HttpStatus.OK);
     }
 }
