@@ -38,6 +38,10 @@ public class Challenge extends BaseTimeEntity {
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Auth> auths = new ArrayList<>();
 
+    public void changeStatus(Challenge.Status status) {
+        this.status = status;
+    }
+
     public enum Status {
         CHALLENGE(1),
         SUCCESS(2),

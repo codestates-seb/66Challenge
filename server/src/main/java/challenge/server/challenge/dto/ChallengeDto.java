@@ -4,10 +4,7 @@ import challenge.server.challenge.entity.Challenge;
 import challenge.server.challenge.entity.Wildcard;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +15,7 @@ public class ChallengeDto {
     @Getter
     @AllArgsConstructor
     @Builder
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Response {
         @ApiModelProperty(example = "1", value = "챌린지 식별자")
         private Long challengeId;

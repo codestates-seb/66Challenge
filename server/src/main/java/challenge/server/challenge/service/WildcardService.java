@@ -9,24 +9,27 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class WildcardService {
     private final WildcardRepository wildcardRepository;
-    private final ChallengeService challengeService;
 
     @Transactional
-    public Challenge useWildcard(Long challengeId) {
-        Challenge challenge = challengeService.findVerifiedChallenge(challengeId);
+    public Wildcard useWildcard(Challenge challenge) {
         Wildcard wildcard = Wildcard.builder().challenge(challenge).build();
-        wildcardRepository.save(wildcard);
 
-        return challenge;
+        return wildcardRepository.save(wildcard);
     }
 
     public Wildcard findWildcard(Long wildcardId) {
         return findVerifiedWildcard(wildcardId);
+    }
+
+    public List<Wildcard> findAllByChallenge(Long challengeId) {
+        return wildcardRepository.findAllByChallengeChallengeId(challengeId);
     }
 
     public Wildcard findVerifiedWildcard(Long wildcardId) {

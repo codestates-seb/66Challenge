@@ -11,18 +11,21 @@ spring:
   # datasource.url: jdbc:h2:mem:test => jdbc url 을 설정(고정)
   datasource:
     url: jdbc:h2:mem:test
-  # spring.sql.init.data-locations: classpath*:db/h2/schema.sql
-  #  => 데이터베이스 사용 시, 해당 경로(src/main/resources/db/h2/)에 있는 .sql 파일(schema.sql)을 자동으로 실행시킴
-  #  => .sql 파일(schema.sql)의 스크립트를 읽어서 DB(h2)의 테이블을 자동으로 생성시킴.
+  # spring.sql.init.data-locations: classpath*:db/h2/data.sql
+  #  => 데이터베이스 사용 시, 해당 경로(src/main/resources/db/h2/)에 있는 .sql 파일(data.sql)을 자동으로 실행시킴
+  #  => .sql 파일(data.sql)의 스크립트를 읽어서 DB(h2)의 테이블을 자동으로 생성시킴.
   ##  => JPA 를 사용할 땐, 굳이 필요할까?
   sql:
     init:
       schema-locations: classpath*:db/h2/schema.sql
+      data-locations: classpath*:db/h2/data.sql
+      mode: always
   # 실행된 쿼리를 확인하고 싶을 때 사용.
   jpa:
     hibernate:
       ddl-auto: create # todo 팀원분들과 상의!
-    show_sql: true
+    defer-datasource-initialization: true
+#    show_sql: true
     properties:
       hibernate:
         format_sql: true
@@ -52,3 +55,5 @@ jwt:
   key: ENC(9d9nAF96s1rYf4Aaq9yt/FPLZ2f24RkPpmWouKdl6q/+6/NsYLqtRrNaMjc3PjXhk7Wpt/Wn86Dp4RMLUONneCGFbnacoFoF)
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 600
+cron:
+  cron1: 0 0 1 * * *

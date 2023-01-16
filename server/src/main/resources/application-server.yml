@@ -1,4 +1,7 @@
 spring:
+  config:
+    activate:
+      on-profile: server
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ENC(Wtjg9OW9Vj1sFhFZwAIPLv9fq4WEjizOS7AG+KWPSMKccZK07ikUYe73+uCBRLlXu9k7DctAOn5XGHItKXped7qSwjF2W9VqiPDVmgmMVXbdBM2uqJev/5oWgW9PKUuTdfSba6v26vpcb42WswgdwIqoV8KI7joMB184GQhc43qf3DREB1KSaG6w5p9tc5Oey90wm7MKqQChqGH61gzPYw==)
@@ -16,6 +19,10 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  sql:
+    init:
+      data-locations: classpath:db/h2/data.sql
+      mode: always
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
@@ -26,3 +33,5 @@ jwt:
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 600
   key: ENC(9d9nAF96s1rYf4Aaq9yt/FPLZ2f24RkPpmWouKdl6q/+6/NsYLqtRrNaMjc3PjXhk7Wpt/Wn86Dp4RMLUONneCGFbnacoFoF)
+cron:
+  cron1: 0 0 0 * * *

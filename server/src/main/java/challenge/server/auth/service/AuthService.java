@@ -2,8 +2,11 @@ package challenge.server.auth.service;
 
 import challenge.server.auth.entity.Auth;
 import challenge.server.auth.repository.AuthRepository;
+import challenge.server.challenge.entity.Challenge;
+import challenge.server.challenge.service.ChallengeService;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
+import challenge.server.review.entity.Review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -17,16 +20,22 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class AuthService {
     private final AuthRepository authRepository;
+    private final ChallengeService challengeService;
 
     @Transactional
-    public Auth createAuth(Auth auth) {
+    public Auth createAuth(Auth auth, Long challengeId) {
+        Challenge challenge = challengeService.findChallenge(challengeId);
+        auth.setChallenge(challenge);
+
         return authRepository.save(auth);
     }
 
     @Transactional
     public Auth updateAuth(Auth auth) {
-        findVerifiedAuth(auth.getAuthId());
-        return authRepository.save(auth);
+        Auth findAuth = findVerifiedAuth(auth.getAuthId());
+        findAuth.changeAuth(auth);  // CustomBeanUtils 구현 후 추가 반영
+
+        return findAuth;
     }
 
     public Auth findAuth(Long authId) {
@@ -38,9 +47,26 @@ public class AuthService {
                 Sort.by("authId").descending())).getContent();
     }
 
+    public List<Auth> findAllByChallenge(Long challengeId, int page, int size) {
+        return authRepository.findAllByChallengeChallengeId(challengeId,
+                PageRequest.of(page - 1, size, Sort.by("authId").descending())).getContent();
+    }
+
+    public List<Auth> findAllByHabit(Long habitId, int page, int size) {
+        return authRepository.findAllByChallengeHabitHabitId(habitId,
+                PageRequest.of(page - 1, size, Sort.by("authId").descending())).getContent();
+    }
+
     @Transactional
     public void deleteAuth(Long authId) {
+        findVerifiedAuth(authId);
         authRepository.deleteById(authId);
+    }
+
+    public void postAuthCheck(Long challengeId) {     // 시간 기준으로 Auth를 조회해야할까?
+//        if (optionalReview.isPresent()) {
+//            throw new BusinessLogicException(ExceptionCode.REVIEW_EXISTS);
+//        }
     }
 
     private Auth findVerifiedAuth(Long authId) {
