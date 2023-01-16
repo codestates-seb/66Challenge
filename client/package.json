@@ -16,9 +16,13 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@reduxjs/toolkit": "^1.9.1",
+    "@svgr/webpack": "^6.5.1",
     "axios": "^1.2.2",
     "eslint": "^8.31.0",
+    "lodash": "^4.17.21",
     "next": "13.1.1",
+    "next-compose-plugins": "^2.2.1",
+    "next-pwa": "^5.6.0",
     "next-redux-wrapper": "^8.1.0",
     "prettier": "^2.8.1",
     "react": "18.2.0",
@@ -27,8 +31,8 @@
     "react-hook-form": "^7.41.5",
     "react-icons": "^4.7.1",
     "react-redux": "^8.0.5",
-    "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
+    "styled-components": "^5.3.6",
     "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {

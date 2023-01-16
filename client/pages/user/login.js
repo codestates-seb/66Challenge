@@ -3,11 +3,13 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import axios from 'axios';
+import { loginRequest } from '../../ducks/loginIdentitySlice';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
   const { register, handleSubmit, getValues, setFocus } = useForm();
   const router = useRouter();
-
+  const dispatch = useDispatch();
   const [emailVerify, setEmailVerify] = useState(true);
   const [passwordView, setPasswordView] = useState(false);
   const emailRegExp =
@@ -29,26 +31,15 @@ const Login = () => {
 
   const loginButtonClick = async (data) => {
     // ajax를 통해 server에 보낼 데이터
-    const { email, password } = data;
+    const { password } = data;
+    const username = data.email;
 
     if (emailVerify && email && password) {
-      await axios({
-        method: 'POST',
-        url: `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
-        data: {
-          username: email,
-          password,
-        },
-      })
-        .then((res) => {
-          console.log(res);
-          setEmailVerify(false);
-          setPasswordView(false);
-          router.push('/');
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      await dispatch(loginRequest({ username, password })).then((data) => {
+        setEmailVerify(false);
+        setPasswordView(false);
+        router.push('/');
+      });
     } else if (!emailVerify || !emailRegExp.test(email)) {
       setEmailVerify(false);
       alert('이메일이 양식에 맞지 않습니다.');
