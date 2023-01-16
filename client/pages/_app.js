@@ -2,7 +2,6 @@ import '../styles/globals.css';
 
 import { BottomNav } from '../components/bottomNav/bottomNav';
 import { HomeNav } from '../components/homeNav';
-
 import { Header } from '../components/header';
 import { wrapper, persistor } from '../ducks/store';
 import { PersistGate } from 'redux-persist/integration/react';
