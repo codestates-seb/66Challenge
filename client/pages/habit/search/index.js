@@ -7,9 +7,9 @@ import { MdExpandMore } from 'react-icons/md';
 import { LoadingIndicator } from '../../../components/loadingIndicator';
 
 import { useRouter } from 'next/router';
+import { ScrollToTopButton } from '../../../components/scrollToTopButton';
 export default function SearchHabit() {
   const router = useRouter();
-  console.log(router.query.categoryId);
 
   const [arrowDirection, setArrowDirection] = useState({
     className: '',
@@ -133,6 +133,7 @@ export default function SearchHabit() {
           );
         })}
       </div>
+
       {searchHabits.length === 0 ? (
         <LoadingIndicator />
       ) : (
@@ -147,7 +148,7 @@ export default function SearchHabit() {
           habitWrapperData={searchHabits}
         />
       )}
-
+      <ScrollToTopButton />
       <div ref={setTarget} className="w-full  h-16"></div>
     </div>
   );
