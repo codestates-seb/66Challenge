@@ -1,5 +1,7 @@
 package challenge.server.challenge.dto;
 
+import challenge.server.challenge.entity.Challenge;
+import challenge.server.challenge.entity.Wildcard;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ChallengeDto {
 

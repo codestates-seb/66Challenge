@@ -2,6 +2,8 @@ package challenge.server.challenge.controller;
 
 import challenge.server.auth.dto.AuthDto;
 import challenge.server.challenge.dto.ChallengeDto;
+import challenge.server.challenge.entity.Challenge;
+import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.review.dto.ReviewDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +22,8 @@ import java.util.List;
 @RequestMapping("/challenges")
 @RequiredArgsConstructor
 public class ChallengeController {
+
+    private final ChallengeRepository challengeRepository;
 
     @ApiOperation(value = "챌린지 생성", notes = "습관 시작하기 버튼을 클릭할 경우 생성됩니다.")
     @PostMapping
@@ -53,44 +57,14 @@ public class ChallengeController {
     }
 
     @ApiOperation(value = "특정 상태의 모든 챌린지 조회", notes = "CHALLENGE = 1 / SUCCESS = 2 / FAIL = 3")
-    @GetMapping("/status")
-    public ResponseEntity findAllByStatus(@RequestParam @Positive Long statusId,
-                                          @RequestParam @Positive int page,
+    @GetMapping("/status/challenge")
+    public ResponseEntity findAllByStatus(@RequestParam @Positive int page,
                                           @RequestParam @Positive int size) {
         return new ResponseEntity<>(List.of(createResponseDto2(), createResponseDto2()), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "리뷰 및 평점 작성")
-    @PostMapping("/{challenge-id}/reviews")
-    public ResponseEntity postReview(@PathVariable("challenge-id") @Positive Long challengeId,
-                                     @RequestBody ReviewDto.Post postDto) {
-        ReviewDto.Response responseDto = createReviewResponseDto();
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
-    }
-
-    @ApiOperation(value = "리뷰 및 평점 수정")
-    @PatchMapping("/reviews/{review-id}")
-    public ResponseEntity updateReview(@PathVariable("review-id") @Positive Long reviewId,
-                                       @RequestBody ReviewDto.Patch patchDto) {
-        ReviewDto.Response responseDto = createReviewResponseDto2();
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "리뷰 및 평점 조회")
-    @GetMapping("/reviews/{review-id}")
-    public ResponseEntity findReview(@PathVariable("review-id") @Positive Long reviewId) {
-        ReviewDto.Response responseDto = createReviewResponseDto();
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "리뷰 및 평점 삭제")
-    @DeleteMapping("/reviews/{review-id}")
-    public ResponseEntity deleteReview(@PathVariable("review-id") @Positive Long reviewId) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
     @ApiOperation(value = "인증글 등록")
-    @PostMapping("/{chaellenge-id}/auth")
+    @PostMapping("/{chaellenge-id}/auths")
     public ResponseEntity createAuth(@PathVariable("chaellenge-id") @Positive Long challengeId,
                                      @RequestBody @Valid AuthDto.Post postDto) {
         AuthDto.Response responseDto = createAuthResponseDto();
@@ -98,7 +72,7 @@ public class ChallengeController {
     }
 
     @ApiOperation(value = "인증글 수정")
-    @PatchMapping("/auth/{auth-id}")
+    @PatchMapping("/{challenge-id}/auths/{auth-id}")
     public ResponseEntity updateAuth(@PathVariable("auth-id") @Positive Long authId,
                                      @RequestBody @Valid AuthDto.Patch patchDto) {
         AuthDto.Response responseDto = createAuthResponseDto();
@@ -106,14 +80,14 @@ public class ChallengeController {
     }
 
     @ApiOperation(value = "인증 조회")
-    @GetMapping("/auth/{auth-id}")
+    @GetMapping("/{challenge-id}/auths/{auth-id}")
     public ResponseEntity findAuth(@PathVariable("auth-id") @Positive Long authId) {
         AuthDto.Response responseDto = createAuthResponseDto();
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @ApiOperation(value = "특정 챌린지의 모든 인증글 조회")
-    @GetMapping("/{chaellenge-id}/auth")
+    @GetMapping("/{chaellenge-id}/auths")
     public ResponseEntity findAuthsByChallenge(@PathVariable("chaellenge-id") @Positive Long challengeId,
                                                @RequestParam @Positive int page,
                                                @RequestParam @Positive int size) {
@@ -121,7 +95,7 @@ public class ChallengeController {
     }
 
     @ApiOperation(value = "인증글 삭제")
-    @DeleteMapping("/auth/{auth-id}")
+    @DeleteMapping("/{challenge-id}/auths/{auth-id}")
     public ResponseEntity deleteAuth(@PathVariable("auth-id") @Positive Long authId) {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

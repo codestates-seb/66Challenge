@@ -4,7 +4,12 @@ import lombok.Getter;
 
 public enum ExceptionCode {
     USER_EXISTS(409, "User exists"),
-    USER_NOT_FOUND(404, "User not found");
+    REVIEW_EXISTS(409, "Review exists"),
+    USER_NOT_FOUND(404, "User not found"),
+    AUTH_NOT_FOUND(404, "Auth not found"),
+    CHALLENGE_NOT_FOUND(404, "Challenge not found"),
+    REVIEW_NOT_FOUND(404, "Review not found"),
+    WILDCARD_NOT_FOUND(404, "Wildcard not found");
 
     @Getter
     private int status;

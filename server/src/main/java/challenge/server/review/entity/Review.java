@@ -1,7 +1,7 @@
 package challenge.server.review.entity;
 
 import challenge.server.audit.BaseTimeEntity;
-import challenge.server.challenge.entity.Challenge;
+import challenge.server.habit.entity.Habit;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,6 +20,8 @@ public class Review extends BaseTimeEntity {
     private int score;
     private String body;
 
-    @OneToOne(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Challenge challenge;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HABIT_ID")
+    private Habit habit;
+
 }
