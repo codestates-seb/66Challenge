@@ -31,12 +31,12 @@ spring:
     servlet:
       encoding:
         force-response: true
-  logging:
-    level:
-      org:
-        springframework:
-          orm:
-            jpa: DEBUG
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
