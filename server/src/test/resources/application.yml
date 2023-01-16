@@ -31,16 +31,15 @@ spring:
     servlet:
       encoding:
         force-response: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 logging:
   level:
     org:
       springframework:
         orm:
           jpa: DEBUG
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
@@ -51,3 +50,5 @@ jwt:
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 600
   key: ENC(9d9nAF96s1rYf4Aaq9yt/FPLZ2f24RkPpmWouKdl6q/+6/NsYLqtRrNaMjc3PjXhk7Wpt/Wn86Dp4RMLUONneCGFbnacoFoF)
+cron:
+  cron1: 0 0 1 * * *
