@@ -85,6 +85,7 @@ export default function SearchHabit() {
       setUrl('http://localhost:4000/habitdata');
     }
   }, [active]);
+
   return (
     <div className="h-screen w-full overflow-y-scroll scrollbar-hide absolute flex flex-col items-center p-4 pb-[100px]">
       <form className="w-4/5 flex justify-center mt-3 mb-6 items-center relative">
