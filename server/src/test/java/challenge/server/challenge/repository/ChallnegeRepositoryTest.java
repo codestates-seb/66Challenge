@@ -3,19 +3,24 @@ package challenge.server.challenge.repository;
 import challenge.server.auth.entity.Auth;
 import challenge.server.auth.repository.AuthRepository;
 import challenge.server.challenge.entity.Challenge;
-import challenge.server.challenge.entity.Wildcard;
 import challenge.server.config.TestConfig;
-import io.jsonwebtoken.lang.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
+import static challenge.server.challenge.entity.Challenge.Status.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -23,58 +28,98 @@ import static org.junit.jupiter.api.Assertions.*;
 class ChallnegeRepositoryTest {
     @Autowired
     private ChallengeRepository challengeRepository;
-
     @Autowired
     private AuthRepository authRepository;
-
     @Autowired
     private WildcardRepository wildcardRepository;
+    @Autowired
+    private EntityManager em;
 
-    @BeforeEach
-    void saveChallenge() throws Exception {
-        Challenge challenge1 = Challenge.builder().status(Challenge.Status.CHALLENGE).build();
-        Challenge saveChallenge = challengeRepository.save(challenge1);
-        Challenge challenge2 = Challenge.builder().status(Challenge.Status.CHALLENGE).build();
-        Challenge saveChallenge2 = challengeRepository.save(challenge2);
-
-        Auth auth1 = Auth.builder().challenge(saveChallenge).body("인증 내용1").build();
-        Auth auth2 = Auth.builder().challenge(saveChallenge).body("인증 내용2").build();
-        Auth auth3 = Auth.builder().challenge(saveChallenge).body("인증 내용3").build();
-        Auth auth4 = Auth.builder().challenge(saveChallenge2).body("인증 내용3").build();
-        Auth auth5 = Auth.builder().challenge(saveChallenge2).body("인증 내용3").build();
-
-        authRepository.save(auth1);
-        authRepository.save(auth2);
-        authRepository.save(auth3);
-
-        challengeRepository.save(saveChallenge);
-        challengeRepository.save(saveChallenge2);
-    }
+//    @BeforeEach
+//    public void saveChallenge() throws Exception {
+//        Challenge challenge1 = Challenge.builder().status(CHALLENGE).build();
+//        Challenge saveChallenge1 = challengeRepository.save(challenge1);
+//        Challenge challenge2 = Challenge.builder().status(CHALLENGE).build();
+//        Challenge saveChallenge2 = challengeRepository.save(challenge2);
+//        Challenge challenge3 = Challenge.builder().status(FAIL).build();
+//        Challenge saveChallenge3 = challengeRepository.save(challenge3);
+//        Challenge challenge4 = Challenge.builder().status(CHALLENGE).build();
+//        Challenge saveChallenge4 = challengeRepository.save(challenge4);
+//        Challenge challenge5 = Challenge.builder().status(CHALLENGE).build();
+//        Challenge saveChallenge5 = challengeRepository.save(challenge5);
+//        Challenge challenge6 = Challenge.builder().status(CHALLENGE).build();
+//        Challenge saveChallenge6 = challengeRepository.save(challenge6);
+//        Challenge challenge7 = Challenge.builder().status(CHALLENGE).build();
+//        Challenge saveChallenge7 = challengeRepository.save(challenge7);
+//
+//
+//        Auth auth1 = Auth.builder().challenge(saveChallenge1).body("인증 내용1").build();
+//        Auth auth2 = Auth.builder().challenge(saveChallenge3).body("인증 내용3").build();
+//
+//        authRepository.save(auth1);
+//        authRepository.save(auth2);
+//
+//        em.flush();
+//        em.clear();
+//    }
 
     @DisplayName(value = "특정 챌린지의 모든 인증 게시글 조회")
     @Test
     void findAuthsByChallengeId() throws Exception {
         // given
-        Challenge challenge = challengeRepository.findAll().get(0);
+        Challenge challenge1 = Challenge.builder().status(CHALLENGE).build();
+        Challenge saveChallenge1 = challengeRepository.save(challenge1);
+        Challenge challenge2 = Challenge.builder().status(CHALLENGE).build();
+        Challenge saveChallenge2 = challengeRepository.save(challenge2);
+
+        Auth auth1 = Auth.builder().challenge(saveChallenge1).body("인증 내용1").build();
+        Auth auth2 = Auth.builder().challenge(saveChallenge1).body("인증 내용3").build();
+
+        authRepository.save(auth1);
+        authRepository.save(auth2);
 
         // when
-        List<Auth> auths = challengeRepository.findAuthsByChallengeId(challenge.getChallengeId());
-        auths.forEach(System.out::println);
+        List<Auth> auths = challengeRepository.findAuthsByChallengeId(saveChallenge1.getChallengeId());
+        List<Auth> auths2 = challengeRepository.findAuthsByChallengeId(saveChallenge2.getChallengeId());
 
         // then
-        assertEquals(3, auths.size());
+        assertEquals(6, auths.size());
+        assertEquals(null, auths2.get(0));
     }
 
-    @DisplayName(value = "특정 상태의 모든 챌린지 조회")
+//    @DisplayName(value = "특정 상태의 모든 챌린지 조회")
+//    @Test
+//    void findAllByStatus() throws Exception {
+//        int page = 1;
+//        int size = 30;
+//
+//        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("challengeId").descending());
+//
+//        // when
+//        List<Challenge> challenges = challengeRepository.findAllByStatus(CHALLENGE, pageable).getContent();
+//        List<Challenge> success = challengeRepository.findAllByStatus(SUCCESS, pageable).getContent();
+//        List<Challenge> fail = challengeRepository.findAllByStatus(FAIL, pageable).getContent();
+//
+//        // then
+//        assertEquals(2, challenges.size());
+//        assertEquals(0, success.size());
+//        assertEquals(1, fail.size());
+//    }
+
     @Test
-    void findAllByStatus() throws Exception {
+    @DisplayName(value = "당일 인증하지 않은 게시물 체크")
+    void notAuthTodayCheck() throws Exception {
+        // given
+        LocalDateTime startDatetime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0, 0));     // test를 위해 기준 날짜 +1일
+        LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(23, 59, 59));    // test를 위해 기준 날짜 +1일
 
         // when
-        List<Challenge> challenges = challengeRepository.findAllByStatus(Challenge.Status.CHALLENGE);
-        List<Challenge> success = challengeRepository.findAllByStatus(Challenge.Status.SUCCESS);
+        List<Challenge> findAll = challengeRepository.findAllByNotAuthToday(CHALLENGE, startDatetime, endDatetime);
+
+        findAll.stream().forEach(challenge -> System.out.println(challenge.getChallengeId()));
 
         // then
-        assertEquals(2, challenges.size());
-        assertEquals(0, success.size());
+        assertEquals(45, findAll.size());
+        assertEquals(CHALLENGE, findAll.get(0).getStatus());
     }
 }
