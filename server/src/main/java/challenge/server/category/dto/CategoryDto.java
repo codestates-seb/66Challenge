@@ -1,10 +1,12 @@
 package challenge.server.category.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 public class CategoryDto {
 
+    @ApiModel(value = "카테고리 등록 요청 시 전달")
     @Getter
     @Setter
     public static class Post {
@@ -12,6 +14,7 @@ public class CategoryDto {
         private String type;
     }
 
+    @ApiModel(value = "카테고리 조회 응답 시 전달")
     @Getter
     @AllArgsConstructor
     @Builder
