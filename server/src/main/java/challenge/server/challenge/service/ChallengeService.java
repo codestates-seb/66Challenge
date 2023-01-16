@@ -9,10 +9,13 @@ import challenge.server.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static challenge.server.challenge.entity.Challenge.Status.CHALLENGE;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +31,11 @@ public class ChallengeService {
     }
 
     @Transactional
-    public Challenge updateChallenge(Challenge challenge) {
-        findVerifiedChallenge(challenge.getChallengeId());
-        return challengeRepository.save(challenge); // TODO: CustomBeanUtils 구현 후 수정
+    public Challenge changeStatus(Long challengeId, Challenge.Status status) {
+        Challenge challenge = findVerifiedChallenge(challengeId);
+        challenge.changeStatus(status);
+
+        return challenge;
     }
 
     public Challenge findChallenge(Long challengeId) {
@@ -44,14 +49,22 @@ public class ChallengeService {
     }
 
     // 특정 상태의 모든 챌린지 조회
-    public List<Challenge> findAllStatus(String status) {
+    public List<Challenge> findAllStatus(Challenge.Status status) {
         // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
-        return challengeRepository.findAllByStatus(Challenge.Status.CHALLENGE);
+        return challengeRepository.findAllByStatus(status);
     }
 
     public List<Challenge> findAll(int page, int size) {
         return challengeRepository.findAll(PageRequest.of(page - 1, size,
                 Sort.by("challengeId").descending())).getContent();
+    }
+
+    @Scheduled(cron = "${cron.cron1}")  // 매일 자정 해당 메서드가 실행됨
+    public void postAuthCheck() {
+        // 오늘 날짜가 포함된 Auth를 포함하지 않은 Challenge를 모두 조회
+        List<Challenge> allByChallenge = challengeRepository.findAllByStatus(CHALLENGE);
+
+        //
     }
 
     public Challenge findVerifiedChallenge(Long challengeId) {
