@@ -51,4 +51,4 @@ jwt:
   refresh-token-expiration-minutes: 600
   key: ENC(9d9nAF96s1rYf4Aaq9yt/FPLZ2f24RkPpmWouKdl6q/+6/NsYLqtRrNaMjc3PjXhk7Wpt/Wn86Dp4RMLUONneCGFbnacoFoF)
 cron:
-  cron1: 0 0 1 * * *
+  cron1: 10 * * * * *

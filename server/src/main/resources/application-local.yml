@@ -24,11 +24,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create # todo 팀원분들과 상의!
-    defer-datasource-initialization: true
-#    show_sql: true
     properties:
       hibernate:
         format_sql: true
+    defer-datasource-initialization: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -42,9 +41,8 @@ server:
 logging:
   level:
     org:
-      springframework:
-        orm:
-          jpa: DEBUG
+      hibernate:
+        SQL: debug
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
@@ -56,4 +54,4 @@ jwt:
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 600
 cron:
-  cron1: 0 0 1 * * *
+  cron1: 30 * * * * *
