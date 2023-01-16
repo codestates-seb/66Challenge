@@ -8,6 +8,7 @@ import challenge.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class Challenge extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long challengeId;
+
+    private LocalDateTime lastPostedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
@@ -40,6 +43,10 @@ public class Challenge extends BaseTimeEntity {
 
     public void changeStatus(Challenge.Status status) {
         this.status = status;
+    }
+
+    public void updatePostedAt(LocalDateTime localDateTime) {
+        this.lastPostedAt = localDateTime;
     }
 
     public enum Status {

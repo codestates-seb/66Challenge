@@ -19,8 +19,6 @@ public class AuthDto {
     @Getter
     @Setter
     public static class Patch {
-        @ApiModelProperty(example = "1", value = "인증글 식별자")
-        private Long authId;
         @ApiModelProperty(example = "인증글 내용")
         private String body;
         // photo 테이블 구현 후 url 추가
