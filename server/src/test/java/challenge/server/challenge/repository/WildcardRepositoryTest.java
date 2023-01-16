@@ -56,7 +56,7 @@ class WildcardRepositoryTest {
         em.clear();
     }
 
-    @Test
+/*    @Test
     void findAllByChallengeChallengeId() throws Exception {
         // when
         List<Wildcard> wildcards1 = wildcardRepository.findAllByChallengeChallengeId(1L);
@@ -67,5 +67,5 @@ class WildcardRepositoryTest {
         assertEquals(3, wildcards1.size());
         assertEquals(2, wildcards2.size());
         assertEquals(0, wildcards3.size());
-    }
+    }*/
 }

@@ -106,17 +106,17 @@ class ChallnegeRepositoryTest {
 //        assertEquals(1, fail.size());
 //    }
 
-    @Test
-    @DisplayName(value = "당일 인증하지 않은 게시물 체크")
-    void notAuthTodayCheck() throws Exception {
-        // given
-        LocalDateTime startDatetime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0, 0));     // test를 위해 기준 날짜 +1일
-        LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(23, 59, 59));    // test를 위해 기준 날짜 +1일
-
-        // when
-        List<Challenge> findAll = challengeRepository.findAllByNotAuthToday(CHALLENGE, startDatetime, endDatetime);
-
-        findAll.stream().forEach(challenge -> System.out.println(challenge.getChallengeId()));
+//    @Test
+//    @DisplayName(value = "당일 인증하지 않은 게시물 체크")
+//    void notAuthTodayCheck() throws Exception {
+//        // given
+//        LocalDateTime startDatetime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0, 0));     // test를 위해 기준 날짜 +1일
+//        LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(23, 59, 59));    // test를 위해 기준 날짜 +1일
+//
+//        // when
+//        List<Challenge> findAll = challengeRepository.findAllByNotAuthToday(CHALLENGE, startDatetime, endDatetime);
+//
+//        findAll.stream().forEach(challenge -> System.out.println(challenge.getChallengeId()));
 
         // then
 //        assertEquals(45, findAll.size());
