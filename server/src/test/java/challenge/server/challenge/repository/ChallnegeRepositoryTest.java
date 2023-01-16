@@ -121,5 +121,5 @@ class ChallnegeRepositoryTest {
         // then
 //        assertEquals(45, findAll.size());
 //        assertEquals(CHALLENGE, findAll.get(0).getStatus());
-    }
+//    }
 }
