@@ -70,4 +70,15 @@ public class User extends BaseTimeEntity {
             this.num = num;
         }
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", username='" + username + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }
