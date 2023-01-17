@@ -1,6 +1,8 @@
 package challenge.server.user.controller;
 
 import challenge.server.challenge.entity.Challenge;
+import challenge.server.habit.controller.HabitController;
+import challenge.server.habit.dto.HabitDto;
 import challenge.server.habit.entity.Habit;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
@@ -31,6 +33,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
+    private final HabitController habitController;
 
     @ApiOperation(value = "이메일 중복 여부 확인", notes = "true 응답 = 중복되는 이메일 존재 / false 응답 = 중복되는 이메일 없음")
     @GetMapping("/emails/check")
@@ -100,6 +103,20 @@ public class UserController {
         // API 통신용
         List<UserDto.CategoryResponse> responseDtos = List.of(createCategoryResponseDto(), createCategoryResponseDto(), createCategoryResponseDto());
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
+
+    /* bookmark(습관 찜하기) 등록 = habit controller에 해당 요청 처리하는 핸들러 메서드 postBookmark() 있음
+    userId 및 habitId로 요청,
+    비로그인 회원은 로그인 페이지로 이동,
+    해당 습관 제작자는 해당 버튼이 보이지 않음
+     */
+    // 회원이 찜한 습관들의 목록 출력
+    @ApiOperation(value = "회원이 찜한 습관들의 목록 출력")
+    @GetMapping("/{user-id}/bookmarks")
+    public ResponseEntity getBookmarks(@PathVariable("user-id") @Positive Long userId) {
+        // API 통신용
+        List<HabitDto.Response> responses = List.of(habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto());
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
     @ApiOperation(value = "내가 만든 습관 조회")
