@@ -47,6 +47,9 @@ export default function MyPage() {
               {userInfo &&
                 userInfo.activeChallenges.map((e) => {
                   return (
+                    // 버튼부분이 프로그레스바 적용해야 하는 부분 //
+                    // 버튼부분이 프로그레스바 적용해야 하는 부분 //
+                    // 버튼부분이 프로그레스바 적용해야 하는 부분 //
                     <button
                       onClick={() => handleHabitDetail(e.challengeId)}
                       className="h-[9] mx-2 rounded-xl my-1 w-36 shrink-0 border-2 flex items-center justify-center max-h-min bg-white"
