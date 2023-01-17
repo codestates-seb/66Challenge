@@ -14,7 +14,15 @@ module.exports = {
         'gray-border': '#929292',
         'sky-pink': '#f4caf8',
         'light-green': '#9de3b2',
+        footerMemberTextColor: '#0d9488',
         borderColor: '#E5E5E5',
+      },
+
+      backgroundColor: {
+        footerColor: '#F5F5F5',
+        checkButton: '#f89500',
+        signUpButton: 'black',
+        footerMemberTextColor: '#0d9488',
       },
       fontFamily: {
         sans: ['Noto Sans KR', 'sans-serif'],
@@ -45,11 +53,16 @@ module.exports = {
           '90%': { top: '-5px' },
           '100%': { top: '-3px' },
         },
+        gage: {
+          '0%': { transform: 'translateX(-100%) ' },
+          '100%': { transform: 'translateX(0) ' },
+        },
       },
       animation: {
         bookMark: 'bookMark 1s ease-in-out ',
         dropDown: 'dropDown .2s ease',
         speechBubble: 'speechBubble 1.8s ease-in-out Infinite',
+        gage: 'gage 0.5s ease',
       },
     },
   },
