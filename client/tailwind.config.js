@@ -16,6 +16,7 @@ module.exports = {
         'light-green': '#9de3b2',
         footerMemberTextColor: '#0d9488',
       },
+      
       backgroundColor: {
         footerColor: '#F5F5F5',
         checkButton: '#f89500',
