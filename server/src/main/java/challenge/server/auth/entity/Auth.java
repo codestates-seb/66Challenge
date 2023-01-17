@@ -17,7 +17,7 @@ public class Auth extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long authId;
     private String body;
-
+    private String authImageUrl;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CHALLENGE_ID")
     private Challenge challenge;
@@ -33,5 +33,9 @@ public class Auth extends BaseTimeEntity {
     public void changeAuth(Auth auth) {
         Optional.ofNullable(auth.getBody())
                 .ifPresent(changetBody -> this.body = changetBody);
+    }
+
+    public void changeImageUrl(String authImageUrl) {
+        this.authImageUrl = authImageUrl;
     }
 }
