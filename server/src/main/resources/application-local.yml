@@ -43,6 +43,10 @@ logging:
     org:
       hibernate:
         SQL: debug
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR # amazon warning 로그 숨겨줌
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
@@ -55,3 +59,12 @@ jwt:
   refresh-token-expiration-minutes: 600
 cron:
   cron1: 0 10 * * * *
+cloud:
+  aws:
+    s3:
+      bucket: challenge66.file.bucket
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false

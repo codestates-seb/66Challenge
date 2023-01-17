@@ -9,17 +9,11 @@ class JasyptConfigTest {
 
     @Test
     void jasypt() {
-        String url = "my_url";
-        String username = "my_username";
-        String password = "my_password";
-        String admin = "my_admin_address";
-        String key = "my_key";
+        String access_key = "AKIA2YC2B47XGV7MZ4C7";
+        String secret_key = "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";
 
-        System.out.println(jasyptEncoding(url));
-        System.out.println(jasyptEncoding(username));
-        System.out.println(jasyptEncoding(password));
-        System.out.println(jasyptEncoding(admin));
-        System.out.println(jasyptEncoding(key));
+        System.out.println(jasyptEncoding(access_key));
+        System.out.println(jasyptEncoding(secret_key));
     }
 
     public String jasyptEncoding(String value) {

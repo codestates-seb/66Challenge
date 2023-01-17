@@ -11,6 +11,7 @@ import challenge.server.challenge.mapper.ChallengeMapper;
 import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.challenge.service.ChallengeService;
 import challenge.server.challenge.service.WildcardService;
+import challenge.server.file.service.FileUploadService;
 import challenge.server.review.dto.ReviewDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -35,6 +37,7 @@ public class ChallengeController {
     private final ChallengeService challengeService;
     private final AuthService authService;
     private final WildcardService wildcardService;
+    private final FileUploadService fileUploadService;
     private final ChallengeMapper mapper;
     private final AuthMapper authMapper;
 
@@ -105,8 +108,11 @@ public class ChallengeController {
     @ApiOperation(value = "인증글 등록")
     @PostMapping("/{chaellenge-id}/auths")
     public ResponseEntity createAuth(@PathVariable("chaellenge-id") @Positive Long challengeId,
-                                     @RequestBody @Valid AuthDto.Post postDto) {
+                                     @RequestPart("file") MultipartFile multipartFile,
+                                     @RequestPart("data") @Valid AuthDto.Post postDto) {
         Auth auth = authMapper.toEntity(postDto);
+        String authImageUrl = fileUploadService.save(multipartFile);
+        auth.changeImageUrl(authImageUrl);
         Auth createAuth = authService.createAuth(auth, challengeId);
 
         return new ResponseEntity<>(authMapper.toDto(createAuth), HttpStatus.CREATED);
