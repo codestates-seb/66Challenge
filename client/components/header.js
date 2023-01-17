@@ -83,7 +83,7 @@ const Header = () => {
           className="text-2xl flex flex-row justify-start items-center"
           href="/"
         >
-          <Image src={logo} className="w-10 h-8 ml-2 mr-1" alt="logo" />
+          <Image src={logo} alt="66logo" className="w-10 h-8 ml-2 mr-1" />
           {/* <span className="text-3xl ml-2 mr-1">66</span> */}
           <div className="text-base font-web">CHALLENGE</div>
         </Link>
