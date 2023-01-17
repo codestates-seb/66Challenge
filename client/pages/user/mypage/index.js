@@ -46,18 +46,29 @@ export default function MyPage() {
             <div className="border-2 mx-2 h-12 rounded-xl flex flex-nowrap overflow-x-auto">
               {userInfo &&
                 userInfo.activeChallenges.map((e) => {
+                  // const progress = parseInt((e.authDays / 66) * 100);
+                  // const progress = 30;
+                  const progress = 80;
                   return (
-                    // 버튼부분이 프로그레스바 적용해야 하는 부분 //
-                    // 버튼부분이 프로그레스바 적용해야 하는 부분 //
-                    // 버튼부분이 프로그레스바 적용해야 하는 부분 //
                     <button
                       onClick={() => handleHabitDetail(e.challengeId)}
-                      className="h-[9] mx-2 rounded-xl my-1 w-36 shrink-0 border-2 flex items-center justify-center max-h-min bg-white"
+                      className="h-[36px] mx-2 rounded-xl my-1 w-36 shrink-0 border p-px border-mainColor flex items-center justify-center max-h-min bg-white relative overflow-hidden z-20"
                     >
-                      <span className="text-center ">
-                        {e.habitSubTitle}
-                        <span className="text-xs">{` (${e.authDays}/66)`}</span>
-                      </span>
+                      <div
+                        className={` absolute h-[34px] w-[30%] ${
+                          progress < 33
+                            ? 'bg-blue-500'
+                            : progress > 66
+                            ? 'bg-subColor'
+                            : 'bg-red-500'
+                        }  rounded-r-xl left-0 animate-gage z-10 anim`}
+                      ></div>
+                      <div className="z-30">
+                        <span className="text-center ">
+                          {e.habitSubTitle}
+                          <span className="text-xs">{` (${e.authDays}/66)`}</span>
+                        </span>
+                      </div>
                     </button>
                   );
                 })}
