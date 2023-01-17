@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -32,6 +33,8 @@ public class ChallengeService {
     private static final DateTimeFormatter formatter
             = DateTimeFormatter.ofPattern("mm:ss:SSS");
     private final WildcardService wildcardService;
+
+    private final EntityManager em;
 
     @Transactional
     public Challenge createChallenge(Challenge challenge) {
@@ -82,21 +85,21 @@ public class ChallengeService {
         LocalDateTime startDatetime = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(0, 0, 0));     // 익일 00:00:00
         LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(23, 59, 59));    // 익일 23:59:59
 
-        // 도전 중인 Challenge 중에 오늘 날짜의 Auth를 가지고 있지 않은 모든 Challenge 조회
+        // 전날 인증글을 게시하지 않은 모든 Challenge 조회
         List<Challenge> challenges = challengeRepository.
                 findAllByNotAuthToday(CHALLENGE, startDatetime, endDatetime);
 
         challenges.forEach(challenge ->
         {
-            int wildcardCount = challenge.getWildcards().size();
+            int wildcardCount = challenge.getWildcards() == null ? 0 : challenge.getWildcards().size();
 
             if (wildcardCount >= 2) {   // wildcard를 이미 모두 사용했다면
                 challenge.changeStatus(FAIL);   // Challenge Fail
             } else {    // 사용할 수 있는 wildcard가 아직 남아있다면
                 wildcardService.useWildcard(challenge);    // wildcard 사용
+                challenge.updatePostedAt(LocalDateTime.now().minusDays(1));     // challenge 마지막 인증 게시글 업로드 시간 업데이트
             }
         });
-
         return challenges;
     }
 

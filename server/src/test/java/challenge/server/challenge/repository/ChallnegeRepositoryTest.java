@@ -3,6 +3,7 @@ package challenge.server.challenge.repository;
 import challenge.server.auth.entity.Auth;
 import challenge.server.auth.repository.AuthRepository;
 import challenge.server.challenge.entity.Challenge;
+import challenge.server.challenge.entity.Wildcard;
 import challenge.server.config.TestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,7 +52,6 @@ class ChallnegeRepositoryTest {
 //        Challenge saveChallenge6 = challengeRepository.save(challenge6);
 //        Challenge challenge7 = Challenge.builder().status(CHALLENGE).build();
 //        Challenge saveChallenge7 = challengeRepository.save(challenge7);
-//
 //
 //        Auth auth1 = Auth.builder().challenge(saveChallenge1).body("인증 내용1").build();
 //        Auth auth2 = Auth.builder().challenge(saveChallenge3).body("인증 내용3").build();
@@ -106,20 +106,34 @@ class ChallnegeRepositoryTest {
 //        assertEquals(1, fail.size());
 //    }
 
-//    @Test
-//    @DisplayName(value = "당일 인증하지 않은 게시물 체크")
-//    void notAuthTodayCheck() throws Exception {
-//        // given
-//        LocalDateTime startDatetime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0, 0));     // test를 위해 기준 날짜 +1일
-//        LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(23, 59, 59));    // test를 위해 기준 날짜 +1일
-//
-//        // when
-//        List<Challenge> findAll = challengeRepository.findAllByNotAuthToday(CHALLENGE, startDatetime, endDatetime);
-//
-//        findAll.stream().forEach(challenge -> System.out.println(challenge.getChallengeId()));
+    @Test
+    @DisplayName(value = "당일 인증하지 않은 게시물 체크")
+    void notAuthTodayCheck() throws Exception {
+        // given
+        LocalDateTime localDateTime = LocalDateTime.of(2023, 1, 15, 1, 1, 1);
+        Challenge challenge1 = Challenge.builder().status(CHALLENGE).lastPostedAt(localDateTime).build();
+        Challenge saveChallenge1 = challengeRepository.save(challenge1);
+        Challenge challenge2 = Challenge.builder().status(CHALLENGE).build();
+        Challenge saveChallenge2 = challengeRepository.save(challenge2);
+
+        wildcardRepository.save(Wildcard.builder().challenge(saveChallenge1).build());
+        wildcardRepository.save(Wildcard.builder().challenge(saveChallenge1).build());
+
+        LocalDateTime startDatetime = LocalDateTime.of(LocalDate.of(2023, 1, 16), LocalTime.of(0, 0, 0));
+        LocalDateTime endDatetime = LocalDateTime.of(LocalDate.of(2023, 1, 16), LocalTime.of(23, 59, 59));
+
+        // when
+        List<Challenge> findAll = challengeRepository.findAllByNotAuthToday(CHALLENGE, startDatetime, endDatetime);
+
+        findAll.forEach(challenge ->
+                System.out.print("챌린지 상태: " + challenge.getStatus() + "\n"
+                        + "챌린지 Id: " + challenge.getChallengeId() + "\n"
+                        + "챌린지 마지막 인증 시간: " + challenge.getLastPostedAt() + "\n"
+                        + "-----------------------------------------------------\n"));
 
         // then
-//        assertEquals(45, findAll.size());
-//        assertEquals(CHALLENGE, findAll.get(0).getStatus());
-//    }
+        assertTrue(findAll.contains(saveChallenge1));
+        assertTrue(findAll.contains(saveChallenge2));
+        assertEquals(30, findAll.size());
+    }
 }

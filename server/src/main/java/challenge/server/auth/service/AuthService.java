@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,6 +27,7 @@ public class AuthService {
     public Auth createAuth(Auth auth, Long challengeId) {
         Challenge challenge = challengeService.findChallenge(challengeId);
         auth.setChallenge(challenge);
+        challenge.updatePostedAt(LocalDateTime.now());
 
         return authRepository.save(auth);
     }
@@ -70,6 +72,7 @@ public class AuthService {
     }
 
     private Auth findVerifiedAuth(Long authId) {
+        Auth auth = authRepository.findById(authId).get();
         return authRepository.findById(authId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.AUTH_NOT_FOUND));
     }
