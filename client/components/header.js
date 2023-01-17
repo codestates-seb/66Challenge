@@ -11,7 +11,6 @@ import {
 import Image from 'next/image';
 import logo from '../public/image/66logo.png';
 
-
 const Header = () => {
   const router = useRouter();
   const pathArr = router.asPath.split('/').slice(1); // path의 요소를 나눔
@@ -144,7 +143,6 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 bg-white z-50">
-
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@700&display=swap"
