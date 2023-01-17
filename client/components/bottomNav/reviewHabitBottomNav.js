@@ -10,7 +10,7 @@ export function ReviewHabitBottomNav() {
   return (
     <div className="flex bg-white h-[3rem] px-6  w-full fixed bottom-0 min-w[300px] justify-center items-center border-t">
       <button
-        className="bg-mainColor h-3/4 w-full rounded-lg  text-iconColor"
+        className="bg-mainColor h-3/4 w-full rounded-lg  text-iconColor text-base"
         onClick={reviewHabitHandle}
       >
         write Review

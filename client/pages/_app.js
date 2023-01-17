@@ -1,14 +1,16 @@
 import '../styles/globals.css';
+import { wrapper, persistor } from '../ducks/store';
+import { PersistGate } from 'redux-persist/integration/react';
 
-import { BottomNav } from '../components/bottomNav/bottomNav';
+import Layout from '../components/layout/layout';
 
 function MyApp({ Component, pageProps }) {
+  const getLayout = Component.getLayout || ((page) => page);
+
   return (
-    <>
-      <Component {...pageProps} />
-      <BottomNav />
-    </>
+    <PersistGate persistor={persistor} loading={<div>loading...</div>}>
+      <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
+    </PersistGate>
   );
 }
-
-export default MyApp;
+export default wrapper.withRedux(MyApp);
