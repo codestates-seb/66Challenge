@@ -27,7 +27,7 @@ const Header = () => {
     signup: '회원가입',
     edit: '회원 정보 수정',
     madehabit: '내가 만든 습관',
-    savehabit: '내가 찜한 습관',
+    savedhabit: '내가 찜한 습관',
     post: '습관 등록하기',
     search: '습관 검색하기',
     edit: '습관 수정하기',
