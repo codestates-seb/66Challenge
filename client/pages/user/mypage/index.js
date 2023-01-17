@@ -51,7 +51,9 @@ export default function MyPage() {
             <div className="border-2 mx-2 h-12 rounded-xl flex flex-nowrap overflow-x-auto">
               {userInfo &&
                 userInfo.activeChallenges.map((e) => {
+
                   const progress = Math.ceil((e.authDays / 66) * 100);
+
 
                   return (
                     <button
@@ -82,6 +84,7 @@ export default function MyPage() {
                         }  rounded-r-xl left-0 animate-gage z-10 anim`}
                         width={progress}
                       ></ProgressBar>
+
                       <div className="z-30">
                         <span className="text-center ">
                           {e.habitSubTitle}
