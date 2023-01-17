@@ -3,6 +3,7 @@ package challenge.server.auth.service;
 import challenge.server.auth.entity.Auth;
 import challenge.server.auth.repository.AuthRepository;
 import challenge.server.challenge.entity.Challenge;
+import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.challenge.service.ChallengeService;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
@@ -22,12 +23,13 @@ import java.util.List;
 public class AuthService {
     private final AuthRepository authRepository;
     private final ChallengeService challengeService;
+    private final ChallengeRepository challengeRepository;
 
     @Transactional
     public Auth createAuth(Auth auth, Long challengeId) {
-        Challenge challenge = challengeService.findChallenge(challengeId);
-        auth.setChallenge(challenge);
-        challenge.updatePostedAt(LocalDateTime.now());
+//        Challenge challenge = challengeService.findChallenge(challengeId);    // File upload test를 위해 임시로 주석처리
+//        auth.setChallenge(challenge);
+//        challenge.updatePostedAt(LocalDateTime.now());
 
         return authRepository.save(auth);
     }
