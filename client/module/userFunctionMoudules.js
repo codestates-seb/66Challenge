@@ -23,8 +23,10 @@ export async function postUserSignUp({ email, username, password }) {
 export async function getUserEmailOverlapVerify(email) {
   try {
     const response = await axios
-      .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${email}/exists`)
-      .then((res) => console.log(res));
+      .get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/emails/check?email=${email}`,
+      )
+      .then((res) => res.data);
     return response;
   } catch (e) {
     console.error(e);
@@ -33,8 +35,10 @@ export async function getUserEmailOverlapVerify(email) {
 export async function getUsernameOverlapVerify(username) {
   try {
     const response = await axios
-      .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${username}/exists`)
-      .then((res) => console.log(res));
+      .get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/usernames/check?username=${username}`,
+      )
+      .then((res) => res.data);
     return response;
   } catch (e) {
     console.error(e);
