@@ -3,6 +3,11 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import styled from 'styled-components';
+
+const ProgressBar = styled.div`
+  width: ${(props) => `${props.width}%`};
+`;
 
 export default function MyPage() {
   //   console.log(getCookie('accessJwtToken'));
@@ -46,23 +51,37 @@ export default function MyPage() {
             <div className="border-2 mx-2 h-12 rounded-xl flex flex-nowrap overflow-x-auto">
               {userInfo &&
                 userInfo.activeChallenges.map((e) => {
-                  // const progress = parseInt((e.authDays / 66) * 100);
-                  // const progress = 30;
-                  const progress = 80;
+                  const progress = Math.ceil((e.authDays / 66) * 100);
+
                   return (
                     <button
                       onClick={() => handleHabitDetail(e.challengeId)}
                       className="h-[36px] mx-2 rounded-xl my-1 w-36 shrink-0 border p-px border-mainColor flex items-center justify-center max-h-min bg-white relative overflow-hidden z-20"
                     >
-                      <div
-                        className={` absolute h-[34px] w-[30%] ${
-                          progress < 33
-                            ? 'bg-blue-500'
-                            : progress > 66
-                            ? 'bg-subColor'
-                            : 'bg-red-500'
+                      <ProgressBar
+                        className={`absolute h-[34px] ${
+                          progress <= 10
+                            ? 'bg-red-700'
+                            : progress <= 20
+                            ? 'bg-red-500'
+                            : progress <= 30
+                            ? 'bg-orange-600'
+                            : progress <= 40
+                            ? 'bg-orange-400'
+                            : progress <= 50
+                            ? 'bg-yellow-500'
+                            : progress <= 60
+                            ? 'bg-yellow-400'
+                            : progress <= 70
+                            ? 'bg-green-500'
+                            : progress <= 80
+                            ? 'bg-green-600'
+                            : progress <= 90
+                            ? 'bg-green-700'
+                            : 'bg-green-800'
                         }  rounded-r-xl left-0 animate-gage z-10 anim`}
-                      ></div>
+                        width={progress}
+                      ></ProgressBar>
                       <div className="z-30">
                         <span className="text-center ">
                           {e.habitSubTitle}
@@ -74,6 +93,7 @@ export default function MyPage() {
                 })}
             </div>
           </div>
+          <div className="border border-mainColor w-[79%] h-[100px]"></div>
         </main>
       )}
     </>
