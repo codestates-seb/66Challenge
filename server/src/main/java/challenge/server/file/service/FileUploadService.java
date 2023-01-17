@@ -1,14 +1,23 @@
 package challenge.server.file.service;
 
+import challenge.server.exception.BusinessLogicException;
+import challenge.server.exception.ExceptionCode;
 import challenge.server.file.dto.FileDto;
 import challenge.server.file.storage.AmazonS3ResourceStorage;
 import challenge.server.file.util.MultipartUtil;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkBaseException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class FileUploadService {
 
@@ -23,5 +32,9 @@ public class FileUploadService {
         String path = MultipartUtil.createPath(multipartFile);
 
         return amazonS3ResourceStorage.store(path, multipartFile);
+    }
+
+    public void delete(String fileUrl) throws SdkBaseException {
+        amazonS3ResourceStorage.delete(fileUrl);
     }
 }
