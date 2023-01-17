@@ -1,30 +1,55 @@
-// <------  사용하시기 전에 꼭 읽어주세요! ------>
-// ToDo 1.
-
-// <예시> 아래의 코드를 주석 해제하고 중괄호를 제거한 뒤 사용해보세요
-
-{
-  /* <MyPageMenuList
-  onClick={() => console.log('버튼의 클릭이벤트로 전해지는 함수')}
-/> */
-}
-
-// <------  사용하시기 전에 꼭 읽어주세요! ------>
+// 현재 임의의 주소를 가져와 인증서 발급 클릭시
+// 모달컴포넌트가 뜨게 만들어진 상황입니다
 
 import { SlArrowRight } from 'react-icons/sl';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 export const MyPageMenuList = (props) => {
-  const CertificationList = (props) => {
-    return (
-      <div className="w-80 cursor-pointer hidden" onClick={props.onClick}>
-        <div className="p-2 font-bold  w-full only:flex place-content-between border-x-2 border-t-2 border-black dark:text-white dark:border-white">
-          숨겨진 업적
-          <div className="pr-5">
-            <SlArrowRight className="inline align-middle dark:bg-white" />
+  const [modal, setModal] = useState(false);
+  const [apiData, SetApiData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get('http://13.209.179.193:8080/habits/search?page=1&size=999')
+      .then((res) => {
+        SetApiData(res.data);
+        console.log(apiData[0].title);
+        console.log('위에 문제 없이 데이터 뜨면 잘한겁니다');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // MyPageMenuList 컴포넌트가 처음 렌더링되는 시점에서 한번 통신이 되기에 여기서는 useeffect가 불필요함
+
+  const GetDataModal = () => {
+    const DataTitle = apiData.map((data) => {
+      return (
+        <div
+          className="w-80 cursor-pointer"
+          onClick={() => {
+            setModal(!modal);
+          }}
+        >
+          <div className="indent-3 text-sm p-2  w-full only:flex place-content-between border-x-2 border-t-2 border-black dark:text-white dark:border-white">
+            {data.title}
+            <div className="pr-5">
+              <button className="border-2">발급</button>
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    });
+    return <div>{DataTitle}</div>;
+  };
+
+  const openModal = () => {
+    setModal(true);
+  };
+  const closeModal = () => {
+    setModal(!modal);
   };
 
   return (
@@ -45,7 +70,7 @@ export const MyPageMenuList = (props) => {
           </div>
         </div>
       </div>
-      <div className="w-80 cursor-pointer" onClick={props.onClick}>
+      <div className="w-80 cursor-pointer" onClick={openModal}>
         <div className="p-2 font-bold  w-full only:flex place-content-between border-x-2 border-t-2 border-black dark:text-white dark:border-white">
           인증서 발급
           <div className="pr-5">
@@ -53,7 +78,16 @@ export const MyPageMenuList = (props) => {
           </div>
         </div>
       </div>
-      <CertificationList />
+      {modal && <GetDataModal />}
+      {/* 똑같은 코드 = {modal ===  true ? <GetDataModal /> : null} */}
+      <div className="w-80 cursor-pointer hidden" onClick={props.onClick}>
+        <div className="p-2 font-bold  w-full only:flex place-content-between border-x-2 border-t-2 border-black dark:text-white dark:border-white">
+          숨겨진 업적
+          <div className="pr-5">
+            <SlArrowRight className="inline align-middle dark:bg-white" />
+          </div>
+        </div>
+      </div>
       <div className="w-80 cursor-pointer" onClick={props.onClick}>
         <div className="p-2 font-bold  w-full only:flex place-content-between border-x-2 border-t-2 border-black dark:text-white dark:border-white">
           친구 초대
