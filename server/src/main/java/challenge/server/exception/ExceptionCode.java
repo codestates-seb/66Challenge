@@ -10,7 +10,8 @@ public enum ExceptionCode {
     CHALLENGE_NOT_FOUND(404, "Challenge not found"),
     REVIEW_NOT_FOUND(404, "Review not found"),
     WILDCARD_NOT_FOUND(404, "Wildcard not found"),
-    FAILED_TO_UPLOAD_FILE(400, "Failed to upload file");
+    FAILED_TO_UPLOAD_FILE(400, "Failed to upload file"),
+    FAILED_TO_DELETE_FILE(400, "Failed to delete file");
 
     @Getter
     private int status;

@@ -9,16 +9,14 @@ class JasyptConfigTest {
 
     @Test
     void jasypt() {
-        String access_key = "AKIA2YC2B47XGV7MZ4C7";
-        String secret_key = "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";
+        String region = "";
 
-        System.out.println(jasyptEncoding(access_key));
-        System.out.println(jasyptEncoding(secret_key));
+        System.out.println(jasyptEncoding(region));
     }
 
     public String jasyptEncoding(String value) {
 
-        String key = "challenge_66_jasypt_key";
+        String key = "";
         StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
         pbeEnc.setAlgorithm("PBEWithMD5AndDES");
         pbeEnc.setPassword(key);

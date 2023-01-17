@@ -62,7 +62,10 @@ cron:
 cloud:
   aws:
     s3:
-      bucket: challenge66.file.bucket
+      bucket: ENC(Z4UP4dP48yD4mb3Ua4sYDsgLbQOEIjV+2xiR/MSMkgc=)
+    credentials:
+      access-key: ENC(JGwONOYUN1OqXufEKPrHAaUqAYllcehHK/3U1eRxhrE=)
+      secret-key: ENC(uAQvMeB1mwQiEP2TnjNCJCTC2Slvxd0BxxROdlc/w7vs7ZaoMw73OYfyJGr+2OR85G1JPTfYlZ4=)
     region:
       static: ap-northeast-2
       auto: false
