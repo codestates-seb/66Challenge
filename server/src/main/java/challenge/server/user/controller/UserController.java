@@ -1,9 +1,7 @@
 package challenge.server.user.controller;
 
-import challenge.server.challenge.entity.Challenge;
 import challenge.server.habit.controller.HabitController;
 import challenge.server.habit.dto.HabitDto;
-import challenge.server.habit.entity.Habit;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.mapper.UserMapper;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
