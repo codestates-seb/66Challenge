@@ -14,7 +14,15 @@ module.exports = {
         'gray-border': '#929292',
         'sky-pink': '#f4caf8',
         'light-green': '#9de3b2',
+        footerMemberTextColor: '#0d9488',
         borderColor: '#E5E5E5',
+      },
+
+      backgroundColor: {
+        footerColor: '#F5F5F5',
+        checkButton: '#f89500',
+        signUpButton: 'black',
+        footerMemberTextColor: '#0d9488',
       },
       fontFamily: {
         sans: ['Noto Sans KR', 'sans-serif'],
