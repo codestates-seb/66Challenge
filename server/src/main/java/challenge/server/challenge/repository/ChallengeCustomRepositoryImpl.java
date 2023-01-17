@@ -44,7 +44,7 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
 
         // TODO: 추후 쿼리만으로 구현 가능하도록 도전
         /**
-         * 1. 첼린지를 반환하고 첼린지 안에는 auth 테이블이 존재 (찬빈님 멋쟁이 이병헌 송중기) 원빈, 현빈, 김우빈, 찬빈 Let's go F4
+         * 1. 첼린지를 반환하고 첼린지 안에는 auth 테이블이 존재
          * 2. 조건 1) 도전중인 첼린지로 추려져야 한다.
          * 3. 조건 2) 각 첼린지에서 가장 최신인 인증 게시물(날짜와 비교가 필요함)
          * 4. 결과 : 도전중인 첼린지만 반환
