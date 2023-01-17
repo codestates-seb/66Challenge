@@ -46,12 +46,22 @@ public class ChallengeController {
 //        return new ResponseEntity<>(mapper.toDto(challenge), HttpStatus.OK);
 //    }
 
-    @ApiOperation(value = "특정 회원의 모든 챌린지 조회")
-    @GetMapping("/users/{user-id}")
-    public ResponseEntity findChallenge(@PathVariable("user-id") @Positive Long userId,
+    @ApiOperation(value = "특정 회원의 도전중인 모든 챌린지 조회")
+    @GetMapping("/users/{user-id}/challenge")
+    public ResponseEntity findAllByChallenge(@PathVariable("user-id") @Positive Long userId,
                                         @RequestParam @Positive int page,
                                         @RequestParam @Positive int size) {
-        List<Challenge> challenges = challengeService.findAllByUser(userId, page, size);
+        List<Challenge> challenges = challengeService.findAllByUserAndStatus(userId, CHALLENGE, page, size);
+
+        return new ResponseEntity<>(mapper.toDtos(challenges), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "특정 회원의 완료한 모든 챌린지 조회")
+    @GetMapping("/users/{user-id}/success")
+    public ResponseEntity findAllBySuccess(@PathVariable("user-id") @Positive Long userId,
+                                        @RequestParam @Positive int page,
+                                        @RequestParam @Positive int size) {
+        List<Challenge> challenges = challengeService.findAllByUserAndStatus(userId, SUCCESS, page, size);
 
         return new ResponseEntity<>(mapper.toDtos(challenges), HttpStatus.OK);
     }

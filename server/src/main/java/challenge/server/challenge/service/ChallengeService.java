@@ -73,6 +73,13 @@ public class ChallengeService {
                 PageRequest.of(page - 1, size, Sort.by("challengeId").descending())).getContent();
     }
 
+    // 특정 회원의 특정 상태의 모든 챌린지 조회
+    public List<Challenge> findAllByUserAndStatus(Long userId, Challenge.Status status, int page, int size) {
+        // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
+        return challengeRepository.findAllByUserUserIdAndStatus(userId, status,
+                PageRequest.of(page - 1, size, Sort.by("challengeId").descending())).getContent();
+    }
+
     public List<Challenge> findAll(int page, int size) {
         return challengeRepository.findAll(PageRequest.of(page - 1, size,
                 Sort.by("challengeId").descending())).getContent();
