@@ -10,50 +10,65 @@ Todo 3. 슬라이드가 자동으로 넘어가는 시간을 설정하고자 하�
 * <------  사용하시기 전에 꼭 읽어주세요! ------> *
 */
 
-import { useEffect, useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Flicking from '@egjs/react-flicking';
+import { AutoPlay } from '@egjs/flicking-plugins';
+import '@egjs/flicking-plugins/dist/flicking-plugins.css';
 
 export const SlideBanner = ({ bannerCont, t }) => {
-  const [slideIdx, setSlideIdx] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setSlideIdx((slideIdx) => {
-        return slideIdx >= bannerCont.length - 1 ? 0 : slideIdx + 1;
-      });
-    }, t || 2000);
-    return () => clearInterval(timer);
-  }, []);
-
   const router = useRouter();
   const bannerClickEvent = (bannerLink) => {
     router.push(bannerLink);
   };
 
-  const slideRef = useRef();
-  useEffect(() => {
-    slideRef.current.style.transition = 'all 0.5s ease-in-out';
-    slideRef.current.style.transform = `translateX(-${slideIdx * 100}vw)`;
-  }, [slideIdx]);
+  const [currendIdx, setCurrendIdx] = useState(0);
+
+  const plugins = [
+    new AutoPlay({
+      duration: t || 2000,
+      direction: 'NEXT',
+      stopOnHover: true,
+    }),
+  ];
+
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setCurrendIdx((currendIdx) => {
+  //       return currendIdx >= bannerCont.length - 1 ? 0 : currendIdx + 1;
+  //     });
+  //   }, t || 2000);
+  //   return () => clearInterval(timer);
+  // }, []);
+
+  const flickingOnChange = (e) => {
+    setCurrendIdx(e.index);
+  };
 
   return (
-    <div className="slidebanner-container relative w-screen h-[200px] overflow-hidden">
-      <ul className="slidebanner-wrapper flex w-full h-full" ref={slideRef}>
+    <div className="slidebanner-container relative h-[200px] overflow-hidden">
+      <Flicking
+        className="[&>div]:flex"
+        plugins={plugins}
+        circular={true}
+        horizontal={true}
+        onChanged={flickingOnChange}
+      >
         {bannerCont.map((el, idx) => {
           return (
-            <li
+            <div
               className={`sildebanner-background w-screen h-[200px] flex-[0_0_auto] flex flex-col justify-center items-center`}
               key={idx}
               onClick={(_) => bannerClickEvent(el.bannerLink)}
             >
               <div className="sildebanner-title">{el.contText}</div>
               <div className="sildebanner-subtitle">{el.contSubText}</div>
-            </li>
+            </div>
           );
         })}
-      </ul>
+      </Flicking>
       <div className="slidebanner-pagination absolute right-2.5 bottom-2.5 bg-black/10 text-center tracking-wider text-xs min-w-[40pdx] p1y-0.5 pr-1 pl-1.5 rounded-xl flex justify-between ">
-        <span>{slideIdx + 1}</span>
+        <span>{currendIdx + 1}</span>
         <span>/</span>
         <span>{bannerCont.length}</span>
       </div>

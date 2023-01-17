@@ -21,54 +21,44 @@ export const slideData = [
 
 export const categoryData = [
   {
-    cateImgUrl: '/image/icons/exercise.svg',
+    cateImgUrl: '/image/icons/exercise.png',
     cateTitle: '운동',
-    cateLink: '',
+    categoryId: '1',
   },
   {
-    cateImgUrl: '/image/icons/exercise.svg',
+    cateImgUrl: '/image/icons/food.png',
     cateTitle: '식습관',
-    cateLink: '',
+    categoryId: '2',
   },
   {
-    cateImgUrl: '/image/icons/exercise.svg',
+    cateImgUrl: '/image/icons/study.png',
     cateTitle: '학습',
-    cateLink: '',
+    categoryId: '3',
   },
   {
-    cateImgUrl: '/image/icons/exercise.svg',
+    cateImgUrl: '/image/icons/life.png',
     cateTitle: '일상생활',
-    cateLink: '',
+    categoryId: '4',
   },
   {
-    cateImgUrl: '/image/icons/exercise.svg',
+    cateImgUrl: '/image/icons/hobby.png',
     cateTitle: '취미',
-    cateLink: '',
+    categoryId: '5',
   },
   {
-    cateImgUrl: '/image/icons/exercise.svg',
-    cateTitle: '셀프케어',
-    cateLink: '',
+    cateImgUrl: '/image/icons/selfcare.png',
+    cateTitle: '자기관리',
+    categoryId: '6',
   },
   {
-    cateImgUrl: '/image/icons/exercise.svg',
-    cateTitle: '에코',
-    cateLink: '',
+    cateImgUrl: '/image/icons/eco.png',
+    cateTitle: '환경',
+    categoryId: '7',
   },
   {
-    cateImgUrl: '/image/icons/exercise.svg',
-    cateTitle: '마음챙김',
-    cateLink: '',
-  },
-  {
-    cateImgUrl: '/image/icons/exercise.svg',
+    cateImgUrl: '/image/icons/etc.png',
     cateTitle: '기타',
-    cateLink: '',
-  },
-  {
-    cateImgUrl: '/image/icons/exercise.svg',
-    cateTitle: '전체보기',
-    cateLink: '',
+    categoryId: '8',
   },
 ];
 

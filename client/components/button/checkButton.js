@@ -6,19 +6,19 @@
 // <예시> 아래의 코드를 주석을 해제하고 중괄호를 지운 뒤 사용해보세요
 
 {
-  /* <SkyPinkButton
-  buttonName="테스트"
-  onClick={() => console.log('버튼의 클릭이벤트로 전해지는 함수')}
-/> */
+  /* <CheckButton
+    buttonName="테스트"
+    onClick={() => console.log('버튼의 클릭이벤트로 전해지는 함수')}
+  /> */
 }
 
 // <------  사용하시기 전에 꼭 읽어주세요! ------>
 
-export const SkyPinkButton = (props) => {
+export const CheckButton = (props) => {
   return (
     <button
-      className="text-white bg-sky-pink border-2 rounded p-2"
       onClick={props.onClick}
+      className="text-white bg-checkButton border-2 rounded px-4 py-2"
     >
       {props.buttonName}
     </button>

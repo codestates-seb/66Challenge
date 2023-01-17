@@ -5,7 +5,7 @@ import {
   getUserEmailOverlapVerify,
   getUsernameOverlapVerify,
   postUserSignUp,
-} from '../../module/functionModules';
+} from '../../module/userFunctionMoudules';
 
 export default function SignUp() {
   const router = useRouter();
@@ -27,17 +27,20 @@ export default function SignUp() {
   const blurHandle = async (verifyBoolean, verifyKey) => {
     if (verifyBoolean) {
       if (verifyKey === 'emailVerify') {
-        // const response = await getUserEmailOverlapVerify(getValues('email'));
-        // if (response === '중복이면') {
-        //   setVerify({ ...verify, [verifyKey]: 'overlap' });
-        // }else{setVerify({ ...verify, [verifyKey]: 'success' });}
-        setVerify({ ...verify, [verifyKey]: 'success' });
+        const response = await getUserEmailOverlapVerify(getValues('email'));
+        console.log(response);
+        if (response === true) {
+          setVerify({ ...verify, [verifyKey]: 'overlap' });
+        } else {
+          setVerify({ ...verify, [verifyKey]: 'success' });
+        }
       } else if (verifyKey === 'usernameVerify') {
-        // const response = await getnOverlapVerify(getValues('username'));
-        // if (response === '중복이면') {
-        //   setVerify({ ...verify, [verifyKey]: 'overlap' });
-        // }else{setVerify({ ...verify, [verifyKey]: 'success' });}
-        setVerify({ ...verify, [verifyKey]: 'success' });
+        const response = await getUsernameOverlapVerify(getValues('username'));
+        if (response === true) {
+          setVerify({ ...verify, [verifyKey]: 'overlap' });
+        } else {
+          setVerify({ ...verify, [verifyKey]: 'success' });
+        }
       } else {
         setVerify({ ...verify, [verifyKey]: 'success' });
       }
