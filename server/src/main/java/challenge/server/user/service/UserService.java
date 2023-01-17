@@ -33,7 +33,7 @@ public class UserService {
     public User createUser(User user) {
         //log.info("-------- createUser 중복 회원 검사 --------");
         //System.out.println(user.getEmail());
-        verifyExistUser(user.getEmail()); // todo User 엔티티 작성
+        verifyExistUser(user.getEmail());
 
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
@@ -54,7 +54,6 @@ public class UserService {
         if (optionalUser.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
         }
-
     }
 
     public Boolean verifyExistEmail(String email) {
