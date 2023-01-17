@@ -16,14 +16,16 @@ module.exports = {
         'light-green': '#9de3b2',
         footerMemberTextColor: '#0d9488',
       },
-      
+
       backgroundColor: {
         footerColor: '#F5F5F5',
         checkButton: '#f89500',
         signUpButton: 'black',
+        footerMemberTextColor: '#0d9488',
       },
       fontFamily: {
         sans: ['Noto Sans KR', 'sans-serif'],
+        web: ['Sofia Sans Condensed', 'sans-serif'],
       },
       fontSize: {
         base: '16px',
@@ -39,8 +41,8 @@ module.exports = {
           '100%': { transform: 'scale(1)' },
         },
         dropDown: {
-          '0%': { transform: 'translateY(0)' },
-          '100%': { transform: 'translateY(-50)' },
+          '0%': { transform: 'translateY(-100%) ' },
+          '100%': { transform: 'translateY(0) ' },
         },
         speechBubble: {
           '0%': { top: '-3px' },
@@ -53,7 +55,7 @@ module.exports = {
       },
       animation: {
         bookMark: 'bookMark 1s ease-in-out ',
-        dropDown: 'dropDown 1s ease',
+        dropDown: 'dropDown .2s ease',
         speechBubble: 'speechBubble 1.8s ease-in-out Infinite',
       },
     },
