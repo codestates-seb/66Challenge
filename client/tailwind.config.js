@@ -15,6 +15,7 @@ module.exports = {
         'sky-pink': '#f4caf8',
         'light-green': '#9de3b2',
         footerMemberTextColor: '#0d9488',
+        borderColor: '#E5E5E5',
       },
 
       backgroundColor: {

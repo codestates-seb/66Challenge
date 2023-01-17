@@ -15,15 +15,18 @@ ToDo 2. 해당 Element를 사용하는 컴포넌트가 어떤 타입인지에 �
 />
 * <------  사용하시기 전에 꼭 읽어주세요! ------> *
 */
+import Image from 'next/image';
 
 export const HabitElement = ({ habitImage, habitTitle, habitBody }) => {
   return (
     <div className={`habit-element-wrapper`}>
       <div className="habit-element-image mb-2.5">
-        <img
+        <Image
           // className={WrapperType === 'horizontal' ? 'w-[140px]' : 'w-full'}
           src={habitImage}
           alt="habit image"
+          width={500}
+          height={500}
         />
       </div>
       <div className="habit-element-title font-bold mb-[5px]">{habitTitle}</div>
