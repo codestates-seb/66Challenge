@@ -45,7 +45,21 @@ export async function getUserInfo({ cookie, userId }) {
     const response = await axios
       .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, {
         headers: {
-          Authorization: `Bearer ${cookie}`,
+          Authorization: cookie,
+        },
+      })
+      .then((res) => console.log(res));
+    return response;
+  } catch (e) {
+    console.error(e);
+  }
+}
+export async function deleteUser({ cookie, userId }) {
+  try {
+    const response = await axios
+      .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, {
+        headers: {
+          Authorization: cookie,
         },
       })
       .then((res) => console.log(res));
@@ -61,11 +75,12 @@ export async function patchUserInfo({ cookie, userId, username, password }) {
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`,
         {
           username,
+          userId,
           password,
         },
         {
           headers: {
-            Authorization: `Bearer ${cookie}`,
+            Authorization: cookie,
           },
         },
       )
@@ -75,42 +90,14 @@ export async function patchUserInfo({ cookie, userId, username, password }) {
     console.error(e);
   }
 }
-export async function getAllAuth(cookie, page, size) {
+export async function getUserCertificate({ cookie, userId, habitId }) {
   try {
     const response = await axios
-      .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/auths`, {
-        headers: {
-          Authorization: `Bearer ${cookie}`,
-        },
-      })
-      .then((res) => console.log(res));
-    return response;
-  } catch (e) {
-    console.error(e);
-  }
-}
-export async function getAllChallenges(page, size) {
-  try {
-    const response = await axios
-      .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/challenges`)
-      .then((res) => console.log(res));
-    return response;
-  } catch (e) {
-    console.error(e);
-  }
-}
-export async function postChallenge({ cookie, userId, habitId }) {
-  try {
-    const response = await axios
-      .post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges`,
-        {
-          userId,
-          habitId,
-        },
+      .get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/${habitId}/certificates`,
         {
           headers: {
-            Authorization: `Bearer ${cookie}`,
+            Authorization: cookie,
           },
         },
       )
@@ -120,14 +107,51 @@ export async function postChallenge({ cookie, userId, habitId }) {
     console.error(e);
   }
 }
-export async function getChallengeAuths(cookie) {
+export async function getUserHabitsCategories({ cookie, userId }) {
   try {
     const response = await axios
-      .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/auths`, {
-        headers: {
-          Authorization: `Bearer ${cookie}`,
+      .get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/categories`,
+        {
+          headers: {
+            Authorization: cookie,
+          },
         },
-      })
+      )
+      .then((res) => console.log(res));
+    return response;
+  } catch (e) {
+    console.error(e);
+  }
+}
+export async function getUserHabitsHosts({ cookie, userId }) {
+  try {
+    const response = await axios
+      .get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/hosts`,
+        {
+          headers: {
+            Authorization: cookie,
+          },
+        },
+      )
+      .then((res) => console.log(res));
+    return response;
+  } catch (e) {
+    console.error(e);
+  }
+}
+export async function getPasswordCheck({ cookie, userId }) {
+  try {
+    const response = await axios
+      .get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/passwords/check`,
+        {
+          headers: {
+            Authorization: cookie,
+          },
+        },
+      )
       .then((res) => console.log(res));
     return response;
   } catch (e) {
