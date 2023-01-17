@@ -73,7 +73,6 @@ public class AuthService {
 
     private Auth findVerifiedAuth(Long authId) {
         Auth auth = authRepository.findById(authId).get();
-        System.out.println(auth.getBody());
         return authRepository.findById(authId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.AUTH_NOT_FOUND));
     }
