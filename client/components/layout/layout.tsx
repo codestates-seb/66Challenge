@@ -2,8 +2,13 @@ import { BottomNav } from '../bottomNav/bottomNav';
 import { TopNav } from '../topNav';
 import { Header } from '../header';
 import { ScrollToTopButton } from '../scrollToTopButton';
+import React from 'react';
 
-export default function Layout({ children }) {
+type LayoutProps = {
+  children: React.ReactNode;
+};
+
+const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <Header />
@@ -13,4 +18,6 @@ export default function Layout({ children }) {
       <BottomNav />
     </>
   );
-}
+};
+
+export default Layout;

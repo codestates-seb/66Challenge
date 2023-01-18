@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { HabitWrapperVertical } from '../../components/habitWrapperVertical';
 import { useIntersection } from '../../hooks/useIntersection';
 
-const HotList = () => {
+const HotList: React.FC = () => {
   const [habitWrapperData, setHabitWrapperData] = useState([]);
   const [page, setPage] = useState(0);
-  const url = 'http://localhost:4000/habitdata';
+  const url: string = 'http://localhost:4000/habitdata';
 
   const [setTarget] = useIntersection(url, page, setPage, setHabitWrapperData);
 

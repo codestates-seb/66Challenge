@@ -3,7 +3,7 @@ import { createWrapper } from 'next-redux-wrapper';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { loginIdentitySlice } from './loginIdentitySlice';
-// import logger from 'redux-logger';
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 
 const reducers = combineReducers({
   loginIdentity: loginIdentitySlice.reducer,
@@ -27,6 +27,11 @@ const store = configureStore({
       serializableCheck: false,
     }),
 });
+type RootState = ReturnType<typeof store.getState>;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+type AppDispatch = typeof store.dispatch;
+export const useAppDispatch: () => AppDispatch = useDispatch;
+
 export const persistor = persistStore(store);
 export const wrapper = createWrapper(() => {
   return { persistor, ...store };

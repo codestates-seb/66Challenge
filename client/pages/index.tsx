@@ -8,10 +8,11 @@ import {
 import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
 import Image from 'next/image';
+import React from 'react';
 
-export default function Home() {
+const Home: React.FC = () => {
   const router = useRouter();
-  const cateIconClick = (categoryId) => {
+  const cateIconClick = (categoryId: string) => {
     router.push({
       pathname: '/habit/search',
       query: {
@@ -22,7 +23,7 @@ export default function Home() {
 
   return (
     <div>
-      <SlideBanner bannerCont={slideData} />
+      <SlideBanner bannerCont={slideData} t={2000} />
       <div className="main-category px-[20px]">
         <ul className="main-category-list grid grid-cols-4 my-[20px]">
           {categoryData.map((el, idx) => {
@@ -52,9 +53,9 @@ export default function Home() {
       <div className="main-video w-full h-full">
         <Iframe
           className="w-full min-h-[250px]"
-          src="https://www.youtube.com/embed/cdZZpaB2kDM"
+          url="https://www.youtube.com/embed/cdZZpaB2kDM"
           title="YouTube video player"
-          frameBorder="0"
+          frameBorder={0}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
         ></Iframe>
@@ -71,4 +72,6 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default Home;

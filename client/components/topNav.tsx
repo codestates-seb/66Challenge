@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { homeNavData, detailNavFunc } from '../data/navData';
 
-export const TopNav = () => {
+export const TopNav: React.FC = () => {
   const router = useRouter();
   const { pathname, query } = router;
 
-  const activeNav = 'border-b-[3px] border-mainColor';
+  const activeNav: string = 'border-b-[3px] border-mainColor';
   const detailNavData = detailNavFunc(query.habitId);
 
   const [page, setPage] = useState('');
