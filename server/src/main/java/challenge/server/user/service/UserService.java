@@ -1,5 +1,7 @@
 package challenge.server.user.service;
 
+import challenge.server.challenge.entity.Challenge;
+import challenge.server.challenge.entity.Wildcard;
 import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
@@ -14,13 +16,20 @@ import challenge.server.utils.CustomBeanUtils;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.asm.Advice;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+
+import static challenge.server.challenge.entity.Challenge.Status.CHALLENGE;
+import static challenge.server.challenge.entity.Challenge.Status.SUCCESS;
 
 @Service
 @Transactional(readOnly = true)
@@ -95,14 +104,100 @@ public class UserService {
         }
     }
 
-    public List<Object> findUserDetails(Long userId) {
+    public UserDto.UserDetailsDb findUserDetails(Long userId) {
+        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
         Long loggedInUserId = verifyLoggedInUser(userId);
+
+        // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
         User findUser = findUser(loggedInUserId);
 
-        UserDto.UserDetailsDb userDetailsDb = userRepository.findUserDetails(userId);
-        List<UserDto.ChallengeDetailsDb> challengeDetailsDb = userRepository.findChallengeDetails(userId);
+        // Querydsl 시도
+//        UserDto.UserDetailsDb userDetailsDb = userRepository.findUserDetails(userId);
+//        List<UserDto.ChallengeDetailsDb> challengeDetailsDb0 = userRepository.findChallengeDetails(userId);
 
-        return List.of(userDetailsDb, challengeDetailsDb);
+        // 쿼리메서드 사용
+        // 반환할 자료형 준비
+        UserDto.UserDetailsDb userDetailsDb = new UserDto.UserDetailsDb();
+
+        // 반환 자료형의 속성 중 컬렉션 준비
+        List<UserDto.ChallengeDetailsDb> activeChallenges = new ArrayList<>();
+        List<UserDto.CategoryDb> activeCategories = new ArrayList<>();
+
+        // 오늘 날짜
+        LocalDateTime today = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS); // 2023.1.19(목) 6h30
+
+        // 현재 진행 중 + 성공한 챌린지 목록을 DB에서 받아옴 = select 쿼리2
+        List<Challenge> challenges = challengeRepository.findAllByUserUserIdAndStatusEqualsOrStatusEquals(findUser.getUserId(), CHALLENGE, SUCCESS);
+
+        // 현재 진행 중인 챌린지 목록을 DB에서 받아옴 = select 쿼리3
+        List<Challenge> challengesInProgress = challengeRepository.findAllByUserUserIdAndStatus(findUser.getUserId(), CHALLENGE);
+
+        // 현재 진행 중인 챌린지 중 가장 먼저 시작한 것 구하기
+        LocalDateTime firstChCreatedAt = challenges.get(0).getCreatedAt();
+        LocalDateTime earliestCreatedAT = LocalDateTime.of(firstChCreatedAt.getYear(), firstChCreatedAt.getMonth(), firstChCreatedAt.getDayOfMonth(), firstChCreatedAt.getHour(), firstChCreatedAt.getMinute(), firstChCreatedAt.getSecond());
+        for (int i = 1; i < challengesInProgress.size(); i++) {
+            LocalDateTime thisDate = challengesInProgress.get(i).getCreatedAt();
+            if (thisDate.isBefore(earliestCreatedAT)) {
+                earliestCreatedAT = LocalDateTime.of(thisDate.getYear(), thisDate.getMonth(), thisDate.getDayOfMonth(), thisDate.getHour(), thisDate.getMinute(), thisDate.getSecond());
+            }
+        }
+
+        System.out.println(earliestCreatedAT); // 7h5 null -> setBiggestProgressDays 라인에서 null pointer exception 발생
+
+        // 날짜 비교 실험
+        LocalDateTime earliestCreatedAt1 = LocalDateTime.of(2023, 1, 15, 1, 1, 1);
+        System.out.println(today.compareTo(earliestCreatedAt1.truncatedTo(ChronoUnit.DAYS)) + 1); // 오늘-과거 비교 기대 값 = 5일 -> 7h 과거-오늘 비교로 실행 시 -1
+
+        // 마이페이지 상단 기본 정보 리턴할 것 준비
+        userDetailsDb.setUserId(findUser.getUserId());
+        userDetailsDb.setEmail(findUser.getEmail());
+        userDetailsDb.setUsername(findUser.getUsername());
+        userDetailsDb.setBiggestProgressDays(today.compareTo(earliestCreatedAT.truncatedTo(ChronoUnit.DAYS)) + 1);
+
+        // 마이페이지 중간1 = '회원이 참여중, 참여완료한 습관목록을 서브타이틀로 표시'
+        for (int i = 0; i < challenges.size(); i++) {
+            Challenge ch = challenges.get(i);
+
+            // 리턴할 자료
+            UserDto.ChallengeDetailsDb challengeDetailsDb = new UserDto.ChallengeDetailsDb();
+
+            challengeDetailsDb.setChallengeId(ch.getChallengeId());
+
+            // 챌린지 진행일
+            LocalDateTime chCreatedAt = LocalDateTime.of(ch.getCreatedAt().getYear(), ch.getCreatedAt().getMonth(), ch.getCreatedAt().getDayOfMonth(), ch.getCreatedAt().getHour(), ch.getCreatedAt().getMinute(), ch.getCreatedAt().getSecond());
+//            challengeDetailsDb.setCreatedAt(ch.getCreatedAt());
+            challengeDetailsDb.setProgressDays(today.compareTo(chCreatedAt.truncatedTo(ChronoUnit.DAYS)) + 1);
+
+            challengeDetailsDb.setHabitId(ch.getHabit().getHabitId());
+            challengeDetailsDb.setSubTitle(ch.getHabit().getSubTitle());
+//            challengeDetailsDb.setCategoryId(ch.getHabit().getCategory().getCategoryId());
+//            challengeDetailsDb.setType(ch.getHabit().getCategory().getType());
+
+            activeChallenges.add(challengeDetailsDb);
+        }
+
+        // 마이페이지 중간2 = '진행중인 습관의 분석데이터를 선택하기위한 카테고리 선택자'
+        for (int i = 0; i < challengesInProgress.size(); i++) {
+            Challenge ch = challengesInProgress.get(i);
+            Long categoryId = ch.getHabit().getCategory().getCategoryId();
+            Set<Long> categoryIds = new HashSet<>();
+
+            // 리턴할 자료
+            UserDto.CategoryDb categoryDb = new UserDto.CategoryDb();
+
+            if (!categoryIds.contains(categoryId)) {
+                categoryDb.setCategoryId(categoryId);
+                categoryDb.setType(ch.getHabit().getCategory().getType());
+
+                activeCategories.add(categoryDb);
+            }
+        }
+
+        // 리턴할 자료 최종 정리
+        userDetailsDb.setActiveChallenges(activeChallenges);
+        userDetailsDb.setActiveCategories(activeCategories);
+
+        return userDetailsDb;
     }
 
     public User findUser(Long userId) {
@@ -115,6 +210,7 @@ public class UserService {
         return findUser;
     }
 
+    // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
     public Long verifyLoggedInUser(Long userId) {
         User loggedInUser = loggedInUserInfoUtils.extractUser();
         Long loggedInUserId = loggedInUser.getUserId();

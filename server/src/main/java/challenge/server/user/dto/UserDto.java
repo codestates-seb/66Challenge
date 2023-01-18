@@ -162,42 +162,53 @@ public class UserDto {
 
     @Getter
     @NoArgsConstructor
+    @Setter
     public static class UserDetailsDb {
         private Long userId;
         private String email;
         private String username;
-        private LocalDateTime earliestCreatedAt;
-//        private List<Challenge> activeChallenges;
-//        private List<Category> activeCategories;
-
-        @QueryProjection
-        public UserDetailsDb(Long userId, String email, String username, LocalDateTime earliestCreatedAt) {
-            this.userId = userId;
-            this.email = email;
-            this.username = username;
-            this.earliestCreatedAt = earliestCreatedAt;
-        }
+        //        private LocalDateTime earliestCreatedAt;
+        private int biggestProgressDays;
+        private List<UserDto.ChallengeDetailsDb> activeChallenges;
+        private List<UserDto.CategoryDb> activeCategories;
+//        @QueryProjection
+//        public UserDetailsDb(Long userId, String email, String username, LocalDateTime earliestCreatedAt) {
+//            this.userId = userId;
+//            this.email = email;
+//            this.username = username;
+//            this.earliestCreatedAt = earliestCreatedAt;
+//        }
     }
 
     @Getter
+    @Setter
     @NoArgsConstructor
     public static class ChallengeDetailsDb {
         private Long challengeId;
-        private LocalDateTime createdAt;
+        //        private LocalDateTime createdAt;
+        private int progressDays;
         private Long habitId;
         private String subTitle;
+//        private Long categoryId;
+//        private String type;
+
+//        @QueryProjection
+//        public ChallengeDetailsDb(Long challengeId, LocalDateTime createdAt, Long habitId, String subTitle, Long categoryId, String type) {
+//            this.challengeId = challengeId;
+//            this.createdAt = createdAt;
+//            this.habitId = habitId;
+//            this.subTitle = subTitle;
+//            this.categoryId = categoryId;
+//            this.type = type;
+//        }
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class CategoryDb {
         private Long categoryId;
         private String type;
-
-        @QueryProjection
-        public ChallengeDetailsDb(Long challengeId, LocalDateTime createdAt, Long habitId, String subTitle, Long categoryId, String type) {
-            this.challengeId = challengeId;
-            this.createdAt = createdAt;
-            this.habitId = habitId;
-            this.subTitle = subTitle;
-            this.categoryId = categoryId;
-            this.type = type;
-        }
     }
 
     @Getter
