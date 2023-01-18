@@ -6,18 +6,18 @@ import {
   getUsernameOverlapVerify,
   patchUserInfo,
 } from '../../../module/userFunctionMoudules';
-interface formValue {
+interface IformValue {
   username: string;
   password: string;
   passwordCheck: string;
 }
-interface stateVerifyValue {
+interface IstateVerifyValue {
   usernameVerify: string;
   passwordVerify: string;
   passwordCheckVerify: string;
   agreeVerify: string;
 }
-interface stateInfoValue {
+interface IstateInfoValue {
   username: {
     boolean: boolean;
     className: string;
@@ -29,16 +29,16 @@ interface stateInfoValue {
 }
 export default function SignUp() {
   const router: NextRouter = useRouter();
-  const { register, handleSubmit, reset, getValues } = useForm<formValue>({
+  const { register, handleSubmit, reset, getValues } = useForm<IformValue>({
     defaultValues: { username: '', password: '', passwordCheck: '' },
   });
-  const [verify, setVerify] = useState<stateVerifyValue>({
+  const [verify, setVerify] = useState<IstateVerifyValue>({
     usernameVerify: '',
     passwordVerify: '',
     passwordCheckVerify: '',
     agreeVerify: 'fail',
   });
-  const [changeUserInfo, setChangeUserInfo] = useState<stateInfoValue>({
+  const [changeUserInfo, setChangeUserInfo] = useState<IstateInfoValue>({
     username: { boolean: false, className: '' },
     password: { boolean: false, className: '' },
   });
@@ -94,7 +94,7 @@ export default function SignUp() {
       ? setVerify({ ...verify, agreeVerify: 'success' })
       : setVerify({ ...verify, agreeVerify: 'fail' });
   };
-  const editUserInfoHandle = async (data: formValue): Promise<void> => {
+  const editUserInfoHandle = async (data: IformValue): Promise<void> => {
     const { username, password, passwordCheck } = data;
     //회원 가입 비동기 함수 호출 부분 에러가 없다면 로그인 페이지로 연동할 것 그 후 리셋
     if (username === '') {

@@ -6,13 +6,13 @@ import {
   getUsernameOverlapVerify,
   postUserSignUp,
 } from '../../module/userFunctionMoudules';
-interface formValue {
+interface IformValue {
   email: string;
   username: string;
   password: string;
   passwordCheck: string;
 }
-interface stateValue {
+interface IstateValue {
   emailVerify: string;
   usernameVerify: string;
   passwordVerify: string;
@@ -21,8 +21,8 @@ interface stateValue {
 }
 export default function SignUp() {
   const router: NextRouter = useRouter();
-  const { register, handleSubmit, reset, getValues } = useForm<formValue>();
-  const [verify, setVerify] = useState<stateValue>({
+  const { register, handleSubmit, reset, getValues } = useForm<IformValue>();
+  const [verify, setVerify] = useState<IstateValue>({
     emailVerify: '',
     usernameVerify: '',
     passwordVerify: '',
@@ -72,7 +72,7 @@ export default function SignUp() {
       ? setVerify({ ...verify, agreeVerify: 'success' })
       : setVerify({ ...verify, agreeVerify: 'fail' });
   };
-  const signUpHandle = async (data: formValue): Promise<void> => {
+  const signUpHandle = async (data: IformValue): Promise<void> => {
     const { email, username, password, passwordCheck } = data;
 
     if (emailRegExp.test(email) === false) {
