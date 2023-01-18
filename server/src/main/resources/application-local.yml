@@ -23,7 +23,7 @@ spring:
   # 실행된 쿼리를 확인하고 싶을 때 사용.
   jpa:
     hibernate:
-      ddl-auto: create # todo 팀원분들과 상의!
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true

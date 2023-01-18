@@ -6,6 +6,7 @@ import challenge.server.user.entity.User;
 import challenge.server.validator.NotSpace;
 import challenge.server.validator.Password;
 import challenge.server.category.entity.Category;
+import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -14,6 +15,7 @@ import lombok.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
 import java.util.List;
 
 //@ApiModel(value = "회원 관련 DTO")
@@ -156,6 +158,46 @@ public class UserDto {
         @ApiModelProperty(example = "[{\"categoryId\": 1, \"type\": \"HEALTH\"}, {\"categoryId\": 1, \"type\": \"HEALTH\"}]", value = "참여 중인 습관들의 카테고리")
         private List<CategoryResponse> activeCategories; // 진행 중인 습관들의 카테고리 정보 -> 진행 중인 습관의 분석 데이터를 선택하기 위한 카테고리 선택자
         // 홍보 문구(오늘의 인용구 포함)
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class UserDetailsDb {
+        private Long userId;
+        private String email;
+        private String username;
+        private LocalDateTime earliestCreatedAt;
+//        private List<Challenge> activeChallenges;
+//        private List<Category> activeCategories;
+
+        @QueryProjection
+        public UserDetailsDb(Long userId, String email, String username, LocalDateTime earliestCreatedAt) {
+            this.userId = userId;
+            this.email = email;
+            this.username = username;
+            this.earliestCreatedAt = earliestCreatedAt;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class ChallengeDetailsDb {
+        private Long challengeId;
+        private LocalDateTime createdAt;
+        private Long habitId;
+        private String subTitle;
+        private Long categoryId;
+        private String type;
+
+        @QueryProjection
+        public ChallengeDetailsDb(Long challengeId, LocalDateTime createdAt, Long habitId, String subTitle, Long categoryId, String type) {
+            this.challengeId = challengeId;
+            this.createdAt = createdAt;
+            this.habitId = habitId;
+            this.subTitle = subTitle;
+            this.categoryId = categoryId;
+            this.type = type;
+        }
     }
 
     @Getter

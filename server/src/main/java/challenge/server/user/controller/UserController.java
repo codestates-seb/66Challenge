@@ -35,20 +35,19 @@ public class UserController {
     @ApiOperation(value = "이메일 중복 여부 확인", notes = "true 응답 = 중복되는 이메일 존재 / false 응답 = 중복되는 이메일 없음")
     @GetMapping("/emails/check")
     public ResponseEntity<Boolean> checkEmailDuplicate(@RequestParam @Email String email) {
-//        return new ResponseEntity<>(userService.verifyExistEmail(email), HttpStatus.OK);
+        return new ResponseEntity<>(userService.verifyExistEmail(email), HttpStatus.OK);
 
         // API 통신용
-//        return new ResponseEntity<>(false, HttpStatus.OK);
-        return ResponseEntity.ok(false);
+        //return ResponseEntity.ok(false);
     }
 
     @ApiOperation(value = "회원 닉네임 중복 여부 확인", notes = "true 응답 = 중복되는 닉네임 존재 / false 응답 = 중복되는 닉네임 없음")
     @GetMapping("/usernames/check")
     public ResponseEntity<Boolean> checkUsernameDuplicate(@RequestParam @NotBlank String username) {
-//        return new ResponseEntity<>(userService.verifyExistUsername(username), HttpStatus.OK);
+        return new ResponseEntity<>(userService.verifyExistUsername(username), HttpStatus.OK);
 
         // API 통신용
-        return new ResponseEntity<>(false, HttpStatus.OK);
+        //return new ResponseEntity<>(false, HttpStatus.OK);
     }
 
     @ApiOperation(value = "회원 가입", notes = "Sign Up 버튼을 클릭할 경우 회원 가입 요청을 보냅니다.")
@@ -59,7 +58,7 @@ public class UserController {
         return new ResponseEntity<>(userMapper.userToUserSimpleResponseDto(createdUser), HttpStatus.CREATED);
 
         // API 통신용
-//        return new ResponseEntity<>(createSimpleResponseDto(), HttpStatus.CREATED);
+        //return new ResponseEntity<>(createSimpleResponseDto(), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "회원 정보 수정")
@@ -71,7 +70,7 @@ public class UserController {
         return new ResponseEntity<>(userMapper.userToUserPatchResponseDto(user), HttpStatus.OK);
 
         // API 통신용
-//        return new ResponseEntity<>(createUserPatchResponseDto(), HttpStatus.OK); // todo 회원 정보 수정 후 어떤 화면으로 연결/이동하지?
+        //return new ResponseEntity<>(createUserPatchResponseDto(), HttpStatus.OK); // todo 회원 정보 수정 후 어떤 화면으로 연결/이동하지?
     }
 
     // todo 관리자가 처리하거나, 또는 특정 조건이 만족되었을 때에 이벤트 발생시켜 처리
@@ -87,13 +86,11 @@ public class UserController {
     @ApiOperation(value = "회원 개인 정보 통합 조회(마이페이지)")
     @GetMapping("/{user-id}")
     public ResponseEntity getUser(@PathVariable("user-id") @Positive Long userId) {
-        /*
-        User findUser = userService.findUser(userId);
-        return new ResponseEntity<>(userMapper.userToUserDetailResponseDto(findUser), HttpStatus.OK);
-         */
+        List<Object> detailsResults = userService.findUserDetails(userId);
+        return new ResponseEntity<>(userMapper.detailsResultsToUserDetailResponseDto(detailsResults), HttpStatus.OK);
 
         // API 통신용
-        return new ResponseEntity<>(createUserDetailResponseDto(), HttpStatus.OK);
+        //return new ResponseEntity<>(createUserDetailResponseDto(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "내가 진행 중인 습관의 카테고리 조회")

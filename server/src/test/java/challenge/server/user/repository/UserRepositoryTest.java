@@ -1,32 +1,39 @@
-//package challenge.server.user.repository;
-//
-//import challenge.server.config.TestConfig;
-//import challenge.server.user.entity.QUser;
-//import challenge.server.user.entity.User;
-//import com.querydsl.jpa.impl.JPAQueryFactory;
-//import org.assertj.core.api.Assertions;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-//import org.springframework.context.annotation.Import;
-//
-//import javax.persistence.EntityManager;
-//
-//import static org.assertj.core.api.Assertions.assertThat;
-//
-//@DataJpaTest
-//@Import(TestConfig.class)
-//public class UserRepositoryTest {
-//
-//    @Autowired
-//    private UserRepository userRepository;
-//
-//    @Autowired
-//    private EntityManager em;
-//
-//    //    @BeforeEach
-////    @Test
+package challenge.server.user.repository;
+
+import challenge.server.config.TestConfig;
+import challenge.server.user.entity.QUser;
+import challenge.server.user.entity.User;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+
+import javax.persistence.EntityManager;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@DataJpaTest
+@Import(TestConfig.class)
+public class UserRepositoryTest {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private EntityManager em;
+
+    @Test
+    @DisplayName(value = "회원 개인 정보 통합 조회(마이페이지)")
+    void findUserDetails() {
+
+    }
+
+    //    @BeforeEach
+//    @Test
 //    void saveUser() {
 //        // given
 //        User user1 = User.builder()
@@ -44,7 +51,7 @@
 //        // then
 ////        Assertions.assertThat(saveUser.getUserId()).isEqualTo(user.getUserId());
 //    }
-//
+
 //    @Test
 //    void findUserById() {
 //        // given
@@ -70,4 +77,4 @@
 ////        assertThat(findUser).isEqualTo(user1);
 //        assertThat(findUser.getUserId()).isEqualTo(user1.getUserId());
 //    }
-//}
+}
