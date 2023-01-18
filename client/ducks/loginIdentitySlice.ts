@@ -2,23 +2,28 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import { setCookie, removeCookie } from '../module/cookies';
 import type { PayloadAction } from '@reduxjs/toolkit';
+interface Idata {
+  userId: number;
+}
+
 const loginRequest = createAsyncThunk(
   'loginIdentitySlice/loginRequest',
   async (data: { username: string; password: string }, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse = await axios({
+      const response: AxiosResponse<Idata, string> = await axios({
         method: 'POST',
         url: `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
         data,
       }).then((res) => res);
-
       const jwtToken: string = response.headers.authorization;
       setCookie('accessJwtToken', jwtToken, { path: '/' });
-
       const userId: number = response.data.userId;
       return userId;
     } catch (err) {
-      return rejectWithValue(err.response.data);
+      if (err instanceof AxiosError) {
+        console.log(rejectWithValue(err.response.data));
+        return rejectWithValue(err.response.data);
+      }
     }
   },
 );
