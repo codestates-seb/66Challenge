@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { NextRouter, useRouter } from 'next/router';
 import {
   getUserEmailOverlapVerify,
@@ -19,7 +19,7 @@ interface IstateValue {
   passwordCheckVerify: string;
   agreeVerify: string;
 }
-export default function SignUp() {
+const SignUp: React.FC = () => {
   const router: NextRouter = useRouter();
   const { register, handleSubmit, reset, getValues } = useForm<IformValue>();
   const [verify, setVerify] = useState<IstateValue>({
@@ -249,4 +249,5 @@ export default function SignUp() {
       </form>
     </div>
   );
-}
+};
+export default SignUp;

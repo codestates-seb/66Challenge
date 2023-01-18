@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { NextRouter, useRouter } from 'next/router';
 import { MdExpandMore } from 'react-icons/md';
 import {
@@ -27,7 +27,7 @@ interface IstateInfoValue {
     className: string;
   };
 }
-export default function SignUp() {
+const Edit: React.FC = () => {
   const router: NextRouter = useRouter();
   const { register, handleSubmit, reset, getValues } = useForm<IformValue>({
     defaultValues: { username: '', password: '', passwordCheck: '' },
@@ -278,4 +278,5 @@ export default function SignUp() {
       </form>
     </div>
   );
-}
+};
+export default Edit;
