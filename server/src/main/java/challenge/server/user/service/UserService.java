@@ -1,7 +1,6 @@
 package challenge.server.user.service;
 
 import challenge.server.challenge.entity.Challenge;
-import challenge.server.challenge.entity.Wildcard;
 import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
@@ -12,19 +11,14 @@ import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.mapper.UserMapper;
 import challenge.server.user.repository.UserRepository;
-import challenge.server.utils.CustomBeanUtils;
-import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.asm.Advice;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -104,6 +98,7 @@ public class UserService {
         }
     }
 
+    // 회원 개인 정보 통합 조회(마이페이지)
     public UserDto.UserDetailsDb findUserDetails(Long userId) {
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
         Long loggedInUserId = verifyLoggedInUser(userId);
