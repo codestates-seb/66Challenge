@@ -3,18 +3,17 @@ package challenge.server.user.dto;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.habit.entity.Habit;
 import challenge.server.user.entity.User;
+import challenge.server.validator.NotSpace;
 import challenge.server.validator.Password;
 import challenge.server.category.entity.Category;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 //@ApiModel(value = "회원 관련 DTO")
@@ -33,23 +32,24 @@ public class UserDto {
         // 유효성 검사를 통해 회원 닉네임과 이메일 중복 여부를 확인
         @ApiModelProperty(example = "user1@gmail.com", value = "회원의 이메일")
         @Email
-        @NotBlank(message = "")
+        @NotBlank(message = "이메일은 공백이 아니어야 하며, 유효한 이메일 주소 형식이어야 합니다.")
         private String email;
 
         @ApiModelProperty(example = "유저no1", value = "회원의 닉네임")
-        //@Pattern(regexp = "/[A-Za-z0-9가-힇]{2,20}/", message = "닉네임은 공백이 아니어야 하며, 영문자/숫자/한글 2~20글자로 이루어집니다.")
-        @NotBlank(message = "")
+        @Pattern(regexp = "[A-Za-z0-9가-힇]{2,20}",
+                message = "닉네임은 공백이 아니어야 하며, 영문자/숫자/한글 2~20글자로 이루어집니다.")
         private String username;
 
         @ApiModelProperty(example = "Iamuser001!", value = "회원의 비밀번호")
-        // 패스워드 유효성 검사 프론트와 합의해서 별도 validation annotation 만들기
         //@Password
-        @NotBlank(message = "")
+        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,12}$",
+                message = "비밀번호는 공백이 아니어야 하며, 영문자 1개, 숫자 1개, 특수문자 1개를 각각 반드시 포함한 8~12글자로 이루어집니다.")
         private String password;
     }
 
     @ApiModel(value = "회원 정보 수정 요청 시 전달")
     @Getter
+    @Setter // UserController
     @AllArgsConstructor
     @Builder
     @NoArgsConstructor
@@ -58,16 +58,19 @@ public class UserDto {
         private Long userId;
 
         @ApiModelProperty(example = "user1번", value = "회원의 닉네임")
-        //@Pattern(regexp = "/[A-Za-z0-9가-힇]{2,20}/", message = "닉네임은 공백이 아니어야 하며, 영문자/숫자/한글 2~20글자로 이루어집니다.")
-        //@NotBlank
+        @NotSpace
+        @Pattern(regexp = "[A-Za-z0-9가-힇]{2,20}",
+                message = "닉네임은 공백이 아니어야 하며, 영문자/숫자/한글 2~20글자로 이루어집니다.")
         private String username;
 
         @ApiModelProperty(example = "iAmUser01!", value = "회원의 비밀번호")
+        @NotSpace
+        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,12}$",
+                message = "비밀번호는 공백이 아니어야 하며, 영문자 1개, 숫자 1개, 특수문자 1개를 각각 반드시 포함한 8~12글자로 이루어집니다.")
         //@Password
-        //@NotBlank(message = "")
         private String password;
 
-        // todo 대소문자 구분 없이 active, quit, banned 3가지 중 1개 값만 가능한 조건 구현?
+        // 대소문자 구분 없이 active, quit, banned 3가지 중 1개 값만 가능한 조건 구현?
 //        private String userStatus;
     }
 
@@ -78,7 +81,7 @@ public class UserDto {
     @NoArgsConstructor
     public static class CheckPassword {
         @ApiModelProperty(example = "iAmUser01!", value = "회원의 비밀번호")
-        //@Password
+        @Password
         private String password;
     }
 
@@ -124,8 +127,8 @@ public class UserDto {
         @ApiModelProperty(example = "user1번", value = "회원의 닉네임")
         private String username;
 
-        @ApiModelProperty(example = "iAmUser01!", value = "회원의 비밀번호")
-        private String password;
+//        @ApiModelProperty(example = "iAmUser01!", value = "회원의 비밀번호")
+//        private String password;
 //        private String userStatus;
     }
 

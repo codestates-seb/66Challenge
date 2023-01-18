@@ -66,10 +66,12 @@ public class UserController {
     @PatchMapping("/{user-id}")
     public ResponseEntity patchUser(@PathVariable("user-id") @Positive Long userId,
                                     @Valid @RequestBody UserDto.Patch requestBody) {
-//        User updateUser = userService.updateUser(userId);
+        requestBody.setUserId(userId);
+        User user = userService.updateUser(userMapper.userPatchDtoToUser(requestBody));
+        return new ResponseEntity<>(userMapper.userToUserPatchResponseDto(user), HttpStatus.OK);
 
         // API 통신용
-        return new ResponseEntity<>(createUserPatchResponseDto(), HttpStatus.OK); // todo 회원 정보 수정 후 어떤 화면으로 연결/이동하지?
+//        return new ResponseEntity<>(createUserPatchResponseDto(), HttpStatus.OK); // todo 회원 정보 수정 후 어떤 화면으로 연결/이동하지?
     }
 
     // todo 관리자가 처리하거나, 또는 특정 조건이 만족되었을 때에 이벤트 발생시켜 처리
@@ -170,7 +172,7 @@ public class UserController {
         return UserDto.PatchResponse.builder()
                 .userId(1L)
                 .username("유저no1")
-                .password("Abc12&defg")
+//                .password("Abc12&defg")
                 .build();
     }
 
