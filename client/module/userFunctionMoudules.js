@@ -17,7 +17,7 @@ export async function postUserSignUp({ email, username, password }) {
       .then((res) => res.status);
     return response;
   } catch (e) {
-    console.error(e);
+    return e.response.status;
   }
 }
 export async function getUserEmailOverlapVerify(email) {
