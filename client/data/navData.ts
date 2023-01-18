@@ -1,4 +1,10 @@
-export const homeNavData = [
+interface homeNavDataType {
+  navTitle: string;
+  navTo: string;
+  pathname: string;
+}
+
+export const homeNavData: Array<homeNavDataType> = [
   {
     navTitle: '홈',
     navTo: '/',
@@ -21,7 +27,13 @@ export const homeNavData = [
   },
 ];
 
-export const detailNavFunc = (habitId) => [
+interface detailNavFuncType {
+  navTitle: string;
+  navTo: string;
+  pathname: string;
+}
+
+export const detailNavFunc = (habitId: string): Array<detailNavFuncType> => [
   {
     navTitle: '상세정보',
     navTo: `/habit/detail/${habitId}`,

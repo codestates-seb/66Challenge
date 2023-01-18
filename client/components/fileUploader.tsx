@@ -5,11 +5,22 @@ ToDo 1. 사용하시는 컴포넌트에서 props로 imgFile setImgFile, uploadCo
 * <------  사용하시기 전에 꼭 읽어주세요! ------> *
 */
 
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { MdOutlineDriveFolderUpload } from 'react-icons/md';
+import Image from 'next/image';
 
-export const FileUploader = ({ imgFile, setImgFile, uploadController }) => {
-  const imgRef = useRef();
+interface FileUploaderProps {
+  imgFile: string;
+  setImgFile: React.Dispatch<React.SetStateAction<string | ArrayBuffer>>;
+  uploadController: () => void;
+}
+
+export const FileUploader = ({
+  imgFile,
+  setImgFile,
+  uploadController,
+}: FileUploaderProps) => {
+  const imgRef = useRef<HTMLInputElement>(null);
 
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
@@ -28,10 +39,12 @@ export const FileUploader = ({ imgFile, setImgFile, uploadController }) => {
       >
         {imgFile ? (
           <div className="file-uploader-preview w-[400px] h-[200px]">
-            <img
+            <Image
               className="object-contain w-full h-full"
               src={imgFile}
               alt="uploaded image"
+              width={500}
+              height={500}
             />
           </div>
         ) : (

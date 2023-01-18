@@ -9,7 +9,10 @@ type FormValues = {
   email: string;
   password: string;
 };
-
+interface IresponseData {
+  status?: number;
+  message?: string;
+}
 const Login: React.FC = () => {
   const { register, handleSubmit, getValues, setFocus } = useForm<FormValues>();
   const router = useRouter();
@@ -40,7 +43,8 @@ const Login: React.FC = () => {
 
     if (emailVerify && username && password) {
       await dispatch(loginRequest({ username, password })).then((data) => {
-        if (data.payload.status === 401) {
+        const response: number | IresponseData = data.payload;
+        if (response.status === 401) {
           alert('이메일이나 비밀번호 확인해주세용');
         } else {
           setEmailVerify(false);
