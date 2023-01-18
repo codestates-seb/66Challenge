@@ -8,10 +8,11 @@ import {
 import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
 import Image from 'next/image';
+import React from 'react';
 
-export default function Home() {
+const Home: React.FC = () => {
   const router = useRouter();
-  const cateIconClick = (categoryId) => {
+  const cateIconClick = (categoryId: string) => {
     router.push({
       pathname: '/habit/search',
       query: {
@@ -71,4 +72,6 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default Home;

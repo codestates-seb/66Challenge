@@ -17,7 +17,25 @@ ToDo 2. 해당 Element를 사용하는 컴포넌트가 어떤 타입인지에 �
 */
 import Image from 'next/image';
 
-export const HabitElement = ({ habitImage, habitTitle, habitBody }) => {
+interface HabitElementProps {
+  habitImage: string;
+  habitTitle: string;
+  habitBody: string;
+  habitId?: string;
+}
+
+interface HabitWrapperProps {
+  habitWrapperTitle: string;
+  habitWrapperData: Array<HabitElementProps>;
+}
+
+export type { HabitElementProps, HabitWrapperProps };
+
+export const HabitElement: React.FC<HabitElementProps> = ({
+  habitImage,
+  habitTitle,
+  habitBody,
+}) => {
   return (
     <div className={`habit-element-wrapper`}>
       <div className="habit-element-image mb-2.5">

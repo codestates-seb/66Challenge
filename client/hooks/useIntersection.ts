@@ -3,8 +3,16 @@
 // Todo 2. 훅을 사용하는 컴포넌트에서 맨 하단에 div 엘리먼트를 만들어주시고, ref의 속성값으로 훅에서 반환되는 setTarget을 넣어주시면 됩니다.
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import type { HabitElementProps } from '../components/habitElement';
 
-export function useIntersection(url, page, setPage, setHabitWrapperData) {
+export function useIntersection(
+  url: string,
+  page: number,
+  setPage: React.Dispatch<React.SetStateAction<number>>,
+  setHabitWrapperData: React.Dispatch<
+    React.SetStateAction<Array<HabitElementProps>>
+  >,
+): Array<React.Dispatch<React.SetStateAction<HTMLElement>>> {
   const [target, setTarget] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [stop, setStop] = useState(false);
@@ -13,7 +21,10 @@ export function useIntersection(url, page, setPage, setHabitWrapperData) {
     setIsLoaded(true);
   };
 
-  const onIntersect = async ([entry], observer) => {
+  const onIntersect: IntersectionObserverCallback = async (
+    [entry],
+    observer,
+  ) => {
     if (entry.isIntersecting && !isLoaded) {
       observer.unobserve(entry.target);
       await getMoreItem();
@@ -27,7 +38,7 @@ export function useIntersection(url, page, setPage, setHabitWrapperData) {
   }, [url]);
 
   useEffect(() => {
-    let observer;
+    let observer: IntersectionObserver;
     if (target && !stop) {
       observer = new IntersectionObserver(onIntersect, {
         threshold: 1,

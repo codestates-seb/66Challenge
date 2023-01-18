@@ -1,21 +1,25 @@
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
-import axios from 'axios';
 import { loginRequest } from '../../ducks/loginIdentitySlice';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../ducks/store';
 
-const Login = () => {
-  const { register, handleSubmit, getValues, setFocus } = useForm();
+type FormValues = {
+  email: string;
+  password: string;
+};
+
+const Login: React.FC = () => {
+  const { register, handleSubmit, getValues, setFocus } = useForm<FormValues>();
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [emailVerify, setEmailVerify] = useState(true);
   const [passwordView, setPasswordView] = useState(false);
   const emailRegExp =
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*[.][a-zA-Z]{2,3}$/i;
 
-  const emailVerifyOnBlur = (verifyBoolean) => {
+  const emailVerifyOnBlur = (verifyBoolean: boolean): void => {
     if (verifyBoolean) {
       setEmailVerify(true);
       setFocus('password');
@@ -24,23 +28,27 @@ const Login = () => {
     setEmailVerify(false);
   };
 
-  const passwordTypeChange = () => {
+  const passwordTypeChange = (): void => {
     setPasswordView(!passwordView);
     setFocus('password');
   };
 
-  const loginButtonClick = async (data) => {
+  const loginButtonClick: SubmitHandler<FormValues> = async (data) => {
     // ajax를 통해 server에 보낼 데이터
     const { password } = data;
     const username = data.email;
 
-    if (emailVerify && email && password) {
+    if (emailVerify && username && password) {
       await dispatch(loginRequest({ username, password })).then((data) => {
-        setEmailVerify(false);
-        setPasswordView(false);
-        router.push('/');
+        if (data.payload.status === 401) {
+          alert('이메일이나 비밀번호 확인해주세용');
+        } else {
+          setEmailVerify(false);
+          setPasswordView(false);
+          router.push('/');
+        }
       });
-    } else if (!emailVerify || !emailRegExp.test(email)) {
+    } else if (!emailVerify || !emailRegExp.test(username)) {
       setEmailVerify(false);
       alert('이메일이 양식에 맞지 않습니다.');
       setFocus('email');
@@ -50,19 +58,19 @@ const Login = () => {
     }
   };
 
-  const signupButtonClick = () => {
+  const signupButtonClick = (): void => {
     router.push('/user/signup');
   };
 
-  const emailInputElKeyEvent = (e) => {
+  const emailInputElKeyEvent = (e: React.KeyboardEvent<HTMLElement>): void => {
     if (e.key === 'Enter') {
       e.preventDefault();
       setFocus('password');
     }
   };
-  const speechBubleBefore =
+  const speechBubleBefore: string =
     'before:absolute before:bottom-[-12px] before:border-[5px] before:border-transparent before:left-2/4 before:border-t-[7px] before:border-t-mainColor before:translate-y-[-100%] before:border-b-0 before:translate-x-[-50%]';
-  const speechBubleAfter =
+  const speechBubleAfter: string =
     'after:absolute after:bottom-[-12px] after:border-[5px] after:border-transparent after:left-2/4 after:border-t-[7px] after:border-t-mainColor after:translate-y-[-100%] after:border-b-0 after:translate-x-[-50%]';
 
   return (
@@ -101,7 +109,7 @@ const Login = () => {
             <label htmlFor="email" className="text-base font-semibold mb-1">
               이메일
             </label>
-            <input hidden="hidden" />
+            <input hidden={true} />
             <input
               type="text"
               id="email"
