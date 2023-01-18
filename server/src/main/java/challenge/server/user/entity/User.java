@@ -15,7 +15,7 @@ import java.util.List;
 
 @Builder
 @Getter
-@Setter
+@Setter // JWT, CustomBeanUtils
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "USERS")

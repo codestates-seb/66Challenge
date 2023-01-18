@@ -8,7 +8,11 @@ import org.mapstruct.Mapper;
 public interface UserMapper {
     User userPostDtoToUser(UserDto.Post requestBody);
 
+    User userPatchDtoToUser(UserDto.Patch requestBody);
+
     UserDto.SimpleResponse userToUserSimpleResponseDto(User user);
+
+    UserDto.PatchResponse userToUserPatchResponseDto(User user);
 
     UserDto.DetailResponse userToUserDetailResponseDto(User user);
 }
