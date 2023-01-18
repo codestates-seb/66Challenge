@@ -23,8 +23,12 @@ public class Report extends BaseTimeEntity {
     private Type type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "reporter_user_id")
     private User reporter;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reported_user_id")
+    private User reported;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HABIT_ID")

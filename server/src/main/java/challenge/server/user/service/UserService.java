@@ -1,14 +1,17 @@
 package challenge.server.user.service;
 
+import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
 import challenge.server.helper.event.UserRegistrationApplicationEvent;
 import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.security.utils.LoggedInUserInfoUtils;
+import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.mapper.UserMapper;
 import challenge.server.user.repository.UserRepository;
 import challenge.server.utils.CustomBeanUtils;
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -24,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
+    private final ChallengeRepository challengeRepository;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final ApplicationEventPublisher publisher; // todo 회원 가입 시 이메일 전송 관련
@@ -74,13 +78,14 @@ public class UserService {
     // todo 회원 정보를 수정하려는 사람이 해당 회원이 맞는지 검증하는 로직이 필요한가? 아니면 요청 받을 때 Access Token을 받으면 그걸로 충분한가?
     @Transactional/*(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)*/
     public User updateUser(User user) {
-        User loggedInUser = verifyLoggedInUser(user.getUserId());
+        Long loggedInUserId = verifyLoggedInUser(user.getUserId());
+        User findUser = findVerifiedUser(loggedInUserId);
         Optional.ofNullable(user.getPassword())
-                .ifPresent(password -> loggedInUser.setPassword(passwordEncoder.encode(password)));
+                .ifPresent(password -> findUser.setPassword(passwordEncoder.encode(password)));
         Optional.ofNullable(user.getUsername())
-                .ifPresent(username -> loggedInUser.setUsername(username));
+                .ifPresent(username -> findUser.setUsername(username));
 
-        return userRepository.save(loggedInUser);
+        return userRepository.save(findUser);
     }
 
     public void verifyExistUser(String email) {
@@ -88,6 +93,16 @@ public class UserService {
         if (optionalUser.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
         }
+    }
+
+    public List<Object> findUserDetails(Long userId) {
+        Long loggedInUserId = verifyLoggedInUser(userId);
+        User findUser = findUser(loggedInUserId);
+
+        UserDto.UserDetailsDb userDetailsDb = userRepository.findUserDetails(userId);
+        List<UserDto.ChallengeDetailsDb> challengeDetailsDb = userRepository.findChallengeDetails(userId);
+
+        return List.of(userDetailsDb, challengeDetailsDb);
     }
 
     public User findUser(Long userId) {
@@ -100,7 +115,7 @@ public class UserService {
         return findUser;
     }
 
-    public User verifyLoggedInUser(Long userId) {
+    public Long verifyLoggedInUser(Long userId) {
         User loggedInUser = loggedInUserInfoUtils.extractUser();
         Long loggedInUserId = loggedInUser.getUserId();
 
@@ -108,7 +123,7 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_USER);
         }
 
-        return loggedInUser;
+        return loggedInUserId;
     }
 
 }
