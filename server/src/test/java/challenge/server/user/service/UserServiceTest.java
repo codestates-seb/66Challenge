@@ -28,12 +28,10 @@
 //@DataJpaTest
 //@Import(TestConfig.class)
 //class UserServiceTest {
-//    @Autowired
-////    @InjectMocks
+//    @InjectMocks
 //    private UserService userService;
 //
-//    @Autowired
-////    @Mock
+//    @Mock
 //    private UserRepository userRepository;
 //
 //    @Autowired
