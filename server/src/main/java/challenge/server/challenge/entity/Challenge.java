@@ -8,7 +8,9 @@ import challenge.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +49,10 @@ public class Challenge extends BaseTimeEntity {
 
     public void updatePostedAt(LocalDateTime localDateTime) {
         this.lastPostedAt = localDateTime;
+    }
+
+    public Boolean successCheck() {
+        return this.getCreatedAt().toLocalDate().plusDays(66).equals(this.lastPostedAt.toLocalDate());
     }
 
     public enum Status {

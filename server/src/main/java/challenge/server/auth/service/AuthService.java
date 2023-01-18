@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static challenge.server.challenge.entity.Challenge.Status.SUCCESS;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -33,6 +35,12 @@ public class AuthService {
         Challenge challenge = challengeService.findChallenge(challengeId);
         auth.setChallenge(challenge);
         challenge.updatePostedAt(LocalDateTime.now());
+
+        // 챌린지 성공 여부 확인
+        // TODO: 인증성 발급 방법 논의 필요
+        if (challenge.successCheck()) {
+            challenge.changeStatus(SUCCESS);
+        }
 
         return authRepository.save(auth);
     }

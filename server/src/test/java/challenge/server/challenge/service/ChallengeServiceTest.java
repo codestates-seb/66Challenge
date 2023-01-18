@@ -1,8 +1,10 @@
 package challenge.server.challenge.service;
 
+import challenge.server.auth.service.AuthService;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.challenge.entity.Wildcard;
 import challenge.server.challenge.repository.ChallengeRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
