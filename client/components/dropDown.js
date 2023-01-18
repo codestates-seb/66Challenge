@@ -29,22 +29,22 @@ export function DropDown() {
     //setIsPostuser(true);
   }, []);
   return (
-    <div className="flex flex-col absolute right-3 top-5 w-20 items-end">
+    <div className="flex flex-col w-[100px] items-end relative">
       <MdExpandMore
         className={arrowDirection.className}
         onClick={arrowDirectionHandle}
       />
       {arrowDirection.boolean === false ? null : (
-        <div className="flex flex-col w-full ">
+        <div className="flex flex-col w-full absolute top-[18px] right-0 ">
           <span
-            className="text-[10px] border border-subColor  bg-white text-center"
+            className="text-xs border border-[#e5e5e5]  bg-white text-center py-[5px]"
             onClick={declarationHandle}
           >
             신고하기
           </span>
           {isPostUser === true ? (
             <span
-              className="text-[10px] border-x border-b border-subColor  bg-white  text-center"
+              className="text-xs border-x border-b border-[#e5e5e5]  bg-white  text-center py-[5px]"
               onClick={deleteAuthHandle}
             >
               삭제하기
