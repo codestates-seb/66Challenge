@@ -86,8 +86,8 @@ public class UserController {
     @ApiOperation(value = "회원 개인 정보 통합 조회(마이페이지)")
     @GetMapping("/{user-id}")
     public ResponseEntity getUser(@PathVariable("user-id") @Positive Long userId) {
-        List<Object> detailsResults = userService.findUserDetails(userId);
-        return new ResponseEntity<>(userMapper.detailsResultsToUserDetailResponseDto(detailsResults), HttpStatus.OK);
+        UserDto.UserDetailsDb userDetailsDb = userService.findUserDetails(userId);
+        return new ResponseEntity<>(userDetailsDb, HttpStatus.OK);
 
         // API 통신용
         //return new ResponseEntity<>(createUserDetailResponseDto(), HttpStatus.OK);
