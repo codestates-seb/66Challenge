@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -24,15 +25,6 @@ public class Auth extends BaseTimeEntity {
 
     public void setChallenge(Challenge challenge) {
         this.challenge = challenge;
-    }
-
-    public void setAuthId(Long authId) {
-        this.authId = authId;
-    }
-
-    public void changeAuth(Auth auth) {
-        Optional.ofNullable(auth.getBody())
-                .ifPresent(changetBody -> this.body = changetBody);
     }
 
     public void changeImageUrl(String authImageUrl) {

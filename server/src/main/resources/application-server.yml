@@ -16,13 +16,14 @@ spring:
     properties:
       hibernate:
         format_sql: true  # SQL pretty print
+    defer-datasource-initialization: true
+  sql:
+    init:
+      data-locations: classpath*:db/h2/data.sql
+      mode: always
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-#  sql:
-#    init:
-#      data-locations: classpath:db/h2/data.sql
-#      mode: always
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
@@ -39,9 +40,6 @@ cloud:
   aws:
     s3:
       bucket: ENC(Z4UP4dP48yD4mb3Ua4sYDsgLbQOEIjV+2xiR/MSMkgc=)
-    credentials:
-      access-key: ENC(JGwONOYUN1OqXufEKPrHAaUqAYllcehHK/3U1eRxhrE=)
-      secret-key: ENC(uAQvMeB1mwQiEP2TnjNCJCTC2Slvxd0BxxROdlc/w7vs7ZaoMw73OYfyJGr+2OR85G1JPTfYlZ4=)
     region:
       static: ap-northeast-2
       auto: false
