@@ -1,37 +1,57 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import { MdExpandMore } from 'react-icons/md';
 import {
   getUsernameOverlapVerify,
   patchUserInfo,
-} from '../../../module/functionModules';
-
+} from '../../../module/userFunctionMoudules';
+interface formValue {
+  username: string;
+  password: string;
+  passwordCheck: string;
+}
+interface stateVerifyValue {
+  usernameVerify: string;
+  passwordVerify: string;
+  passwordCheckVerify: string;
+  agreeVerify: string;
+}
+interface stateInfoValue {
+  username: {
+    boolean: boolean;
+    className: string;
+  };
+  password: {
+    boolean: boolean;
+    className: string;
+  };
+}
 export default function SignUp() {
-  const router = useRouter();
-  const { register, handleSubmit, reset, getValues } = useForm({
+  const router: NextRouter = useRouter();
+  const { register, handleSubmit, reset, getValues } = useForm<formValue>({
     defaultValues: { username: '', password: '', passwordCheck: '' },
   });
-  const [verify, setVerify] = useState({
+  const [verify, setVerify] = useState<stateVerifyValue>({
     usernameVerify: '',
     passwordVerify: '',
     passwordCheckVerify: '',
     agreeVerify: 'fail',
   });
-  const [changeUserInfo, setChangeUserInfo] = useState({
+  const [changeUserInfo, setChangeUserInfo] = useState<stateInfoValue>({
     username: { boolean: false, className: '' },
     password: { boolean: false, className: '' },
   });
-  const inputDefaultClassName =
+  const inputDefaultClassName: string =
     'border h-[35px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 outline-0 mb-1';
-  const labelDefaultClassName =
+  const labelDefaultClassName: string =
     'text-base flex w-full font-semibold mb-1 justify-between';
-  const passwordRegExp =
+  const passwordRegExp: RegExp =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,12}$/;
-  const usernameRegExp = /[A-Za-z0-9가-힇]{2,20}/;
-  const upArrow = 'rotate-180 duration-500';
-  const downArrow = 'rotate-0';
-  const arrowDirectionHandle = (type) => {
+  const usernameRegExp: RegExp = /[A-Za-z0-9가-힇]{2,20}/;
+  const upArrow: string = 'rotate-180 duration-500';
+  const downArrow: string = 'rotate-0';
+  const arrowDirectionHandle = (type: string) => {
     const verifyBoolean = type + 'Verify';
     if (changeUserInfo[type].boolean === false) {
       setChangeUserInfo({
@@ -48,13 +68,20 @@ export default function SignUp() {
       reset({ [type]: '' });
     }
   };
-  const blurHandle = async (verifyBoolean, verifyKey) => {
+  const blurHandle = async (
+    verifyBoolean: boolean,
+    verifyKey: string,
+  ): Promise<void> => {
     if (verifyBoolean) {
       if (verifyKey === 'usernameVerify') {
-        const response = await getnOverlapVerify(getValues('username'));
-        // if (response === '중복이면') {
-        //   setVerify({ ...verify, [verifyKey]: 'overlap' });
-        // }
+        const response: boolean = await getUsernameOverlapVerify(
+          getValues('username'),
+        );
+        if (response === true) {
+          setVerify({ ...verify, [verifyKey]: 'overlap' });
+        } else {
+          setVerify({ ...verify, [verifyKey]: 'success' });
+        }
       } else {
         setVerify({ ...verify, [verifyKey]: 'success' });
       }
@@ -62,12 +89,12 @@ export default function SignUp() {
       setVerify({ ...verify, [verifyKey]: 'fail' });
     }
   };
-  const checkHandle = () => {
+  const checkHandle = (): void => {
     verify.agreeVerify === 'fail'
       ? setVerify({ ...verify, agreeVerify: 'success' })
       : setVerify({ ...verify, agreeVerify: 'fail' });
   };
-  const editUserInfoHandle = async (data) => {
+  const editUserInfoHandle = async (data: formValue): Promise<void> => {
     const { username, password, passwordCheck } = data;
     //회원 가입 비동기 함수 호출 부분 에러가 없다면 로그인 페이지로 연동할 것 그 후 리셋
     if (username === '') {
@@ -89,15 +116,13 @@ export default function SignUp() {
     }
     console.log(data);
   };
-  const onError = (e) => {
-    console.log(e);
-  };
+
   return (
     <div className="siginUpContatiner w-full h-screen flex flex-col px-10 items-center pt-20  mx-auto relative">
       <img src="/image/logo.svg" className="mb-[40px]" />
       <form
         className="signUpForm w-full flex flex-col items-center"
-        onSubmit={handleSubmit(editUserInfoHandle, onError)}
+        onSubmit={handleSubmit(editUserInfoHandle)}
       >
         <div
           className={`signUpPasswordBox flex flex-col w-full ${
@@ -122,7 +147,7 @@ export default function SignUp() {
               }`}
               placeholder="2~20자 이내로 입력해주세요"
               {...register('username', {
-                onBlur: () => {
+                onBlur: (): void => {
                   blurHandle(
                     usernameRegExp.test(getValues('username')),
                     'usernameVerify',
@@ -169,11 +194,12 @@ export default function SignUp() {
               placeholder="영문/숫자/특수문자 혼합 8~12자"
               type="password"
               {...register('password', {
-                onBlur: () =>
+                onBlur: (): void => {
                   blurHandle(
                     passwordRegExp.test(getValues('password')),
                     'passwordVerify',
-                  ),
+                  );
+                },
               })}
               required
             />
@@ -196,11 +222,12 @@ export default function SignUp() {
               placeholder="비밀번호를 한번 더 입력해주세요"
               type="password"
               {...register('passwordCheck', {
-                onBlur: () =>
+                onBlur: (): void => {
                   blurHandle(
                     getValues('password') === getValues('passwordCheck'),
                     'passwordCheckVerify',
-                  ),
+                  );
+                },
               })}
               required
             />
@@ -231,7 +258,9 @@ export default function SignUp() {
           value="Edit"
           className="border py-2.5 px-5 text-base font-semibold w-full rounded-md bg-mainColor text-iconColor duration-500 outline-0 mb-1 disabled:opacity-20"
           disabled={
-            !Object.values(verify).every((el) => el === 'success') &&
+            !Object.values(verify).every(
+              (el: string): boolean => el === 'success',
+            ) &&
             !(
               verify.usernameVerify === 'success' &&
               verify.passwordVerify === '' &&
