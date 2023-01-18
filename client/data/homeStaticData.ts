@@ -1,4 +1,11 @@
-export const slideData = [
+interface slideDataType {
+  bgImgUrl: string;
+  contText: string;
+  contSubText: string;
+  bannerLink: string;
+}
+
+export const slideData: Array<slideDataType> = [
   {
     bgImgUrl: '',
     contText: 'test용 첫 번째 슬라이드입니다.',
@@ -19,7 +26,13 @@ export const slideData = [
   },
 ];
 
-export const categoryData = [
+interface categoryDataType {
+  cateImgUrl: string;
+  cateTitle: string;
+  categoryId: string;
+}
+
+export const categoryData: Array<categoryDataType> = [
   {
     cateImgUrl: '/image/icons/exercise.png',
     cateTitle: '운동',
@@ -62,7 +75,14 @@ export const categoryData = [
   },
 ];
 
-export const habitWrapperData = [
+interface habitWrapperDataType {
+  habitId: string;
+  habitImage: string;
+  habitTitle: string;
+  habitBody: string;
+}
+
+export const habitWrapperData: Array<habitWrapperDataType> = [
   {
     habitId: '1',
     habitImage: '/image/running.png',

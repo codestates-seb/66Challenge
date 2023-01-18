@@ -30,9 +30,26 @@ ToDo 5. 모달창 내 하단 버튼의 이름을 buttonName으로 넣어주셔�
 * <------  사용하시기 전에 꼭 읽어주세요! ------> *
 */
 
+import React from 'react';
 import { IoClose } from 'react-icons/io5';
 
-export const Modal = ({ isOpen, setIsOpen, buttonName, onClick, children }) => {
+interface ModalProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  buttonName: string;
+  onClick: () => void;
+  children: React.ReactNode;
+}
+
+export type { ModalProps };
+
+export const Modal: React.FC = ({
+  isOpen,
+  setIsOpen,
+  buttonName,
+  onClick,
+  children,
+}: ModalProps) => {
   const closeModalHandler = () => {
     setIsOpen(!isOpen);
   };
