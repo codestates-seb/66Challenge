@@ -11,7 +11,8 @@ public enum ExceptionCode {
     REVIEW_NOT_FOUND(404, "Review not found"),
     WILDCARD_NOT_FOUND(404, "Wildcard not found"),
     FAILED_TO_UPLOAD_FILE(400, "Failed to upload file"),
-    FAILED_TO_DELETE_FILE(400, "Failed to delete file");
+    FAILED_TO_DELETE_FILE(400, "Failed to delete file"),
+    EXTENSION_IS_NOT_VAILD(400, "Extension is not valid");
 
     @Getter
     private int status;

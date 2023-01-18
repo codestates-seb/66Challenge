@@ -121,9 +121,10 @@ public class ChallengeController {
     @ApiOperation(value = "인증글 수정")
     @PatchMapping("/{challenge-id}/auths/{auth-id}")
     public ResponseEntity updateAuth(@PathVariable("auth-id") @Positive Long authId,
-                                     @RequestBody @Valid AuthDto.Patch patchDto) {
-        Auth auth = authMapper.toEntity(patchDto);
-        auth.setAuthId(authId);
+                                     @RequestPart("file") MultipartFile multipartFile,
+                                     @RequestPart("data") @Valid AuthDto.Patch patchDto) {
+        String authImageUrl = fileUploadService.save(multipartFile);
+        Auth auth = Auth.builder().authId(authId).body(patchDto.getBody()).authImageUrl(authImageUrl).build();
         Auth updateAuth = authService.updateAuth(auth);
 
         return new ResponseEntity<>(authMapper.toDto(updateAuth), HttpStatus.OK);

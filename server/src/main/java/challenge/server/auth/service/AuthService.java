@@ -7,7 +7,9 @@ import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.challenge.service.ChallengeService;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
+import challenge.server.file.service.FileUploadService;
 import challenge.server.review.entity.Review;
+import challenge.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,13 +25,14 @@ import java.util.List;
 public class AuthService {
     private final AuthRepository authRepository;
     private final ChallengeService challengeService;
-    private final ChallengeRepository challengeRepository;
+    private final CustomBeanUtils<Auth> beanUtils;
+    private final FileUploadService fileUploadService;
 
     @Transactional
     public Auth createAuth(Auth auth, Long challengeId) {
-//        Challenge challenge = challengeService.findChallenge(challengeId);    // File upload test를 위해 임시로 주석처리
-//        auth.setChallenge(challenge);
-//        challenge.updatePostedAt(LocalDateTime.now());
+        Challenge challenge = challengeService.findChallenge(challengeId);
+        auth.setChallenge(challenge);
+        challenge.updatePostedAt(LocalDateTime.now());
 
         return authRepository.save(auth);
     }
@@ -37,9 +40,9 @@ public class AuthService {
     @Transactional
     public Auth updateAuth(Auth auth) {
         Auth findAuth = findVerifiedAuth(auth.getAuthId());
-        findAuth.changeAuth(auth);  // CustomBeanUtils 구현 후 추가 반영
+        fileUploadService.delete(findAuth.getAuthImageUrl());
 
-        return findAuth;
+        return beanUtils.copyNonNullProperties(auth, findAuth);
     }
 
     public Auth findAuth(Long authId) {
@@ -63,18 +66,12 @@ public class AuthService {
 
     @Transactional
     public void deleteAuth(Long authId) {
-        findVerifiedAuth(authId);
+        Auth auth = findVerifiedAuth(authId);
+        fileUploadService.delete(auth.getAuthImageUrl());
         authRepository.deleteById(authId);
     }
 
-    public void postAuthCheck(Long challengeId) {     // 시간 기준으로 Auth를 조회해야할까?
-//        if (optionalReview.isPresent()) {
-//            throw new BusinessLogicException(ExceptionCode.REVIEW_EXISTS);
-//        }
-    }
-
     private Auth findVerifiedAuth(Long authId) {
-        Auth auth = authRepository.findById(authId).get();
         return authRepository.findById(authId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.AUTH_NOT_FOUND));
     }
