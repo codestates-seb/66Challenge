@@ -17,7 +17,18 @@ const nextConfig = {
   },
 };
 
-module.exports = widthPlugins([nextConfig, withPWA]);
+const remoteImg = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'media.istockphoto.com',
+      },
+    ],
+  },
+};
+
+module.exports = widthPlugins([nextConfig, withPWA, remoteImg]);
 
 // const withPWA = require('next-pwa')({
 //   dest: 'public',
