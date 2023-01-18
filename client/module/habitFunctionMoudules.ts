@@ -1,4 +1,18 @@
-export async function postHabit({ data, cookie }) {
+import axios from 'axios';
+import type {
+  habitGeneralProps,
+  postHabitProps,
+  deleteHabitProps,
+  getHabitAuthsReviewsProps,
+  postAuthReportProps,
+  postHabitReviewProps,
+  deleteHabitReviewProps,
+  patchHabitReviewProps,
+  getHabitsSearchProps,
+  getHabitsSearchCategoryProps,
+} from './moduleInterface';
+
+export async function postHabit({ data, cookie }: postHabitProps) {
   try {
     const response = await axios
       .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits`, data, {
@@ -12,7 +26,7 @@ export async function postHabit({ data, cookie }) {
     console.error(e);
   }
 }
-export async function getHabitDetail({ habitId }) {
+export async function getHabitDetail(habitId: string) {
   try {
     const response = await axios
       .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}`)
@@ -22,7 +36,7 @@ export async function getHabitDetail({ habitId }) {
     console.error(e);
   }
 }
-export async function deleteHabit({ cookie, habitId }) {
+export async function deleteHabit({ cookie, habitId }: deleteHabitProps) {
   try {
     const response = await axios
       .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}`, {
@@ -36,7 +50,11 @@ export async function deleteHabit({ cookie, habitId }) {
     console.error(e);
   }
 }
-export async function getHabitAuths({ habitId, page, size }) {
+export async function getHabitAuths({
+  habitId,
+  page,
+  size,
+}: getHabitAuthsReviewsProps) {
   try {
     const response = await axios
       .get(
@@ -49,12 +67,13 @@ export async function getHabitAuths({ habitId, page, size }) {
   }
 }
 
+// 문서와 좀 다름 -> 추후 수정 필요
 export async function postAuthReport({
   habitId,
   authReportPostDto,
   cookie,
   authId,
-}) {
+}: postAuthReportProps) {
   try {
     const response = await axios
       .post(
@@ -72,7 +91,11 @@ export async function postAuthReport({
     console.error(e);
   }
 }
-export async function postBookMark({ habitId, cookie, userId }) {
+export async function postBookMark({
+  habitId,
+  cookie,
+  userId,
+}: habitGeneralProps) {
   try {
     const response = await axios
       .post(
@@ -90,7 +113,11 @@ export async function postBookMark({ habitId, cookie, userId }) {
     console.error(e);
   }
 }
-export async function deleteBookMark({ habitId, cookie, userId }) {
+export async function deleteBookMark({
+  habitId,
+  cookie,
+  userId,
+}: habitGeneralProps) {
   try {
     const response = await axios
       .delete(
@@ -107,7 +134,11 @@ export async function deleteBookMark({ habitId, cookie, userId }) {
     console.error(e);
   }
 }
-export async function postStartChallenge({ habitId, cookie, userId }) {
+export async function postStartChallenge({
+  habitId,
+  cookie,
+  userId,
+}: habitGeneralProps) {
   try {
     const response = await axios
       .post(
@@ -125,7 +156,11 @@ export async function postStartChallenge({ habitId, cookie, userId }) {
     console.error(e);
   }
 }
-export async function postHabitReport({ habitId, cookie, userId }) {
+export async function postHabitReport({
+  habitId,
+  cookie,
+  userId,
+}: habitGeneralProps) {
   try {
     const response = await axios
       .post(
@@ -143,7 +178,11 @@ export async function postHabitReport({ habitId, cookie, userId }) {
     console.error(e);
   }
 }
-export async function getHabitReviews({ habitId, page, size }) {
+export async function getHabitReviews({
+  habitId,
+  page,
+  size,
+}: getHabitAuthsReviewsProps) {
   try {
     const response = await axios
       .get(
@@ -161,7 +200,7 @@ export async function postHabitReview({
   userId,
   body,
   score,
-}) {
+}: postHabitReviewProps) {
   try {
     const response = await axios
       .post(
@@ -179,7 +218,11 @@ export async function postHabitReview({
     console.error(e);
   }
 }
-export async function deleteHabitReview({ habitId, cookie, reviewId }) {
+export async function deleteHabitReview({
+  habitId,
+  cookie,
+  reviewId,
+}: deleteHabitReviewProps) {
   try {
     const response = await axios
       .delete(
@@ -202,7 +245,7 @@ export async function patchHabitReview({
   reviewId,
   body,
   score,
-}) {
+}: patchHabitReviewProps) {
   try {
     const response = await axios
       .patch(
@@ -220,7 +263,11 @@ export async function patchHabitReview({
     console.error(e);
   }
 }
-export async function postHabitReviewReport({ habitId, cookie, reviewId }) {
+export async function postHabitReviewReport({
+  habitId,
+  cookie,
+  reviewId,
+}: deleteHabitReviewProps) {
   try {
     const response = await axios
       .post(
@@ -238,7 +285,7 @@ export async function postHabitReviewReport({ habitId, cookie, reviewId }) {
     console.error(e);
   }
 }
-export async function getHabitStatistics({ habitId }) {
+export async function getHabitStatistics(habitId: string) {
   try {
     const response = await axios
       .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/statistics`)
@@ -248,7 +295,11 @@ export async function getHabitStatistics({ habitId }) {
     console.error(e);
   }
 }
-export async function getHabitsSearch({ keyword, page, size }) {
+export async function getHabitsSearch({
+  keyword,
+  page,
+  size,
+}: getHabitsSearchProps) {
   try {
     const response = await axios
       .get(
@@ -264,7 +315,11 @@ export async function getHabitsSearch({ keyword, page, size }) {
     console.error(e);
   }
 }
-export async function getHabitsSearchCategory({ categoryId, page, size }) {
+export async function getHabitsSearchCategory({
+  categoryId,
+  page,
+  size,
+}: getHabitsSearchCategoryProps) {
   try {
     const response = await axios
       .get(

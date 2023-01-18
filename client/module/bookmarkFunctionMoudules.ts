@@ -1,4 +1,7 @@
-export async function getUserBookmarks(userId, cookie) {
+import axios from 'axios';
+import type { UserGeneralProps } from './moduleInterface';
+
+export async function getUserBookmarks({ userId, cookie }: UserGeneralProps) {
   try {
     const response = await axios
       .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/bookmarks/${userId}`, {
