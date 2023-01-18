@@ -2,8 +2,20 @@ import { useForm } from 'react-hook-form';
 import { FileUploader } from '../../components/fileUploader';
 import { useState, useRef } from 'react';
 
+interface HabitFormValues {
+  title: string;
+  subtitle: string;
+  body: string;
+  category: string;
+  authEndTime: string;
+  authStartTime: string;
+}
+
+export type { HabitFormValues };
+
 const Post = () => {
-  const { register, handleSubmit, getValues, setFocus, reset } = useForm();
+  const { register, handleSubmit, getValues, setFocus, reset } =
+    useForm<HabitFormValues>();
   const [imgFile, setImgFile] = useState('');
   const [verify, setVerify] = useState({
     titleVerify: '',
@@ -19,7 +31,7 @@ const Post = () => {
   const subtitleRegExp = /^[A-Za-z0-9가-힇\s]{5,10}$/;
   const bodyRegExp = /^[A-Za-z0-9가-힇\s`~!@#$%^&*()-_=+]{100,}$/;
 
-  const blurHandle = (verifyBoolean, verifyKey) => {
+  const blurHandle = (verifyBoolean: boolean, verifyKey: string): void => {
     if (verifyBoolean) {
       setVerify({ ...verify, [verifyKey]: 'success' });
     } else {
@@ -27,7 +39,7 @@ const Post = () => {
     }
   };
 
-  const postButtonClick = (data) => {
+  const postButtonClick = (data: HabitFormValues) => {
     const { title, subtitle, body, category, authEndTime, authStartTime } =
       data;
 
@@ -49,7 +61,18 @@ const Post = () => {
     }
   };
 
-  const InputElKeyEvent = (e, nextInput) => {
+  type nextInput =
+    | 'title'
+    | 'subtitle'
+    | 'body'
+    | 'category'
+    | 'authEndTime'
+    | 'authStartTime';
+
+  const InputElKeyEvent = (
+    e: React.KeyboardEvent<HTMLElement>,
+    nextInput: nextInput,
+  ): void => {
     if (e.key === 'Enter') {
       e.preventDefault();
       setFocus(nextInput);
@@ -62,7 +85,7 @@ const Post = () => {
       : setVerify({ ...verify, agreeVerify: 'fail' });
   };
 
-  const inputDefaultClassName =
+  const inputDefaultClassName: string =
     'text-base w-full rounded-md px-2 pt-[2px] border focus:border-mainColor duration-500 outline-0 mb-1';
 
   return (

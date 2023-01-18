@@ -23,7 +23,7 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <SlideBanner bannerCont={slideData} />
+      <SlideBanner bannerCont={slideData} t={2000} />
       <div className="main-category px-[20px]">
         <ul className="main-category-list grid grid-cols-4 my-[20px]">
           {categoryData.map((el, idx) => {
@@ -53,9 +53,9 @@ const Home: React.FC = () => {
       <div className="main-video w-full h-full">
         <Iframe
           className="w-full min-h-[250px]"
-          src="https://www.youtube.com/embed/cdZZpaB2kDM"
+          url="https://www.youtube.com/embed/cdZZpaB2kDM"
           title="YouTube video player"
-          frameBorder="0"
+          frameBorder={0}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
         ></Iframe>

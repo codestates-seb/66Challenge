@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { DropDown } from '../../../../components/dropDown';
 import { AiFillStar } from 'react-icons/ai';
 
-const HabitDetail = () => {
+const HabitDetail: React.FC = () => {
   const router = useRouter();
   const habitId = router.query.habitId;
 

@@ -5,7 +5,10 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 interface Idata {
   userId: number;
 }
-
+interface IrejectValue {
+  payload: { status: number; message: string };
+  meta: any;
+}
 const loginRequest = createAsyncThunk(
   'loginIdentitySlice/loginRequest',
   async (data: { username: string; password: string }, { rejectWithValue }) => {
@@ -21,12 +24,12 @@ const loginRequest = createAsyncThunk(
       return userId;
     } catch (err) {
       if (err instanceof AxiosError) {
-        console.log(rejectWithValue(err.response.data));
         return rejectWithValue(err.response.data);
       }
     }
   },
 );
+
 interface loginIdentity {
   isLogin: boolean;
   userId: number | null;

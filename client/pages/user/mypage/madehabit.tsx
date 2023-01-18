@@ -5,7 +5,7 @@ import { useIntersection } from '../../../hooks/useIntersection';
 export default function MadeHabit() {
   const [madeHabits, setMadeHabits] = useState([]);
   const [page, setPage] = useState(0);
-  const url = 'http://localhost:4000/habitdata';
+  const url: string = 'http://localhost:4000/habitdata';
   const [setTarget] = useIntersection(url, page, setPage, setMadeHabits);
   return (
     <div className="h-screen w-full overflow-y-scroll scrollbar-hide absolute">
