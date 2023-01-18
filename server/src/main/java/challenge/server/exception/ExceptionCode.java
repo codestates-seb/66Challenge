@@ -15,7 +15,11 @@ public enum ExceptionCode {
     FAILED_TO_UPLOAD_FILE(400, "Failed to upload file"),
     FAILED_TO_DELETE_FILE(400, "Failed to delete file"),
     UNAUTHORIZED_USER(403, "Unauthorized user"),
-    EXTENSION_IS_NOT_VAILD(400, "Extension is not valid");
+    EXTENSION_IS_NOT_VAILD(400, "Extension is not valid"),
+    CATEGORY_NOT_FOUND(404, "Category not found"),
+    HABIT_NOT_FOUND(404, "Habit not found"),
+    REPORT_NOT_FOUND(404, "Report not found");
+
 
     @Getter
     private int status;
