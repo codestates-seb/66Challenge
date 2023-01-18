@@ -225,6 +225,7 @@ public class UserService {
         return findVerifiedUser(userId);
     }
 
+    @Transactional(readOnly = true)
     public User findVerifiedUser(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         User findUser = optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
