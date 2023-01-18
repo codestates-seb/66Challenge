@@ -40,7 +40,7 @@ class AuthServiceTest {
         // given
         LocalDateTime createdAt = LocalDateTime.now().minusDays(66);
         Challenge challenge = Challenge.builder().challengeId(1L).status(CHALLENGE).build();
-        challenge.setCreatedAt(LocalDateTime.now());
+        challenge.setCreatedAt(createdAt);
         Auth auth = Auth.builder().build();
 
         given(challengeService.findChallenge(Mockito.anyLong())).willReturn(challenge);
@@ -50,6 +50,6 @@ class AuthServiceTest {
         authService.createAuth(auth, challenge.getChallengeId());
 
         // then
-        assertEquals(CHALLENGE, challenge.getStatus());
+        assertEquals(SUCCESS, challenge.getStatus());
     }
 }
