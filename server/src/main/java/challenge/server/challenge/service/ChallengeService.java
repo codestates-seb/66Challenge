@@ -85,14 +85,21 @@ public class ChallengeService {
                 Sort.by("challengeId").descending())).getContent();
     }
 
+    /**
+     * 1. 매일 자정 해당 로직 실행
+     * 2. 전날 인증글을 게시하지 않은 진행중인 모든 Challenge 조회
+     * 3. wildcard를 이미 모두 사용했다면 Challenge Fail
+     * 4. 사용할 수 있는 wildcard가 이미 남아있다면 wildcard 사용
+     * 5. challenge 마지막 인증 게시글 업로드 시간 업데이트
+     * 6. wildcard로 마지막 66일을 채워도 Challenge Success
+     */
     @Transactional
-    @Scheduled(cron = "${cron.cron1}")  // 매일 자정 해당 메서드가 실행됨
+    @Scheduled(cron = "${cron.cron1}")
     public List<Challenge> notAuthTodayCheck() {
-        log.info("현재시간 - {}", formatter.format(LocalDateTime.now()));
+        log.info("로직 실행시간 - {}", formatter.format(LocalDateTime.now()));
         LocalDateTime startDatetime = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(0, 0, 0));     // 익일 00:00:00
         LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(23, 59, 59));    // 익일 23:59:59
 
-        // 전날 인증글을 게시하지 않은 모든 Challenge 조회
         List<Challenge> challenges = challengeRepository.
                 findAllByNotAuthToday(CHALLENGE, startDatetime, endDatetime);
 
@@ -100,11 +107,13 @@ public class ChallengeService {
         {
             int wildcardCount = challenge.getWildcards() == null ? 0 : challenge.getWildcards().size();
 
-            if (wildcardCount >= 2) {   // wildcard를 이미 모두 사용했다면
-                challenge.changeStatus(FAIL);   // Challenge Fail
-            } else {    // 사용할 수 있는 wildcard가 아직 남아있다면
-                wildcardService.useWildcard(challenge);    // wildcard 사용
-                challenge.updatePostedAt(LocalDateTime.now().minusDays(1));     // challenge 마지막 인증 게시글 업로드 시간 업데이트
+            if (wildcardCount >= 2) {
+                challenge.changeStatus(FAIL);
+            } else {
+                wildcardService.useWildcard(challenge);
+                challenge.updatePostedAt(LocalDateTime.now().minusDays(1));
+                challenge.successCheck();
+                // TODO: 인증성 발급 방법 논의 필요
             }
         });
         return challenges;
