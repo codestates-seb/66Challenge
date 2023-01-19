@@ -4,8 +4,8 @@ import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
 import challenge.server.review.entity.Review;
 import challenge.server.review.repository.ReviewRepository;
+import challenge.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,7 @@ import java.util.Optional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final CustomBeanUtils<Review> beanUtils;
 
     public Review createReview(Review review) {
         verfiyExistReview(review.getHabit().getHabitId(), review.getUser().getUserId());
@@ -27,7 +28,7 @@ public class ReviewService {
 
     public Review updateReview(Review review) {
         Review findReview = findVerifiedReview(review.getReviewId());
-        findReview.changeReview(review);    // CustomBeanUtils 구현 후 수정
+        beanUtils.copyNonNullProperties(review, findReview);
 
         return findReview;
     }

@@ -47,7 +47,7 @@ class AuthServiceTest {
         given(authRepository.save(Mockito.any(Auth.class))).willReturn(auth);
 
         // when
-        authService.createAuth(auth, challenge.getChallengeId());
+        authService.createAuth(auth, challenge);
 
         // then
         assertEquals(SUCCESS, challenge.getStatus());

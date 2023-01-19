@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -31,11 +32,4 @@ public class Review extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HABIT_ID")
     private Habit habit;
-
-    public void changeReview(Review review) {
-        Optional.ofNullable(review.getBody())
-                .ifPresent(changeBody -> this.body = changeBody);
-        Optional.ofNullable(review.getScore())
-                .ifPresent(changeScore -> this.score = changeScore);
-    }
 }

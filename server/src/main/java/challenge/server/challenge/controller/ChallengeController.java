@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -110,10 +111,12 @@ public class ChallengeController {
     public ResponseEntity createAuth(@PathVariable("chaellenge-id") @Positive Long challengeId,
                                      @RequestPart("file") MultipartFile multipartFile,
                                      @RequestPart("data") @Valid AuthDto.Post postDto) {
+        Challenge challenge = challengeService.findChallenge(challengeId);
+        challenge.todayAuthCheck(LocalDate.now());
         Auth auth = authMapper.toEntity(postDto);
         String authImageUrl = fileUploadService.save(multipartFile);
         auth.changeImageUrl(authImageUrl);
-        Auth createAuth = authService.createAuth(auth, challengeId);
+        Auth createAuth = authService.createAuth(auth, challenge);
 
         return new ResponseEntity<>(authMapper.toDto(createAuth), HttpStatus.CREATED);
     }

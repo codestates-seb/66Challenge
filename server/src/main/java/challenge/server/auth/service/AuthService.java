@@ -31,8 +31,7 @@ public class AuthService {
     private final FileUploadService fileUploadService;
 
     @Transactional
-    public Auth createAuth(Auth auth, Long challengeId) {
-        Challenge challenge = challengeService.findChallenge(challengeId);
+    public Auth createAuth(Auth auth, Challenge challenge) {
         auth.setChallenge(challenge);
         challenge.updatePostedAt(LocalDateTime.now());
 
