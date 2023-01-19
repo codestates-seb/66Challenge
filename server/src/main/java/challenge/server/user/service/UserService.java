@@ -31,6 +31,7 @@ import java.util.*;
 
 import static challenge.server.challenge.entity.Challenge.Status.CHALLENGE;
 import static challenge.server.challenge.entity.Challenge.Status.SUCCESS;
+import static challenge.server.user.entity.User.Status.QUIT;
 
 @Service
 @Transactional(readOnly = true)
@@ -297,4 +298,20 @@ public class UserService {
 
         return successHabitCertificate;
     }
+
+    // 회원 탈퇴
+    // todo 회원 탈퇴했다가(quit 상태) 다시 가입하고자 하는 사람은 어떻게 하나? 회원 가입 시 quit 상태인 사람들은 받아주나, 아니면 새로운 이메일 주소로 가입해야 하나?
+    @Transactional
+    public void quitUser(Long userId) {
+        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
+        Long loggedInUserId = verifyLoggedInUser(userId);
+
+        // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
+        User findUser = findUser(loggedInUserId);
+        findUser.setStatus(QUIT);
+        System.out.println(findUser.getStatus().toString());
+
+        userRepository.save(findUser);
+    }
+
 }

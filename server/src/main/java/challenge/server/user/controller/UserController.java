@@ -6,6 +6,7 @@ import challenge.server.habit.dto.HabitDto;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.mapper.UserMapper;
+import challenge.server.user.repository.UserRepository;
 import challenge.server.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +30,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class UserController {
+    private final UserRepository userRepository;
     private final UserService userService;
     private final UserMapper userMapper;
     private final HabitController habitController;
@@ -173,7 +175,7 @@ public class UserController {
     @ApiOperation(value = "회원 탈퇴")
     @DeleteMapping("/{user-id}")
     public ResponseEntity deleteUser(@PathVariable("user-id") @Positive Long userId) {
-        // API 통신용
+        userService.quitUser(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
