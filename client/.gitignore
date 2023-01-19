@@ -26,11 +26,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+.env*.local
 
 # vercel
 .vercel
@@ -38,6 +34,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# sw.js.map
-/public/sw.js.map
