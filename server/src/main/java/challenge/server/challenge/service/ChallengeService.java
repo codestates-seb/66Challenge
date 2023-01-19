@@ -112,8 +112,6 @@ public class ChallengeService {
                 if (challenge.getCreatedAt() != null) { // createdAt 추가해줘야함
                     if (challenge.successCheck()) challenge.changeStatus(SUCCESS);
                 }
-
-                // TODO: 인증성 발급 방법 논의 필요
             }
         });
         return challenges;

@@ -2,15 +2,15 @@ package challenge.server.challenge.entity;
 
 import challenge.server.audit.BaseTimeEntity;
 import challenge.server.auth.entity.Auth;
+import challenge.server.exception.BusinessLogicException;
+import challenge.server.exception.ExceptionCode;
 import challenge.server.habit.entity.Habit;
-import challenge.server.review.entity.Review;
 import challenge.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +53,12 @@ public class Challenge extends BaseTimeEntity {
 
     public Boolean successCheck() {
         return this.getCreatedAt().toLocalDate().plusDays(66).equals(this.lastPostedAt.toLocalDate());
+    }
+
+    public void todayAuthCheck(LocalDate localDate) {
+        if (this.lastPostedAt.toLocalDate().equals(localDate)) {
+            throw new BusinessLogicException(ExceptionCode.AUTH_EXISTS);
+        }
     }
 
     public enum Status {
