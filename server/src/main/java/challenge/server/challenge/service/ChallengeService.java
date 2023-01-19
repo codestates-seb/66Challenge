@@ -20,8 +20,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static challenge.server.challenge.entity.Challenge.Status.CHALLENGE;
-import static challenge.server.challenge.entity.Challenge.Status.FAIL;
+import static challenge.server.challenge.entity.Challenge.Status.*;
 
 @Slf4j
 @Service
@@ -33,8 +32,6 @@ public class ChallengeService {
     private static final DateTimeFormatter formatter
             = DateTimeFormatter.ofPattern("mm:ss:SSS");
     private final WildcardService wildcardService;
-
-    private final EntityManager em;
 
     @Transactional
     public Challenge createChallenge(Challenge challenge) {
@@ -112,7 +109,10 @@ public class ChallengeService {
             } else {
                 wildcardService.useWildcard(challenge);
                 challenge.updatePostedAt(LocalDateTime.now().minusDays(1));
-                challenge.successCheck();
+                if (challenge.getCreatedAt() != null) { // createdAt 추가해줘야함
+                    if (challenge.successCheck()) challenge.changeStatus(SUCCESS);
+                }
+
                 // TODO: 인증성 발급 방법 논의 필요
             }
         });
