@@ -1,8 +1,22 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { AiFillCamera } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
+import Image from 'next/image';
+import { useAppSelector } from '../../ducks/store';
+interface IauthFormValue {
+  memo: string;
+  authImage: File | null;
+}
+interface IverifyForm {
+  imgVerify: string;
+  chooseHabitVerify: string;
+  memoVerify: string;
+  agreeVerify: string;
+}
 export default function Auth() {
   //추후 데이터 받아와서 더미데이터 대체해야함
+  const { userId } = useAppSelector((state) => state.loginIdentity);
+
   const dummyArr = [
     'habit1habit1habit1habit1habit1habit1habit1habit1habit1',
     'habit2',
@@ -16,57 +30,57 @@ export default function Auth() {
     'habit10',
     'habit11',
   ];
-  const { register, handleSubmit, reset, getValues } = useForm();
-  const memoRegExp = /[A-Za-z0-9가-힇ㄱ-ㅎ]{2,20}/;
+  const { register, handleSubmit, reset, getValues, watch } =
+    useForm<IauthFormValue>();
+  const memoRegExp: RegExp = /[A-Za-z0-9가-힇ㄱ-ㅎ]{2,20}/;
   const [active, setActive] = useState(-1); //active에는 habitId가 들어가야한다.
   const [imgFile, setImgFile] = useState('');
-  const imgRef = useRef();
   const [verify, setVerify] = useState({
     imgVerify: 'fail',
     chooseHabitVerify: 'fail',
     memoVerify: '',
     agreeVerify: 'fail',
   });
-  const saveImgFile = () => {
-    if (imgRef.current.files[0] !== undefined) {
-      const file = imgRef.current.files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setImgFile(reader.result);
-        setVerify({ ...verify, imgVerify: 'success' });
-      };
-    }
-  };
-  const deleteImgHandle = () => {
+  const { authImage } = watch();
+  const deleteImgHandle = (): void => {
     setImgFile('');
+    reset({
+      authImage: null,
+    });
     setVerify({ ...verify, imgVerify: 'fail' });
   };
-  const checkHandle = () => {
+  const checkHandle = (): void => {
     verify.agreeVerify === 'fail'
       ? setVerify({ ...verify, agreeVerify: 'success' })
       : setVerify({ ...verify, agreeVerify: 'fail' });
   };
-  const blurHandle = (boolean) => {
+  const blurHandle = (boolean: boolean): void => {
     if (boolean === false) {
       setVerify({ ...verify, memoVerify: 'fail' });
     } else {
       setVerify({ ...verify, memoVerify: 'success' });
     }
   };
-  const postAuthHandle = (data) => {
+  const postAuthHandle = (data: IauthFormValue): void => {
     const { memo } = data;
-    if (memoRegExp.text(memo)) {
+    if (memoRegExp.test(memo)) {
       //{memo,imgFile,active} 보내야함.
       //reset()
       //router 이용하여 상세페이지 인증탭으로 이동
+      const formData = new FormData();
+      formData.append('authImage', authImage[0]);
     } else {
       setVerify({ ...verify, memoVerify: 'fail' });
     }
   };
-  const onError = (e) => {
-    console.log(e);
-  };
+  useEffect((): void => {
+    if (authImage && authImage.length > 0) {
+      setVerify({ ...verify, imgVerify: 'success' });
+      const file = authImage[0];
+      setImgFile(URL.createObjectURL(file));
+    }
+  }, [authImage]);
+
   return (
     <div className="h-screen w-full px-10 flex flex-col pt-5 overvflow-y-scroll scrollbar-hide">
       <div className="mb-4 w-full">
@@ -97,7 +111,7 @@ export default function Auth() {
       </div>
       <form
         className="file-uploader-container"
-        onSubmit={handleSubmit(postAuthHandle, onError)}
+        onSubmit={handleSubmit(postAuthHandle)}
       >
         <label
           className="file-uploader-label flex justify-center items-center w-full mx-auto h-[202px] my-[20px] border border-mainColor rounded"
@@ -105,10 +119,12 @@ export default function Auth() {
         >
           {imgFile !== '' ? (
             <div className="file-uploader-preview w-[300px] h-[200px]">
-              <img
+              <Image
                 className="object-contain w-full h-full"
                 src={imgFile}
                 alt="uploaded image"
+                width={500}
+                height={500}
               />
             </div>
           ) : (
@@ -123,9 +139,8 @@ export default function Auth() {
           type="file"
           accept="image/*"
           capture="environment"
-          ref={imgRef}
           disabled={imgFile !== ''}
-          onChange={saveImgFile}
+          {...register('authImage')}
         />
         {imgFile !== '' ? (
           <div className=" flex justify-center w-full items-center bg-mainColor rounded-full h-[40px] mb-5">
@@ -173,7 +188,7 @@ export default function Auth() {
         </div>
         <input
           type="submit"
-          value="Edit"
+          value="인증 등록"
           className="border py-2.5 px-5 text-base font-semibold w-full rounded-md bg-mainColor text-iconColor duration-500 outline-0 mb-1 disabled:opacity-20"
           disabled={!Object.values(verify).every((el) => el === 'success')}
         />
