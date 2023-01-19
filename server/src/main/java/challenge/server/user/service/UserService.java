@@ -247,6 +247,7 @@ public class UserService {
     }
 
     // 내가 만든 습관 조회
+    // todo mapper 만들어서 테스트 필요(mapper 없이 응답 통신 가는 것은 Postman 확인 완료)
     public List<Habit> findHostHabits(Long userId, int page, int size) {
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
         Long loggedInUserId = verifyLoggedInUser(userId);
@@ -256,5 +257,28 @@ public class UserService {
 
         List<Habit> habits = habitRepository.findAllByHostUserId(findUser.getUserId(), PageRequest.of(page - 1, size, Sort.by("habitId").descending())).getContent();
         return habits;
+    }
+
+    // 인증서 발급
+    // todo 테스트 필요
+    public UserDto.SuccessHabitCertificate issueHabitCertificate(Long userId, Long habitId) {
+        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
+        Long loggedInUserId = verifyLoggedInUser(userId);
+
+        // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
+        User findUser = findUser(loggedInUserId);
+
+        Optional<Challenge> optionalChallenge = challengeRepository.findByUserUserIdAndHabitHabitId(findUser.getUserId(), habitId);
+        Challenge findChallenge = optionalChallenge.orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+
+        UserDto.SuccessHabitCertificate successHabitCertificate = UserDto.SuccessHabitCertificate.builder()
+                .challengeId(findChallenge.getChallengeId())
+                .username(findUser.getUsername())
+                .title(findChallenge.getHabit().getTitle())
+                .createdAt(findChallenge.getCreatedAt())
+                .completedAt(findChallenge.getCreatedAt().plusDays(66L))
+                .build();
+
+        return successHabitCertificate;
     }
 }
