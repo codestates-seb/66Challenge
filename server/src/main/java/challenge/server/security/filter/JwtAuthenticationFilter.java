@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setStatus(HttpStatus.OK.value());
 
         Map<String, Long> body = new HashMap<>();
-        body.put("userId", user.getUserId());
+        body.put("userId", user.getUserId()); // 로그인 후 userId를 응답 body에 전달
 
         new ObjectMapper().writeValue(response.getOutputStream(), body);
     }
