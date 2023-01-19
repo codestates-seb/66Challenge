@@ -43,7 +43,6 @@ class AuthServiceTest {
         challenge.setCreatedAt(createdAt);
         Auth auth = Auth.builder().build();
 
-        given(challengeService.findChallenge(Mockito.anyLong())).willReturn(challenge);
         given(authRepository.save(Mockito.any(Auth.class))).willReturn(auth);
 
         // when
