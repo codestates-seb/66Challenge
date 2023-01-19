@@ -125,10 +125,15 @@ public class UserController {
 
     @ApiOperation(value = "내가 만든 습관 조회")
     @GetMapping("/{user-id}/habits/hosts")
-    public ResponseEntity getHostHabits(@PathVariable("user-id") @Positive Long userId) {
+    public ResponseEntity getHostHabits(@PathVariable("user-id") @Positive Long userId,
+                                        @RequestParam @Positive int page,
+                                        @RequestParam @Positive int size) {
+        List<Habit> habits = userService.findHostHabits(userId, page, size);
+        return new ResponseEntity(userMapper.habitsToUserDtoHabitResponses(habits), HttpStatus.OK);
+
         // API 통신용
-        List<UserDto.HabitResponse> responseDtos = List.of(createHabitResponseDto(), createHabitResponseDto());
-        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+//        List<UserDto.HabitResponse> responseDtos = List.of(createHabitResponseDto(), createHabitResponseDto());
+//        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
     @ApiOperation(value = "인증서 발급")
