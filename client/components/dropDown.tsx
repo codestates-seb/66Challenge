@@ -39,8 +39,6 @@ export function DropDown({ dropDownType, boolean }: propsValue) {
       //리뷰 삭제 비동기 함수 호출
     } else if (dropDownType === 'auth') {
       //인증 삭제 비동기 함수 호출
-    } else if (dropDownType === 'habit') {
-      //습관 삭제 비동기 함수 호출
     }
   };
 

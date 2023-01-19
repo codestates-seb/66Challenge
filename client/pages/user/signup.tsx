@@ -39,10 +39,7 @@ const SignUp: React.FC = () => {
   const emailRegExp: RegExp =
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*[.][a-zA-Z]{2,3}$/;
   const usernameRegExp: RegExp = /[A-Za-z0-9가-힇]{2,20}/;
-  const blurHandle = async (
-    verifyBoolean: boolean,
-    verifyKey: string,
-  ): Promise<void> => {
+  const blurHandle = async (verifyBoolean: boolean, verifyKey: string) => {
     if (verifyBoolean) {
       if (verifyKey === 'emailVerify') {
         const response: boolean = await getUserEmailOverlapVerify(
@@ -54,7 +51,9 @@ const SignUp: React.FC = () => {
           setVerify({ ...verify, [verifyKey]: 'success' });
         }
       } else if (verifyKey === 'usernameVerify') {
-        const response = await getUsernameOverlapVerify(getValues('username'));
+        const response: boolean = await getUsernameOverlapVerify(
+          getValues('username'),
+        );
         if (response === true) {
           setVerify({ ...verify, [verifyKey]: 'overlap' });
         } else {

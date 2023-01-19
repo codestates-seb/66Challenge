@@ -25,7 +25,7 @@ export function HabitPageBottomNav() {
   const habitId: string | string[] = router.query.habitId;
   const a = 1;
 
-  if (a === 1) {
+  if (a === 3) {
     return <StartHabitBottomNav />;
   } else if (a === 2) {
     return <EditHabitBottomNav />;
