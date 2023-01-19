@@ -243,26 +243,6 @@ public class UserService {
         return loggedInUserId;
     }
 
-    // 회원이 찜한 습관들의 목록 출력
-    // todo 테스트 필요
-    public List<Habit> findBookmarkHabits(Long userId, int page, int size) {
-        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
-        Long loggedInUserId = verifyLoggedInUser(userId);
-
-        // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
-        User findUser = findUser(loggedInUserId);
-
-        List<Bookmark> bookmarks = bookmarkRepository.findAllByUserUserId(findUser.getUserId(), PageRequest.of(page - 1, size, Sort.by("habitId").descending())).getContent();
-
-        List<Habit> habits = new ArrayList<>();
-
-        for (int i = 0; i < bookmarks.size(); i++) {
-            habits.add(habitRepository.findById(bookmarks.get(i).getHabit().getHabitId()).get());
-        }
-
-        return habits;
-    }
-
     // 내가 만든 습관 조회
     // todo mapper 만들어서 테스트 필요(mapper 없이 응답 통신 가는 것은 Postman 확인 완료)
     public List<Habit> findHostHabits(Long userId, int page, int size) {

@@ -1,12 +1,10 @@
 package challenge.server.user.controller;
 
-import challenge.server.bookmark.entity.Bookmark;
-import challenge.server.habit.controller.HabitController;
-import challenge.server.habit.dto.HabitDto;
+import challenge.server.bookmark.service.BookmarkService;
+import challenge.server.habit.entity.Habit;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.mapper.UserMapper;
-import challenge.server.user.repository.UserRepository;
 import challenge.server.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,10 +28,9 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class UserController {
-    private final UserRepository userRepository;
     private final UserService userService;
     private final UserMapper userMapper;
-    private final HabitController habitController;
+    private final BookmarkService bookmarkService;
 
     @ApiOperation(value = "이메일 중복 여부 확인", notes = "true 응답 = 중복되는 이메일 존재 / false 응답 = 중복되는 이메일 없음")
     @GetMapping("/emails/check")
@@ -117,7 +114,7 @@ public class UserController {
     public ResponseEntity getBookmarks(@PathVariable("user-id") @Positive Long userId,
                                        @RequestParam @Positive int page,
                                        @RequestParam @Positive int size) {
-        List<Habit> habits = userService.findBookmarkHabits(userId, page, size);
+        List<Habit> habits = bookmarkService.findBookmarkHabits(userId, page, size);
         return new ResponseEntity<>(userMapper.habitsToUserDtoHabitResponses(habits), HttpStatus.OK);
 
         // API 통신용
