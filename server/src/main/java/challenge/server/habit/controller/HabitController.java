@@ -1,8 +1,12 @@
 package challenge.server.habit.controller;
 
 import challenge.server.auth.dto.AuthDto;
+import challenge.server.bookmark.entity.Bookmark;
+import challenge.server.bookmark.mapper.BookmarkMapper;
+import challenge.server.bookmark.service.BookmarkService;
 import challenge.server.challenge.dto.ChallengeDto;
 import challenge.server.habit.dto.HabitDto;
+import challenge.server.habit.entity.Habit;
 import challenge.server.report.dto.ReportDto;
 import challenge.server.review.dto.ReviewDto;
 import io.swagger.annotations.Api;
@@ -24,6 +28,9 @@ import java.util.List;
 @RequestMapping("/habits")
 @RequiredArgsConstructor
 public class HabitController {
+    // 북마크 추가/삭제 관련 추가
+    private final BookmarkService bookmarkService;
+    private final BookmarkMapper bookmarkMapper;
 
     @ApiOperation(value = "습관 등록")
     @PostMapping
@@ -168,17 +175,24 @@ public class HabitController {
     @PostMapping("/{habit-id}/bookmarks")
     public ResponseEntity postBookmark(@PathVariable("habit-id") @Positive Long habitId,
                                         @RequestParam @Positive Long userId) {
-        String body = "즐겨찾기에 추가 되었습니다.";
-        return new ResponseEntity(body,HttpStatus.OK);
+        Bookmark bookmark = bookmarkService.createBookmark(habitId, userId);
+        return new ResponseEntity<>(bookmarkMapper.bookmarkToBookmarkResponseDto(bookmark), HttpStatus.OK);
+
+        // API 통신용
+//        String body = "즐겨찾기에 추가 되었습니다.";
+//        return new ResponseEntity(body, HttpStatus.OK);
     }
 
     // 습관 북마크 - 북마크 취소 메시지
     @ApiOperation(value="북마크")
     @DeleteMapping("/{habit-id}/bookmarks")
     public ResponseEntity deleteBookmark(@PathVariable("habit-id") @Positive Long habitId,
-                                       @RequestParam @Positive Long userId) {
-        String body = "즐겨찾기에서 삭제 되었습니다.";
-        return new ResponseEntity(body,HttpStatus.NO_CONTENT);
+                                       @RequestParam @Positive Long bookmarkId) {
+        bookmarkService.deleteBookmark(bookmarkId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        // API 통신용
+//        String body = "즐겨찾기에서 삭제 되었습니다.";
+//        return new ResponseEntity(body, HttpStatus.NO_CONTENT);
     }
 
     // 습관 신고 - 신고 접수 완료 메시지
