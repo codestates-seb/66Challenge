@@ -9,9 +9,9 @@ interface HabitFormValues {
   category: string;
   authEndTime: string;
   authStartTime: string;
-  habitImage: any;
-  successImage: any;
-  failImage: any;
+  habitImage: File | null;
+  successImage: File | null;
+  failImage: File | null;
 }
 
 export type { HabitFormValues };
@@ -32,10 +32,6 @@ const Post = () => {
       setHabitImagePreview(URL.createObjectURL(file));
     }
   }, [habitImage]);
-
-  console.log(habitImage);
-  console.log(successImage);
-  console.log(failImage);
 
   useEffect(() => {
     if (successImage && successImage.length > 0) {
@@ -78,8 +74,17 @@ const Post = () => {
   };
 
   const postButtonClick = (data: HabitFormValues) => {
-    const { title, subtitle, body, category, authEndTime, authStartTime } =
-      data;
+    const {
+      title,
+      subtitle,
+      body,
+      category,
+      authEndTime,
+      authStartTime,
+      habitImage,
+      successImage,
+      failImage,
+    } = data;
 
     if (titleRegExp.test(title) === false) {
       setVerify({ ...verify, titleVerify: 'fail' });
@@ -87,16 +92,30 @@ const Post = () => {
       setVerify({ ...verify, subtitleVerify: 'fail' });
     } else if (category === 'default') {
       setVerify({ ...verify, categoryVerify: 'fail' });
-    } else if (habitImagePreview.length === 0) {
+    } else if (habitImage.length === 0) {
       setVerify({ ...verify, habitImageVerify: 'fail' });
     } else if (bodyRegExp.test(body) === false) {
       setVerify({ ...verify, bodyVerify: 'fail' });
     } else if (authStartTime < authEndTime === false) {
       setVerify({ ...verify, authTimeVerify: 'fail' });
+    } else if (successImage.length === 0) {
+      setVerify({ ...verify, successImageVerify: 'fail' });
+    } else if (failImage.length === 0) {
+      setVerify({ ...verify, failImageVerify: 'fail' });
     } else {
+      const formData = new FormData();
+      formData.append('habitImage', habitImage[0]);
+      formData.append('successImage', successImage[0]);
+      formData.append('failImage', failImage[0]);
+
+      console.log(data);
+
       // 데이터 통신
       // reset();
-      console.log(data);
+      // console.log(habitImage[0]);
+      // for (let value of formData.values()) {
+      //   console.log(value);
+      // }
     }
   };
 
