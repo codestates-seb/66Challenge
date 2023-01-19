@@ -162,8 +162,12 @@ public class UserController {
     @GetMapping("/{user-id}/passwords/check")
     public ResponseEntity<Boolean> checkPasswordCorrect(@PathVariable("user-id") @Positive Long userId,
                                                         @Valid @RequestBody UserDto.CheckPassword requestBody) {
+        requestBody.setUserId(userId);
+        User user = userMapper.UserCheckPasswordDtoToUser(requestBody);
+
+        return new ResponseEntity<>(userService.verifyExistPassword(user), HttpStatus.OK);
         // API 통신용
-        return ResponseEntity.ok(true);
+//        return ResponseEntity.ok(true);
     }
 
     @ApiOperation(value = "회원 탈퇴")

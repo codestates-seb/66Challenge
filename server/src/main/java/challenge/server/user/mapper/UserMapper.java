@@ -42,4 +42,6 @@ public interface UserMapper {
     default List<UserDto.HabitResponse> habitsToUserDtoHabitResponses(List<Habit> habits) {
         return null;
     }
+
+    User UserCheckPasswordDtoToUser(UserDto.CheckPassword requestBody);
 }
