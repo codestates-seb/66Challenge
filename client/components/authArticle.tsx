@@ -1,10 +1,14 @@
 import { DropDown } from './dropDown';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useAppSelector } from '../ducks/store';
 
 export function AuthArticle() {
-  //useEffect 사용 곤란 할 때 serverSideProps 이용 확인 해볼 것
-  //필요 데이터 유저네임,인증시간,인증사진,인증 내용(텍스트),인증 등록한 유저Id
+  const { userId } = useAppSelector((state) => state.loginIdentity);
+
+  //필요 데이터 유저네임,score,후기내용,리뷰등록시간, 등록한 유저Id
+  //등록한 유저 Id와 현재 로그인한 유저 Id가 같다면 editUserBoolean을 true로 만들어 줄 것.
+  const [editUserBoolean, setEditUserBoolean] = useState(false);
   useEffect(() => {}, []);
   return (
     <div className="flex justify-center w-full h-auto py-5 box-border gap-5">
@@ -14,7 +18,7 @@ export function AuthArticle() {
             <span className="text-base">{`userName`}</span>
             <span className="text-sm text-[#7d7d7d]">{`postTime`}</span>
           </div>
-          <DropDown />
+          <DropDown dropDownType="auth" boolean={editUserBoolean} />
         </div>
         <div className="w-full border-solid  mb-2">
           <Image
