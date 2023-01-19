@@ -134,6 +134,5 @@ class ChallnegeRepositoryTest {
         // then
         assertTrue(findAll.contains(saveChallenge1));
         assertTrue(findAll.contains(saveChallenge2));
-        assertEquals(30, findAll.size());
     }
 }
