@@ -30,27 +30,32 @@ export async function postUserSignUp({
     return e.response.status;
   }
 }
-export async function getUserEmailOverlapVerify(email: string) {
+
+export async function getUserEmailOverlapVerify(
+  email: string,
+): Promise<boolean> {
   try {
-    const response = await axios
-      .get<AxiosResponse<boolean>>(
+    const response: boolean = await axios
+      .get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/emails/check?email=${email}`,
       )
-      .then((res) => {
-        res.data;
-      });
+      .then((res) => res.data);
+    console.log(response);
     return response;
   } catch (e) {
     console.error(e);
   }
 }
-export async function getUsernameOverlapVerify(username: string) {
+export async function getUsernameOverlapVerify(
+  username: string,
+): Promise<boolean> {
   try {
-    const response = await axios
+    const response: boolean = await axios
       .get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/usernames/check?username=${username}`,
       )
       .then((res) => res.data);
+    console.log(response);
     return response;
   } catch (e) {
     console.error(e);
