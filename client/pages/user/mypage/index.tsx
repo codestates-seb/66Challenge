@@ -1,30 +1,32 @@
 import { useState, useEffect } from 'react';
 // import { getCookie } from '../../../module/cookies';
 import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../../ducks/store';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { FC } from 'react';
 
 const ProgressBar = styled.div`
   width: ${(props) => `${props.width}%`};
 `;
 
-export default function MyPage() {
+const MyPage: FC = () => {
   //   console.log(getCookie('accessJwtToken'));
-  const userId = useSelector((state) => state.loginIdentity.userId);
+  const userId = useAppSelector((state) => state.loginIdentity.userId);
   const [userInfo, setUserInfo] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
     axios(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`).then(
-      (data) => {
+      (data): void => {
         setUserInfo(data.data);
         console.log(data.data);
       },
     );
   }, []);
 
-  const handleHabitDetail = (id) => {
+  const handleHabitDetail = (id: number): void => {
     router.push(`/habit/detail/${id}`);
   };
   return (
@@ -51,9 +53,7 @@ export default function MyPage() {
             <div className="border-2 mx-2 h-12 rounded-xl flex flex-nowrap overflow-x-auto">
               {userInfo &&
                 userInfo.activeChallenges.map((e) => {
-
                   const progress = Math.ceil((e.authDays / 66) * 100);
-
 
                   return (
                     <button
@@ -101,4 +101,6 @@ export default function MyPage() {
       )}
     </>
   );
-}
+};
+
+export default MyPage;
