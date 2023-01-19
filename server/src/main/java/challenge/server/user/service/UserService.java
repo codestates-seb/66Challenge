@@ -1,9 +1,13 @@
 package challenge.server.user.service;
 
+import challenge.server.bookmark.entity.Bookmark;
+import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
+import challenge.server.habit.entity.Habit;
+import challenge.server.habit.repository.HabitRepository;
 import challenge.server.helper.event.UserRegistrationApplicationEvent;
 import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.security.utils.LoggedInUserInfoUtils;
@@ -14,6 +18,9 @@ import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +37,8 @@ import static challenge.server.challenge.entity.Challenge.Status.SUCCESS;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
+    private final BookmarkRepository bookmarkRepository;
+    private final HabitRepository habitRepository;
     private final ChallengeRepository challengeRepository;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
@@ -215,6 +224,26 @@ public class UserService {
         }
 
         return loggedInUserId;
+    }
+
+    // 회원이 찜한 습관들의 목록 출력
+    // todo 테스트 필요
+    public List<Habit> findBookmarkHabits(Long userId, int page, int size) {
+        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
+        Long loggedInUserId = verifyLoggedInUser(userId);
+
+        // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
+        User findUser = findUser(loggedInUserId);
+
+        List<Bookmark> bookmarks = bookmarkRepository.findAllByUserUserId(findUser.getUserId(), PageRequest.of(page - 1, size, Sort.by("habitId").descending())).getContent();
+
+        List<Habit> habits = new ArrayList<>();
+
+        for (int i = 0; i < bookmarks.size(); i++) {
+            habits.add(habitRepository.findById(bookmarks.get(i).getHabit().getHabitId()).get());
+        }
+
+        return habits;
     }
 
 }
