@@ -5,8 +5,11 @@ import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.bookmark.mapper.BookmarkMapper;
 import challenge.server.bookmark.service.BookmarkService;
 import challenge.server.challenge.dto.ChallengeDto;
+import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.dto.HabitDto;
 import challenge.server.habit.entity.Habit;
+import challenge.server.habit.mapper.HabitMapper;
+import challenge.server.habit.service.HabitService;
 import challenge.server.report.dto.ReportDto;
 import challenge.server.review.dto.ReviewDto;
 import io.swagger.annotations.Api;
@@ -16,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -32,33 +36,57 @@ public class HabitController {
     private final BookmarkService bookmarkService;
     private final BookmarkMapper bookmarkMapper;
 
+    private final HabitMapper mapper;
+    private final HabitService habitService;
+    private final FileUploadService fileUploadService;
+
     @ApiOperation(value = "습관 등록")
     @PostMapping
-    public ResponseEntity postHabit(@RequestBody @Valid HabitDto.Post habitPostDto) {
-        HabitDto.ResponseDetail responseDto = createResponseDetailDto();
-        return new ResponseEntity(responseDto, HttpStatus.CREATED);
+    public ResponseEntity postHabit(@RequestPart("thumbImg") MultipartFile thumbImg,
+                                    @RequestPart("succImg") MultipartFile succImg,
+                                    @RequestPart("failImg") MultipartFile failImg,
+                                    @RequestPart("data") @Valid HabitDto.Post habitPostDto) {
+        // TODO 이미지 파일 리스트로 받기
+        // TODO 아래 과정 컨트롤러 말고 DTO에서 처리하기
+        Habit habit = mapper.habitPostDtoToHabit(habitPostDto);
+        habit.setThumbImgUrl(fileUploadService.save(thumbImg));
+        habit.setThumbImgUrl(fileUploadService.save(succImg));
+        habit.setThumbImgUrl(fileUploadService.save(failImg));
+
+        // TODO mapper unmapped 필드 DTO에서 처리하기
+        Habit createHabit = habitService.createHabit(habit, habitPostDto.getCategory(), habitPostDto.getUserId());
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "습관 수정")
-    public ResponseEntity patchHabit(@RequestBody @Valid HabitDto.Patch habitPatchDto,
-            @PathVariable("habit-id") @Positive Long habitId) {
+    @PatchMapping("/{habit-id}")
+    public ResponseEntity patchHabit(@RequestPart(value = "thumbImg", required = false) MultipartFile thumbImg,
+                                     @RequestPart(value = "succImg", required = false) MultipartFile succImg,
+                                     @RequestPart(value = "failImg", required = false) MultipartFile failImg,
+                                     @RequestPart("data") @Valid HabitDto.Patch habitPatchDto,
+                                     @PathVariable("habit-id") @Positive Long habitId) {
 
-        HabitDto.ResponseDetail responseDto = createResponseDetailDto();
-        return new ResponseEntity(responseDto, HttpStatus.CREATED);
+        Habit habit = mapper.habitPatchDtoToHabit(habitPatchDto);
+        habit.setThumbImgUrl(fileUploadService.save(thumbImg));
+        habit.setThumbImgUrl(fileUploadService.save(succImg));
+        habit.setThumbImgUrl(fileUploadService.save(failImg));
+
+        Habit updateHabit = habitService.updateHabit(habit, habitPatchDto.getCategory(), habitPatchDto.getUserId());
+        return new ResponseEntity(mapper.habitToHabitResponseDetailDto(updateHabit), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "습관 삭제")
     @DeleteMapping("/{habit-id}")
     public ResponseEntity deleteHabit(@PathVariable("habit-id") @Positive Long habitId) {
-
+        habitService.deleteHabit(habitId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @ApiOperation(value = "습관 상세 조회")
     @GetMapping("/{habit-id}")
     public ResponseEntity getHabit(@PathVariable("habit-id") @Positive Long habitId) {
-        HabitDto.ResponseDetail responseDto = createResponseDetailDto();
-        return new ResponseEntity(responseDto, HttpStatus.OK);
+        Habit findHabit = habitService.findHabit(habitId);
+        return new ResponseEntity(mapper.habitToHabitResponseDetailDto(findHabit), HttpStatus.OK);
     }
 
     // 습관 조회 - 상세정보 탭 - 습관 시작하기 - Challenge DTO
@@ -154,10 +182,12 @@ public class HabitController {
     @ApiOperation(value="습관 검색", notes = "keyword를 작성해 검색하거나, 작성하지 않으면 습관 목록을 전체 조회합니다.")
     @GetMapping("/search")
     public ResponseEntity getAllByKeyword(@RequestParam(required = false) String keyword,
-                                           @RequestParam @Positive int page,
-                                           @RequestParam @Positive int size) {
-        List<HabitDto.Response> responses = List.of(createResponseDto(),createResponseDto(),createResponseDto(),createResponseDto());
-        return new ResponseEntity(responses, HttpStatus.OK);
+                                          @RequestParam @Positive int page,
+                                          @RequestParam @Positive int size) {
+        List<Habit> habits; // 테스트 필요
+        if(keyword==null) habits = habitService.findAll(page-1,size);
+        else habits = habitService.findAllByKeyword(keyword,page-1,size);
+        return new ResponseEntity(mapper.habitsToHabitResponseDtos(habits), HttpStatus.OK);
     }
 
     // 습관 검색(카테고리 조회) - 응답 DTO
@@ -166,8 +196,8 @@ public class HabitController {
     public ResponseEntity getAllByCategory(@PathVariable("category-id") Long categoryId,
                                             @RequestParam @Positive int page,
                                             @RequestParam @Positive int size) {
-        List<HabitDto.Response> responses = List.of(createResponseDto(),createResponseDto(),createResponseDto(),createResponseDto());
-        return new ResponseEntity(responses, HttpStatus.OK);
+        List<Habit> habits = habitService.findAllByCategory(categoryId,page-1,size);
+        return new ResponseEntity(mapper.habitsToHabitResponseDtos(habits), HttpStatus.OK);
     }
 
     // 습관 북마크 - 북마크 등록 or 취소 메시지

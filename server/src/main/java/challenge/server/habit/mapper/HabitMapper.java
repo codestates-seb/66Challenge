@@ -13,6 +13,8 @@ public interface HabitMapper {
     Habit habitPostDtoToHabit(HabitDto.Post post);
     Habit habitPatchDtoToHabit(HabitDto.Patch patch);
     List<HabitDto.Response> habitsToHabitResponseDtos(List<Habit> habits);
+
+    // TODO challengeStatus 필드 매핑
     HabitDto.ResponseDetail habitToHabitResponseDetailDto(Habit habit);
     Category typeToCategory(String type);
     String CategoryToType(Category category);

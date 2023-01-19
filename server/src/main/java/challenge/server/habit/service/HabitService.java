@@ -1,9 +1,12 @@
 package challenge.server.habit.service;
 
+import challenge.server.category.service.CategoryService;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
+import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.repository.HabitRepository;
+import challenge.server.user.service.UserService;
 import challenge.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -18,18 +21,27 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class HabitService {
 
-    private final HabitRepository habitRepository;
     private final CustomBeanUtils<Habit> beanUtils;
+    private final HabitRepository habitRepository;
+    private final CategoryService categoryService;
+    private final UserService userService;
+    private final FileUploadService fileUploadService;
 
+    // TODO Mapper unmapped 필드 매핑 후 매개변수 줄이기 & 불필요 메서드 제거
     @Transactional
-    public Habit createHabit(Habit habit) {
+    public Habit createHabit(Habit habit, String type, Long userId) {
+        habit.setCategory(categoryService.findByType(type));
+        habit.setHost(userService.findUser(userId));
         return habitRepository.save(habit);
     }
 
     @Transactional
-    public Habit updateHabit(Habit habit) {
+    public Habit updateHabit(Habit habit, String type, Long userId) {
         Habit findHabit = findVerifiedHabit(habit.getHabitId());
         Habit updatingHabit = beanUtils.copyNonNullProperties(habit,findHabit);
+
+        updatingHabit.setCategory(categoryService.findByType(type));
+        updatingHabit.setHost(userService.findUser(userId));
         return habitRepository.save(updatingHabit);
     }
 
@@ -64,6 +76,9 @@ public class HabitService {
     @Transactional
     public void deleteHabit(Long habitId) {
         Habit habit = findVerifiedHabit(habitId);
+        fileUploadService.delete(habit.getThumbImgUrl());
+        fileUploadService.delete(habit.getSuccImgUrl());
+        fileUploadService.delete(habit.getFailImgUrl());
         habitRepository.delete(habit);
     }
 

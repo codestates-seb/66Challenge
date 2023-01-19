@@ -10,8 +10,6 @@ import challenge.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Setter
 public class Habit extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +29,10 @@ public class Habit extends BaseTimeEntity {
     private String body;
     private LocalTime authStartTime;
     private LocalTime authEndTime;
+
+    private String thumbImgUrl;
+    private String succImgUrl;
+    private String failImgUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID")
