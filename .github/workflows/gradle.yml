@@ -34,7 +34,7 @@ jobs:
       - name: Set Yaml
         uses: microsoft/variable-substitution@v1
         with:
-          files: ./src/main/resources/application-server.yml 
+          files: ./server/src/main/resources/application-server.yml 
         env:
           jasypt.encryptor.key: ${{ secrets.JASYPT_PASSWORD }}
         
