@@ -29,7 +29,15 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-
+      
+      # Actions Secret의 복호화 키 사용
+      - name: Set Yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./src/main/resources/application-server.yml 
+        env:
+          jasypt.encryptor.key: ${{ secrets.JASYPT_PASSWORD }}
+        
       - name: Add permission
         run: chmod +x ./gradlew
 
