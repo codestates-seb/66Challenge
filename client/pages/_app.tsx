@@ -5,6 +5,7 @@ import type { ReactElement, ReactNode } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import Layout from '../components/layout/layout';
+import { LoadingIndicator } from '../components/loadingIndicator';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -18,7 +19,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
 
   return (
-    <PersistGate persistor={persistor} loading={<div>loading...</div>}>
+    <PersistGate persistor={persistor} loading={<LoadingIndicator />}>
       <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
     </PersistGate>
   );
