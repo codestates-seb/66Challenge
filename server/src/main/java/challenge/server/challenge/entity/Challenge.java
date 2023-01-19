@@ -11,6 +11,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class Challenge extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long challengeId;
 
-    private LocalDateTime lastPostedAt;
+    private LocalDateTime lastAuthAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
@@ -48,16 +49,25 @@ public class Challenge extends BaseTimeEntity {
     }
 
     public void updatePostedAt(LocalDateTime localDateTime) {
-        this.lastPostedAt = localDateTime;
+        this.lastAuthAt = localDateTime;
     }
 
     public Boolean successCheck() {
-        return this.getCreatedAt().toLocalDate().plusDays(66).equals(this.lastPostedAt.toLocalDate());
+        return this.getCreatedAt().toLocalDate().plusDays(66).equals(this.lastAuthAt.toLocalDate());
     }
 
-    public void todayAuthCheck(LocalDate localDate) {
-        if (this.lastPostedAt.toLocalDate().equals(localDate)) {
+    public void todayAuthCheck(LocalDateTime localDateTime) {
+        LocalTime startTime = this.habit.getAuthStartTime();
+        LocalTime endTime = this.habit.getAuthEndTime();
+
+        LocalDate nowDate = localDateTime.toLocalDate();
+        LocalTime nowTime = localDateTime.toLocalTime();
+
+        if (this.lastAuthAt.toLocalDate().equals(nowDate)) {
             throw new BusinessLogicException(ExceptionCode.AUTH_EXISTS);
+        }
+        if (nowTime.isBefore(startTime) || nowTime.isAfter(endTime)) {
+            throw new BusinessLogicException(ExceptionCode.AUTH_NOT_TIME);
         }
     }
 

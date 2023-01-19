@@ -35,7 +35,7 @@ public class FileUploadService {
         String contentType = multipartFile.getContentType();
 
         // 확장자가 jpeg, png인 파일들만 받아서 처리
-        if (ObjectUtils.isEmpty(contentType) | (!contentType.contains("image/jpeg") & !contentType.contains("image/png")))
+        if (ObjectUtils.isEmpty(contentType) || (!contentType.contains("image/jpeg") && !contentType.contains("image/png")))
             throw new BusinessLogicException(ExceptionCode.EXTENSION_IS_NOT_VAILD);
     }
 }

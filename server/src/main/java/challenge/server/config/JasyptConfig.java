@@ -3,15 +3,19 @@ package challenge.server.config;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class JasyptConfig {
 
+    @Value("${jasypt.encryptor.key}")
+    String key;
+
     @Bean(name = "jasyptStringEncryptor")
     public StringEncryptor stringEncryptor() {
-        String key = "key";
+
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
         config.setPassword(key);    // 암호화할 때 사용하는 키

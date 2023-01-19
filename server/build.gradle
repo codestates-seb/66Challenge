@@ -41,9 +41,6 @@ dependencies {
 	//S3 연계
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
-	//Awaitility
-	testImplementation group: 'org.awaitility', name: 'awaitility', version: '4.1.1'
-
 	//MapStruct
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
