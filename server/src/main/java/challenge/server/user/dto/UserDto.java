@@ -78,13 +78,16 @@ public class UserDto {
 
     @ApiModel(value = "비밀번호 확인 요청 시 전달")
     @Getter
+    @Setter // UserController
     @AllArgsConstructor
     @Builder
     @NoArgsConstructor
     public static class CheckPassword {
         @ApiModelProperty(example = "iAmUser01!", value = "회원의 비밀번호")
-        @Password
+        @NotSpace
         private String password;
+
+        private Long userId;
     }
 
     @ApiModel(value = "일정 회수 이상 신고 당한 회원 정지 처리 후 응답")

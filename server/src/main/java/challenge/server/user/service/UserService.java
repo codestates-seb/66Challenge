@@ -67,6 +67,22 @@ public class UserService {
         return existUsername;
     }
 
+    // 비밀번호 일치 여부 확인
+    // todo 10h25 Postman 테스트 시 항상 true -> 수정 필요
+    public Boolean verifyExistPassword(User user) {
+//        return passwordEncoder.encode(user.getPassword()) == findUser.getPassword();
+        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
+        User loggedInUser = loggedInUserInfoUtils.extractUser();
+        Long loggedInUserId = verifyLoggedInUser(user.getUserId());
+
+        // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
+        User findUser = findUser(loggedInUserId);
+
+        String loggedInUserPassword = loggedInUser.getPassword();
+
+        return loggedInUserPassword == findUser.getPassword();
+    }
+
     @Transactional
     public User createUser(User user) {
         //log.info("-------- createUser 중복 회원 검사 --------");
