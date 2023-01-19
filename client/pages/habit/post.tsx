@@ -9,9 +9,9 @@ interface HabitFormValues {
   category: string;
   authEndTime: string;
   authStartTime: string;
-  habitImage: any;
-  successImage: any;
-  failImage: any;
+  habitImage: File | null;
+  successImage: File | null;
+  failImage: File | null;
 }
 
 export type { HabitFormValues };
@@ -107,6 +107,8 @@ const Post = () => {
       formData.append('habitImage', habitImage[0]);
       formData.append('successImage', successImage[0]);
       formData.append('failImage', failImage[0]);
+
+      console.log(data);
 
       // 데이터 통신
       // reset();
