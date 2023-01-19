@@ -5,11 +5,11 @@ export function EditHabitBottomNav() {
   //게시글 클릭 유저의 상황에 따른 달라지는 네비게이션 현재는 임의로 조정
   //useState 초기 값은 getServerSideProps로 받아와 부여 할 생각 중 해봐야 알듯.
   const router = useRouter();
-  const startHabitHandle = () => {
+  const startHabitHandle = (): void => {
     //습관 시작 모달 호출 핸들
     //이미 진행 중인 유저는 하는 중이다 알려주는 모달 창 띄우기
   };
-  const editHabitHandle = () => {
+  const editHabitHandle = (): void => {
     //수정 페이지 이동해야함. 프롭스로 전달 예정 프롭스가 있을 경우 수정 페이지
   };
   return (

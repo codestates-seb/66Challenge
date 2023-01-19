@@ -1,17 +1,27 @@
 import { useState } from 'react';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+
+interface IBookMarkValue {
+  boolean: boolean;
+  animate: string;
+}
+
 export function StartHabitBottomNav() {
-  const [isBookMark, setIsBookMark] = useState(true);
-  const [animate, setAnimate] = useState('h-3/4 w-1/4 text-subColor ');
-  const bookMarkHandle = () => {
+  const [isBookMark, setIsBookMark] = useState<IBookMarkValue>({
+    boolean: false,
+    animate: 'h-3/4 w-1/4 text-subColor ',
+  });
+  const bookMarkHandle = (): void => {
     //login 여부 확인 후 false면 로그인 페이지로 경로 설정
     //북마크 관련 비동기 요청 함수
-    if (isBookMark === false) {
-      setAnimate(animate + 'animate-bookMark');
+    if (isBookMark.boolean === false) {
+      setIsBookMark({
+        boolean: true,
+        animate: isBookMark.animate + 'animate-bookMark',
+      });
     } else {
-      setAnimate('h-3/4 w-1/4 text-subColor ');
+      setIsBookMark({ boolean: false, animate: 'animate-bookMark' });
     }
-    setIsBookMark(!isBookMark);
   };
   const startHabitHandle = () => {
     //습관 시작 모달 호출 핸들
@@ -20,13 +30,13 @@ export function StartHabitBottomNav() {
 
   return (
     <div className="flex bg-white h-[3rem] px-6  w-full fixed bottom-0 border-t min-w[300px] justify-center items-center">
-      {isBookMark === false ? (
+      {isBookMark.boolean === false ? (
         <AiOutlineHeart
           className="h-3/4 w-1/4 text-subColor"
           onClick={bookMarkHandle}
         />
       ) : (
-        <AiFillHeart className={animate} onClick={bookMarkHandle} />
+        <AiFillHeart className={isBookMark.animate} onClick={bookMarkHandle} />
       )}
 
       <button

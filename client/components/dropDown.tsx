@@ -1,15 +1,22 @@
 import { useEffect, useState } from 'react';
 import { MdExpandMore } from 'react-icons/md';
 
-export function DropDown() {
-  const [arrowDirection, setArrowDirection] = useState({
+interface IarrowValue {
+  className: string;
+  boolean: boolean;
+}
+interface propsValue {
+  dropDownType: string;
+  boolean: boolean;
+}
+export function DropDown({ dropDownType, boolean }: propsValue) {
+  const [arrowDirection, setArrowDirection] = useState<IarrowValue>({
     className: '',
     boolean: false,
   });
-  const [isPostUser, setIsPostUser] = useState(true);
-  const upArrow = 'rotate-180 duration-500';
-  const downArrow = 'rotate-0';
-  const arrowDirectionHandle = () => {
+  const upArrow: string = 'rotate-180 duration-500';
+  const downArrow: string = 'rotate-0';
+  const arrowDirectionHandle = (): void => {
     if (arrowDirection.boolean === false) {
       setArrowDirection({ className: upArrow, boolean: true });
     } else {
@@ -19,14 +26,21 @@ export function DropDown() {
 
   //props로 넘겨받는거에서 인증글이냐,리뷰냐 판단하여 비동기 함수 조건부 호출
   const declarationHandle = () => {
-    //신고하기 호출
+    if (dropDownType === 'review') {
+      //리뷰 신고 비동기 함수 호출
+    } else if (dropDownType === 'auth') {
+      //인증 신고 비동기 함수 호출
+    }
   };
   const deleteAuthHandle = () => {
-    //삭제하기 호출
+    if (dropDownType === 'review') {
+      //리뷰 삭제 비동기 함수 호출
+    } else if (dropDownType === 'auth') {
+      //인증 삭제 비동기 함수 호출
+    }
   };
   useEffect(() => {
-    //만약 글을 작성한 사람이면 isPostUser를 true 값으로 바꿔준다.
-    //setIsPostuser(true);
+    dropDownType;
   }, []);
   return (
     <div className="flex flex-col w-[100px] items-end relative">
@@ -42,7 +56,7 @@ export function DropDown() {
           >
             신고하기
           </span>
-          {isPostUser === true ? (
+          {boolean === true ? (
             <span
               className="text-xs border-x border-b border-[#e5e5e5]  bg-white  text-center py-[5px]"
               onClick={deleteAuthHandle}

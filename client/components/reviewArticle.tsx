@@ -1,8 +1,14 @@
 import { DropDown } from './dropDown';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AiFillStar } from 'react-icons/ai';
+import { useAppSelector } from '../ducks/store';
 export const ReviewArticle = () => {
+  const { userId } = useAppSelector((state) => state.loginIdentity);
+
   //필요 데이터 유저네임,score,후기내용,리뷰등록시간, 등록한 유저Id
+  //등록한 유저 Id와 현재 로그인한 유저 Id가 같다면 editUserBoolean을 true로 만들어 줄 것.
+  const [editUserBoolean, setEditUserBoolean] = useState(false);
+
   useEffect(() => {}, []);
   return (
     <>
@@ -17,7 +23,7 @@ export const ReviewArticle = () => {
               </span>
               <span className="text-sm text-[#7d7d7d]">{`postTime`}</span>
             </div>
-            <DropDown />
+            <DropDown dropDownType="review" boolean={editUserBoolean} />
           </div>
           <div className=" w-full box-border flex flex-wrap">
             <span className="text-base break-all w-full">
