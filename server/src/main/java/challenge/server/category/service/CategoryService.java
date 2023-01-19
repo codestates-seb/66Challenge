@@ -33,6 +33,11 @@ public class CategoryService {
         return findVerifiedCategory(categoryId);
     }
 
+    public Category findByType(String type) {
+        return categoryRepository.findByType(type)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CATEGORY_NOT_FOUND));
+    }
+
     // 전체 카테고리 조회
     @Transactional
     public List<String> findAllTypes() {
