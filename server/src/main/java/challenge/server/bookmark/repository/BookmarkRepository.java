@@ -1,9 +1,12 @@
 package challenge.server.bookmark.repository;
 
 import challenge.server.bookmark.entity.Bookmark;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
+    Page<Bookmark> findAllByUserUserId(Long userId, Pageable pageable);
     /*
     특정 회원이 찜한 습관 조회
     select b.habit_id

@@ -1,5 +1,7 @@
 package challenge.server.user.mapper;
 
+import challenge.server.bookmark.entity.Bookmark;
+import challenge.server.habit.entity.Habit;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import org.mapstruct.Mapper;
@@ -34,6 +36,10 @@ public interface UserMapper {
     }
 
     default UserDto.DetailResponse detailsResultsToUserDetailResponseDto(List<Object> detailsResults) {
+        return null;
+    }
+
+    default List<UserDto.HabitResponse> habitsToUserDtoHabitResponses(List<Habit> habits) {
         return null;
     }
 }

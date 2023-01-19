@@ -1,5 +1,6 @@
 package challenge.server.user.controller;
 
+import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.habit.controller.HabitController;
 import challenge.server.habit.dto.HabitDto;
 import challenge.server.user.dto.UserDto;
@@ -93,13 +94,15 @@ public class UserController {
         //return new ResponseEntity<>(createUserDetailResponseDto(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "내가 진행 중인 습관의 카테고리 조회")
+    /*
+    @ApiOperation(value = "내가 진행 중인 습관의 카테고리 조회") // 회원 개인 정보 통합 조회(마이페이지) 시 함께 조회하도록 처리
     @GetMapping("/{user-id}/habits/categories")
     public ResponseEntity getActiveCategories(@PathVariable("user-id") @Positive Long userId) {
         // API 통신용
         List<UserDto.CategoryResponse> responseDtos = List.of(createCategoryResponseDto(), createCategoryResponseDto(), createCategoryResponseDto());
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
+     */
 
     /* bookmark(습관 찜하기) 등록 = habit controller에 해당 요청 처리하는 핸들러 메서드 postBookmark() 있음
     userId 및 habitId로 요청,
@@ -109,10 +112,15 @@ public class UserController {
     // 회원이 찜한 습관들의 목록 출력
     @ApiOperation(value = "회원이 찜한 습관들의 목록 출력")
     @GetMapping("/{user-id}/bookmarks")
-    public ResponseEntity getBookmarks(@PathVariable("user-id") @Positive Long userId) {
+    public ResponseEntity getBookmarks(@PathVariable("user-id") @Positive Long userId,
+                                       @RequestParam @Positive int page,
+                                       @RequestParam @Positive int size) {
+        List<Habit> habits = userService.findBookmarkHabits(userId, page, size);
+        return new ResponseEntity<>(userMapper.habitsToUserDtoHabitResponses(habits), HttpStatus.OK);
+
         // API 통신용
-        List<HabitDto.Response> responses = List.of(habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto());
-        return new ResponseEntity<>(responses, HttpStatus.OK);
+//        List<HabitDto.Response> responses = List.of(habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto());
+//        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
     @ApiOperation(value = "내가 만든 습관 조회")
