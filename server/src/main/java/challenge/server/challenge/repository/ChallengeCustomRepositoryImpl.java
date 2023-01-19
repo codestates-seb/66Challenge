@@ -37,8 +37,8 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
                 .selectFrom(challenge)
                 .where(
                         challenge.status.eq(CHALLENGE),
-                        challenge.lastPostedAt.notBetween(startDatetime, endDatetime)
-                        .or(challenge.lastPostedAt.isNull()))
+                        challenge.lastAuthAt.notBetween(startDatetime, endDatetime)
+                        .or(challenge.lastAuthAt.isNull()))
                 .fetch();
 
 

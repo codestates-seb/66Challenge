@@ -12,6 +12,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +28,8 @@ public class Habit extends BaseTimeEntity {
     private String title;
     private String subTitle;
     private String body;
-    private LocalDateTime authStartTime;
-    private LocalDateTime authEndTime;
+    private LocalTime authStartTime;
+    private LocalTime authEndTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID")

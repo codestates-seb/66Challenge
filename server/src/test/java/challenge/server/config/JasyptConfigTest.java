@@ -9,13 +9,13 @@ class JasyptConfigTest {
 
     @Test
     void jasypt() {
-        String region = "my_region";
+        String chb = "";
 
-        System.out.println(jasyptEncoding(region));
+
+        System.out.println(jasyptEncoding(chb));
     }
 
     public String jasyptEncoding(String value) {
-
         String key = "key";
         StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
         pbeEnc.setAlgorithm("PBEWithMD5AndDES");

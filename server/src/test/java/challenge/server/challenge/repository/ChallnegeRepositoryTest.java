@@ -5,15 +5,11 @@ import challenge.server.auth.repository.AuthRepository;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.challenge.entity.Wildcard;
 import challenge.server.config.TestConfig;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
@@ -111,7 +107,7 @@ class ChallnegeRepositoryTest {
     void notAuthTodayCheck() throws Exception {
         // given
         LocalDateTime localDateTime = LocalDateTime.of(2023, 1, 15, 1, 1, 1);
-        Challenge challenge1 = Challenge.builder().status(CHALLENGE).lastPostedAt(localDateTime).build();
+        Challenge challenge1 = Challenge.builder().status(CHALLENGE).lastAuthAt(localDateTime).build();
         Challenge saveChallenge1 = challengeRepository.save(challenge1);
         Challenge challenge2 = Challenge.builder().status(CHALLENGE).build();
         Challenge saveChallenge2 = challengeRepository.save(challenge2);
@@ -128,7 +124,7 @@ class ChallnegeRepositoryTest {
         findAll.forEach(challenge ->
                 System.out.print("챌린지 상태: " + challenge.getStatus() + "\n"
                         + "챌린지 Id: " + challenge.getChallengeId() + "\n"
-                        + "챌린지 마지막 인증 시간: " + challenge.getLastPostedAt() + "\n"
+                        + "챌린지 마지막 인증 시간: " + challenge.getLastAuthAt() + "\n"
                         + "-----------------------------------------------------\n"));
 
         // then
