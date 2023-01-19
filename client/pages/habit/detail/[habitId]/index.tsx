@@ -21,7 +21,7 @@ const HabitDetail: React.FC = () => {
         <div className="habit-detail-top-info p-5 border-b border-borderColor">
           <div className="habit-detail-title-container flex justify-between items-center mb-2 pt-5">
             <h2 className="habit-detail-title text-2xl font-bold">{`습관 제목`}</h2>
-            <DropDown />
+            <DropDown dropDownType="habit" boolean={false} />
           </div>
           <div className="habit-detail-metainfo-container flex items-center gap-2.5">
             <div className="habit-detail-postuser">{`게시한 유저 이름`}</div>
