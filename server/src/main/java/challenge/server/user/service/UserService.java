@@ -253,7 +253,7 @@ public class UserService {
         // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
         User findUser = findUser(loggedInUserId);
 
-        List<Habit> habits = habitRepository.findAllByHostUserId(findUser.getUserId(), PageRequest.of(page - 1, size, Sort.by("habitId").descending())).getContent();
+        List<Habit> habits = habitRepository.findByHostUserId(findUser.getUserId(), PageRequest.of(page - 1, size, Sort.by("habitId").descending())).getContent();
         return habits;
     }
 
