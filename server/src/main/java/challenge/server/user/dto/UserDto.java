@@ -253,7 +253,7 @@ public class UserDto {
         private Long challengeId;
         private String username;
         private String title;
-        private String createdAt;
-        private String completedAt;
+        private LocalDateTime createdAt;
+        private LocalDateTime completedAt;
     }
 }

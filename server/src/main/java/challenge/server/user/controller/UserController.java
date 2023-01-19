@@ -140,8 +140,11 @@ public class UserController {
     @GetMapping("/{user-id}/habits/{habit-id}/certificates")
     public ResponseEntity getHabitCertificate(@PathVariable("habit-id") @Positive Long habit_id,
                                               @PathVariable("user-id") @Positive Long user_id) {
+        UserDto.SuccessHabitCertificate successHabitCertificate = userService.issueHabitCertificate(user_id, habit_id);
+        return new ResponseEntity(successHabitCertificate, HttpStatus.OK);
+
         // API 통신용
-        return new ResponseEntity<>(createSucessHabitCertificate(), HttpStatus.OK);
+//        return new ResponseEntity<>(createSucessHabitCertificate(), HttpStatus.OK);
     }
 
     /* 2023.1.13(금) 15h10 habit controller가 처리하는 것이 맞음!
@@ -231,13 +234,13 @@ public class UserController {
                 .build();
     }
 
-    private UserDto.SuccessHabitCertificate createSucessHabitCertificate() {
-        return UserDto.SuccessHabitCertificate.builder()
-                .challengeId(1L)
-                .username("유저no1")
-                .title("새벽 4시30분 기상 - 미라클 모닝")
-                .createdAt("2022-04-10")
-                .completedAt("2022-06-15")
-                .build();
-    }
+//    private UserDto.SuccessHabitCertificate createSucessHabitCertificate() {
+//        return UserDto.SuccessHabitCertificate.builder()
+//                .challengeId(1L)
+//                .username("유저no1")
+//                .title("새벽 4시30분 기상 - 미라클 모닝")
+//                .createdAt("2022-04-10")
+//                .completedAt("2022-06-15")
+//                .build();
+//    }
 }
