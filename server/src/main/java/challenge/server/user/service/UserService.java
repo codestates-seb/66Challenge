@@ -25,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -102,6 +103,16 @@ public class UserService {
 
         publisher.publishEvent(new UserRegistrationApplicationEvent(savedUser)); // todo 회원 가입 시 이메일 전송 관련
         return savedUser;
+    }
+
+    @Transactional
+    public User addProfileImage(Long userId, MultipartFile multipartFile) {
+        User findUser = findVerifiedUser(userId);
+
+        String profileImageUrl = fileUploadService.save(multipartFile);
+        findUser.setProfileImageUrl(profileImageUrl);
+
+        return userRepository.save(findUser);
     }
 
     // 회원 정보를 수정하려는 사람이 해당 회원이 맞는지 검증하는 로직이 필요한가? 아니면 요청 받을 때 Access Token을 받으면 그걸로 충분한가? -> 2023.1.19(목) 멘토링3 = 후자

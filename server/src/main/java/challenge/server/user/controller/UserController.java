@@ -64,20 +64,21 @@ public class UserController {
         //return new ResponseEntity<>(createSimpleResponseDto(), HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "회원 프로필 사진 등록")
     @PostMapping("/{user-id}/profiles")
     public ResponseEntity postProfileImage(@PathVariable("user-id") @Positive Long userId,
-                                         @RequestPart("file") MultipartFile multipartFile,
-                                         @RequestPart("data") @Valid UserDto.Patch patchDto) {
-        String profileImageUrl = fileUploadService.save(multipartFile);
-        patchDto.setUserId(userId);
-        patchDto.setProfileImageUrl(profileImageUrl);
+                                         @RequestPart("file") MultipartFile multipartFile/*,
+                                         @RequestPart("data") @Valid UserDto.Patch patchDto*/) {
+        User userWithProfileImg = userService.addProfileImage(userId, multipartFile);
+        return new ResponseEntity<>(userMapper.userToUserSimpleResponseDto(userWithProfileImg), HttpStatus.OK);
 
-        String result = "파일 업로드 성공";
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        // API 통신용
+//        String result = "파일 업로드 성공";
+//        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation(value = "회원 정보 수정")
-    @PatchMapping(value = "/{user-id}", consumes = {"multipart/form-data"})
+    @PatchMapping(value = "/{user-id}"/*, consumes = {"multipart/form-data"}*/)
     public ResponseEntity patchUser(@PathVariable("user-id") @Positive Long userId,
                                     @RequestPart(value = "file", required = false) MultipartFile multipartFile,
                                     @RequestPart(value = "data", required = false) @Valid UserDto.Patch patchDto) {
