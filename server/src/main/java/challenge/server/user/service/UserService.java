@@ -6,6 +6,7 @@ import challenge.server.challenge.entity.Challenge;
 import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
+import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.repository.HabitRepository;
 import challenge.server.helper.event.UserRegistrationApplicationEvent;
@@ -47,6 +48,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final LoggedInUserInfoUtils loggedInUserInfoUtils;
+    private final FileUploadService fileUploadService;
 
     public Boolean verifyExistEmail(String email) {
         Boolean existEmail = false;
@@ -73,15 +75,13 @@ public class UserService {
     public Boolean verifyExistPassword(User user) {
 //        return passwordEncoder.encode(user.getPassword()) == findUser.getPassword();
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
-        User loggedInUser = loggedInUserInfoUtils.extractUser();
-        Long loggedInUserId = verifyLoggedInUser(user.getUserId());
+//        User loggedInUser = loggedInUserInfoUtils.extractUser();
+//        Long loggedInUserId = verifyLoggedInUser(user.getUserId());
+//        return loggedInUserPassword == findUser.getPassword();
 
         // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
-        User findUser = findUser(loggedInUserId);
-
-        String loggedInUserPassword = loggedInUser.getPassword();
-
-        return loggedInUserPassword == findUser.getPassword();
+        User findUser = findVerifiedUser(user.getUserId());
+        return passwordEncoder.matches(user.getPassword(), findUser.getPassword());
     }
 
     @Transactional
@@ -104,11 +104,37 @@ public class UserService {
         return savedUser;
     }
 
-    // todo 회원 정보를 수정하려는 사람이 해당 회원이 맞는지 검증하는 로직이 필요한가? 아니면 요청 받을 때 Access Token을 받으면 그걸로 충분한가?
+    // 회원 정보를 수정하려는 사람이 해당 회원이 맞는지 검증하는 로직이 필요한가? 아니면 요청 받을 때 Access Token을 받으면 그걸로 충분한가? -> 2023.1.19(목) 멘토링3 = 후자
     @Transactional/*(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)*/
     public User updateUser(User user) {
-        Long loggedInUserId = verifyLoggedInUser(user.getUserId());
-        User findUser = findVerifiedUser(loggedInUserId);
+//        Long loggedInUserId = verifyLoggedInUser(user.getUserId());
+//        User findUser = findVerifiedUser(loggedInUserId);
+        User findUser = findVerifiedUser(user.getUserId());
+
+        String oldImage = findUser.getProfileImageUrl();
+        String newImage = user.getProfileImageUrl();
+
+        // 기존 이미지가 있고 이번에 새로운 이미지를 업로드하려는 경우 = 이미지 수정
+        if (oldImage != null && newImage != null) {
+            // 기존 이미지 삭제
+            fileUploadService.delete(oldImage);
+
+            // 새로운 이미지 저장
+            findUser.setProfileImageUrl(newImage);
+        } else if (oldImage == null && newImage != null) { // else if 기존 이미지가 없고 새로운 이미지를 업로드하는 경우 = 이미지 추가
+            findUser.setProfileImageUrl(newImage);
+        } // else if 기존 이미지가 있고 새로운 이미지가 없는 경우 = 이미지 유지(변동 없음)
+        // else = 기존 이미지가 없고 새로운 이미지도 없는 경우 = 프로필 이미지 없음
+
+        /* todo 위 로직을 람다식으로 써보기
+        Optional.ofNullable(user.getProfileImageUrl())
+                        .ifPresent( if (oldImage != null) {
+                            fileUploadService.delete(oldImage);
+        }
+        profileImageUrl -> findUser.setProfileImageUrl(profileImageUrl);
+                        );
+         */
+
         Optional.ofNullable(user.getPassword())
                 .ifPresent(password -> findUser.setPassword(passwordEncoder.encode(password)));
         Optional.ofNullable(user.getUsername())
@@ -126,11 +152,13 @@ public class UserService {
 
     // 회원 개인 정보 통합 조회(마이페이지)
     public UserDto.UserDetailsDb findUserDetails(Long userId) {
-        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
+        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없는 로직
+        /*
         Long loggedInUserId = verifyLoggedInUser(userId);
-
         // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
         User findUser = findUser(loggedInUserId);
+         */
+        User findUser = findVerifiedUser(userId);
 
         // Querydsl 시도
 //        UserDto.UserDetailsDb userDetailsDb = userRepository.findUserDetails(userId);
@@ -151,10 +179,14 @@ public class UserService {
         List<Challenge> challenges = challengeRepository.findAllByUserUserIdAndStatusEqualsOrStatusEquals(findUser.getUserId(), CHALLENGE, SUCCESS);
 
         // 현재 진행 중인 챌린지 목록을 DB에서 받아옴 = select 쿼리3
-        List<Challenge> challengesInProgress = challengeRepository.findAllByUserUserIdAndStatus(findUser.getUserId(), CHALLENGE);
+        List<Challenge> challengesInProgress = challengeRepository.findAllByUserUserIdAndStatusOrderByChallengeIdAsc(findUser.getUserId(), CHALLENGE);
 
         // 현재 진행 중인 챌린지 중 가장 먼저 시작한 것 구하기
-        LocalDateTime firstChCreatedAt = challenges.get(0).getCreatedAt();
+        LocalDateTime earliestCreatedAt = LocalDateTime.now();
+        if (!challengesInProgress.isEmpty()) {
+            earliestCreatedAt = challengesInProgress.get(0).getCreatedAt();
+        }
+        /*
         LocalDateTime earliestCreatedAT = LocalDateTime.of(firstChCreatedAt.getYear(), firstChCreatedAt.getMonth(), firstChCreatedAt.getDayOfMonth(), firstChCreatedAt.getHour(), firstChCreatedAt.getMinute(), firstChCreatedAt.getSecond());
         for (int i = 1; i < challengesInProgress.size(); i++) {
             LocalDateTime thisDate = challengesInProgress.get(i).getCreatedAt();
@@ -164,16 +196,18 @@ public class UserService {
         }
 
         System.out.println(earliestCreatedAT); // 7h5 null -> setBiggestProgressDays 라인에서 null pointer exception 발생
+         */
 
         // 날짜 비교 실험
         LocalDateTime earliestCreatedAt1 = LocalDateTime.of(2023, 1, 15, 1, 1, 1);
-        System.out.println(today.compareTo(earliestCreatedAt1.truncatedTo(ChronoUnit.DAYS)) + 1); // 오늘-과거 비교 기대 값 = 5일 -> 7h 과거-오늘 비교로 실행 시 -1
+        System.out.println(today.compareTo(earliestCreatedAt1.truncatedTo(ChronoUnit.DAYS)) + 1); // 오늘(1/19)-과거 비교 기대 값 = 5일 -> 7h 과거-오늘 비교로 실행 시 -1
 
         // 마이페이지 상단 기본 정보 리턴할 것 준비
         userDetailsDb.setUserId(findUser.getUserId());
         userDetailsDb.setEmail(findUser.getEmail());
         userDetailsDb.setUsername(findUser.getUsername());
-        userDetailsDb.setBiggestProgressDays(today.compareTo(earliestCreatedAT.truncatedTo(ChronoUnit.DAYS)) + 1);
+        userDetailsDb.setProfileImageUrl(findUser.getProfileImageUrl());
+        userDetailsDb.setBiggestProgressDays(today.compareTo(earliestCreatedAt.truncatedTo(ChronoUnit.DAYS)) + 1);
 
         // 마이페이지 중간1 = '회원이 참여중, 참여완료한 습관목록을 서브타이틀로 표시'
         for (int i = 0; i < challenges.size(); i++) {
@@ -185,7 +219,9 @@ public class UserService {
             challengeDetailsDb.setChallengeId(ch.getChallengeId());
 
             // 챌린지 진행일
-            LocalDateTime chCreatedAt = LocalDateTime.of(ch.getCreatedAt().getYear(), ch.getCreatedAt().getMonth(), ch.getCreatedAt().getDayOfMonth(), ch.getCreatedAt().getHour(), ch.getCreatedAt().getMinute(), ch.getCreatedAt().getSecond());
+//            LocalDateTime chCreatedAt = LocalDateTime.of(ch.getCreatedAt().getYear(), ch.getCreatedAt().getMonth(), ch.getCreatedAt().getDayOfMonth(), ch.getCreatedAt().getHour(), ch.getCreatedAt().getMinute(), ch.getCreatedAt().getSecond());
+            LocalDateTime chCreatedAt = ch.getCreatedAt();
+//            System.out.println(chCreatedAt); // 2023.1.20(금) 14h10 '2022-07-04T21:08:55'와 같이 출력됨
 //            challengeDetailsDb.setCreatedAt(ch.getCreatedAt());
             challengeDetailsDb.setProgressDays(today.compareTo(chCreatedAt.truncatedTo(ChronoUnit.DAYS)) + 1);
 
@@ -225,7 +261,7 @@ public class UserService {
         return findVerifiedUser(userId);
     }
 
-    @Transactional(readOnly = true)
+    //    @Transactional(readOnly = true)
     public User findVerifiedUser(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         User findUser = optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
@@ -247,11 +283,13 @@ public class UserService {
     // 내가 만든 습관 조회
     // todo mapper 만들어서 테스트 필요(mapper 없이 응답 통신 가는 것은 Postman 확인 완료)
     public List<Habit> findHostHabits(Long userId, int page, int size) {
-        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
+        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없는 로직
+        /*
         Long loggedInUserId = verifyLoggedInUser(userId);
-
         // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
         User findUser = findUser(loggedInUserId);
+         */
+        User findUser = findVerifiedUser(userId);
 
         List<Habit> habits = habitRepository.findByHostUserId(findUser.getUserId(), PageRequest.of(page - 1, size, Sort.by("habitId").descending())).getContent();
         return habits;
@@ -260,11 +298,7 @@ public class UserService {
     // 인증서 발급
     // todo 테스트 필요
     public UserDto.SuccessHabitCertificate issueHabitCertificate(Long userId, Long habitId) {
-        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
-        Long loggedInUserId = verifyLoggedInUser(userId);
-
-        // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
-        User findUser = findUser(loggedInUserId);
+        User findUser = findVerifiedUser(userId);
 
         Optional<Challenge> optionalChallenge = challengeRepository.findByUserUserIdAndHabitHabitId(findUser.getUserId(), habitId);
         Challenge findChallenge = optionalChallenge.orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
@@ -284,13 +318,11 @@ public class UserService {
     // todo 회원 탈퇴했다가(quit 상태) 다시 가입하고자 하는 사람은 어떻게 하나? 회원 가입 시 quit 상태인 사람들은 받아주나, 아니면 새로운 이메일 주소로 가입해야 하나?
     @Transactional
     public void quitUser(Long userId) {
-        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
-        Long loggedInUserId = verifyLoggedInUser(userId);
+        User findUser = findVerifiedUser(userId);
+        fileUploadService.delete(findUser.getProfileImageUrl());
 
-        // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
-        User findUser = findUser(loggedInUserId);
         findUser.setStatus(QUIT);
-        System.out.println(findUser.getStatus().toString());
+//        System.out.println(findUser.getStatus().toString());
 
         userRepository.save(findUser);
     }

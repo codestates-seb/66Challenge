@@ -18,7 +18,7 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long>, Cha
     Page<Challenge> findAllByUserUserIdAndStatus(Long userId, Challenge.Status status, Pageable pageable);
 
     // user '마이페이지' 관련 추가
-    List<Challenge> findAllByUserUserIdAndStatus(Long userId, Challenge.Status status);
+    List<Challenge> findAllByUserUserIdAndStatusOrderByChallengeIdAsc(Long userId, Challenge.Status status);
 
     List<Challenge> findAllByUserUserIdAndStatusEqualsOrStatusEquals(Long userId, Challenge.Status status1, Challenge.Status status2);
 

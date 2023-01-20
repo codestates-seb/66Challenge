@@ -59,6 +59,9 @@ public class UserDto {
         @ApiModelProperty(example = "1", value = "회원의 식별자")
         private Long userId;
 
+        @NotSpace
+        private String profileImageUrl;
+
         @ApiModelProperty(example = "user1번", value = "회원의 닉네임")
         @NotSpace
         @Pattern(regexp = "[A-Za-z0-9가-힇]{2,20}",
@@ -170,6 +173,7 @@ public class UserDto {
         private Long userId;
         private String email;
         private String username;
+        private String profileImageUrl;
         //        private LocalDateTime earliestCreatedAt;
         private int biggestProgressDays;
         private List<UserDto.ChallengeDetailsDb> activeChallenges;
