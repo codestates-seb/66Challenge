@@ -1,6 +1,7 @@
 package challenge.server.user.controller;
 
 import challenge.server.bookmark.service.BookmarkService;
+import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -31,6 +33,7 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
     private final BookmarkService bookmarkService;
+    private final FileUploadService fileUploadService;
 
     @ApiOperation(value = "이메일 중복 여부 확인", notes = "true 응답 = 중복되는 이메일 존재 / false 응답 = 중복되는 이메일 없음")
     @GetMapping("/emails/check")
@@ -61,12 +64,26 @@ public class UserController {
         //return new ResponseEntity<>(createSimpleResponseDto(), HttpStatus.CREATED);
     }
 
+    @PostMapping("/{user-id}/profiles")
+    public ResponseEntity postProfileImage(@PathVariable("user-id") @Positive Long userId,
+                                         @RequestPart("file") MultipartFile multipartFile,
+                                         @RequestPart("data") @Valid UserDto.Patch patchDto) {
+        String profileImageUrl = fileUploadService.save(multipartFile);
+        patchDto.setUserId(userId);
+        patchDto.setProfileImageUrl(profileImageUrl);
+
+        String result = "파일 업로드 성공";
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @ApiOperation(value = "회원 정보 수정")
-    @PatchMapping("/{user-id}")
+    @PatchMapping(value = "/{user-id}", consumes = {"multipart/form-data"})
     public ResponseEntity patchUser(@PathVariable("user-id") @Positive Long userId,
-                                    @Valid @RequestBody UserDto.Patch requestBody) {
-        requestBody.setUserId(userId);
-        User user = userService.updateUser(userMapper.userPatchDtoToUser(requestBody));
+                                    @RequestPart(value = "file", required = false) MultipartFile multipartFile,
+                                    @RequestPart(value = "data", required = false) @Valid UserDto.Patch patchDto) {
+        if (multipartFile != null) patchDto.setProfileImageUrl(fileUploadService.save(multipartFile));
+        patchDto.setUserId(userId);
+        User user = userService.updateUser(userMapper.userPatchDtoToUser(patchDto));
         return new ResponseEntity<>(userMapper.userToUserPatchResponseDto(user), HttpStatus.OK);
 
         // API 통신용

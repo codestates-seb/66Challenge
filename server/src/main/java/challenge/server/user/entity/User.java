@@ -32,6 +32,8 @@ public class User extends BaseTimeEntity {
     @Column(length = 255, nullable = true)  // OAuth2 User 등록을 위해 Password nullable true로 변경
     private String password;
 
+    private String profileImageUrl;
+
     @Column(length = 255, nullable = false, unique = true)
     private String username;
 

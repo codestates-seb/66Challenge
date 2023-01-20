@@ -33,11 +33,12 @@ public class BookmarkService {
     // 회원이 찜한 습관들의 목록 출력
     // todo 테스트 필요
     public List<Habit> findBookmarkHabits(Long userId, int page, int size) {
-        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
-        Long loggedInUserId = userService.verifyLoggedInUser(userId);
+        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없음
+//        Long loggedInUserId = userService.verifyLoggedInUser(userId);
+        User findUser = userService.findVerifiedUser(userId);
 
         // Bookmark 테이블에서 해당 회원의 Bookmark 데이터를 다 받아옴
-        List<Bookmark> bookmarks = bookmarkRepository.findAllByUserUserId(loggedInUserId, PageRequest.of(page - 1, size, Sort.by("bookmarkId").descending())).getContent();
+        List<Bookmark> bookmarks = bookmarkRepository.findAllByUserUserId(findUser.getUserId(), PageRequest.of(page - 1, size, Sort.by("bookmarkId").descending())).getContent();
 
         List<Habit> habits = new ArrayList<>();
 
@@ -52,13 +53,10 @@ public class BookmarkService {
     // 북마크 추가
     @Transactional
     public Bookmark createBookmark(Long habitId, Long userId) {
-        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
-        Long loggedInUserId = userService.verifyLoggedInUser(userId);
-
         // 유효한 북마크가 될 수 있는지 확인
-        verifyBookmark(habitId, loggedInUserId);
+        verifyBookmark(habitId, userId);
 
-        User findUser = userRepository.findById(loggedInUserId).get();
+        User findUser = userRepository.findById(userId).get();
         Habit findHabit = habitRepository.findById(habitId).get();
 
         Bookmark bookmark = Bookmark.builder()
@@ -81,9 +79,6 @@ public class BookmarkService {
     @Transactional
     public void deleteBookmark(Long bookmarkId) {
         Bookmark findBookmark = findVerifiedBookmark(bookmarkId);
-
-        // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
-        Long loggedInUserId = userService.verifyLoggedInUser(findBookmark.getUser().getUserId());
 
         bookmarkRepository.delete(findBookmark);
     }
