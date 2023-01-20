@@ -5,7 +5,7 @@ import { postHabitReview } from '../../module/habitFunctionMoudules';
 import { useAppSelector } from '../../ducks/store';
 import { useRouter } from 'next/router';
 export function ReviewHabitBottomNav() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [value, setValue] = useState('');
   const [score, setScore] = useState(-1);
   const router = useRouter();
@@ -32,15 +32,7 @@ export function ReviewHabitBottomNav() {
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           buttonName="후기작성 완료"
-          onClick={(): void => {
-            postHabitReview({
-              userId,
-              habitId: Number(habitId),
-              body: value,
-              score: score + 1,
-            });
-            router.push(`/habit/detail/${habitId}/review`);
-          }}
+          onClick={() => console.log(userId, habitId, value)}
         >
           <form className="flex flex-col">
             <div className="flex items-center mb-4">
@@ -51,7 +43,7 @@ export function ReviewHabitBottomNav() {
                     <AiOutlineStar
                       key={idx}
                       onClick={() => scoreHandle(idx)}
-                      className="text-[20px] mr-1 "
+                      className="text-[20px] mr-1"
                     />
                   );
                 } else if (idx <= score) {
@@ -59,7 +51,7 @@ export function ReviewHabitBottomNav() {
                     <AiFillStar
                       key={idx}
                       onClick={() => scoreHandle(idx)}
-                      className="text-subColor text-[20px] mr-1 animate-bookMark"
+                      className="text-subColor text-[20px] mr-1"
                     />
                   );
                 }
@@ -74,7 +66,7 @@ export function ReviewHabitBottomNav() {
               </label>
               <textarea
                 id="reviewInput"
-                className="w-full h-40 border border-mainColor rounded-lg focus:outline-subColor "
+                className="w-full h-40 border border-mainColor rounded-lg "
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
               />

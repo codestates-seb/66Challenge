@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StartHabitBottomNav } from './startHabitBottomNav';
 import { EditHabitBottomNav } from './editHabitBottomNav';
 import { ReviewHabitBottomNav } from './reviewHabitBottomNav';
@@ -21,25 +21,12 @@ interface IhabitDetail {
 export function HabitPageBottomNav() {
   //user가 접근한 습관에 대해 시작 여부에 따른 분배
   const router = useRouter();
-  const { userId, isLogin } = useAppSelector((state) => state.loginIdentity);
-  const [habitId, setHabitId] = useState(0);
-  const a = 3;
+  const { userId } = useAppSelector((state) => state.loginIdentity);
+  const habitId: string | string[] = router.query.habitId;
+  const a = 1;
 
-  const id = useMemo(() => {
-    const id = router.query.habitId;
-    return id;
-  }, [router.query.habitId]);
-  useEffect(() => {
-    setHabitId(() => (id !== undefined ? Number(router.query.habitId) : 0));
-  }, [id]);
-  if (isLogin === false || a === 3) {
-    return (
-      <StartHabitBottomNav
-        habitId={habitId}
-        userId={userId}
-        isLogin={isLogin}
-      />
-    );
+  if (a === 3) {
+    return <StartHabitBottomNav />;
   } else if (a === 2) {
     return <EditHabitBottomNav />;
   } else {
