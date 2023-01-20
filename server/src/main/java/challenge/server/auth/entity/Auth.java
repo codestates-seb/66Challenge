@@ -17,7 +17,11 @@ public class Auth extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long authId;
+
+    @Column(nullable = false)
     private String body;
+
+    @Column(nullable = false)
     private String authImageUrl;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CHALLENGE_ID")
