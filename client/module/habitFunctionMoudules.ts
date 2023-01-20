@@ -11,12 +11,13 @@ import type {
   getHabitsSearchProps,
   getHabitsSearchCategoryProps,
 } from './moduleInterface';
-export async function postHabit({ data, cookie }: postHabitProps) {
+import { getCookie } from './cookies';
+export async function postHabit({ data }: postHabitProps) {
   try {
     const response = await axios
       .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits`, data, {
         headers: {
-          Authorization: cookie,
+          Authorization: getCookie('accessJwtToken'),
         },
       })
       .then((res) => console.log(res));
@@ -35,12 +36,12 @@ export async function getHabitDetail(habitId: string) {
     console.error(e);
   }
 }
-export async function deleteHabit({ cookie, habitId }: deleteHabitProps) {
+export async function deleteHabit({ habitId }: deleteHabitProps) {
   try {
     const response = await axios
       .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}`, {
         headers: {
-          Authorization: cookie,
+          Authorization: getCookie('accessJwtToken'),
         },
       })
       .then((res) => console.log(res));
@@ -70,7 +71,6 @@ export async function getHabitAuths({
 export async function postAuthReport({
   habitId,
   authReportPostDto,
-  cookie,
   authId,
 }: postAuthReportProps) {
   try {
@@ -80,7 +80,7 @@ export async function postAuthReport({
         authReportPostDto,
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -90,11 +90,7 @@ export async function postAuthReport({
     console.error(e);
   }
 }
-export async function postBookMark({
-  habitId,
-  cookie,
-  userId,
-}: habitGeneralProps) {
+export async function postBookMark({ habitId, userId }: habitGeneralProps) {
   try {
     const response = await axios
       .post(
@@ -102,7 +98,7 @@ export async function postBookMark({
         null,
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -112,18 +108,14 @@ export async function postBookMark({
     console.error(e);
   }
 }
-export async function deleteBookMark({
-  habitId,
-  cookie,
-  userId,
-}: habitGeneralProps) {
+export async function deleteBookMark({ habitId, userId }: habitGeneralProps) {
   try {
     const response = await axios
       .delete(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/bookmarks?userId=${userId}`,
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -135,7 +127,6 @@ export async function deleteBookMark({
 }
 export async function postStartChallenge({
   habitId,
-  cookie,
   userId,
 }: habitGeneralProps) {
   try {
@@ -145,7 +136,7 @@ export async function postStartChallenge({
         null,
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -155,11 +146,7 @@ export async function postStartChallenge({
     console.error(e);
   }
 }
-export async function postHabitReport({
-  habitId,
-  cookie,
-  userId,
-}: habitGeneralProps) {
+export async function postHabitReport({ habitId, userId }: habitGeneralProps) {
   try {
     const response = await axios
       .post(
@@ -167,7 +154,7 @@ export async function postHabitReport({
         { habitId, reportType: 'ABUSE', reporter: userId },
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -195,7 +182,6 @@ export async function getHabitReviews({
 }
 export async function postHabitReview({
   habitId,
-  cookie,
   userId,
   body,
   score,
@@ -208,7 +194,7 @@ export async function postHabitReview({
         { body, score },
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -220,7 +206,6 @@ export async function postHabitReview({
 }
 export async function deleteHabitReview({
   habitId,
-  cookie,
   reviewId,
 }: deleteHabitReviewProps) {
   try {
@@ -229,7 +214,7 @@ export async function deleteHabitReview({
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews/${reviewId}`,
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -241,7 +226,6 @@ export async function deleteHabitReview({
 }
 export async function patchHabitReview({
   habitId,
-  cookie,
   reviewId,
   body,
   score,
@@ -253,7 +237,7 @@ export async function patchHabitReview({
         { body, score, reviewId },
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -265,7 +249,6 @@ export async function patchHabitReview({
 }
 export async function postHabitReviewReport({
   habitId,
-  cookie,
   reviewId,
 }: deleteHabitReviewProps) {
   try {
@@ -275,7 +258,7 @@ export async function postHabitReviewReport({
         {},
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
