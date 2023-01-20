@@ -12,6 +12,7 @@ import type {
 4. then 뒷부분 console.log 로 받아오는 데이터를 확인한다.
 5. 확인 후 리턴해야 할 값을 명확히 적는다.
 6. 끝 */
+import { getCookie } from './cookies';
 export async function postUserSignUp({
   email,
   username,
@@ -30,38 +31,43 @@ export async function postUserSignUp({
     return e.response.status;
   }
 }
-export async function getUserEmailOverlapVerify(email: string) {
+
+export async function getUserEmailOverlapVerify(
+  email: string,
+): Promise<boolean> {
   try {
-    const response = await axios
-      .get<AxiosResponse<boolean>>(
+    const response: boolean = await axios
+      .get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/emails/check?email=${email}`,
       )
-      .then((res) => {
-        res.data;
-      });
+      .then((res) => res.data);
+    console.log(response);
     return response;
   } catch (e) {
     console.error(e);
   }
 }
-export async function getUsernameOverlapVerify(username: string) {
+export async function getUsernameOverlapVerify(
+  username: string,
+): Promise<boolean> {
   try {
-    const response = await axios
+    const response: boolean = await axios
       .get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/usernames/check?username=${username}`,
       )
       .then((res) => res.data);
+    console.log(response);
     return response;
   } catch (e) {
     console.error(e);
   }
 }
-export async function getUserInfo({ cookie, userId }: UserGeneralProps) {
+export async function getUserInfo({ userId }: UserGeneralProps) {
   try {
     const response = await axios
       .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, {
         headers: {
-          Authorization: cookie,
+          Authorization: getCookie('accessJwtToken'),
         },
       })
       .then((res) => console.log(res));
@@ -70,12 +76,12 @@ export async function getUserInfo({ cookie, userId }: UserGeneralProps) {
     console.error(e);
   }
 }
-export async function deleteUser({ cookie, userId }: UserGeneralProps) {
+export async function deleteUser({ userId }: UserGeneralProps) {
   try {
     const response = await axios
       .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, {
         headers: {
-          Authorization: cookie,
+          Authorization: getCookie('accessJwtToken'),
         },
       })
       .then((res) => console.log(res));
@@ -85,7 +91,6 @@ export async function deleteUser({ cookie, userId }: UserGeneralProps) {
   }
 }
 export async function patchUserInfo({
-  cookie,
   userId,
   username,
   password,
@@ -101,7 +106,7 @@ export async function patchUserInfo({
         },
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -112,7 +117,6 @@ export async function patchUserInfo({
   }
 }
 export async function getUserCertificate({
-  cookie,
   userId,
   habitId,
 }: getUserCertificateProps) {
@@ -122,7 +126,7 @@ export async function getUserCertificate({
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/${habitId}/certificates`,
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -132,17 +136,14 @@ export async function getUserCertificate({
     console.error(e);
   }
 }
-export async function getUserHabitsCategories({
-  cookie,
-  userId,
-}: UserGeneralProps) {
+export async function getUserHabitsCategories({ userId }: UserGeneralProps) {
   try {
     const response = await axios
       .get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/categories`,
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -152,14 +153,14 @@ export async function getUserHabitsCategories({
     console.error(e);
   }
 }
-export async function getUserHabitsHosts({ cookie, userId }: UserGeneralProps) {
+export async function getUserHabitsHosts({ userId }: UserGeneralProps) {
   try {
     const response = await axios
       .get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/hosts`,
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -169,14 +170,14 @@ export async function getUserHabitsHosts({ cookie, userId }: UserGeneralProps) {
     console.error(e);
   }
 }
-export async function getPasswordCheck({ cookie, userId }: UserGeneralProps) {
+export async function getPasswordCheck({ userId }: UserGeneralProps) {
   try {
     const response = await axios
       .get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/passwords/check`,
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )

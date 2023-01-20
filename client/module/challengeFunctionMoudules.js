@@ -1,3 +1,4 @@
+import { getCookie } from './cookies';
 // export async function getAllChallenges(page, size) {
 //   try {
 //     const response = await axios
@@ -51,7 +52,7 @@ export async function postAuth({ challengeId, body, cookie }) {
         { body },
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -61,14 +62,14 @@ export async function postAuth({ challengeId, body, cookie }) {
     console.error(e);
   }
 }
-export async function deleteAuth({ cookie, challengeId, authId }) {
+export async function deleteAuth({ challengeId, authId }) {
   try {
     const response = await axios
       .delete(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/${challengeId}/auths/${authId}`,
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -78,7 +79,7 @@ export async function deleteAuth({ cookie, challengeId, authId }) {
     console.error(e);
   }
 }
-export async function patchAuths({ cookie, challengeId, authId, body }) {
+export async function patchAuths({ challengeId, authId, body }) {
   try {
     const response = await axios
       .patch(
@@ -86,7 +87,7 @@ export async function patchAuths({ cookie, challengeId, authId, body }) {
         { authId, body },
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -96,14 +97,14 @@ export async function patchAuths({ cookie, challengeId, authId, body }) {
     console.error(e);
   }
 }
-export async function getUserChallenges(userId, cookie, page, size) {
+export async function getUserChallenges(userId, page, size) {
   try {
     const response = await axios
       .get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/users/${userId}?page=${page}&size=${size}`,
         {
           headers: {
-            Authorization: cookie,
+            Authorization: getCookie('accessJwtToken'),
           },
         },
       )

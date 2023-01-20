@@ -52,7 +52,6 @@ export const Modal = ({
   const closeModalHandler = () => {
     setIsOpen(!isOpen);
   };
-
   return (
     <div className="modal-container">
       <div
