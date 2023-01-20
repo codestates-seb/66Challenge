@@ -5,13 +5,19 @@ import { useAppSelector } from '../ducks/store';
 
 interface authArticleProps {
   authId: number;
+  author: string;
+  authUserId: number;
   body: string;
   createdAt: string;
   authImageUrl: string;
 }
 
+export type { authArticleProps };
+
 export function AuthArticle({
   authId,
+  author,
+  authUserId,
   body,
   createdAt,
   authImageUrl,
@@ -27,7 +33,7 @@ export function AuthArticle({
       <div className="flex flex-col relative items-center  w-full">
         <div className="auth-article-header w-full flex justify-between items-center mb-2 ">
           <div className="flex w-full gap-2.5 items-center">
-            <span className="text-base">{`userName`}</span>
+            <span className="text-base">{author}</span>
             <span className="text-sm text-[#7d7d7d]">{`postTime`}</span>
           </div>
           <DropDown dropDownType="auth" boolean={editUserBoolean} />
