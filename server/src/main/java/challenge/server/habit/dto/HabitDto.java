@@ -4,18 +4,22 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+
 public class HabitDto {
     @ApiModel(value = "습관 등록 요청 시 전달")
     @Getter
     @Setter
     public static class Post {
         @ApiModelProperty(example = "1", value = "유저(습관 작성자) 식별자")
+        @NotNull
         private Long userId;
         @ApiModelProperty(example = "매일매일 일기 쓰기")
         private String title;
         @ApiModelProperty(example = "매일일기")
         private String subTitle;
         @ApiModelProperty(example = "자기계발")
+        @NotNull
         private String category;
         @ApiModelProperty(example = "매일매일 일기를 작성해서 훌륭한 어른이 됩시다.")
         private String body;
@@ -25,11 +29,6 @@ public class HabitDto {
         private String authStartTime;
         @ApiModelProperty(example = "24:00")
         private String authEndTime;
-
-        // TODO DTO 상 이미지 분리하기
-        private String thumbImgUrl;
-        private String succImgUrl;
-        private String failImgUrl;
     }
 
     @ApiModel(value = "습관 수정 요청 시 전달")
@@ -37,14 +36,14 @@ public class HabitDto {
     @Setter
     public static class Patch {
         @ApiModelProperty(example = "1",value = "습관 식별자")
+        @NotNull
         private Long habitId;
-        @ApiModelProperty(example = "1", value = "유저(습관 작성자) 식별자")
-        private Long userId;
         @ApiModelProperty(example = "매일매일 일기 쓰기")
         private String title;
         @ApiModelProperty(example = "매일일기")
         private String subTitle;
         @ApiModelProperty(example = "자기계발")
+        @NotNull
         private String category;
         @ApiModelProperty(example = "매일매일 일기를 작성해서 훌륭한 어른이 됩시다.")
         private String body;
@@ -54,10 +53,6 @@ public class HabitDto {
         private String authStartTime;
         @ApiModelProperty(example = "24:00")
         private String authEndTime;
-
-        private String thumbImgUrl;
-        private String succImgUrl;
-        private String failImgUrl;
     }
 
 
@@ -110,6 +105,7 @@ public class HabitDto {
         private Boolean isBooked;
         private String challengeStatus;
 
+        // TODO 응답 DTO 상 이미지 분리하기
         private String thumbImgUrl;
         private String succImgUrl;
         private String failImgUrl;
