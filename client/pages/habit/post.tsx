@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { FileUploader } from '../../components/fileUploader';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface HabitFormValues {
   title: string;
@@ -9,14 +9,46 @@ interface HabitFormValues {
   category: string;
   authEndTime: string;
   authStartTime: string;
+  habitImage: File | null;
+  successImage: File | null;
+  failImage: File | null;
 }
 
 export type { HabitFormValues };
 
 const Post = () => {
-  const { register, handleSubmit, getValues, setFocus, reset } =
+  const { register, handleSubmit, getValues, setFocus, watch, reset } =
     useForm<HabitFormValues>();
-  const [imgFile, setImgFile] = useState('');
+
+  const { habitImage, successImage, failImage } = watch();
+  const [habitImagePreview, setHabitImagePreview] = useState('');
+  const [successImagePreview, setSuccessImagePreview] = useState('');
+  const [failImagePreview, setFailImagePreview] = useState('');
+
+  useEffect(() => {
+    if (habitImage && habitImage.length > 0) {
+      setVerify({ ...verify, habitImageVerify: 'success' });
+      const file = habitImage[0];
+      setHabitImagePreview(URL.createObjectURL(file));
+    }
+  }, [habitImage]);
+
+  useEffect(() => {
+    if (successImage && successImage.length > 0) {
+      setVerify({ ...verify, successImageVerify: 'success' });
+      const file = successImage[0];
+      setSuccessImagePreview(URL.createObjectURL(file));
+    }
+  }, [successImage]);
+
+  useEffect(() => {
+    if (failImage && failImage.length > 0) {
+      setVerify({ ...verify, failImageVerify: 'success' });
+      const file = failImage[0];
+      setFailImagePreview(URL.createObjectURL(file));
+    }
+  }, [failImage]);
+
   const [verify, setVerify] = useState({
     titleVerify: '',
     subtitleVerify: '',
@@ -24,6 +56,8 @@ const Post = () => {
     habitImageVerify: '',
     bodyVerify: '',
     authTimeVerify: 'success',
+    successImageVerify: '',
+    failImageVerify: '',
     agreeVerify: 'fail',
   });
 
@@ -40,8 +74,17 @@ const Post = () => {
   };
 
   const postButtonClick = (data: HabitFormValues) => {
-    const { title, subtitle, body, category, authEndTime, authStartTime } =
-      data;
+    const {
+      title,
+      subtitle,
+      body,
+      category,
+      authEndTime,
+      authStartTime,
+      habitImage,
+      successImage,
+      failImage,
+    } = data;
 
     if (titleRegExp.test(title) === false) {
       setVerify({ ...verify, titleVerify: 'fail' });
@@ -49,15 +92,30 @@ const Post = () => {
       setVerify({ ...verify, subtitleVerify: 'fail' });
     } else if (category === 'default') {
       setVerify({ ...verify, categoryVerify: 'fail' });
-    } else if (imgFile.length === 0) {
+    } else if (habitImage.length === 0) {
       setVerify({ ...verify, habitImageVerify: 'fail' });
     } else if (bodyRegExp.test(body) === false) {
       setVerify({ ...verify, bodyVerify: 'fail' });
     } else if (authStartTime < authEndTime === false) {
       setVerify({ ...verify, authTimeVerify: 'fail' });
+    } else if (successImage.length === 0) {
+      setVerify({ ...verify, successImageVerify: 'fail' });
+    } else if (failImage.length === 0) {
+      setVerify({ ...verify, failImageVerify: 'fail' });
     } else {
+      const formData = new FormData();
+      formData.append('habitImage', habitImage[0]);
+      formData.append('successImage', successImage[0]);
+      formData.append('failImage', failImage[0]);
+
+      console.log(data);
+
       // 데이터 통신
       // reset();
+      // console.log(habitImage[0]);
+      // for (let value of formData.values()) {
+      //   console.log(value);
+      // }
     }
   };
 
@@ -71,7 +129,7 @@ const Post = () => {
 
   const InputElKeyEvent = (
     e: React.KeyboardEvent<HTMLElement>,
-    nextInput: nextInput,
+    nextInput?: nextInput,
   ): void => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -193,12 +251,8 @@ const Post = () => {
         <div className="habit-image-input-wrapper flex flex-col mb-5 min-h-[245px]">
           <div className="text-base font-semibold mb-1">습관 메인 사진</div>
           <FileUploader
-            imgFile={imgFile}
-            setImgFile={setImgFile}
-            uploadController={() => {
-              setVerify({ ...verify, habitImageVerify: 'success' });
-              setFocus('body');
-            }}
+            imgFilePreview={habitImagePreview}
+            register={register('habitImage')}
           />
           {verify.habitImageVerify === 'fail' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
@@ -257,6 +311,9 @@ const Post = () => {
               type="time"
               className={`h-[70px] text-base w-full rounded-tr-md text-center bg-slate-50 rounded-br-md px-2 pt-[30px] border focus:border-mainColor outline-0 mb-1`}
               defaultValue="23:59"
+              onKeyDown={(e) => {
+                InputElKeyEvent(e);
+              }}
               {...register('authEndTime', {
                 onBlur: () => {
                   blurHandle(
@@ -276,6 +333,33 @@ const Post = () => {
           {verify.authTimeVerify === 'fail' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
               인증 시작시간은 종료시간 보다 이전이어야 합니다.
+            </span>
+          ) : null}
+        </div>
+
+        <div className="habit-auth-image-input-wrapper flex flex-col mb-5 min-h-[245px]">
+          <div className="text-base font-semibold mb-1">습관 인증 사진</div>
+          <div className="flex flex-col">
+            <div className="text-center text-green-600 py-2.5 text-sm font-bold">
+              올바른 인증 사례
+            </div>
+            <FileUploader
+              imgFilePreview={successImagePreview}
+              register={register('successImage')}
+            />
+            <div className="text-center text-rose-600 pt-5 pb-2.5 text-sm font-bold">
+              잘못된 인증 사례
+            </div>
+            <FileUploader
+              imgFilePreview={failImagePreview}
+              register={register('failImage')}
+            />
+          </div>
+          {verify.successImageVerify === 'fail' ||
+          verify.failImageVerify === 'fail' ? (
+            <span className="block text-subColor text-[13px] h-[13px] ">
+              습관 형성을 위한 인증 사진의 올바른 사례와 잘못된 사례에 대한
+              이미지를 모두 업로드 해주세요.
             </span>
           ) : null}
         </div>
