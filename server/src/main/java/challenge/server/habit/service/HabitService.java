@@ -27,21 +27,16 @@ public class HabitService {
     private final UserService userService;
     private final FileUploadService fileUploadService;
 
-    // TODO Mapper unmapped 필드 매핑 후 매개변수 줄이기 & 불필요 메서드 제거
     @Transactional
-    public Habit createHabit(Habit habit, String type, Long userId) {
-        habit.setCategory(categoryService.findByType(type));
-        habit.setHost(userService.findUser(userId));
+    public Habit createHabit(Habit habit) {
         return habitRepository.save(habit);
     }
 
     @Transactional
-    public Habit updateHabit(Habit habit, String type, Long userId) {
+    public Habit updateHabit(Habit habit) {
         Habit findHabit = findVerifiedHabit(habit.getHabitId());
         Habit updatingHabit = beanUtils.copyNonNullProperties(habit,findHabit);
 
-        updatingHabit.setCategory(categoryService.findByType(type));
-        updatingHabit.setHost(userService.findUser(userId));
         return habitRepository.save(updatingHabit);
     }
 

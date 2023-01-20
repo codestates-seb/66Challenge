@@ -8,7 +8,7 @@ import challenge.server.challenge.dto.ChallengeDto;
 import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.dto.HabitDto;
 import challenge.server.habit.entity.Habit;
-import challenge.server.habit.mapper.HabitMapper;
+import challenge.server.habit.mapper.HabitMapperImpl;
 import challenge.server.habit.service.HabitService;
 import challenge.server.report.dto.ReportDto;
 import challenge.server.review.dto.ReviewDto;
@@ -36,7 +36,7 @@ public class HabitController {
     private final BookmarkService bookmarkService;
     private final BookmarkMapper bookmarkMapper;
 
-    private final HabitMapper mapper;
+    private final HabitMapperImpl mapper;
     private final HabitService habitService;
     private final FileUploadService fileUploadService;
 
@@ -53,9 +53,8 @@ public class HabitController {
         habit.setThumbImgUrl(fileUploadService.save(succImg));
         habit.setThumbImgUrl(fileUploadService.save(failImg));
 
-        // TODO mapper unmapped 필드 DTO에서 처리하기
-        Habit createHabit = habitService.createHabit(habit, habitPostDto.getCategory(), habitPostDto.getUserId());
-        return new ResponseEntity(HttpStatus.CREATED);
+        Habit createHabit = habitService.createHabit(habit);
+        return new ResponseEntity(mapper.habitToHabitResponseDetailDto(createHabit), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "습관 수정")
@@ -67,11 +66,11 @@ public class HabitController {
                                      @PathVariable("habit-id") @Positive Long habitId) {
 
         Habit habit = mapper.habitPatchDtoToHabit(habitPatchDto);
-        habit.setThumbImgUrl(fileUploadService.save(thumbImg));
-        habit.setThumbImgUrl(fileUploadService.save(succImg));
-        habit.setThumbImgUrl(fileUploadService.save(failImg));
+        if(thumbImg!=null) habit.setThumbImgUrl(fileUploadService.save(thumbImg));
+        if(succImg!=null) habit.setThumbImgUrl(fileUploadService.save(succImg));
+        if(failImg!=null) habit.setThumbImgUrl(fileUploadService.save(failImg));
 
-        Habit updateHabit = habitService.updateHabit(habit, habitPatchDto.getCategory(), habitPatchDto.getUserId());
+        Habit updateHabit = habitService.updateHabit(habit);
         return new ResponseEntity(mapper.habitToHabitResponseDetailDto(updateHabit), HttpStatus.CREATED);
     }
 

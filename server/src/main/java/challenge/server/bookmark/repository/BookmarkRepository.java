@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     Page<Bookmark> findAllByUserUserId(Long userId, Pageable pageable);
     /*
@@ -20,4 +22,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     on b.habit_id = h.habit_id
     where h.host_id = # && b.user_id = #;
      */
+    // 특정 회원이 찜한 습관 조회기능이 필요하여 추가했습니다. 쿼리 사용하게 되신다면 삭제해주세요.
+    Optional<Bookmark> findByUserUserIdAndHabitHabitId(Long userId, Long habitId);
 }

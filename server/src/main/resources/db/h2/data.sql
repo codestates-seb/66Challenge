@@ -1,5 +1,5 @@
-insert into category (type) values (1);
-insert into category (type) values (2);
+insert into category (type) values ('자기계발');
+insert into category (type) values ('운동');
 insert into users (email, password, username) values ('jpetran0@google.cn', 'Ju9skkz', 'bhellwing0');
 insert into users (email, password, username) values ('svanderwalt1@sciencedirect.com', 'SPLcH1AJRR', 'mcrighton1');
 insert into users (email, password, username) values ('jbaudacci2@twitpic.com', 'moMZriaon', 'mnormand2');
@@ -20,11 +20,10 @@ insert into users (email, password, username) values ('fpuffettg@domainmarket.co
 insert into users (email, password, username) values ('okincaidh@cyberchimps.com', 'bO5DUc0BAlTn', 'fgustickeh');
 insert into users (email, password, username) values ('rgamlyni@squarespace.com', 'IfwR8YDcItJ', 'dclingoei');
 insert into users (email, password, username) values ('bduddanj@typepad.com', 'fnFH17pTtv', 'abannellj');
-insert into habit (title, sub_title, body, auth_start_time, auth_end_time, category_id, user_id) values ('Al Franken: God Spoke', 'Mr', 'Proin interdum mauris non ligula pellentesque ultrices.', '05:26:46', '14:58:39',  1, 1);
-insert into habit (title, sub_title, body, auth_start_time, auth_end_time, category_id, user_id) values ('Girls Gone Dead', 'Dr', 'Etiam vel augue.', '08:24:50', '11:42:52',  2, 2);
-insert into habit (title, sub_title, body, auth_start_time, auth_end_time, category_id, user_id) values ('Gorko!', 'Honorable', 'Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.', '07:30:31', '18:58:08', 2, 3);
-insert into habit (title, sub_title, body, auth_start_time, auth_end_time, category_id, user_id) values ('Al Frandfasdfken: Spoke', 'Mrsf', 'Proin interdumn ligula pellentesque ultfgdfgrices.', '05:26:46', '14:58:39', 1, 1);
-insert into habit (title, sub_title, body, auth_start_time, auth_end_time, category_id, user_id) values ('Girls Gone Dead sfgsdfgsf', 'Drr', 'Etiam vel augufgddfsge.', '08:24:50', '11:42:52', 2, 1);
+insert into habit (title, sub_title, body, auth_start_time, auth_end_time, category_id, user_id) values ('매일매일 일기 쓰기', '매일일기', '매일매일 일기를 작성하며 나의 하루를 돌아봅시다.', '18:00', '23:59', 1, 1);
+insert into habit (title, sub_title, body, auth_start_time, auth_end_time, category_id, user_id) values ('매일매일 독서하기', '매일독서', '매일매일 독서하며 소양과 지식을 기릅시다.', '00:00', '23:59', 1, 1);
+insert into habit (title, sub_title, body, auth_start_time, auth_end_time, category_id, user_id) values ('하루 10000보 걷기', '만보걷기', '매일매일 만보를 채워 잠만보에서 벗어납시다.', '00:00', '23:59', 2, 2);
+insert into habit (title, sub_title, body, auth_start_time, auth_end_time, category_id, user_id) values ('아침에 산책하기', '아침산책', '아침 산책으로 하루를 상쾌하게 시작합시다.', '05:00', '09:00', 2, 3);
 insert into challenge (user_id, habit_id, status, last_auth_at, created_at) values (18, 1, 'SUCCESS', '2022-10-12 07:30:00', '2022-01-25 23:15:26');
 insert into challenge (user_id, habit_id, status, last_auth_at, created_at) values (3, 1, 'CHALLENGE', '2022-03-21 04:08:34', '2022-06-18 15:52:43');
 insert into challenge (user_id, habit_id, status, last_auth_at, created_at) values (7, 3, 'SUCCESS', '2022-11-14 16:08:54', '2022-04-21 11:56:53');
@@ -85,7 +84,7 @@ insert into challenge (user_id, habit_id, status, last_auth_at, created_at) valu
 insert into challenge (user_id, habit_id, status, last_auth_at, created_at) values (11, 3, 'SUCCESS', '2022-02-26 18:41:50', '2022-01-14 00:36:33');
 insert into challenge (user_id, habit_id, status, last_auth_at, created_at) values (11, 3, 'CHALLENGE', '2022-06-03 13:57:22', '2022-12-27 06:47:15');
 insert into challenge (user_id, habit_id, status, last_auth_at, created_at) values (18, 3, 'CHALLENGE', '2022-09-27 10:04:41', '2022-05-01 08:05:20');
-insert into challenge (user_id, habit_id, status, last_auth_at, created_at) values (1, 1, 'SUCCESS', '2022-10-11 07:30:00', '2022-01-25 23:10:26');
+insert into challenge (user_id, habit_id, status, last_auth_at, created_at) values (1, 1, 'FAIL', '2022-10-11 07:30:00', '2022-01-25 23:10:26');
 insert into challenge (user_id, habit_id, status, last_auth_at, created_at) values (1, 2, 'SUCCESS', '2022-11-01 15:37:01', '2022-01-16 12:10:56');
 insert into auth (body, challenge_id, created_at) values ('Vivamus vel nulla eget eros elementum pellentesque.', 1, '2023-01-15 00:00:00');
 insert into auth (body, challenge_id, created_at) values ('Aenean lectus.', 2, '2023-01-15 00:00:00');
