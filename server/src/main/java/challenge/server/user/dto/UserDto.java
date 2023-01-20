@@ -121,6 +121,8 @@ public class UserDto {
 
         @ApiModelProperty(example = "user1번", value = "회원의 닉네임")
         private String username;
+
+        private String profileImageUrl;
     }
 
     @ApiModel(value = "회원 정보 수정 후 응답 시 전달")
@@ -134,6 +136,8 @@ public class UserDto {
 
         @ApiModelProperty(example = "user1번", value = "회원의 닉네임")
         private String username;
+
+        private String profileImageUrl;
 
 //        @ApiModelProperty(example = "iAmUser01!", value = "회원의 비밀번호")
 //        private String password;
@@ -154,6 +158,8 @@ public class UserDto {
 
         @ApiModelProperty(example = "user1번", value = "회원의 닉네임")
         private String username;
+
+        private String profileImageUrl;
 
         @ApiModelProperty(example = "47", value = "회원이 진행 중인 습관 중 가장 높은 진행일")
         private int biggestNumOfChallengeHabitDays; // 회원이 진행 중인 challenge 중 가장 높은 진행일을 선택하여 'n일차' 출력
