@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
 import { AuthArticle } from '../../../../components/authArticle';
+import { useEffect } from 'react';
 
-export default function HabitAuthDetail() {
+export default function HabitDetailAuth() {
   const router = useRouter();
   const habitId = router.query.habitId;
 
@@ -12,6 +13,7 @@ export default function HabitAuthDetail() {
       </div>
       <div className="habit-detail-review-middle"></div>
       <div className="habit-detail-review-bottom"></div>
+      <div></div>
     </div>
   );
 }

@@ -3,10 +3,22 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useAppSelector } from '../ducks/store';
 
-export function AuthArticle() {
+interface authArticleProps {
+  authId: number;
+  body: string;
+  createdAt: string;
+  authImageUrl: string;
+}
+
+export function AuthArticle({
+  authId,
+  body,
+  createdAt,
+  authImageUrl,
+}: authArticleProps) {
   const { userId } = useAppSelector((state) => state.loginIdentity);
 
-  //필요 데이터 유저네임,score,후기내용,리뷰등록시간, 등록한 유저Id
+  //필요 데이터 유저네임,score,후기내용,등록한 유저Id
   //등록한 유저 Id와 현재 로그인한 유저 Id가 같다면 editUserBoolean을 true로 만들어 줄 것.
   const [editUserBoolean, setEditUserBoolean] = useState(false);
   useEffect(() => {}, []);

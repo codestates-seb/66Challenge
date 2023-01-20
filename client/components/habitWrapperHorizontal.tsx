@@ -5,7 +5,7 @@
 
 ToDo 1. HabitWrapper를 사용하는 컴포넌트에서 habitWrapperTitle, habitWrapperData를 props로 넘겨주셔야 합니다.
         (habitWrapperData는 각 habit들에 대한 데이터를 담고 있는 배열이며,
-          각각의 배열 요소들은 해당 Habit에 대한 habitImage(이미지), habitTitle, habitBody를 담고 있는 객체입니다.)
+          각각의 배열 요소들은 해당 Habit에 대한 habitImage(이미지), title, body를 담고 있는 객체입니다.)
 
 < example >
 <HabitWrapperHorizontal habitWrapperTitle="" habitWrapperData={habitWrapperData} />

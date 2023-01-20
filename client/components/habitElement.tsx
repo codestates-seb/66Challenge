@@ -24,9 +24,9 @@ import { postBookMark, deleteBookMark } from '../module/habitFunctionMoudules';
 
 interface HabitElementProps {
   habitImage: string;
-  habitTitle: string;
-  habitBody: string;
-  habitId: string;
+  title: string;
+  body: string;
+  habitId: number;
   isBooked: boolean;
 }
 
@@ -38,25 +38,27 @@ interface HabitWrapperProps {
 export type { HabitElementProps, HabitWrapperProps };
 
 export const HabitElement: React.FC<HabitElementProps> = ({
-  habitImage,
-  habitTitle,
-  habitBody,
   habitId,
+  title,
+  body,
+  habitImage,
   isBooked,
 }) => {
   const router = useRouter();
-  const [isBookMark, setIsBookMark] = useState(isBooked);
-  const userId = useAppSelector((state) => state.loginIdentity.userId);
+  const { userId, isLogin } = useAppSelector((state) => state.loginIdentity);
+  const [isBookMark, setIsBookMark] = useState(isLogin ? isBooked : false);
 
   const bookMarkHandler = async () => {
     // login 여부 확인 후 false면 로그인 페이지로 경로 설정
     if (!userId) {
-      alert('로그인 후에 이용해주세용');
+      alert('로그인 후에 이용해주세요');
       router.push('/user/login');
     }
     // 북마크 관련 비동기 요청 함수
     if (isBookMark) {
+      await deleteBookMark({ habitId, userId });
     } else {
+      await postBookMark({ habitId, userId });
     }
 
     setIsBookMark(!isBookMark);
@@ -77,9 +79,9 @@ export const HabitElement: React.FC<HabitElementProps> = ({
           )}
         </div>
       </div>
-      <div className="habit-element-title font-bold mb-[5px]">{habitTitle}</div>
+      <div className="habit-element-title font-bold mb-[5px]">{title}</div>
       <div className="habit-element-body text-ellipsis overflow-hidden break-words line-clamp-2 ">
-        {habitBody}
+        {body}
       </div>
     </div>
   );
