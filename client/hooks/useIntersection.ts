@@ -49,8 +49,10 @@ export function useIntersection(
   }, [target, isLoaded, stop]);
 
   useEffect(() => {
+    console.log(`${url}page=${page}&size=30`);
     if (isLoaded && !stop) {
-      axios.get(`${url}/${page}`).then((res) => {
+      axios.get(`${url}page=${page}&size=30`).then((res) => {
+        console.log(res.data);
         setHabitWrapperData((habitWrapperData) =>
           habitWrapperData.concat(res.data),
         );

@@ -34,9 +34,11 @@ export default function SearchHabit() {
   const [search, setSearch] = useState('');
   const [searchHabits, setSearchHabits] = useState([]);
   const [doing, setDoing] = useState('all');
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [active, setActive] = useState(0);
-  const [url, setUrl] = useState('http://localhost:4000/habitdata');
+  const [url, setUrl] = useState(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=""&`,
+  );
   const [setTarget] = useIntersection(url, page, setPage, setSearchHabits);
   const categoryList: IcategoryList[] = [
     { categoryId: 0, name: '전체' },
@@ -56,27 +58,31 @@ export default function SearchHabit() {
     //키워드 비동기 함수 호출
     if (search === '') {
       setDoing('all');
-      setPage(0);
+      setPage(1);
       setSearchHabits([]);
-      setUrl('http://localhost:4000/habitdata');
+      setUrl(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=""&`);
     } else {
       setDoing('search');
-      setPage(0);
+      setPage(1);
       setSearchHabits([]);
-      setUrl(`http://localhost:4000/categorydata/${search}`);
+      setUrl(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=${search}&`,
+      );
     }
   };
   useEffect(() => {
     if (active !== 0) {
       setDoing('category');
-      setPage(0);
+      setPage(1);
       setSearchHabits([]);
-      setUrl(`http://localhost:4000/categorydata/${active}`);
+      setUrl(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?category=${active}&`,
+      );
     } else {
       setDoing('all');
-      setPage(0);
+      setPage(1);
       setSearchHabits([]);
-      setUrl('http://localhost:4000/habitdata');
+      setUrl(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=""&`);
     }
   }, [active]);
   useEffect(() => {
