@@ -71,7 +71,7 @@ public class HabitController {
         if(failImg!=null) habit.setThumbImgUrl(fileUploadService.save(failImg));
 
         Habit updateHabit = habitService.updateHabit(habit);
-        return new ResponseEntity(mapper.habitToHabitResponseDetailDto(updateHabit), HttpStatus.CREATED);
+        return new ResponseEntity(mapper.habitToHabitResponseDetailDto(updateHabit), HttpStatus.OK);
     }
 
     @ApiOperation(value = "습관 삭제")
@@ -79,6 +79,28 @@ public class HabitController {
     public ResponseEntity deleteHabit(@PathVariable("habit-id") @Positive Long habitId) {
         habitService.deleteHabit(habitId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    // 습관 검색(첫 화면 모두 / 키워드 조회) - 응답 DTO
+    @ApiOperation(value="습관 검색", notes = "keyword를 작성해 검색하거나, 작성하지 않으면 습관 목록을 전체 조회합니다.")
+    @GetMapping("/search")
+    public ResponseEntity getAllByKeyword(@RequestParam(required = false) String keyword,
+                                          @RequestParam @Positive int page,
+                                          @RequestParam @Positive int size) {
+        List<Habit> habits;
+        if(keyword==null) habits = habitService.findAll(page,size);
+        else habits = habitService.findAllByKeyword(keyword,page,size);
+        return new ResponseEntity(mapper.habitsToHabitResponseDtos(habits), HttpStatus.OK);
+    }
+
+    // 습관 검색(카테고리 조회) - 응답 DTO
+    @ApiOperation(value="습관 검색", notes = "category-id로 특정 카테고리의 습관을 검색합니다.")
+    @GetMapping("/search/{category-id}")
+    public ResponseEntity getAllByCategory(@PathVariable("category-id") Long categoryId,
+                                           @RequestParam @Positive int page,
+                                           @RequestParam @Positive int size) {
+        List<Habit> habits = habitService.findAllByCategory(categoryId,page,size);
+        return new ResponseEntity(mapper.habitsToHabitResponseDtos(habits), HttpStatus.OK);
     }
 
     @ApiOperation(value = "습관 상세 조회")
@@ -94,7 +116,7 @@ public class HabitController {
     public ResponseEntity postChallenge(@PathVariable("habit-id") @Positive Long habitId,
                                         @RequestParam @Positive Long userId) {
         ChallengeDto.Response responseDto = createChallengeResponseDto();
-        return new ResponseEntity(responseDto, HttpStatus.OK);
+        return new ResponseEntity(responseDto, HttpStatus.CREATED);
     }
 
     // 습관 조회 - 상세정보 탭 - 습관 상태 변경
@@ -140,7 +162,7 @@ public class HabitController {
     public ResponseEntity patchReview(@PathVariable("review-id") @Positive Long reviewId,
                                       @RequestBody @Valid ReviewDto.Patch reviewPatchDto) {
         ReviewDto.Response responseDto = createReviewResponseDto();
-        return new ResponseEntity(responseDto, HttpStatus.CREATED);
+        return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
     // 습관 조회 - 후기 탭 - 후기 삭제
@@ -174,29 +196,7 @@ public class HabitController {
     public ResponseEntity postAuthReport(@PathVariable("auth-id") @Positive Long authId,
                                          @RequestBody @Valid ReportDto.AuthPost AuthReportPostDto) {
 
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    // 습관 검색(첫 화면 모두 / 키워드 조회) - 응답 DTO
-    @ApiOperation(value="습관 검색", notes = "keyword를 작성해 검색하거나, 작성하지 않으면 습관 목록을 전체 조회합니다.")
-    @GetMapping("/search")
-    public ResponseEntity getAllByKeyword(@RequestParam(required = false) String keyword,
-                                          @RequestParam @Positive int page,
-                                          @RequestParam @Positive int size) {
-        List<Habit> habits; // 테스트 필요
-        if(keyword==null) habits = habitService.findAll(page-1,size);
-        else habits = habitService.findAllByKeyword(keyword,page-1,size);
-        return new ResponseEntity(mapper.habitsToHabitResponseDtos(habits), HttpStatus.OK);
-    }
-
-    // 습관 검색(카테고리 조회) - 응답 DTO
-    @ApiOperation(value="습관 검색", notes = "category-id로 특정 카테고리의 습관을 검색합니다.")
-    @GetMapping("/search/{category-id}")
-    public ResponseEntity getAllByCategory(@PathVariable("category-id") Long categoryId,
-                                            @RequestParam @Positive int page,
-                                            @RequestParam @Positive int size) {
-        List<Habit> habits = habitService.findAllByCategory(categoryId,page-1,size);
-        return new ResponseEntity(mapper.habitsToHabitResponseDtos(habits), HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     // 습관 북마크 - 북마크 등록 or 취소 메시지
@@ -205,7 +205,7 @@ public class HabitController {
     public ResponseEntity postBookmark(@PathVariable("habit-id") @Positive Long habitId,
                                         @RequestParam @Positive Long userId) {
         Bookmark bookmark = bookmarkService.createBookmark(habitId, userId);
-        return new ResponseEntity<>(bookmarkMapper.bookmarkToBookmarkResponseDto(bookmark), HttpStatus.OK);
+        return new ResponseEntity<>(bookmarkMapper.bookmarkToBookmarkResponseDto(bookmark), HttpStatus.CREATED);
 
         // API 통신용
 //        String body = "즐겨찾기에 추가 되었습니다.";
