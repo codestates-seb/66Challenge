@@ -15,8 +15,7 @@ interface SignUpProps {
 }
 
 interface UserGeneralProps {
-  cookie: string;
-  userId: string;
+  userId: number;
 }
 
 interface PatchUserInfoProps extends UserGeneralProps {
@@ -25,36 +24,36 @@ interface PatchUserInfoProps extends UserGeneralProps {
 }
 
 interface getUserCertificateProps extends UserGeneralProps {
-  habitId: string;
+  habitId: number;
 }
 // userFunctionModule
 
 // habitFunctionModule
 interface deleteHabitProps {
-  cookie: string;
-  habitId: string;
+  habitId: number;
 }
 
 interface habitGeneralProps extends deleteHabitProps {
-  userId: string;
+  userId: number;
 }
 
 interface PostHabitData extends HabitFormValues {
-  habitImage: string;
+  habitImage: File | null;
+  successImage: File | null;
+  failImage: File | null;
 }
 
 interface postHabitProps {
   data: PostHabitData;
-  cookie: string;
 }
 
 interface getHabitAuthsReviewsProps extends pageAndSize {
-  habitId: string;
+  habitId: number;
 }
 
 interface postAuthReportProps extends deleteHabitProps {
   authReportPostDto: string;
-  authId: string;
+  authId: number;
 }
 
 interface postHabitReviewProps extends habitGeneralProps {
@@ -63,7 +62,7 @@ interface postHabitReviewProps extends habitGeneralProps {
 }
 
 interface deleteHabitReviewProps extends deleteHabitProps {
-  reviewId: string;
+  reviewId: number;
 }
 
 interface patchHabitReviewProps extends deleteHabitReviewProps {
@@ -76,7 +75,7 @@ interface getHabitsSearchProps extends pageAndSize {
 }
 
 interface getHabitsSearchCategoryProps extends pageAndSize {
-  categoryId: string;
+  categoryId: number;
 }
 // habitFunctionModule
 
