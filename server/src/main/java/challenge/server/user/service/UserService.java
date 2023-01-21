@@ -154,6 +154,15 @@ public class UserService {
         return userRepository.save(findUser);
     }
 
+    @Transactional
+    public void deleteProfileImage(Long userId) {
+        User findUser = findVerifiedUser(userId);
+        fileUploadService.delete(findUser.getProfileImageUrl());
+
+        findUser.setProfileImageUrl(null);
+        userRepository.save(findUser);
+    }
+
     public void verifyExistUser(String email) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
