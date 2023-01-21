@@ -65,6 +65,9 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
+    public void deleteRoles() {
+        this.roles = null;
+    }
 
     public enum Status {
         ACTIVE(1),

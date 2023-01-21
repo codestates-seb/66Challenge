@@ -22,6 +22,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -336,15 +337,32 @@ public class UserService {
 
     // 회원 탈퇴
     // todo 회원 탈퇴했다가(quit 상태) 다시 가입하고자 하는 사람은 어떻게 하나? 회원 가입 시 quit 상태인 사람들은 받아주나, 아니면 새로운 이메일 주소로 가입해야 하나?
+    // todo 2023.1.21(토) 9h30 문제 = 현재 로그인 시 회원의 상태(ACTIVE)를 확인하지는 않아서, 회원 탈퇴했어도(상태 QUIT) 로그인 가능..
+    // todo 회원 탈퇴 시 db상 비밀번호, 닉네임 정보 남겨놓나? 이메일 주소(로그인 ID 역할)는?
     @Transactional
     public void quitUser(Long userId) {
         User findUser = findVerifiedUser(userId);
-        fileUploadService.delete(findUser.getProfileImageUrl());
 
+        // 회원 프로필 이미지 저장소에서 삭제 + db 데이터 업데이트
+        if (findUser.getProfileImageUrl() != null) {
+            fileUploadService.delete(findUser.getProfileImageUrl());
+            findUser.setProfileImageUrl(null);
+        }
+
+        // todo 아래 회원 엔티티 상태 변경 관련해서 엔티티에 '회원 탈퇴' 메서드 만들기?
+        // 회원 상태 변경
         findUser.setStatus(QUIT);
 //        System.out.println(findUser.getStatus().toString());
 
+        // Spring Security 회원 탈퇴(reference = https://carpet-part1.tistory.com/156)
+//        SecurityContextHolder.clearContext(); // 이렇게 해도 user_roles 테이블 데이터 삭제 안 됨 + 로그인됨
+
+        // 회원 역할(roles) 삭제
+        findUser.deleteRoles();
+
+        // 비밀번호 삭제 -> null로 만들려고 했으나 Column 'password' cannot be null
+//        findUser.setPassword(null);
+
         userRepository.save(findUser);
     }
-
 }
