@@ -88,6 +88,7 @@ public class UserController {
         }
 
         if (multipartFile != null) patchDto.setProfileImageUrl(fileUploadService.save(multipartFile));
+        // 위 null 처리로 인해 file, data 둘 다 없이 요청 보내도 요청/응답되긴 함
 
         patchDto.setUserId(userId);
         User user = userService.updateUser(userMapper.userPatchDtoToUser(patchDto));
@@ -95,6 +96,13 @@ public class UserController {
 
         // API 통신용
         //return new ResponseEntity<>(createUserPatchResponseDto(), HttpStatus.OK); // todo 회원 정보 수정 후 어떤 화면으로 연결/이동하지?
+    }
+
+    @ApiOperation(value = "프로필 사진 삭제")
+    @DeleteMapping("/{user-id}/profiles")
+    public ResponseEntity deleteProfileImage(@PathVariable("user-id") @Positive Long userId) {
+        userService.deleteProfileImage(userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // todo 관리자가 처리하거나, 또는 특정 조건이 만족되었을 때에 이벤트 발생시켜 처리
@@ -200,6 +208,8 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    // API 통신용 dummy data
+    /*
     private UserDto.SimpleResponse createUserSimpleResponseDto() {
         return UserDto.SimpleResponse.builder()
                 .userId(1L)
@@ -270,4 +280,5 @@ public class UserController {
 //                .completedAt("2022-06-15")
 //                .build();
 //    }
+     */
 }
