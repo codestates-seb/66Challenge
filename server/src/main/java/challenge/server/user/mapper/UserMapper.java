@@ -19,7 +19,7 @@ public interface UserMapper {
 
     UserDto.PatchResponse userToUserPatchResponseDto(User user);
 
-    /*
+    /* 아래 dto 대신 UserDto.UserDetailsDb를 service에서 직접 만들어서 반환 -> 마이페이지 조회 관련 mapper 필요 없음
     default UserDto.DetailResponse userToUserDetailResponseDto(User user) {
 //        return UserDto.DetailResponse.builder()
 //                .userId(user.getUserId())
@@ -38,9 +38,9 @@ public interface UserMapper {
     }
      */
 
-    default List<UserDto.HabitResponse> habitsToUserDtoHabitResponses(List<Habit> habits) {
-        return null;
-    }
+    UserDto.HabitResponse habitToUserDtoHabitResponse(Habit habit);
+
+    List<UserDto.HabitResponse> habitsToUserDtoHabitResponses(List<Habit> habits);
 
     User UserCheckPasswordDtoToUser(UserDto.CheckPassword requestBody);
 }

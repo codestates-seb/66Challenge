@@ -256,9 +256,9 @@ public class UserDto {
         private String subTitle;
         private String body;
         //        private Long categoryId;
-        private Boolean isBooked;
-//        private String hostUsername; // todo 현재 화면 정의서 상 습관 목록 및 상세 조회 페이지에 host 정보 없는데, 확인해보기
-        // image // todo 사진 저장 방식 결정 필요
+//        private Boolean isBooked;
+//        private String hostUsername; // 현재 화면 정의서 상 습관 목록 및 상세 조회 페이지에 host 정보 없는데, 확인해보기
+        private String thumbImgUrl; // 사진 저장 방식 결정 필요
     }
 
     @Getter
