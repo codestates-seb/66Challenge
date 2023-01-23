@@ -2,6 +2,8 @@ package challenge.server.challenge.repository;
 
 import challenge.server.auth.entity.Auth;
 import challenge.server.challenge.entity.Challenge;
+import challenge.server.habit.entity.QHabit;
+import challenge.server.review.entity.QReview;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -12,6 +14,8 @@ import java.util.List;
 import static challenge.server.auth.entity.QAuth.auth;
 import static challenge.server.challenge.entity.Challenge.Status.CHALLENGE;
 import static challenge.server.challenge.entity.QChallenge.challenge;
+import static challenge.server.habit.entity.QHabit.habit;
+import static challenge.server.review.entity.QReview.review;
 
 @Repository
 @RequiredArgsConstructor

@@ -29,7 +29,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, updatable = false, unique = true)
     private String email;
 
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = true)  // OAuth2 User 등록을 위해 Password nullable true로 변경
     private String password;
 
     @Column(length = 255, nullable = false, unique = true)
@@ -60,6 +60,12 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Challenge> challenges = new ArrayList<>();
+
+    public User update(String name, String profileImageUrl) {
+        this.username = name;
+        return this;
+    }
+
 
     public enum Status {
         ACTIVE(1),
