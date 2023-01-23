@@ -20,7 +20,7 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long>, Cha
     // user '마이페이지' 관련 추가
     List<Challenge> findAllByUserUserIdAndStatusOrderByChallengeIdAsc(Long userId, Challenge.Status status);
 
-    List<Challenge> findAllByUserUserIdAndStatusEqualsOrStatusEquals(Long userId, Challenge.Status status1, Challenge.Status status2);
+    List<Challenge> findAllByUserUserIdAndStatusEqualsOrUserUserIdAndStatusEquals(Long userId1, Challenge.Status status1, Long userId2, Challenge.Status status2);
 
     // user 인증서 발급 관련 추가
     Optional<Challenge> findByUserUserIdAndHabitHabitId(Long userId, Long habitId);
