@@ -19,25 +19,24 @@ public interface UserMapper {
 
     UserDto.PatchResponse userToUserPatchResponseDto(User user);
 
+    /*
     default UserDto.DetailResponse userToUserDetailResponseDto(User user) {
-        /*
-        return UserDto.DetailResponse.builder()
-                .userId(user.getUserId())
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .biggestNumOfChallengeHabitDays(LocalDateTime.now() - user.getChallenges().stream()
-                        .filter(challenge -> challenge.getStatus().equals("CHALLENGE"))
-                        .map(challenge -> challenge.getCreatedAt())
-                        .min().get())
-                .
-                
-         */
+//        return UserDto.DetailResponse.builder()
+//                .userId(user.getUserId())
+//                .email(user.getEmail())
+//                .username(user.getUsername())
+//                .biggestNumOfChallengeHabitDays(LocalDateTime.now() - user.getChallenges().stream()
+//                        .filter(challenge -> challenge.getStatus().equals("CHALLENGE"))
+//                        .map(challenge -> challenge.getCreatedAt())
+//                        .min().get())
+
         return null;
     }
 
     default UserDto.DetailResponse detailsResultsToUserDetailResponseDto(List<Object> detailsResults) {
         return null;
     }
+     */
 
     default List<UserDto.HabitResponse> habitsToUserDtoHabitResponses(List<Habit> habits) {
         return null;

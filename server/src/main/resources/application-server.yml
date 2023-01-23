@@ -80,3 +80,12 @@ cloud:
       auto: false
     stack:
       auto: false
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+    challenge:
+      server: trace
+  file:
+    name: /Users/greenpianorabbit/codestates/log/challenge66.log

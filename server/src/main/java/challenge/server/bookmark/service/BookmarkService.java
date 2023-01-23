@@ -6,6 +6,7 @@ import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.repository.HabitRepository;
+import challenge.server.habit.service.HabitService;
 import challenge.server.user.entity.User;
 import challenge.server.user.repository.UserRepository;
 import challenge.server.user.service.UserService;
@@ -29,6 +30,7 @@ public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final HabitRepository habitRepository;
     private final UserService userService;
+    private final HabitService habitService;
 
     // 회원이 찜한 습관들의 목록 출력
     // todo 테스트 필요
@@ -72,7 +74,7 @@ public class BookmarkService {
         userService.findVerifiedUser(userId);
 
         // 습관 존재하는지 확인
-//        habitService.findVerifiedHabit(habitId); // todo 추후 예림님 코드 참고해서 사용
+        habitService.findVerifiedHabit(habitId); // 추후 예림님 코드 참고해서 사용
     }
 
     // 북마크 삭제

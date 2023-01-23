@@ -18,6 +18,7 @@ import challenge.server.user.mapper.UserMapper;
 import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.Days;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -35,6 +37,7 @@ import java.util.*;
 import static challenge.server.challenge.entity.Challenge.Status.CHALLENGE;
 import static challenge.server.challenge.entity.Challenge.Status.SUCCESS;
 import static challenge.server.user.entity.User.Status.QUIT;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 @Transactional(readOnly = true)
@@ -73,7 +76,7 @@ public class UserService {
     }
 
     // 비밀번호 일치 여부 확인
-    // todo 10h25 Postman 테스트 시 항상 true -> 수정 필요
+    // 10h25 Postman 테스트 시 항상 true -> 수정 필요
     public Boolean verifyExistPassword(User user) {
 //        return passwordEncoder.encode(user.getPassword()) == findUser.getPassword();
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인
@@ -194,18 +197,18 @@ public class UserService {
         List<UserDto.CategoryDb> activeCategories = new ArrayList<>();
 
         // 오늘 날짜
-        LocalDateTime today = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS); // 2023.1.19(목) 6h30
+        LocalDate today = LocalDate.now(); // 2023.1.19(목) 6h30
 
-        // 현재 진행 중 + 성공한 챌린지 목록을 DB에서 받아옴 = select 쿼리2
-        List<Challenge> challenges = challengeRepository.findAllByUserUserIdAndStatusEqualsOrStatusEquals(findUser.getUserId(), CHALLENGE, SUCCESS);
+        // 현재 진행 중 또는 성공한 챌린지 목록을 DB에서 받아옴 = select 쿼리2
+        List<Challenge> challenges = challengeRepository.findAllByUserUserIdAndStatusEqualsOrUserUserIdAndStatusEquals(findUser.getUserId(), CHALLENGE, findUser.getUserId(), SUCCESS);
 
         // 현재 진행 중인 챌린지 목록을 DB에서 받아옴 = select 쿼리3
         List<Challenge> challengesInProgress = challengeRepository.findAllByUserUserIdAndStatusOrderByChallengeIdAsc(findUser.getUserId(), CHALLENGE);
 
         // 현재 진행 중인 챌린지 중 가장 먼저 시작한 것 구하기
-        LocalDateTime earliestCreatedAt = LocalDateTime.now();
+        LocalDate earliestCreatedAt = LocalDate.now();
         if (!challengesInProgress.isEmpty()) {
-            earliestCreatedAt = challengesInProgress.get(0).getCreatedAt();
+            earliestCreatedAt = challengesInProgress.get(0).getCreatedAt().toLocalDate();
         }
         /*
         LocalDateTime earliestCreatedAT = LocalDateTime.of(firstChCreatedAt.getYear(), firstChCreatedAt.getMonth(), firstChCreatedAt.getDayOfMonth(), firstChCreatedAt.getHour(), firstChCreatedAt.getMinute(), firstChCreatedAt.getSecond());
@@ -220,15 +223,16 @@ public class UserService {
          */
 
         // 날짜 비교 실험
-        LocalDateTime earliestCreatedAt1 = LocalDateTime.of(2023, 1, 15, 1, 1, 1);
-        System.out.println(today.compareTo(earliestCreatedAt1.truncatedTo(ChronoUnit.DAYS)) + 1); // 오늘(1/19)-과거 비교 기대 값 = 5일 -> 7h 과거-오늘 비교로 실행 시 -1
+        LocalDate earliestCreatedAtExample = LocalDate.of(2023, 1, 15);
+//        System.out.println(today.compareTo(earliestCreatedAt1.truncatedTo(ChronoUnit.DAYS)) + 1); // 오늘(1/19)-과거 비교 기대 값 = 5일 -> 7h 과거-오늘 비교로 실행 시 -1
+        System.out.println("날짜 비교 실험 결과 = 2023.1.15 ~ 오늘 날짜 수 = " + DAYS.between(earliestCreatedAtExample, today)); // 2023.1.23(월) 23h45 실행 시 8 찍힘 -> todo 우리 biz logic 상 +1 해줘야 하나?
 
         // 마이페이지 상단 기본 정보 리턴할 것 준비
         userDetailsDb.setUserId(findUser.getUserId());
         userDetailsDb.setEmail(findUser.getEmail());
         userDetailsDb.setUsername(findUser.getUsername());
         userDetailsDb.setProfileImageUrl(findUser.getProfileImageUrl());
-        userDetailsDb.setBiggestProgressDays(today.compareTo(earliestCreatedAt.truncatedTo(ChronoUnit.DAYS)) + 1);
+        userDetailsDb.setBiggestProgressDays((int) DAYS.between(earliestCreatedAt, today));
 
         // 마이페이지 중간1 = '회원이 참여중, 참여완료한 습관목록을 서브타이틀로 표시'
         for (int i = 0; i < challenges.size(); i++) {
@@ -244,7 +248,7 @@ public class UserService {
             LocalDateTime chCreatedAt = ch.getCreatedAt();
 //            System.out.println(chCreatedAt); // 2023.1.20(금) 14h10 '2022-07-04T21:08:55'와 같이 출력됨
 //            challengeDetailsDb.setCreatedAt(ch.getCreatedAt());
-            challengeDetailsDb.setProgressDays(today.compareTo(chCreatedAt.truncatedTo(ChronoUnit.DAYS)) + 1);
+            challengeDetailsDb.setProgressDays((int) DAYS.between(chCreatedAt, today));
 
             challengeDetailsDb.setHabitId(ch.getHabit().getHabitId());
             challengeDetailsDb.setSubTitle(ch.getHabit().getSubTitle());

@@ -144,6 +144,7 @@ public class UserDto {
 //        private String userStatus;
     }
 
+    /*
     @ApiModel(value = "회원의 마이페이지 조회 응답 시 전달")
     @Getter
     @AllArgsConstructor
@@ -165,13 +166,15 @@ public class UserDto {
         private int biggestNumOfChallengeHabitDays; // 회원이 진행 중인 challenge 중 가장 높은 진행일을 선택하여 'n일차' 출력
 
         @ApiModelProperty(example = "[{\"challengeId\": 1, habitSubTitle\": \"미라클모닝\", \"authDays\": 32}, {\"challengeId\": 1, habitSubTitle\": \"미라클모닝\", \"authDays\": 32}, {\"challengeId\": 1, habitSubTitle\": \"미라클모닝\", \"authDays\": 32}]", value = "회원이 참여 중인 & 참여 완료한 습관 목록")
-        private List<ChallengeResponse> activeChallenges; // 회원이 참여중 + 참여 완료한 습관 목록을 서브타이틀(및 진행일수)로 표시 -> todo 이 정보를 담기 위한 별도의 객체가 필요한지?
+        private List<ChallengeResponse> activeChallenges; // 회원이 참여중 + 참여 완료한 습관 목록을 서브타이틀(및 진행일수)로 표시 -> 이 정보를 담기 위한 별도의 객체가 필요한지?
 
         @ApiModelProperty(example = "[{\"categoryId\": 1, \"type\": \"HEALTH\"}, {\"categoryId\": 1, \"type\": \"HEALTH\"}]", value = "참여 중인 습관들의 카테고리")
         private List<CategoryResponse> activeCategories; // 진행 중인 습관들의 카테고리 정보 -> 진행 중인 습관의 분석 데이터를 선택하기 위한 카테고리 선택자
         // 홍보 문구(오늘의 인용구 포함)
     }
+     */
 
+    @ApiModel(value = "회원의 마이페이지 조회 응답 시 전달")
     @Getter
     @NoArgsConstructor
     @Setter
