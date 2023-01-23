@@ -75,6 +75,9 @@ public class BookmarkService {
 
         // 습관 존재하는지 확인
         habitService.findVerifiedHabit(habitId); // 추후 예림님 코드 참고해서 사용
+
+        // 해당 회원이 해당 습관에 대해 이미 북마크를 했는지 확인
+        verifyExistBookmark(userId, habitId);
     }
 
     // 북마크 삭제
@@ -89,5 +92,12 @@ public class BookmarkService {
         Optional<Bookmark> optionalBookmark = bookmarkRepository.findById(bookmarkId);
         Bookmark findBookmark = optionalBookmark.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOOKMARK_NOT_FOUND));
         return findBookmark;
+    }
+
+    public void verifyExistBookmark(Long userId, Long habitId) {
+        Optional<Bookmark> optionalBookmark = bookmarkRepository.findByUserUserIdAndHabitHabitId(userId, habitId);
+        if (optionalBookmark.isPresent()) {
+            throw new BusinessLogicException(ExceptionCode.BOOKMARK_EXISTS);
+        }
     }
 }

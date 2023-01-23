@@ -306,7 +306,7 @@ public class UserService {
     }
 
     // 내가 만든 습관 조회
-    // todo mapper 만들어서 테스트 필요(mapper 없이 응답 통신 가는 것은 Postman 확인 완료)
+    // mapper 만들어서 테스트 필요(mapper 없이 응답 통신 가는 것은 Postman 확인 완료)
     public List<Habit> findHostHabits(Long userId, int page, int size) {
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없는 로직
         /*
