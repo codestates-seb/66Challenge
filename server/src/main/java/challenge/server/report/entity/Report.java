@@ -19,30 +19,22 @@ public class Report extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportId;
 
-    @Enumerated(EnumType.STRING)
-    private Type type;
+    private Long postId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reporter_user_id")
-    private User reporter;
+    @Enumerated(EnumType.STRING)
+    private PostType postType;
+
+    @Enumerated(EnumType.STRING)
+    private ReportType reportType;
+
+    @Column(name = "reporter_user_id")
+    private Long reporter;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reported_user_id")
     private User reported;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HABIT_ID")
-    private Habit habit;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "AUTH_ID")
-    private Auth auth;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REVIEW_ID")
-    private Review review;
-
-    public enum Type {
+    public enum ReportType {
         PORNOGRAPHY(1),
         ADVERTISEMENT(2),
         ABUSE(3);
@@ -50,7 +42,20 @@ public class Report extends BaseTimeEntity {
         @Getter
         private int num;
 
-        Type(int num) {
+        ReportType(int num) {
+            this.num = num;
+        }
+    }
+
+    public enum PostType {
+        HABIT(1),
+        REVIEW(2),
+        AUTH(3);
+
+        @Getter
+        private int num;
+
+        PostType(int num) {
             this.num = num;
         }
     }
