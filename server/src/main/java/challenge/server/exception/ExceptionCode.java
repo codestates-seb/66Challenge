@@ -22,8 +22,8 @@ public enum ExceptionCode {
     HABIT_NOT_FOUND(404, "Habit not found"),
     REPORT_NOT_FOUND(404, "Report not found"),
     TOO_MANY_REPORTS(400, "Too many reports"),
-    DUPLICATED_REPORT(400,"Duplicated report");
-
+    DUPLICATED_REPORT(400,"Duplicated report"),
+    BOOKMARK_EXISTS(409, "Bookmark exists");
 
     @Getter
     private int status;
