@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 **/src/main/resources/application-local.yml
 **/src/test
+**/src/main/resources/application-oauth.yml
 
 # Created by https://www.toptal.com/developers/gitignore/api/java,macos,windows,react
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,macos,windows,react
