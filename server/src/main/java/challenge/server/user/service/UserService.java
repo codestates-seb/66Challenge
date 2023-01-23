@@ -197,7 +197,7 @@ public class UserService {
         List<UserDto.CategoryDb> activeCategories = new ArrayList<>();
 
         // 오늘 날짜
-        LocalDate today = LocalDate.now(); // 2023.1.19(목) 6h30
+        LocalDateTime today = LocalDateTime.now(); // 2023.1.19(목) 6h30 -> 2023.1.24(화) 7h 현재 주석 이해 안 됨
 
         // 현재 진행 중 또는 성공한 챌린지 목록을 DB에서 받아옴 = select 쿼리2
         List<Challenge> challenges = challengeRepository.findAllByUserUserIdAndStatusEqualsOrUserUserIdAndStatusEquals(findUser.getUserId(), CHALLENGE, findUser.getUserId(), SUCCESS);
@@ -223,7 +223,7 @@ public class UserService {
          */
 
         // 날짜 비교 실험
-        LocalDate earliestCreatedAtExample = LocalDate.of(2023, 1, 15);
+        LocalDateTime earliestCreatedAtExample = LocalDateTime.of(2023, 1, 15, 0, 1, 1);
 //        System.out.println(today.compareTo(earliestCreatedAt1.truncatedTo(ChronoUnit.DAYS)) + 1); // 오늘(1/19)-과거 비교 기대 값 = 5일 -> 7h 과거-오늘 비교로 실행 시 -1
         System.out.println("날짜 비교 실험 결과 = 2023.1.15 ~ 오늘 날짜 수 = " + DAYS.between(earliestCreatedAtExample, today)); // 2023.1.23(월) 23h45 실행 시 8 찍힘 -> todo 우리 biz logic 상 +1 해줘야 하나?
 
@@ -244,11 +244,15 @@ public class UserService {
             challengeDetailsDb.setChallengeId(ch.getChallengeId());
 
             // 챌린지 진행일
-//            LocalDateTime chCreatedAt = LocalDateTime.of(ch.getCreatedAt().getYear(), ch.getCreatedAt().getMonth(), ch.getCreatedAt().getDayOfMonth(), ch.getCreatedAt().getHour(), ch.getCreatedAt().getMinute(), ch.getCreatedAt().getSecond());
-            LocalDateTime chCreatedAt = ch.getCreatedAt();
+            if (!ch.getStatus().equals(SUCCESS)) {
+                //            LocalDateTime chCreatedAt = LocalDateTime.of(ch.getCreatedAt().getYear(), ch.getCreatedAt().getMonth(), ch.getCreatedAt().getDayOfMonth(), ch.getCreatedAt().getHour(), ch.getCreatedAt().getMinute(), ch.getCreatedAt().getSecond());
+                LocalDateTime chCreatedAt = ch.getCreatedAt();
 //            System.out.println(chCreatedAt); // 2023.1.20(금) 14h10 '2022-07-04T21:08:55'와 같이 출력됨
 //            challengeDetailsDb.setCreatedAt(ch.getCreatedAt());
-            challengeDetailsDb.setProgressDays((int) DAYS.between(chCreatedAt, today));
+                challengeDetailsDb.setProgressDays((int) DAYS.between(chCreatedAt, today)); // 0 ~ 66
+            } else {
+                challengeDetailsDb.setProgressDays(66);
+            }
 
             challengeDetailsDb.setHabitId(ch.getHabit().getHabitId());
             challengeDetailsDb.setSubTitle(ch.getHabit().getSubTitle());
