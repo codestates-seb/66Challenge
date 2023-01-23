@@ -20,7 +20,9 @@ public enum ExceptionCode {
     BOOKMARK_NOT_FOUND(404, "Bookmark not found"),
     CATEGORY_NOT_FOUND(404, "Category not found"),
     HABIT_NOT_FOUND(404, "Habit not found"),
-    REPORT_NOT_FOUND(404, "Report not found");
+    REPORT_NOT_FOUND(404, "Report not found"),
+    TOO_MANY_REPORTS(400, "Too many reports"),
+    DUPLICATED_REPORT(400,"Duplicated report");
 
 
     @Getter

@@ -49,9 +49,6 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "reporter", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Report> reportingReports = new ArrayList<>();
-
     @OneToMany(mappedBy = "reported", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Report> reportedReports = new ArrayList<>();
 

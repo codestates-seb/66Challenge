@@ -11,6 +11,9 @@ import challenge.server.habit.entity.Habit;
 import challenge.server.habit.mapper.HabitMapperImpl;
 import challenge.server.habit.service.HabitService;
 import challenge.server.report.dto.ReportDto;
+import challenge.server.report.entity.Report;
+import challenge.server.report.mapper.ReportMapperImpl;
+import challenge.server.report.service.ReportService;
 import challenge.server.review.dto.ReviewDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,8 +39,11 @@ public class HabitController {
     private final BookmarkService bookmarkService;
     private final BookmarkMapper bookmarkMapper;
 
-    private final HabitMapperImpl mapper;
+    private final HabitMapperImpl habitMapper;
     private final HabitService habitService;
+
+    private final ReportMapperImpl reportMapper;
+    private final ReportService reportService;
     private final FileUploadService fileUploadService;
 
     @ApiOperation(value = "습관 등록")
@@ -48,13 +54,13 @@ public class HabitController {
                                     @RequestPart("data") @Valid HabitDto.Post habitPostDto) {
         // TODO 이미지 파일 리스트로 받기
         // TODO 아래 과정 컨트롤러 말고 DTO에서 처리하기
-        Habit habit = mapper.habitPostDtoToHabit(habitPostDto);
+        Habit habit = habitMapper.habitPostDtoToHabit(habitPostDto);
         habit.setThumbImgUrl(fileUploadService.save(thumbImg));
         habit.setThumbImgUrl(fileUploadService.save(succImg));
         habit.setThumbImgUrl(fileUploadService.save(failImg));
 
         Habit createHabit = habitService.createHabit(habit);
-        return new ResponseEntity(mapper.habitToHabitResponseDetailDto(createHabit), HttpStatus.CREATED);
+        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(createHabit), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "습관 수정")
@@ -65,13 +71,13 @@ public class HabitController {
                                      @RequestPart("data") @Valid HabitDto.Patch habitPatchDto,
                                      @PathVariable("habit-id") @Positive Long habitId) {
 
-        Habit habit = mapper.habitPatchDtoToHabit(habitPatchDto);
+        Habit habit = habitMapper.habitPatchDtoToHabit(habitPatchDto);
         if(thumbImg!=null) habit.setThumbImgUrl(fileUploadService.save(thumbImg));
         if(succImg!=null) habit.setThumbImgUrl(fileUploadService.save(succImg));
         if(failImg!=null) habit.setThumbImgUrl(fileUploadService.save(failImg));
 
         Habit updateHabit = habitService.updateHabit(habit, habitId);
-        return new ResponseEntity(mapper.habitToHabitResponseDetailDto(updateHabit), HttpStatus.OK);
+        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(updateHabit), HttpStatus.OK);
     }
 
     @ApiOperation(value = "습관 삭제")
@@ -90,7 +96,7 @@ public class HabitController {
         List<Habit> habits;
         if(keyword==null) habits = habitService.findAll(page,size);
         else habits = habitService.findAllByKeyword(keyword,page,size);
-        return new ResponseEntity(mapper.habitsToHabitResponseDtos(habits), HttpStatus.OK);
+        return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits), HttpStatus.OK);
     }
 
     // 습관 검색(카테고리 조회) - 응답 DTO
@@ -100,14 +106,14 @@ public class HabitController {
                                            @RequestParam @Positive int page,
                                            @RequestParam @Positive int size) {
         List<Habit> habits = habitService.findAllByCategory(categoryId,page,size);
-        return new ResponseEntity(mapper.habitsToHabitResponseDtos(habits), HttpStatus.OK);
+        return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits), HttpStatus.OK);
     }
 
     @ApiOperation(value = "습관 상세 조회")
     @GetMapping("/{habit-id}")
     public ResponseEntity getHabit(@PathVariable("habit-id") @Positive Long habitId) {
         Habit findHabit = habitService.findHabit(habitId);
-        return new ResponseEntity(mapper.habitToHabitResponseDetailDto(findHabit), HttpStatus.OK);
+        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(findHabit), HttpStatus.OK);
     }
 
     // 습관 조회 - 상세정보 탭 - 습관 시작하기 - Challenge DTO
@@ -176,8 +182,9 @@ public class HabitController {
     @ApiOperation(value="습관 후기 신고 등록")
     @PostMapping("/{habit-id}/reviews/{review-id}/reports")
     public ResponseEntity postReviewReport(@PathVariable("review-id") @Positive Long reviewId,
-                                           @RequestBody @Valid ReportDto.ReviewPost reviewReportPostDto) {
-        return new ResponseEntity(HttpStatus.CREATED);
+                                           @RequestBody @Valid ReportDto.Post reportDto) {
+        Report createReport = reportService.createReport(reportMapper.reportPostDtoToReport(reportDto));
+        return new ResponseEntity(reportMapper.reportToReportResponseDto(createReport), HttpStatus.CREATED);
     }
 
     // 습관 조회 - 인증 탭 - Auth 리스트 DTO(특정 습관 id에 해당하는)
@@ -194,9 +201,9 @@ public class HabitController {
     @ApiOperation(value="습관 인증 신고 등록")
     @PostMapping("/{habit-id}/auths/{auth-id}/reports")
     public ResponseEntity postAuthReport(@PathVariable("auth-id") @Positive Long authId,
-                                         @RequestBody @Valid ReportDto.AuthPost AuthReportPostDto) {
-
-        return new ResponseEntity(HttpStatus.CREATED);
+                                         @RequestBody @Valid ReportDto.Post reportDto) {
+        Report createReport = reportService.createReport(reportMapper.reportPostDtoToReport(reportDto));
+        return new ResponseEntity(reportMapper.reportToReportResponseDto(createReport), HttpStatus.CREATED);
     }
 
     // 습관 북마크 - 북마크 등록 or 취소 메시지
@@ -224,12 +231,13 @@ public class HabitController {
 //        return new ResponseEntity(body, HttpStatus.NO_CONTENT);
     }
 
-    // 습관 신고 - 신고 접수 완료 메시지
+    // 습관 신고
     @ApiOperation(value="습관 신고 등록")
     @PostMapping("/{habit-id}/reports")
     public ResponseEntity postHabitReport(@PathVariable("habit-id") @Positive Long habitId,
-                                          @RequestBody @Valid ReportDto.HabitPost habitReportPostDto) {
-        return new ResponseEntity(HttpStatus.CREATED);
+                                          @RequestBody @Valid ReportDto.Post reportDto) {
+        Report createReport = reportService.createReport(reportMapper.reportPostDtoToReport(reportDto));
+        return new ResponseEntity(reportMapper.reportToReportResponseDto(createReport), HttpStatus.CREATED);
     }
 
     // 응답 더미데이터 - 습관 상세 DTO
