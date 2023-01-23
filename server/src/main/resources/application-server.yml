@@ -88,4 +88,4 @@ logging:
     challenge:
       server: trace
   file:
-    name: /Users/greenpianorabbit/codestates/log/challenge66.log
+    name: ~/codestates/log/challenge66.log
