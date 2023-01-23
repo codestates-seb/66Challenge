@@ -29,6 +29,7 @@ public class Habit extends BaseTimeEntity {
     private String body;
     private LocalTime authStartTime;
     private LocalTime authEndTime;
+    private String authType;
 
     private String thumbImgUrl;
     private String succImgUrl;
@@ -47,9 +48,6 @@ public class Habit extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "habit", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Challenge> challenges = new ArrayList<>();
-
-    @OneToMany(mappedBy = "habit", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Report> reports = new ArrayList<>();
 
     @OneToMany(mappedBy = "habit", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();

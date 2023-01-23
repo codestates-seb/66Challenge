@@ -33,8 +33,8 @@ public class HabitService {
     }
 
     @Transactional
-    public Habit updateHabit(Habit habit) {
-        Habit findHabit = findVerifiedHabit(habit.getHabitId());
+    public Habit updateHabit(Habit habit, long habitId) {
+        Habit findHabit = findVerifiedHabit(habitId);
         Habit updatingHabit = beanUtils.copyNonNullProperties(habit,findHabit);
 
         return habitRepository.save(updatingHabit);

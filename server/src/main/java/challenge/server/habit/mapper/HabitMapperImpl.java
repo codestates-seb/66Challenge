@@ -3,9 +3,7 @@ package challenge.server.habit.mapper;
 import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.category.service.CategoryService;
 import challenge.server.challenge.repository.ChallengeRepository;
-import challenge.server.habit.dto.HabitDto.Patch;
-import challenge.server.habit.dto.HabitDto.Post;
-import challenge.server.habit.dto.HabitDto.Response;
+import challenge.server.habit.dto.HabitDto.*;
 import challenge.server.habit.dto.HabitDto.ResponseDetail;
 import challenge.server.habit.entity.Habit;
 import java.time.LocalTime;
@@ -38,7 +36,7 @@ public class HabitMapperImpl {
                 .body(post.getBody())
 
                 .category(categoryService.findByType(post.getCategory()))
-                .host(userService.findUser(post.getUserId()))
+                .host(userService.findUser(post.getHostUserId()))
 
                 // parse DateTimeFormatter.ISO_LOCAL_TIME 형태 - hh:mm:ss
                 .authStartTime(LocalTime.parse(post.getAuthStartTime()+":00"))
@@ -54,7 +52,6 @@ public class HabitMapperImpl {
         }
 
         Habit habit = Habit.builder()
-                .habitId(patch.getHabitId())
                 .title(patch.getTitle())
                 .subTitle(patch.getSubTitle())
                 .body(patch.getBody())
@@ -68,14 +65,14 @@ public class HabitMapperImpl {
         return habit;
     }
 
-    public List<Response> habitsToHabitResponseDtos(List<Habit> habits) {
+    public List<Overview> habitsToHabitResponseDtos(List<Habit> habits) {
         if ( habits == null ) {
             return null;
         }
 
-        List<Response> list = new ArrayList<Response>( habits.size() );
+        List<Overview> list = new ArrayList<Overview>( habits.size() );
         for ( Habit habit : habits ) {
-            list.add( habitToResponse( habit ) );
+            list.add( habitToOverview( habit ) );
         }
 
         return list;
@@ -87,40 +84,53 @@ public class HabitMapperImpl {
         }
 
         ResponseDetail responseDetail = ResponseDetail.builder()
-                .habitId(habit.getHabitId())
-                .userId(habit.getHost().getUserId())
-                .category(habit.getCategory().getType())
-                .title(habit.getTitle())
-                .subTitle(habit.getSubTitle())
-                .body(habit.getBody())
-                .authStartTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthStartTime()).substring(0,5))
-                .authEndTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthEndTime()).substring(0,5))
-                .thumbImgUrl(habit.getThumbImgUrl())
-                .succImgUrl(habit.getSuccImgUrl())
-                .failImgUrl(habit.getFailImgUrl())
-                .challengeStatus(challengeRepository
-                        .findByUserUserIdAndHabitHabitId(habit.getHost().getUserId(),habit.getHabitId())
-                        .get().getStatus().toString()) // 유저가 참여중인 해빗의 상태
-                .isBooked(!bookmarkRepository
-                        .findByUserUserIdAndHabitHabitId(habit.getHost().getUserId(), habit.getHabitId())
-                        .isEmpty()) // 유저가 참여중인 해빗이 북마크 되었는지(북마크 테이블에 있는지)
+                .overview(habitToOverview(habit))
+                .detail(habitToDetail(habit))
+                .image(habitToImage(habit))
                 .build();
 
         return responseDetail;
     }
 
-    protected Response habitToResponse(Habit habit) {
+    protected Overview habitToOverview(Habit habit) {
         if ( habit == null ) {
             return null;
         }
 
-        Response response = Response.builder()
+        Overview overview = Overview.builder()
                 .habitId(habit.getHabitId())
                 .title(habit.getTitle())
                 .body(habit.getBody())
+                .isBooked(!bookmarkRepository
+                        .findByUserUserIdAndHabitHabitId(habit.getHost().getUserId(), habit.getHabitId())
+                        .isEmpty()) // bookmark 테이블에서 userId와 habitId로 조회
                 .thumbImgUrl(habit.getThumbImgUrl())
+// TODO         .score("reviewRepository에서 haibitId로 조회 & score 칼럼을 통계")
                 .build();
 
-        return response;
+        return overview;
+    }
+
+    protected Detail habitToDetail(Habit habit) {
+        if(habit==null) return null;
+        Detail detail = Detail.builder()
+                .hostUserId(habit.getHost().getUserId())
+                .subTitle(habit.getSubTitle())
+                .authType(habit.getAuthType())
+                .authStartTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthStartTime()).substring(0,5))
+                .authEndTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthEndTime()).substring(0,5))
+                .challengeStatus(challengeRepository.findByUserUserIdAndHabitHabitId(habit.getHost().getUserId(), habit.getHabitId())
+                        .get().getStatus().toString()) // challenge 테이블에서 userId와 habitId로 챌린지 상태 조회.
+                .build();
+        return detail;
+    }
+
+    protected Image habitToImage(Habit habit) {
+        if(habit==null) return null;
+        Image image = Image.builder()
+                .succImgUrl(habit.getSuccImgUrl())
+                .failImgUrl(habit.getFailImgUrl())
+                .build();
+        return image;
     }
 }
