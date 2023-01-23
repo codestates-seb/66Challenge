@@ -70,7 +70,7 @@ public class HabitController {
         if(succImg!=null) habit.setThumbImgUrl(fileUploadService.save(succImg));
         if(failImg!=null) habit.setThumbImgUrl(fileUploadService.save(failImg));
 
-        Habit updateHabit = habitService.updateHabit(habit);
+        Habit updateHabit = habitService.updateHabit(habit, habitId);
         return new ResponseEntity(mapper.habitToHabitResponseDetailDto(updateHabit), HttpStatus.OK);
     }
 
@@ -235,22 +235,18 @@ public class HabitController {
     // 응답 더미데이터 - 습관 상세 DTO
     public HabitDto.ResponseDetail createResponseDetailDto() {
         return HabitDto.ResponseDetail.builder()
-                .habitId(1L).userId(1L)
-                .title("매일매일 일기 쓰기").subTitle("매일일기")
-                .category("자기계발").body("매일매일 일기를 작성해서 훌륭한 어른이 됩시다.")
-                .authType("카메라")
-                .authStartTime("00:00").authEndTime("24:00")
-                .score(4.7f).isBooked(true)
+                .overview(createResponseDto())
                 .build();
     }
 
     // 응답 더미데이터 - 습관 DTO
-    public HabitDto.Response createResponseDto() {
-        return HabitDto.Response.builder()
+    public HabitDto.Overview createResponseDto() {
+        return HabitDto.Overview.builder()
                 .habitId(1L)
                 .title("매일매일 일기 쓰기")
                 .body("매일매일 일기를 작성해서 훌륭한 어른이 됩시다.")
                 .isBooked(true)
+                .score(4.5f)
                 .build();
     }
 
