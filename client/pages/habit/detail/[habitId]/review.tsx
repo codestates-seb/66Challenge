@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { ReviewArticle } from '../../../../components/reviewArticle';
 
-export default function HabitReviewDetail() {
+export default function HabitDetailReview() {
   const router = useRouter();
   const habitId = router.query.habitId;
 
