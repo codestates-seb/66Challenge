@@ -1,6 +1,5 @@
 package challenge.server.user.service;
 
-import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.challenge.repository.ChallengeRepository;
@@ -15,16 +14,13 @@ import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.security.utils.LoggedInUserInfoUtils;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
-import challenge.server.user.mapper.UserMapper;
+import challenge.server.user.mapper.UserMapperImpl;
 import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.Days;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static challenge.server.challenge.entity.Challenge.Status.CHALLENGE;
@@ -49,7 +44,7 @@ public class UserService {
     private final HabitRepository habitRepository;
     private final HabitService habitService;
     private final ChallengeRepository challengeRepository;
-    private final UserMapper userMapper;
+    private final UserMapperImpl userMapper;
     private final UserRepository userRepository;
     private final ApplicationEventPublisher publisher; // todo 회원 가입 시 이메일 전송 관련
     private final PasswordEncoder passwordEncoder;
@@ -313,7 +308,7 @@ public class UserService {
 
     // 내가 만든 습관 조회
     // mapper 만들어서 테스트 필요(mapper 없이 응답 통신 가는 것은 Postman 확인 완료)
-    public List<Habit> findHostHabits(Long userId, int page, int size) {
+    public List<UserDto.HabitResponse> findHostHabits(Long userId, int page, int size) {
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없는 로직
         /*
         Long loggedInUserId = verifyLoggedInUser(userId);
@@ -323,7 +318,23 @@ public class UserService {
         User findUser = findVerifiedUser(userId);
 
         List<Habit> habits = habitRepository.findByHostUserId(findUser.getUserId(), PageRequest.of(page - 1, size, Sort.by("habitId").descending())).getContent();
-        return habits;
+
+        List<UserDto.HabitResponse> habitResponses = new ArrayList<>();
+        for (int i = 0; i < habits.size(); i++) {
+            Habit h = habits.get(i);
+            UserDto.HabitResponse habitResponse = UserDto.HabitResponse.builder()
+                    .habitId(h.getHabitId())
+                    .title(h.getTitle())
+                    .subTitle(h.getSubTitle())
+                    .body(h.getBody())
+                    .isBooked(!bookmarkRepository.findByUserUserIdAndHabitHabitId(userId, h.getHabitId()).isEmpty())
+                    .thumbImgUrl(h.getThumbImgUrl())
+                    .build();
+
+            habitResponses.add(habitResponse);
+        }
+
+        return habitResponses;
     }
 
     // 인증서 발급
