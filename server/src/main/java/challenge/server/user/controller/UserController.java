@@ -3,6 +3,7 @@ package challenge.server.user.controller;
 import challenge.server.bookmark.service.BookmarkService;
 import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
+import challenge.server.security.dto.LogoutDto;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.mapper.UserMapper;
@@ -208,77 +209,9 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // API 통신용 dummy data
-    /*
-    private UserDto.SimpleResponse createUserSimpleResponseDto() {
-        return UserDto.SimpleResponse.builder()
-                .userId(1L)
-                .email("user1@gmail.com")
-                .username("user1번")
-                .build();
-    }
-
-    private UserDto.PatchResponse createUserPatchResponseDto() {
-        return UserDto.PatchResponse.builder()
-                .userId(1L)
-                .username("유저no1")
-//                .password("Abc12&defg")
-                .build();
-    }
-
-    private UserDto.BanResponse createUserBanResponseDto() {
-        return UserDto.BanResponse.builder()
-                .userId(1L)
-                .status(User.Status.BANNED)
-                .build();
-    }
-
-    private UserDto.DetailResponse createUserDetailResponseDto() {
-        return UserDto.DetailResponse.builder()
-                .userId(1L)
-                .email("user1@gmail.com")
-                .username("user1번")
-                .biggestNumOfChallengeHabitDays(51)
-                .activeChallenges(List.of(createChallengeResponseDto(), createChallengeResponseDto(), createChallengeResponseDto(), createChallengeResponseDto()))
-                .activeCategories(List.of(createCategoryResponseDto()))
-                .build();
-    }
-
-    private UserDto.ChallengeResponse createChallengeResponseDto() {
-        return UserDto.ChallengeResponse.builder()
-                .challengeId(1L)
-                .habitSubTitle("미라클모닝")
-                .authDays(32)
-                .build();
-    }
-
-    private UserDto.CategoryResponse createCategoryResponseDto() {
-        return UserDto.CategoryResponse.builder()
-                .categoryId(1L)
-                .type("HEALTH")
-                .build();
-    }
-
-    private UserDto.HabitResponse createHabitResponseDto() {
-        return UserDto.HabitResponse.builder()
-                .habitId(1L)
-                .title("새벽 4시30분 기상 - 미라클 모닝")
-                .subTitle("아침루틴")
-                .body("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut euismod eu nulla sit amet pellentesque. Cras neque augue, laoreet vel blandit volutpat, convallis in velit. Nulla urna arcu, malesuada vel odio tempor, congue elementum est.")
-//                .categoryId(1L)
-//                .hostUsername("유저no1")
-                .isBooked(true)
-                .build();
-    }
-
-//    private UserDto.SuccessHabitCertificate createSucessHabitCertificate() {
-//        return UserDto.SuccessHabitCertificate.builder()
-//                .challengeId(1L)
-//                .username("유저no1")
-//                .title("새벽 4시30분 기상 - 미라클 모닝")
-//                .createdAt("2022-04-10")
-//                .completedAt("2022-06-15")
-//                .build();
+//    @ApiOperation(value = "로그아웃")
+//    public ResponseEntity logout(LogoutDto logoutDto) {
+//
 //    }
-     */
+
 }
