@@ -46,6 +46,7 @@ public class HabitDto {
         private String body;
         private String thumbImgUrl;
         private double score;
+        private Boolean isBooked;
     }
 
     @Getter
@@ -59,7 +60,6 @@ public class HabitDto {
         private String authStartTime;
         private String authEndTime;
         private String challengeStatus;
-        private Boolean isBooked;
     }
 
     @Getter

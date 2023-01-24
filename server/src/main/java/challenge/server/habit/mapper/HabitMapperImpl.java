@@ -68,14 +68,14 @@ public class HabitMapperImpl {
         return habit;
     }
 
-    public List<Overview> habitsToHabitResponseDtos(List<Habit> habits) {
+    public List<Overview> habitsToHabitResponseDtos(List<Habit> habits, Long userId) {
         if ( habits == null ) {
             return null;
         }
 
         List<Overview> list = new ArrayList<Overview>(habits.size());
         for ( Habit habit : habits ) {
-            list.add(habitToOverview(habit));
+            list.add(habitToOverview(habit, userId));
         }
 
         return list;
@@ -87,7 +87,7 @@ public class HabitMapperImpl {
         }
 
         ResponseDetail responseDetail = ResponseDetail.builder()
-                .overview(habitToOverview(habit))
+                .overview(habitToOverview(habit, userId))
                 .detail(habitToDetail(habit, userId))
                 .image(habitToImage(habit))
                 .build();
@@ -95,7 +95,7 @@ public class HabitMapperImpl {
         return responseDetail;
     }
 
-    protected Overview habitToOverview(Habit habit) {
+    protected Overview habitToOverview(Habit habit, Long userId) {
         if ( habit == null ) {
             return null;
         }
@@ -107,6 +107,8 @@ public class HabitMapperImpl {
                 .body(habit.getBody())
                 .thumbImgUrl(habit.getThumbImgUrl())
                 .score(getHabitScore(habit.getHabitId()))
+                // bookmark 테이블에서 userId(로그인한 사용자)와 habitId로 조회
+                .isBooked(!bookmarkRepository.findByUserUserIdAndHabitHabitId(userId, habit.getHabitId()).isEmpty())
                 .build();
 
         System.out.println(overview.getScore());
@@ -130,8 +132,6 @@ public class HabitMapperImpl {
                 .authEndTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthEndTime()).substring(0,5))
                 // challenge 테이블에서 userId(로그인한 사용자)와 habitId로 챌린지 상태 조회.
                 .challengeStatus(getChallengeStatus(userId, habit.getHabitId()))
-                // bookmark 테이블에서 userId(로그인한 사용자)와 habitId로 조회
-                .isBooked(!bookmarkRepository.findByUserUserIdAndHabitHabitId(userId, habit.getHabitId()).isEmpty())
                 .build();
         return detail;
     }
