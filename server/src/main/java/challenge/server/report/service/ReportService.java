@@ -56,6 +56,7 @@ public class ReportService {
                 });
     }
 
+    @Transactional
     public void findByReportedUserId(Long reportedUserId) {
         List<Report> reports = reportRepository.findByReportedUserId(reportedUserId);
         if(reports.size() >= 4) { // 이번에 신고하면 총 누적 5회가 되므로 banned으로 상태를 바꾼다.
@@ -72,7 +73,7 @@ public class ReportService {
 //    }
 
     public List<Report> findAll(int page, int size) {
-        return reportRepository.findAll(PageRequest.of(page,size, Sort.by("reportId").descending())).getContent();
+        return reportRepository.findAll(PageRequest.of(page-1, size, Sort.by("reportId").descending())).getContent();
     }
 
 
