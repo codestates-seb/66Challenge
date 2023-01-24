@@ -9,6 +9,7 @@ import challenge.server.exception.ExceptionCode;
 import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.repository.HabitRepository;
+import challenge.server.habit.service.HabitService;
 import challenge.server.helper.event.UserRegistrationApplicationEvent;
 import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.security.utils.LoggedInUserInfoUtils;
@@ -46,6 +47,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class UserService {
     private final BookmarkRepository bookmarkRepository;
     private final HabitRepository habitRepository;
+    private final HabitService habitService;
     private final ChallengeRepository challengeRepository;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
@@ -327,15 +329,29 @@ public class UserService {
     // 인증서 발급
     // todo 테스트 필요
     public UserDto.SuccessHabitCertificate issueHabitCertificate(Long userId, Long habitId) {
+        System.out.println("userId = " + userId + ", habitId = " + habitId);
         User findUser = findVerifiedUser(userId);
 
-        Optional<Challenge> optionalChallenge = challengeRepository.findByUserUserIdAndHabitHabitId(findUser.getUserId(), habitId);
+        Optional<Challenge> optionalChallenge = challengeRepository.findByUserUserIdAndHabitHabitId(userId, habitId);
         Challenge findChallenge = optionalChallenge.orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+        /* 2023.1.24(화) 8h45 인증서 발급 테스트 시 만들어봄
+        Challenge findChallenge = Challenge.builder().build();
+        List<Challenge> challengeList = challengeRepository.findAllByUserUserIdAndHabitHabitId(findUser.getUserId(), habitId);
+        if (challengeList.isEmpty()) {
+            throw new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND);
+        } else {
+            findChallenge = challengeList.get(0);
+        }
+         */
+        System.out.println("인증서 발급 대상 challenge의 식별자 = " + findChallenge.getChallengeId());
+
+        Habit findHabit = habitService.findVerifiedHabit(findChallenge.getHabit().getHabitId());
+        System.out.println("인증서 발급 대상 challenge의 habit title = " + findHabit.getTitle());
 
         UserDto.SuccessHabitCertificate successHabitCertificate = UserDto.SuccessHabitCertificate.builder()
                 .challengeId(findChallenge.getChallengeId())
                 .username(findUser.getUsername())
-                .title(findChallenge.getHabit().getTitle())
+                .title(findHabit.getTitle())
                 .createdAt(findChallenge.getCreatedAt())
                 .completedAt(findChallenge.getCreatedAt().plusDays(66L))
                 .build();
