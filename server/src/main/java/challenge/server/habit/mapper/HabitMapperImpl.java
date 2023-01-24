@@ -1,29 +1,32 @@
 package challenge.server.habit.mapper;
 
-import challenge.server.bookmark.repository.BookmarkRepository;
-import challenge.server.category.service.CategoryService;
-import challenge.server.challenge.repository.ChallengeRepository;
-import challenge.server.habit.dto.HabitDto.*;
-import challenge.server.habit.dto.HabitDto.ResponseDetail;
-import challenge.server.habit.entity.Habit;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import challenge.server.category.service.CategoryService;
+import challenge.server.review.repository.ReviewRepository;
 import challenge.server.user.service.UserService;
+import challenge.server.challenge.repository.ChallengeRepository;
+import challenge.server.bookmark.repository.BookmarkRepository;
+import challenge.server.challenge.entity.Challenge;
+import challenge.server.habit.entity.Habit;
+import challenge.server.habit.dto.HabitDto.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class HabitMapperImpl {
-    // MapStruct mapper로 매핑되지 않는 필드를 채우기 위함
 
     private final CategoryService categoryService;
     private final UserService userService;
     private final ChallengeRepository challengeRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final ReviewRepository reviewRepository;
 
     public Habit habitPostDtoToHabit(Post post) {
         if ( post == null ) {
@@ -70,22 +73,22 @@ public class HabitMapperImpl {
             return null;
         }
 
-        List<Overview> list = new ArrayList<Overview>( habits.size() );
+        List<Overview> list = new ArrayList<Overview>(habits.size());
         for ( Habit habit : habits ) {
-            list.add( habitToOverview( habit ) );
+            list.add(habitToOverview(habit));
         }
 
         return list;
     }
 
-    public ResponseDetail habitToHabitResponseDetailDto(Habit habit) {
+    public ResponseDetail habitToHabitResponseDetailDto(Habit habit, Long userId) {
         if ( habit == null ) {
             return null;
         }
 
         ResponseDetail responseDetail = ResponseDetail.builder()
                 .overview(habitToOverview(habit))
-                .detail(habitToDetail(habit))
+                .detail(habitToDetail(habit, userId))
                 .image(habitToImage(habit))
                 .build();
 
@@ -101,17 +104,22 @@ public class HabitMapperImpl {
                 .habitId(habit.getHabitId())
                 .title(habit.getTitle())
                 .body(habit.getBody())
-                .isBooked(!bookmarkRepository
-                        .findByUserUserIdAndHabitHabitId(habit.getHost().getUserId(), habit.getHabitId())
-                        .isEmpty()) // bookmark 테이블에서 userId와 habitId로 조회
                 .thumbImgUrl(habit.getThumbImgUrl())
-// TODO         .score("reviewRepository에서 haibitId로 조회 & score 칼럼을 통계")
+                .score(getHabitScore(habit.getHabitId()))
                 .build();
 
+        System.out.println(overview.getScore());
         return overview;
     }
 
-    protected Detail habitToDetail(Habit habit) {
+    // TODO Refactor :: Review 테이블에 데이터가 없다면 0.0 리턴
+    private double getHabitScore(Long habitId) {
+        Double score = reviewRepository.findAverage(habitId);
+        if(score!=null) return Math.round(score * 100) / 100d;
+        else return 0d;
+    }
+
+    protected Detail habitToDetail(Habit habit, Long userId) {
         if(habit==null) return null;
         Detail detail = Detail.builder()
                 .hostUserId(habit.getHost().getUserId())
@@ -119,10 +127,19 @@ public class HabitMapperImpl {
                 .authType(habit.getAuthType())
                 .authStartTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthStartTime()).substring(0,5))
                 .authEndTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthEndTime()).substring(0,5))
-                .challengeStatus(challengeRepository.findByUserUserIdAndHabitHabitId(habit.getHost().getUserId(), habit.getHabitId())
-                        .get().getStatus().toString()) // challenge 테이블에서 userId와 habitId로 챌린지 상태 조회.
+                // challenge 테이블에서 userId(로그인한 사용자)와 habitId로 챌린지 상태 조회.
+                .challengeStatus(getChallengeStatus(userId, habit.getHabitId()))
+                // bookmark 테이블에서 userId(로그인한 사용자)와 habitId로 조회
+                .isBooked(!bookmarkRepository.findByUserUserIdAndHabitHabitId(userId, habit.getHabitId()).isEmpty())
                 .build();
         return detail;
+    }
+
+    // TODO Refactor :: 챌린지 테이블에 데이터가 없다면 NONE 리턴
+    private String getChallengeStatus(Long userId, Long habitId) {
+        Optional<Challenge> challenge = challengeRepository.findByUserUserIdAndHabitHabitId(userId, habitId);
+        if(challenge.isPresent()) return challenge.get().getStatus().toString();
+        else return "NONE";
     }
 
     protected Image habitToImage(Habit habit) {
