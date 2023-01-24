@@ -21,8 +21,7 @@ import challenge.server.review.entity.Review;
 import challenge.server.review.mapper.ReviewMapper;
 import challenge.server.review.service.ReviewService;
 import challenge.server.user.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,10 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.time.LocalDateTime;
 import java.util.List;
 
-@Api
 @Validated
 @RestController
 @RequestMapping("/habits")
@@ -102,6 +99,7 @@ public class HabitController {
                                           @RequestParam @Positive int page,
                                           @RequestParam @Positive int size,
                                           @RequestParam(required = false) @Positive Long userId) {
+        // TODO userId null일 때 challengeStatus, isBooked 조회
         List<Habit> habits;
         if(keyword==null) habits = habitService.findAll(page,size);
         else habits = habitService.findAllByKeyword(keyword,page,size);
@@ -114,6 +112,7 @@ public class HabitController {
                                            @RequestParam @Positive int page,
                                            @RequestParam @Positive int size,
                                            @RequestParam(required = false) @Positive Long userId) {
+        // TODO userId null일 때 challengeStatus, isBooked 조회
         List<Habit> habits = habitService.findAllByCategory(categoryId,page,size);
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
@@ -122,6 +121,7 @@ public class HabitController {
     @GetMapping("/{habit-id}")
     public ResponseEntity getHabit(@PathVariable("habit-id") @Positive Long habitId,
                                    @RequestParam(required = false) @Positive Long userId) {
+        // TODO userId null일 때 challengeStatus, isBooked 조회
         Habit findHabit = habitService.findHabit(habitId);
         return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(findHabit, userId), HttpStatus.OK);
     }
@@ -232,8 +232,10 @@ public class HabitController {
     // 습관 북마크 - 북마크 취소
     @DeleteMapping("/{habit-id}/bookmarks")
     public ResponseEntity deleteBookmark(@PathVariable("habit-id") @Positive Long habitId,
-                                       @RequestParam @Positive Long bookmarkId) {
-        bookmarkService.deleteBookmark(bookmarkId);
+                                       @RequestParam @Positive Long userId) {
+
+        Bookmark findBookmark = bookmarkService.findBookmarkByUserAndHabit(userId, habitId);
+        bookmarkService.deleteBookmark(findBookmark.getBookmarkId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

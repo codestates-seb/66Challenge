@@ -84,6 +84,11 @@ public class BookmarkService {
         return bookmarkRepository.save(bookmark);
     }
 
+    public Bookmark findBookmarkByUserAndHabit(Long userId, Long habitId) {
+        return bookmarkRepository.findByUserUserIdAndHabitHabitId(userId, habitId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOOKMARK_NOT_FOUND));
+    }
+
     private void verifyBookmark(Long habitId, Long userId) {
         // 회원 존재하는지 확인
         userService.findVerifiedUser(userId);
