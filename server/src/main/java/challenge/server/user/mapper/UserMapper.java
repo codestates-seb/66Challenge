@@ -1,6 +1,7 @@
 package challenge.server.user.mapper;
 
 import challenge.server.bookmark.entity.Bookmark;
+import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.habit.entity.Habit;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+
     User userPostDtoToUser(UserDto.Post requestBody);
 
     User userPatchDtoToUser(UserDto.Patch requestBody);
