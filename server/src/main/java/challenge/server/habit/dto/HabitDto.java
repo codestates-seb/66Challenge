@@ -48,7 +48,7 @@ public class HabitDto {
         private String authType;
         @ApiModelProperty(example = "00:00")
         private String authStartTime;
-        @ApiModelProperty(example = "24:00")
+        @ApiModelProperty(example = "23:59")
         private String authEndTime;
     }
 
@@ -66,10 +66,8 @@ public class HabitDto {
         private String title;
         @ApiModelProperty(example = "매일매일 일기를 작성해서 훌륭한 어른이 됩시다.")
         private String body;
-        @ApiModelProperty(example = "true", value = "북마크 여부")
-        private Boolean isBooked;
         private String thumbImgUrl;
-        private Float score;
+        private double score;
     }
 
     @Getter
@@ -89,7 +87,8 @@ public class HabitDto {
         private String authEndTime;
         @ApiModelProperty(example = "CHALLENGE/SUCCESS/FAIL/NONE - 도전중/성공/실패/미도전")
         private String challengeStatus;
-
+        @ApiModelProperty(example = "true", value = "북마크 여부")
+        private Boolean isBooked;
     }
 
     @Getter

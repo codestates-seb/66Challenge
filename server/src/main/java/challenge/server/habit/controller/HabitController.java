@@ -35,7 +35,6 @@ import java.util.List;
 @RequestMapping("/habits")
 @RequiredArgsConstructor
 public class HabitController {
-    // 북마크 추가/삭제 관련 추가
     private final BookmarkService bookmarkService;
     private final BookmarkMapper bookmarkMapper;
 
@@ -51,7 +50,8 @@ public class HabitController {
     public ResponseEntity postHabit(@RequestPart("thumbImg") MultipartFile thumbImg,
                                     @RequestPart("succImg") MultipartFile succImg,
                                     @RequestPart("failImg") MultipartFile failImg,
-                                    @RequestPart("data") @Valid HabitDto.Post habitPostDto) {
+                                    @RequestPart("data") @Valid HabitDto.Post habitPostDto,
+                                    @RequestParam @Positive Long userId) { // TODO 로그인한 사용자 Id 쿼리파라미터 대신 내부에서 얻기
         // TODO 이미지 파일 리스트로 받기
         // TODO 아래 과정 컨트롤러 말고 DTO에서 처리하기
         Habit habit = habitMapper.habitPostDtoToHabit(habitPostDto);
@@ -60,7 +60,7 @@ public class HabitController {
         habit.setThumbImgUrl(fileUploadService.save(failImg));
 
         Habit createHabit = habitService.createHabit(habit);
-        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(createHabit), HttpStatus.CREATED);
+        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(createHabit, userId), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "습관 수정")
@@ -69,15 +69,17 @@ public class HabitController {
                                      @RequestPart(value = "succImg", required = false) MultipartFile succImg,
                                      @RequestPart(value = "failImg", required = false) MultipartFile failImg,
                                      @RequestPart("data") @Valid HabitDto.Patch habitPatchDto,
-                                     @PathVariable("habit-id") @Positive Long habitId) {
+                                     @PathVariable("habit-id") @Positive Long habitId,
+                                     @RequestParam @Positive Long userId) {
 
         Habit habit = habitMapper.habitPatchDtoToHabit(habitPatchDto);
         if(thumbImg!=null) habit.setThumbImgUrl(fileUploadService.save(thumbImg));
         if(succImg!=null) habit.setThumbImgUrl(fileUploadService.save(succImg));
         if(failImg!=null) habit.setThumbImgUrl(fileUploadService.save(failImg));
 
-        Habit updateHabit = habitService.updateHabit(habit, habitId);
-        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(updateHabit), HttpStatus.OK);
+        habit.setHabitId(habitId);
+        Habit updateHabit = habitService.updateHabit(habit);
+        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(updateHabit,userId), HttpStatus.OK);
     }
 
     @ApiOperation(value = "습관 삭제")
@@ -111,9 +113,10 @@ public class HabitController {
 
     @ApiOperation(value = "습관 상세 조회")
     @GetMapping("/{habit-id}")
-    public ResponseEntity getHabit(@PathVariable("habit-id") @Positive Long habitId) {
+    public ResponseEntity getHabit(@PathVariable("habit-id") @Positive Long habitId,
+                                   @RequestParam @Positive Long userId) {
         Habit findHabit = habitService.findHabit(habitId);
-        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(findHabit), HttpStatus.OK);
+        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(findHabit, userId), HttpStatus.OK);
     }
 
     // 습관 조회 - 상세정보 탭 - 습관 시작하기 - Challenge DTO
@@ -238,24 +241,6 @@ public class HabitController {
                                           @RequestBody @Valid ReportDto.Post reportDto) {
         Report createReport = reportService.createReport(reportMapper.reportPostDtoToReport(reportDto));
         return new ResponseEntity(reportMapper.reportToReportResponseDto(createReport), HttpStatus.CREATED);
-    }
-
-    // 응답 더미데이터 - 습관 상세 DTO
-    public HabitDto.ResponseDetail createResponseDetailDto() {
-        return HabitDto.ResponseDetail.builder()
-                .overview(createResponseDto())
-                .build();
-    }
-
-    // 응답 더미데이터 - 습관 DTO
-    public HabitDto.Overview createResponseDto() {
-        return HabitDto.Overview.builder()
-                .habitId(1L)
-                .title("매일매일 일기 쓰기")
-                .body("매일매일 일기를 작성해서 훌륭한 어른이 됩시다.")
-                .isBooked(true)
-                .score(4.5f)
-                .build();
     }
 
     // 응답 더미데이터 - 인증 DTO

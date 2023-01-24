@@ -1,12 +1,10 @@
 package challenge.server.habit.service;
 
-import challenge.server.category.service.CategoryService;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
 import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.repository.HabitRepository;
-import challenge.server.user.service.UserService;
 import challenge.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -23,8 +21,6 @@ public class HabitService {
 
     private final CustomBeanUtils<Habit> beanUtils;
     private final HabitRepository habitRepository;
-    private final CategoryService categoryService;
-    private final UserService userService;
     private final FileUploadService fileUploadService;
 
     @Transactional
@@ -33,8 +29,8 @@ public class HabitService {
     }
 
     @Transactional
-    public Habit updateHabit(Habit habit, long habitId) {
-        Habit findHabit = findVerifiedHabit(habitId);
+    public Habit updateHabit(Habit habit) {
+        Habit findHabit = findVerifiedHabit(habit.getHabitId());
         Habit updatingHabit = beanUtils.copyNonNullProperties(habit,findHabit);
 
         return habitRepository.save(updatingHabit);
