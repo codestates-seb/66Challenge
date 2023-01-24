@@ -87,5 +87,5 @@ logging:
         SQL: debug
     challenge:
       server: trace
-  file:
-    name: ~/codestates/log/challenge66.log
+#  file:
+#    name: ~/codestates/log/challenge66.log
