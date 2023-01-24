@@ -1,6 +1,8 @@
 package challenge.server.habit.controller;
 
-import challenge.server.auth.dto.AuthDto;
+import challenge.server.auth.entity.Auth;
+import challenge.server.auth.mapper.AuthMapper;
+import challenge.server.auth.service.AuthService;
 import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.bookmark.mapper.BookmarkMapper;
 import challenge.server.bookmark.service.BookmarkService;
@@ -15,6 +17,10 @@ import challenge.server.report.entity.Report;
 import challenge.server.report.mapper.ReportMapperImpl;
 import challenge.server.report.service.ReportService;
 import challenge.server.review.dto.ReviewDto;
+import challenge.server.review.entity.Review;
+import challenge.server.review.mapper.ReviewMapper;
+import challenge.server.review.service.ReviewService;
+import challenge.server.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -35,17 +41,20 @@ import java.util.List;
 @RequestMapping("/habits")
 @RequiredArgsConstructor
 public class HabitController {
+
+    private final HabitService habitService;
+    private final HabitMapperImpl habitMapper;
     private final BookmarkService bookmarkService;
     private final BookmarkMapper bookmarkMapper;
-
-    private final HabitMapperImpl habitMapper;
-    private final HabitService habitService;
-
-    private final ReportMapperImpl reportMapper;
     private final ReportService reportService;
+    private final ReportMapperImpl reportMapper;
+    private final AuthService authService;
+    private final AuthMapper authMapper;
+    private final ReviewService reviewService;
+    private final ReviewMapper reviewMapper;
     private final FileUploadService fileUploadService;
+    private final UserService userService;
 
-    @ApiOperation(value = "습관 등록")
     @PostMapping
     public ResponseEntity postHabit(@RequestPart("thumbImg") MultipartFile thumbImg,
                                     @RequestPart("succImg") MultipartFile succImg,
@@ -63,7 +72,6 @@ public class HabitController {
         return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(createHabit, userId), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "습관 수정")
     @PatchMapping("/{habit-id}")
     public ResponseEntity patchHabit(@RequestPart(value = "thumbImg", required = false) MultipartFile thumbImg,
                                      @RequestPart(value = "succImg", required = false) MultipartFile succImg,
@@ -82,7 +90,6 @@ public class HabitController {
         return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(updateHabit,userId), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "습관 삭제")
     @DeleteMapping("/{habit-id}")
     public ResponseEntity deleteHabit(@PathVariable("habit-id") @Positive Long habitId) {
         habitService.deleteHabit(habitId);
@@ -90,7 +97,6 @@ public class HabitController {
     }
 
     // 습관 검색(첫 화면 모두 / 키워드 조회) - 응답 DTO
-    @ApiOperation(value="습관 검색", notes = "keyword를 작성해 검색하거나, 작성하지 않으면 습관 목록을 전체 조회합니다.")
     @GetMapping("/search")
     public ResponseEntity getAllByKeyword(@RequestParam(required = false) String keyword,
                                           @RequestParam @Positive int page,
@@ -102,7 +108,6 @@ public class HabitController {
     }
 
     // 습관 검색(카테고리 조회) - 응답 DTO
-    @ApiOperation(value="습관 검색", notes = "category-id로 특정 카테고리의 습관을 검색합니다.")
     @GetMapping("/search/{category-id}")
     public ResponseEntity getAllByCategory(@PathVariable("category-id") Long categoryId,
                                            @RequestParam @Positive int page,
@@ -111,7 +116,6 @@ public class HabitController {
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "습관 상세 조회")
     @GetMapping("/{habit-id}")
     public ResponseEntity getHabit(@PathVariable("habit-id") @Positive Long habitId,
                                    @RequestParam @Positive Long userId) {
@@ -120,7 +124,6 @@ public class HabitController {
     }
 
     // 습관 조회 - 상세정보 탭 - 습관 시작하기 - Challenge DTO
-    @ApiOperation(value = "챌린지 생성(습관 시작하기)", notes = "습관 시작하기 버튼을 클릭할 경우 생성됩니다.")
     @PostMapping("/{habit-id}/challenges")
     public ResponseEntity postChallenge(@PathVariable("habit-id") @Positive Long habitId,
                                         @RequestParam @Positive Long userId) {
@@ -129,7 +132,6 @@ public class HabitController {
     }
 
     // 습관 조회 - 상세정보 탭 - 습관 상태 변경
-    @ApiOperation(value = "챌린지 상태 변경", notes = "CHALLENGE = 1 / SUCCESS = 2 / FAIL = 3")
     @PatchMapping("/{habit-id}/challenges/{challenge-id}/status")
     public ResponseEntity changeChallengeStatus(@PathVariable("challenge-id") @Positive Long challengeId,
                                                 @RequestParam("statusId") @Positive Long statusId) {
@@ -138,7 +140,6 @@ public class HabitController {
     }
 
     // 습관 조회 - 통계 탭 - 통계 DTO
-    @ApiOperation(value = "습관 조회", notes = "습관 통계 탭을 눌러 확인합니다.")
     @GetMapping("/{habit-id}/statistics")
     public ResponseEntity getHabitByStatistics(@PathVariable("habit-id") @Positive Long habitId) {
         // TODO 통계 테이블 설정 후 추가 예정
@@ -146,43 +147,45 @@ public class HabitController {
     }
 
     // 습관 조회 - 후기 탭 - Review 리스트 DTO
-    @ApiOperation(value = "습관 후기 전체 조회", notes = "습관 후기 탭을 눌러 확인합니다.")
     @GetMapping("/{habit-id}/reviews")
     public ResponseEntity getReviewsByHabit(@PathVariable("habit-id") @Positive Long habitId,
                                             @RequestParam @Positive int page,
                                             @RequestParam @Positive int size) {
-        List<ReviewDto.Response> responses = List.of(createReviewResponseDto(),createReviewResponseDto());
-        return new ResponseEntity(responses, HttpStatus.OK);
+        List<Review> reviews = reviewService.findAllByHabit(habitId, page, size);
+        return new ResponseEntity(reviewMapper.toDtos(reviews), HttpStatus.OK);
     }
 
     // 습관 조회 - 후기 탭 - 후기 등록 - Review DTO
-    @ApiOperation(value="습관 후기 등록")
     @PostMapping("/{habit-id}/reviews")
     public ResponseEntity postReview(@PathVariable("habit-id") @Positive Long habitId,
-                                     @RequestParam @Positive Long userId,
+                                     @RequestParam @Positive Long userId, // 로그인한 유저
                                      @RequestBody @Valid ReviewDto.Post reviewPostDto) {
-        ReviewDto.Response responseDto = createReviewResponseDto();
-        return new ResponseEntity(responseDto, HttpStatus.CREATED);
+        Review review = reviewMapper.toEntity(reviewPostDto);
+        review.setUser(userService.findUser(userId));
+        review.setHabit(habitService.findHabit(habitId));
+        Review createReview = reviewService.createReview(review);
+
+        return new ResponseEntity(reviewMapper.toDto(createReview), HttpStatus.CREATED);
     }
 
     // 습관 조회 - 후기 탭 - 후기 수정 - Review DTO
-    @ApiOperation(value="습관 후기 수정")
     @PatchMapping("/{habit-id}/reviews/{review-id}")
     public ResponseEntity patchReview(@PathVariable("review-id") @Positive Long reviewId,
                                       @RequestBody @Valid ReviewDto.Patch reviewPatchDto) {
-        ReviewDto.Response responseDto = createReviewResponseDto();
-        return new ResponseEntity(responseDto, HttpStatus.OK);
+        Review review = reviewMapper.toEntity(reviewPatchDto);
+        review.setReviewId(reviewId);
+        Review updateReview = reviewService.updateReview(review);
+        return new ResponseEntity(reviewMapper.toDto(updateReview), HttpStatus.OK);
     }
 
     // 습관 조회 - 후기 탭 - 후기 삭제
-    @ApiOperation(value="습관 후기 삭제")
     @DeleteMapping("/{habit-id}/reviews/{review-id}")
     public ResponseEntity deleteReview(@PathVariable("review-id") @Positive Long reviewId) {
+        reviewService.deleteReview(reviewId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     // 습관 조회 - 후기 탭 - 후기 신고
-    @ApiOperation(value="습관 후기 신고 등록")
     @PostMapping("/{habit-id}/reviews/{review-id}/reports")
     public ResponseEntity postReviewReport(@PathVariable("review-id") @Positive Long reviewId,
                                            @RequestBody @Valid ReportDto.Post reportDto) {
@@ -191,17 +194,15 @@ public class HabitController {
     }
 
     // 습관 조회 - 인증 탭 - Auth 리스트 DTO(특정 습관 id에 해당하는)
-    @ApiOperation(value="습관 인증 전체 조회")
     @GetMapping("/{habit-id}/auths")
     public ResponseEntity getAuthsByHabit(@PathVariable("habit-id") @Positive Long habitId,
                                           @RequestParam @Positive int page,
                                           @RequestParam @Positive int size) {
-        List<AuthDto.Response> responses = List.of(createAuthResponseDto(), createAuthResponseDto());
-        return new ResponseEntity(responses, HttpStatus.OK);
+        List<Auth> auths = authService.findAllByHabit(habitId, page, size);
+        return new ResponseEntity(authMapper.toDtos(auths), HttpStatus.OK);
     }
 
     // 습관 조회 - 인증 탭 - 인증 신고
-    @ApiOperation(value="습관 인증 신고 등록")
     @PostMapping("/{habit-id}/auths/{auth-id}/reports")
     public ResponseEntity postAuthReport(@PathVariable("auth-id") @Positive Long authId,
                                          @RequestBody @Valid ReportDto.Post reportDto) {
@@ -210,7 +211,6 @@ public class HabitController {
     }
 
     // 습관 북마크 - 북마크 등록 or 취소 메시지
-    @ApiOperation(value="북마크")
     @PostMapping("/{habit-id}/bookmarks")
     public ResponseEntity postBookmark(@PathVariable("habit-id") @Positive Long habitId,
                                         @RequestParam @Positive Long userId) {
@@ -223,7 +223,6 @@ public class HabitController {
     }
 
     // 습관 북마크 - 북마크 취소 메시지
-    @ApiOperation(value="북마크")
     @DeleteMapping("/{habit-id}/bookmarks")
     public ResponseEntity deleteBookmark(@PathVariable("habit-id") @Positive Long habitId,
                                        @RequestParam @Positive Long bookmarkId) {
@@ -235,29 +234,11 @@ public class HabitController {
     }
 
     // 습관 신고
-    @ApiOperation(value="습관 신고 등록")
     @PostMapping("/{habit-id}/reports")
     public ResponseEntity postHabitReport(@PathVariable("habit-id") @Positive Long habitId,
                                           @RequestBody @Valid ReportDto.Post reportDto) {
         Report createReport = reportService.createReport(reportMapper.reportPostDtoToReport(reportDto));
         return new ResponseEntity(reportMapper.reportToReportResponseDto(createReport), HttpStatus.CREATED);
-    }
-
-    // 응답 더미데이터 - 인증 DTO
-    public AuthDto.Response createAuthResponseDto() {
-        return AuthDto.Response.builder().authId(1L).body("오늘도 증말루다가 열심히 달렸다.")
-                .createdAt(LocalDateTime.now().toString()).build();
-    }
-
-    // 응답 더미데이터 - 리뷰 DTO
-    public ReviewDto.Response createReviewResponseDto() {
-        return ReviewDto.Response.builder()
-                .reviewId(1L)
-                .reviewer("reviewer")
-                .score(5)
-                .body("최고의 경험이었어요!")
-                .createdAt(LocalDateTime.now().toString())
-                .build();
     }
 
     // 응답 더미데이터 - 챌린지 DTO

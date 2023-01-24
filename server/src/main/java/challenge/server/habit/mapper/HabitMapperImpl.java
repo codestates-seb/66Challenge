@@ -102,6 +102,7 @@ public class HabitMapperImpl {
 
         Overview overview = Overview.builder()
                 .habitId(habit.getHabitId())
+                .hostUserId(habit.getHost().getUserId())
                 .title(habit.getTitle())
                 .body(habit.getBody())
                 .thumbImgUrl(habit.getThumbImgUrl())
