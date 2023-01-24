@@ -6,7 +6,7 @@ import challenge.server.habit.entity.Habit;
 import challenge.server.security.dto.LogoutDto;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
-import challenge.server.user.mapper.UserMapper;
+import challenge.server.user.mapper.UserMapperImpl;
 import challenge.server.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final UserMapper userMapper;
+    private final UserMapperImpl userMapper;
     private final BookmarkService bookmarkService;
     private final FileUploadService fileUploadService;
 
@@ -106,7 +106,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // todo 관리자가 처리하거나, 또는 특정 조건이 만족되었을 때에 이벤트 발생시켜 처리
+    // 관리자가 처리하거나, 또는 특정 조건이 만족되었을 때에 이벤트 발생시켜 처리
     /*
     @ApiOperation(value = "5회 이상 신고 당한 회원 정지")
     @PatchMapping("/reports/{user-id}")
@@ -147,8 +147,8 @@ public class UserController {
     public ResponseEntity getBookmarks(@PathVariable("user-id") @Positive Long userId,
                                        @RequestParam @Positive int page,
                                        @RequestParam @Positive int size) {
-        List<Habit> habits = bookmarkService.findBookmarkHabits(userId, page, size);
-        return new ResponseEntity<>(userMapper.habitsToUserDtoHabitResponses(habits), HttpStatus.OK);
+        List<UserDto.HabitResponse> habitResponses = bookmarkService.findBookmarkHabits(userId, page, size);
+        return new ResponseEntity<>(habitResponses, HttpStatus.OK);
 
         // API 통신용
 //        List<HabitDto.Response> responses = List.of(habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto());
@@ -160,8 +160,8 @@ public class UserController {
     public ResponseEntity getHostHabits(@PathVariable("user-id") @Positive Long userId,
                                         @RequestParam @Positive int page,
                                         @RequestParam @Positive int size) {
-        List<Habit> habits = userService.findHostHabits(userId, page, size);
-        return new ResponseEntity(userMapper.habitsToUserDtoHabitResponses(habits), HttpStatus.OK);
+        List<UserDto.HabitResponse> habitResponses = userService.findHostHabits(userId, page, size);
+        return new ResponseEntity(habitResponses, HttpStatus.OK);
 
         // API 통신용
 //        List<UserDto.HabitResponse> responseDtos = List.of(createHabitResponseDto(), createHabitResponseDto());

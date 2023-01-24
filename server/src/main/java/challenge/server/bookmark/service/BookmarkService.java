@@ -7,6 +7,7 @@ import challenge.server.exception.ExceptionCode;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.repository.HabitRepository;
 import challenge.server.habit.service.HabitService;
+import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.repository.UserRepository;
 import challenge.server.user.service.UserService;
@@ -33,8 +34,7 @@ public class BookmarkService {
     private final HabitService habitService;
 
     // 회원이 찜한 습관들의 목록 출력
-    // todo 테스트 필요
-    public List<Habit> findBookmarkHabits(Long userId, int page, int size) {
+    public List<UserDto.HabitResponse> findBookmarkHabits(Long userId, int page, int size) {
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없음
 //        Long loggedInUserId = userService.verifyLoggedInUser(userId);
         User findUser = userService.findVerifiedUser(userId);
@@ -49,7 +49,22 @@ public class BookmarkService {
             habits.add(habitRepository.findById(bookmarks.get(i).getHabit().getHabitId()).get());
         }
 
-        return habits;
+        List<UserDto.HabitResponse> habitResponses = new ArrayList<>();
+        for (int i = 0; i < habits.size(); i++) {
+            Habit h = habits.get(i);
+            UserDto.HabitResponse habitResponse = UserDto.HabitResponse.builder()
+                    .habitId(h.getHabitId())
+                    .title(h.getTitle())
+                    .subTitle(h.getSubTitle())
+                    .body(h.getBody())
+                    .isBooked(!bookmarkRepository.findByUserUserIdAndHabitHabitId(userId, h.getHabitId()).isEmpty())
+                    .thumbImgUrl(h.getThumbImgUrl())
+                    .build();
+
+            habitResponses.add(habitResponse);
+        }
+
+        return habitResponses;
     }
 
     // 북마크 추가
