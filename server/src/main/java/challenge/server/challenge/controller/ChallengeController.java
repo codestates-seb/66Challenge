@@ -118,22 +118,6 @@ public class ChallengeController {
         return new ResponseEntity<>(authMapper.toDto(createAuth), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{challenge-id}/auths/{auth-id}")
-    public ResponseEntity updateAuth(@PathVariable("auth-id") @Positive Long authId,
-                                     @RequestPart(value = "file", required = false) MultipartFile multipartFile,
-                                     @RequestPart("data") @Valid AuthDto.Patch patchDto) {
-        Auth auth = Auth.builder().authId(authId).body(patchDto.getBody()).build();
-
-        if (!multipartFile.isEmpty()) {
-            String authImageUrl = fileUploadService.save(multipartFile);
-            auth.changeImageUrl(authImageUrl);
-        }
-
-        Auth updateAuth = authService.updateAuth(auth);
-
-        return new ResponseEntity<>(authMapper.toDto(updateAuth), HttpStatus.OK);
-    }
-
 //    @ApiOperation(value = "인증글 조회")
 //    @GetMapping("/{challenge-id}/auths/{auth-id}")
 //    public ResponseEntity findAuth(@PathVariable("auth-id") @Positive Long authId) {
@@ -153,12 +137,6 @@ public class ChallengeController {
 //        return new ResponseEntity<>(authMapper.toDtos(findAuths), HttpStatus.CREATED);
 //    }
 
-    @DeleteMapping("/{challenge-id}/auths/{auth-id}")
-    public ResponseEntity deleteAuth(@PathVariable("auth-id") @Positive Long authId) {
-        authService.deleteAuth(authId);
-
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
 
 //    @ApiOperation(value = "특정 챌린지의 모든 와일드카드 조회")
 //    @GetMapping("/{challenge-id}/wildcards")
