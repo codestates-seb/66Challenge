@@ -10,13 +10,15 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <>
-      <Header />
-      <TopNav />
-      <main className="pb-[100px]">{children}</main>
-      <ScrollToTopButton />
-      <BottomNav />
-    </>
+    <div className="desktop-section bg-slate-100">
+      <div className="app-section min-w-[360px] max-w-[460px] bg-white">
+        <Header />
+        <TopNav />
+        <main className="pb-[100px]">{children}</main>
+        <ScrollToTopButton />
+        <BottomNav />
+      </div>
+    </div>
   );
 };
 

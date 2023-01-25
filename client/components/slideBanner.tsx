@@ -10,16 +10,15 @@ Todo 3. 슬라이드가 자동으로 넘어가는 시간을 설정하고자 하�
 * <------  사용하시기 전에 꼭 읽어주세요! ------> *
 */
 
-import { useState, useEffect, JSXElementConstructor } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Flicking from '@egjs/react-flicking';
 import { AutoPlay } from '@egjs/flicking-plugins';
 import '@egjs/flicking-plugins/dist/flicking-plugins.css';
+import Image from 'next/image';
 
 interface BannerContType {
   bgImgUrl: string;
-  contText: string;
-  contSubText: string;
   bannerLink: string;
 }
 
@@ -44,21 +43,12 @@ export const SlideBanner: React.FC<SlideBannerProps> = ({ bannerCont, t }) => {
     }),
   ];
 
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setCurrendIdx((currendIdx) => {
-  //       return currendIdx >= bannerCont.length - 1 ? 0 : currendIdx + 1;
-  //     });
-  //   }, t || 2000);
-  //   return () => clearInterval(timer);
-  // }, []);
-
   const flickingOnChange = (e) => {
     setCurrendIdx(e.index);
   };
 
   return (
-    <div className="slidebanner-container relative h-[200px] overflow-hidden">
+    <div className="slidebanner-container relative min-h-[200px] overflow-hidden">
       <Flicking
         className="[&>div]:flex"
         plugins={plugins}
@@ -69,17 +59,21 @@ export const SlideBanner: React.FC<SlideBannerProps> = ({ bannerCont, t }) => {
         {bannerCont.map((el: BannerContType, idx: number) => {
           return (
             <div
-              className={`sildebanner-background w-screen h-[200px] flex-[0_0_auto] flex flex-col justify-center items-center`}
+              className={`sildebanner-background w-screen max-w-[460px] min-h-[200px] flex-[0_0_auto] flex flex-col justify-center items-center relative`}
               key={idx}
               onClick={(_) => bannerClickEvent(el.bannerLink)}
             >
-              <div className="sildebanner-title">{el.contText}</div>
-              <div className="sildebanner-subtitle">{el.contSubText}</div>
+              <Image
+                src={el.bgImgUrl}
+                alt="slide image"
+                width="800"
+                height="500"
+              />
             </div>
           );
         })}
       </Flicking>
-      <div className="slidebanner-pagination absolute right-2.5 bottom-2.5 bg-black/10 text-center tracking-wider text-xs min-w-[40pdx] p1y-0.5 pr-1 pl-1.5 rounded-xl flex justify-between ">
+      <div className="slidebanner-pagination absolute right-2.5 top-2.5 bg-black/50 text-white text-center tracking-wider text-xs min-w-[40pdx] p1y-0.5 pr-1 pl-1.5 rounded-xl flex justify-between ">
         <span>{currendIdx + 1}</span>
         <span>/</span>
         <span>{bannerCont.length}</span>
