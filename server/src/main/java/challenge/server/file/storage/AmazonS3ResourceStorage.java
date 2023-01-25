@@ -51,7 +51,8 @@ public class AmazonS3ResourceStorage {
         } finally {
             if (file.exists()) removeNewFile(file);   // 로컬에 있는 파일을 지워줍니다.
         }
-        return amazonS3Client.getUrl(bucket, fullPath).toString();  // S3에 업로드된 파일 URL 반환
+        out.println(amazonS3Client.getObject(bucket, fullPath).toString());
+        return amazonS3Client.getUrl(bucket, fullPath).toString().replaceFirst("s", "");  // S3에 업로드된 파일 URL 반환
     }
 
     private void createThumbnail(String fullPath, File file) {
