@@ -28,6 +28,7 @@ public class OAuthAttributes {
         this.email = email;
         this.gender = gender;
         this.ageRange = ageRange;
+        this.profileImageUrl = profileImageUrl;
     }
 
     public static OAuthAttributes of(String socialName, String userNameAttributeName, Map<String, Object> attributes) {
