@@ -15,7 +15,8 @@ interface SignUpProps {
 }
 
 interface UserGeneralProps {
-  userId: number;
+  userId: number | null;
+  password?: string;
 }
 
 interface PatchUserInfoProps extends UserGeneralProps {

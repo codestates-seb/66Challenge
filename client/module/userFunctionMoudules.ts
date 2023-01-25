@@ -70,7 +70,7 @@ export async function getUserInfo({ userId }: UserGeneralProps) {
           Authorization: getCookie('accessJwtToken'),
         },
       })
-      .then((res) => console.log(res));
+      .then((res) => res.data);
     return response;
   } catch (e) {
     console.error(e);
