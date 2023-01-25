@@ -14,6 +14,7 @@ public interface AuthMapper {
     Auth toEntity(AuthDto.Patch patchDto);
 
     @Mapping(source = "auth.challenge.user.userId", target = "authorUserId")
+    @Mapping(source = "auth.challenge.user.username", target = "authorUsername")
     AuthDto.Response toDto(Auth auth);
 
     List<AuthDto.Response> toDtos(List<Auth> auths);

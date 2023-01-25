@@ -63,6 +63,7 @@ public class HabitMapperImpl {
 
                 .authStartTime(LocalTime.parse(patch.getAuthStartTime()+":00"))
                 .authEndTime(LocalTime.parse(patch.getAuthEndTime()+":00"))
+                .authType(patch.getAuthType())
                 .build();
 
         return habit;
@@ -125,7 +126,7 @@ public class HabitMapperImpl {
     protected Detail habitToDetail(Habit habit, Long userId) {
         if(habit==null) return null;
         Detail detail = Detail.builder()
-                .hostUserId(habit.getHost().getUserId())
+                .hostUsername(habit.getHost().getUsername())
                 .subTitle(habit.getSubTitle())
                 .authType(habit.getAuthType())
                 .authStartTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthStartTime()).substring(0,5))
