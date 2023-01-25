@@ -5,7 +5,7 @@ import { useIntersection } from '../../hooks/useIntersection';
 const HotList: React.FC = () => {
   const [habitWrapperData, setHabitWrapperData] = useState([]);
   const [page, setPage] = useState(0);
-  const url: string = 'http://localhost:4000/habitdata';
+  const url: string = 'http://localhost:4000/habitdata?';
 
   const [setTarget] = useIntersection(url, page, setPage, setHabitWrapperData);
 
