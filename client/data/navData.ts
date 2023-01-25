@@ -33,7 +33,9 @@ interface detailNavFuncType {
   pathname: string;
 }
 
-export const detailNavFunc = (habitId: string): Array<detailNavFuncType> => [
+export const detailNavFunc = (
+  habitId: string | string[],
+): Array<detailNavFuncType> => [
   {
     navTitle: '상세정보',
     navTo: `/habit/detail/${habitId}`,
