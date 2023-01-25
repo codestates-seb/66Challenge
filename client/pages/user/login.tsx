@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { loginRequest } from '../../ducks/loginIdentitySlice';
 import { useAppDispatch } from '../../ducks/store';
-import { KaKaoShare } from '../../module/kakaoShare';
 
 type FormValues = {
   email: string;
@@ -174,7 +173,6 @@ const Login: React.FC = () => {
           </div>
         </form>
       </div>
-      <KaKaoShare />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { getHabitDetail } from '../../../../module/habitFunctionMoudules';
 
 interface habitDetailOverview {
   habitId: number;
+  hostUserId: number;
   title: string;
   body: string;
   thumbImgUrl: string;
@@ -15,7 +16,7 @@ interface habitDetailOverview {
 }
 
 interface habitDetailDetail {
-  hostUserId: number;
+  hostUsername: string;
   subTitle: string;
   authType: string | null;
   authStartTime: string;
@@ -41,19 +42,22 @@ const HabitDetail: React.FC = () => {
   const { userId } = useAppSelector((state) => state.loginIdentity);
   const [habitData, setHabitData] = useState<habitDataType>({});
   useEffect(() => {
-    console.log(habitId);
+    if (!router.isReady) return;
     getHabitDetail({ userId, habitId }).then((data) => {
       setHabitData(data);
     });
-  }, []);
-  console.log(habitId);
+  }, [router.isReady]);
 
   return (
     <div className="habit-detail-container">
       <div className="habit-detail-top">
         <div className="habit-detail-top-image">
           <Image
-            src="/image/running.png"
+            src={
+              habitData?.overview?.thumbImgUrl
+                ? habitData.overview.thumbImgUrl
+                : '/image/running.png'
+            }
             alt="habit image"
             width={500}
             height={500}
@@ -64,10 +68,16 @@ const HabitDetail: React.FC = () => {
             <h2 className="habit-detail-title text-2xl font-bold">
               {habitData?.overview?.title}
             </h2>
-            <DropDown dropDownType="habit" boolean={false} />
+            <DropDown
+              dropDownType="habit"
+              boolean={false}
+              hostUserId={habitData?.overview?.hostUserId}
+            />
           </div>
           <div className="habit-detail-metainfo-container flex items-center gap-2.5">
-            <div className="habit-detail-postuser">{`게시한 유저 이름`}</div>
+            <div className="habit-detail-postuser">
+              {habitData?.detail?.hostUsername}
+            </div>
             <div className="habit-detail-score-container flex items-center gap-1">
               <AiFillStar className="text-subColor" />
               <span className="text-sm ">{habitData?.overview?.score}</span>
@@ -99,7 +109,7 @@ const HabitDetail: React.FC = () => {
           <div className="flex flex-col">
             <Image
               src={
-                habitData?.image
+                habitData?.image?.succImgUrl
                   ? habitData.image.succImgUrl
                   : `/image/running.png`
               }
@@ -114,7 +124,7 @@ const HabitDetail: React.FC = () => {
           <div className="flex flex-col">
             <Image
               src={
-                habitData?.image
+                habitData?.image?.failImgUrl
                   ? habitData.image.failImgUrl
                   : `/image/running.png`
               }

@@ -7,8 +7,8 @@ import { DateFormat } from '../module/dateFormat';
 interface authArticleProps {
   habitId: number;
   authId: number;
-  author: string;
-  authUserId: number;
+  authorUsername: string;
+  authorUserId: number;
   body: string;
   createdAt: string;
   authImageUrl: string;
@@ -19,8 +19,8 @@ export type { authArticleProps };
 export function AuthArticle({
   habitId,
   authId,
-  author,
-  authUserId,
+  authorUsername,
+  authorUserId,
   body,
   createdAt,
   authImageUrl,
@@ -31,7 +31,7 @@ export function AuthArticle({
   //등록한 유저 Id와 현재 로그인한 유저 Id가 같다면 editUserBoolean을 true로 만들어 줄 것.
   const [editUserBoolean, setEditUserBoolean] = useState(false);
   useEffect(() => {
-    if (userId === authUserId) {
+    if (userId === authorUserId) {
       setEditUserBoolean(true);
     } else {
       setEditUserBoolean(false);
@@ -42,7 +42,7 @@ export function AuthArticle({
       <div className="flex flex-col relative items-center  w-full">
         <div className="auth-article-header w-full flex justify-between items-center mb-2 ">
           <div className="flex w-full gap-2.5 items-center">
-            <span className="text-base">{author}</span>
+            <span className="text-base">{authorUsername}</span>
             <span className="text-sm text-[#7d7d7d]">
               {DateFormat(createdAt)}
             </span>
@@ -51,13 +51,14 @@ export function AuthArticle({
             dropDownType="auth"
             boolean={editUserBoolean}
             authId={authId}
+            authorUserId={authorUserId}
             habitId={habitId}
           />
         </div>
         <div className="w-full border-solid  mb-2">
           <Image
             className="w-full h-full rounded-md"
-            src={authImageUrl}
+            src={authImageUrl || '/image/running.png'}
             alt="auth image"
             width={500}
             height={500}

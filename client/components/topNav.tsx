@@ -24,6 +24,7 @@ export const TopNav: React.FC = () => {
       setPage('');
     }
   }, [pathname]);
+  console.log(pathname);
 
   if (page.length) {
     return (
