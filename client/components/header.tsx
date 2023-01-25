@@ -36,8 +36,6 @@ const Header: FC = () => {
   // path별 페이지제목
 
   useEffect(() => {
-    console.log(pathArr);
-
     function titleDetect(pathArr): void {
       for (let i = pathArr.length - 1; i >= 0; i--) {
         if (titleList[pathArr[i]]) {
@@ -127,7 +125,7 @@ const Header: FC = () => {
       return (
         <div className="mr-3">
           {isMyPage ? (
-            <IoSettings className="h-8 w-8" />
+            <IoSettings className="h-8 w-8" /> // TODO : 세부설정 추가되면 변경할 것
           ) : (
             <Link href={'/habit/search'}>
               <IoSearch className="h-8 w-8" />

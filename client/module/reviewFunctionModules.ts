@@ -29,7 +29,6 @@ export async function postHabitReview({
   body,
   score,
 }: postHabitReviewProps) {
-  console.log(habitId, userId, body, score);
   try {
     const response = await axios
       .post(

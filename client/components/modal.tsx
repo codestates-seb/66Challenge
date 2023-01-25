@@ -57,7 +57,7 @@ export const Modal = ({
   return (
     <div className="modal-container z-50">
       <div
-        className="modal-backdrop inset-0 bg-slate-200/50 flex justify-center items-center"
+        className="modal-backdrop inset-0 fixed bg-slate-200/50 flex justify-center items-center"
         onClick={closeModalHandler}
       >
         <div
