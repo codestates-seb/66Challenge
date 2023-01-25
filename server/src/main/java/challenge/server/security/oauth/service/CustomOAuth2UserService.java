@@ -25,7 +25,6 @@ import java.util.Collections;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
-    private final HttpSession httpSession;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -44,15 +43,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
         User user = saveOrUpdate(attributes);
 
-//        httpSession.setAttribute("user", new SessionUser(user));    // 직렬화된 dto 클래스 사용
-
-
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(user.getRoles().get(0))),
                 attributes.getAttributes(), attributes.getNameAttributesKey());
     }
 
     private User saveOrUpdate(OAuthAttributes authAttributes) {
-        log.info(authAttributes.toString());
+        log.info("email = {}, nickName = {}, profileImageUrl = {}, gender = {}, angeRange = {}",
+                authAttributes.getEmail(), authAttributes.getName(), authAttributes.getProfileImageUrl(),
+                authAttributes.getGender(), authAttributes.getAgeRange());
         User user = userRepository.findByEmail(authAttributes.getEmail())
                 .map(entity -> entity.update(authAttributes.getName(), authAttributes.getProfileImageUrl()))
                 .orElse(authAttributes.toEntity());

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
@@ -35,6 +37,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
         LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
+        log.info("# attemptAuthentication : loginDto.getEmail={}, login.getPassword={}",
+                loginDto.getUsername(),loginDto.getPassword());
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         return authenticationManager.authenticate(authenticationToken);
