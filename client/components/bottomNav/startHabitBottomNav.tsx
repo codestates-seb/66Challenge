@@ -1,34 +1,51 @@
 import { useState, useEffect } from 'react';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { Modal } from '../modal';
-import { postStartChallenge } from '../../module/habitFunctionMoudules';
+import {
+  postStartChallenge,
+  postBookMark,
+  deleteBookMark,
+} from '../../module/habitFunctionMoudules';
 import { useRouter } from 'next/router';
 interface IBookMarkValue {
   boolean: boolean;
   animate: string;
 }
-interface IidValue {
+interface IPropValue {
   habitId: number;
   userId: number;
   isLogin: boolean;
+  challengeStatus: string;
+  isBooked: boolean;
 }
-export function StartHabitBottomNav({ habitId, userId, isLogin }: IidValue) {
+export function StartHabitBottomNav({
+  habitId,
+  userId,
+  isLogin,
+  challengeStatus,
+  isBooked,
+}: IPropValue) {
+  const defaultClassName = 'h-3/4 w-1/4 text-subColor ';
   const [isBookMark, setIsBookMark] = useState<IBookMarkValue>({
     boolean: false,
     animate: 'h-3/4 w-1/4 text-subColor ',
   });
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const bookMarkHandle = (): void => {
+  const bookMarkHandle = async () => {
     //login 여부 확인 후 false면 로그인 페이지로 경로 설정
     //북마크 관련 비동기 요청 함수
-    if (isBookMark.boolean === false) {
+    if (isBookMark.boolean === false && isLogin === true) {
       setIsBookMark({
         boolean: true,
-        animate: isBookMark.animate + 'animate-bookMark',
+        animate: defaultClassName + 'animate-bookMark',
       });
+      await postBookMark({ habitId, userId });
+    } else if (isBookMark.boolean === true && isLogin === true) {
+      setIsBookMark({ boolean: false, animate: defaultClassName });
+      await deleteBookMark({ habitId, userId });
     } else {
-      setIsBookMark({ boolean: false, animate: 'animate-bookMark' });
+      router.push('/user/login');
     }
   };
   const startHabitHandle = (): void => {
@@ -38,7 +55,13 @@ export function StartHabitBottomNav({ habitId, userId, isLogin }: IidValue) {
       setIsOpen(true);
     }
   };
-
+  console.log(isBooked);
+  useEffect(() => {
+    if (isBooked === true) {
+      setIsBookMark({ boolean: true, animate: defaultClassName });
+    }
+  }, [isBooked]);
+  console.log(challengeStatus);
   return (
     <div className="flex bg-white h-[3rem] px-6  w-full fixed bottom-0 border-t min-w[300px] justify-center items-center">
       {isBookMark.boolean === false ? (
@@ -51,11 +74,11 @@ export function StartHabitBottomNav({ habitId, userId, isLogin }: IidValue) {
       )}
 
       <button
-        className="bg-mainColor h-4/5 w-3/4 rounded-lg ml-5 text-iconColor text-base"
+        className="bg-mainColor h-4/5 w-3/4 rounded-lg ml-5 text-iconColor text-base disabled:opacity-50"
         onClick={() => {
           startHabitHandle();
         }}
-        // disabled={doing === true}
+        disabled={challengeStatus !== 'NONE'}
       >
         Start
       </button>
@@ -71,6 +94,9 @@ export function StartHabitBottomNav({ habitId, userId, isLogin }: IidValue) {
             });
             if (response !== 201) {
               router.push('/user/login');
+            } else {
+              setIsOpen(false);
+              router.push(`/habit/detail/${habitId}`);
             }
           }}
         >
