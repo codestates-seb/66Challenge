@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import type {
   habitGeneralProps,
   postHabitProps,
@@ -130,7 +130,7 @@ export async function postStartChallenge({
   userId,
 }: habitGeneralProps) {
   try {
-    const response = await axios
+    const response: number = await axios
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/challenges?userId=${userId}`,
         null,
@@ -140,10 +140,12 @@ export async function postStartChallenge({
           },
         },
       )
-      .then((res) => console.log(res));
+      .then((res) => res.status);
     return response;
   } catch (e) {
-    console.error(e);
+    if (e instanceof AxiosError) {
+      return e.response.status;
+    }
   }
 }
 export async function postHabitReport({ habitId, userId }: habitGeneralProps) {
@@ -186,7 +188,6 @@ export async function postHabitReview({
   body,
   score,
 }: postHabitReviewProps) {
-  console.log(habitId, userId, body, score);
   try {
     const response = await axios
       .post(
