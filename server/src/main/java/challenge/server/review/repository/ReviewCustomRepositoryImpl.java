@@ -47,6 +47,6 @@ public class ReviewCustomRepositoryImpl implements ReviewCustomRepository {
         if (lastReviewId == null) {
             return null;
         }
-        return habit.habitId.lt(lastReviewId);
+        return review.reviewId.lt(lastReviewId);
     }
 }

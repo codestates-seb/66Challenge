@@ -47,6 +47,6 @@ public class AuthCustomRepositoryImpl implements AuthCustomRepository {
         if (lastAuthId == null) {
             return null;
         }
-        return habit.habitId.lt(lastAuthId);
+        return auth.authId.lt(lastAuthId);
     }
 }
