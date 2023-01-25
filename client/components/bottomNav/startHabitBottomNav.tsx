@@ -55,13 +55,11 @@ export function StartHabitBottomNav({
       setIsOpen(true);
     }
   };
-  console.log(isBooked);
   useEffect(() => {
     if (isBooked === true) {
       setIsBookMark({ boolean: true, animate: defaultClassName });
     }
   }, [isBooked]);
-  console.log(challengeStatus);
   return (
     <div className="flex bg-white h-[3rem] px-6  w-full fixed bottom-0 border-t min-w[300px] justify-center items-center">
       {isBookMark.boolean === false ? (
@@ -98,6 +96,7 @@ export function StartHabitBottomNav({
               setIsOpen(false);
               router.push(`/habit/detail/${habitId}`);
             }
+            console.log(response);
           }}
         >
           <div className="flex flex-col items-center">
