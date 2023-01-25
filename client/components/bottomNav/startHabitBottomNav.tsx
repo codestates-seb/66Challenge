@@ -25,7 +25,7 @@ export function StartHabitBottomNav({
   challengeStatus,
   isBooked,
 }: IPropValue) {
-  const defaultClassName = 'h-3/4 w-1/4 text-subColor ';
+  const defaultClassName = 'h-3/4 w-full text-subColor ';
   const [isBookMark, setIsBookMark] = useState<IBookMarkValue>({
     boolean: false,
     animate: 'h-3/4 w-1/4 text-subColor ',
@@ -61,18 +61,22 @@ export function StartHabitBottomNav({
     }
   }, [isBooked]);
   return (
-    <div className="flex bg-white h-[3rem] px-6  w-full fixed bottom-0 border-t min-w[300px] justify-center items-center">
-      {isBookMark.boolean === false ? (
-        <AiOutlineHeart
-          className="h-3/4 w-1/4 text-subColor"
-          onClick={bookMarkHandle}
-        />
-      ) : (
-        <AiFillHeart className={isBookMark.animate} onClick={bookMarkHandle} />
-      )}
-
+    <div className="flex bg-white h-[3rem]   w-full fixed bottom-0 border-t pr-2 min-w[300px] items-center">
+      <div className="w-[15%] h-full flex items-center justify-center">
+        {isBookMark.boolean === false ? (
+          <AiOutlineHeart
+            className={isBookMark.animate}
+            onClick={bookMarkHandle}
+          />
+        ) : (
+          <AiFillHeart
+            className={isBookMark.animate}
+            onClick={bookMarkHandle}
+          />
+        )}
+      </div>
       <button
-        className="bg-mainColor h-4/5 w-3/4 rounded-lg ml-5 text-iconColor text-base disabled:opacity-50"
+        className="bg-mainColor h-4/5 w-5/6 rounded-lg  text-iconColor text-base disabled:opacity-50"
         onClick={() => {
           startHabitHandle();
         }}
@@ -96,7 +100,6 @@ export function StartHabitBottomNav({
               setIsOpen(false);
               router.push(`/habit/detail/${habitId}`);
             }
-            console.log(response);
           }}
         >
           <div className="flex flex-col items-center">
