@@ -84,7 +84,7 @@ public class UserMapperImpl {
         habitResponse.title(habit.getTitle());
         habitResponse.subTitle(habit.getSubTitle());
         habitResponse.body(habit.getBody());
-//        habitResponse.isBooked(bookmarkRepository.findByUserUserIdAndHabitHabitId(habit.get))
+        habitResponse.isBooked(true);   // 찜한 습관 조회를 한거기 때문에 true 설정(임시방편). @Mapper 구현 후 수정 필요
         habitResponse.thumbImgUrl(habit.getThumbImgUrl());
 
         return habitResponse.build();

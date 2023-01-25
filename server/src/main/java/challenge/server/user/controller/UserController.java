@@ -1,8 +1,10 @@
 package challenge.server.user.controller;
 
+import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.bookmark.service.BookmarkService;
 import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
+import challenge.server.habit.mapper.HabitMapperImpl;
 import challenge.server.security.dto.LogoutDto;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
@@ -23,6 +25,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.util.List;
+
+import static challenge.server.habit.entity.QHabit.habit;
 
 @Api
 @RestController
@@ -145,10 +149,11 @@ public class UserController {
     @ApiOperation(value = "회원이 찜한 습관들의 목록 출력")
     @GetMapping("/{user-id}/bookmarks")
     public ResponseEntity getBookmarks(@PathVariable("user-id") @Positive Long userId,
+                                       @RequestParam(required = false) @Positive Long lastHabitId,
                                        @RequestParam @Positive int page,
                                        @RequestParam @Positive int size) {
-        List<UserDto.HabitResponse> habitResponses = bookmarkService.findBookmarkHabits(userId, page, size);
-        return new ResponseEntity<>(habitResponses, HttpStatus.OK);
+        List<Habit> habits = bookmarkService.findBookmarkHabits(lastHabitId, userId, page, size);
+        return new ResponseEntity<>(userMapper.habitsToUserDtoHabitResponses(habits), HttpStatus.OK);
 
         // API 통신용
 //        List<HabitDto.Response> responses = List.of(habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto(), habitController.createResponseDto());
@@ -158,9 +163,10 @@ public class UserController {
     @ApiOperation(value = "내가 만든 습관 조회")
     @GetMapping("/{user-id}/habits/hosts")
     public ResponseEntity getHostHabits(@PathVariable("user-id") @Positive Long userId,
+                                        @RequestParam(required = false) @Positive Long lastHabitId,
                                         @RequestParam @Positive int page,
                                         @RequestParam @Positive int size) {
-        List<UserDto.HabitResponse> habitResponses = userService.findHostHabits(userId, page, size);
+        List<UserDto.HabitResponse> habitResponses = userService.findHostHabits(lastHabitId, userId, page, size);
         return new ResponseEntity(habitResponses, HttpStatus.OK);
 
         // API 통신용

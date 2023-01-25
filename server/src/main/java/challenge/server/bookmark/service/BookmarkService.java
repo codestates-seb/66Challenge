@@ -34,37 +34,13 @@ public class BookmarkService {
     private final HabitService habitService;
 
     // 회원이 찜한 습관들의 목록 출력
-    public List<UserDto.HabitResponse> findBookmarkHabits(Long userId, int page, int size) {
+    public List<Habit> findBookmarkHabits(Long lastHabitId, Long userId, int page, int size) {
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없음
 //        Long loggedInUserId = userService.verifyLoggedInUser(userId);
         User findUser = userService.findVerifiedUser(userId);
+        List<Habit> habits  = bookmarkRepository.findAllByUserUserId(lastHabitId, findUser.getUserId(), page, size);
 
-        // Bookmark 테이블에서 해당 회원의 Bookmark 데이터를 다 받아옴
-        List<Bookmark> bookmarks = bookmarkRepository.findAllByUserUserId(findUser.getUserId(), PageRequest.of(page - 1, size, Sort.by("bookmarkId").descending())).getContent();
-
-        List<Habit> habits = new ArrayList<>();
-
-        // DB로부터 받아온, 해당 회원의 Bookmarks 데이터 중 habitId를 통해 해당 Habit 상세 정보를 Habit 테이블로부터 받아옴
-        for (int i = 0; i < bookmarks.size(); i++) {
-            habits.add(habitRepository.findById(bookmarks.get(i).getHabit().getHabitId()).get());
-        }
-
-        List<UserDto.HabitResponse> habitResponses = new ArrayList<>();
-        for (int i = 0; i < habits.size(); i++) {
-            Habit h = habits.get(i);
-            UserDto.HabitResponse habitResponse = UserDto.HabitResponse.builder()
-                    .habitId(h.getHabitId())
-                    .title(h.getTitle())
-                    .subTitle(h.getSubTitle())
-                    .body(h.getBody())
-                    .isBooked(!bookmarkRepository.findByUserUserIdAndHabitHabitId(userId, h.getHabitId()).isEmpty())
-                    .thumbImgUrl(h.getThumbImgUrl())
-                    .build();
-
-            habitResponses.add(habitResponse);
-        }
-
-        return habitResponses;
+        return habits;
     }
 
     // 북마크 추가

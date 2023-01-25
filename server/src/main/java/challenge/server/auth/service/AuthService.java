@@ -56,19 +56,12 @@ public class AuthService {
         return findVerifiedAuth(authId);
     }
 
-    public List<Auth> findAll(int page, int size) {
-        return authRepository.findAll(PageRequest.of(page, size,
-                Sort.by("authId").descending())).getContent();
+    public List<Auth> findAllByChallenge(Long lastAuthId, Long challengeId, int page, int size) {
+        return authRepository.findAllByChallengeChallengeId(lastAuthId, challengeId, page, size);
     }
 
-    public List<Auth> findAllByChallenge(Long challengeId, int page, int size) {
-        return authRepository.findAllByChallengeChallengeId(challengeId,
-                PageRequest.of(page - 1, size, Sort.by("authId").descending())).getContent();
-    }
-
-    public List<Auth> findAllByHabit(Long habitId, int page, int size) {
-        return authRepository.findAllByChallengeHabitHabitId(habitId,
-                PageRequest.of(page - 1, size, Sort.by("authId").descending())).getContent();
+    public List<Auth> findAllByHabit(Long lastAuthId, Long habitId, int page, int size) {
+        return authRepository.findAllByChallengeHabitHabitId(lastAuthId, habitId, page, size);
     }
 
     @Transactional

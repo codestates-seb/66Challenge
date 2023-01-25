@@ -50,7 +50,6 @@ public class ChallengeController {
 //        return new ResponseEntity<>(mapper.toDto(challenge), HttpStatus.OK);
 //    }
 
-    @ApiOperation(value = "특정 회원의 도전중인 모든 챌린지 조회")
     @GetMapping("/users/{user-id}/challenge")
     public ResponseEntity findAllByChallenge(@PathVariable("user-id") @Positive Long userId,
                                         @RequestParam @Positive int page,
@@ -60,7 +59,6 @@ public class ChallengeController {
         return new ResponseEntity<>(mapper.toDtos(challenges), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "특정 회원의 완료한 모든 챌린지 조회")
     @GetMapping("/users/{user-id}/success")
     public ResponseEntity findAllBySuccess(@PathVariable("user-id") @Positive Long userId,
                                         @RequestParam @Positive int page,
@@ -106,7 +104,6 @@ public class ChallengeController {
 //        return new ResponseEntity<>(mapper.toDtos(findAllByFail), HttpStatus.OK);
 //    }
 
-    @ApiOperation(value = "인증글 등록")
     @PostMapping("/{chaellenge-id}/auths")
     public ResponseEntity createAuth(@PathVariable("chaellenge-id") @Positive Long challengeId,
                                      @RequestPart("file") MultipartFile multipartFile,
@@ -121,7 +118,6 @@ public class ChallengeController {
         return new ResponseEntity<>(authMapper.toDto(createAuth), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "인증글 수정")
     @PatchMapping("/{challenge-id}/auths/{auth-id}")
     public ResponseEntity updateAuth(@PathVariable("auth-id") @Positive Long authId,
                                      @RequestPart(value = "file", required = false) MultipartFile multipartFile,
@@ -157,7 +153,6 @@ public class ChallengeController {
 //        return new ResponseEntity<>(authMapper.toDtos(findAuths), HttpStatus.CREATED);
 //    }
 
-    @ApiOperation(value = "인증글 삭제")
     @DeleteMapping("/{challenge-id}/auths/{auth-id}")
     public ResponseEntity deleteAuth(@PathVariable("auth-id") @Positive Long authId) {
         authService.deleteAuth(authId);
