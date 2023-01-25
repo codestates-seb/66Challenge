@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Modal } from '../modal';
 import { AiOutlineStar, AiFillStar } from 'react-icons/ai';
-import { postHabitReview } from '../../module/habitFunctionMoudules';
-import { useAppSelector } from '../../ducks/store';
+import { postHabitReview } from '../../module/reviewFunctionModules';
 import { useRouter } from 'next/router';
-export function ReviewHabitBottomNav() {
+interface IPropValue {
+  habitId: number;
+  userId: number;
+}
+export function ReviewHabitBottomNav({ habitId, userId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState('');
   const [score, setScore] = useState(-1);
@@ -13,9 +16,7 @@ export function ReviewHabitBottomNav() {
   const scoreHandle = (score: number) => {
     setScore(score);
   };
-  const { userId } = useAppSelector((state) => state.loginIdentity);
   const max = new Array(5).fill(null);
-  const habitId: string | string[] = router.query.habitId;
 
   return (
     <div className="flex bg-white h-[3rem] px-6  w-full fixed bottom-0 min-w[300px] justify-center items-center border-t">

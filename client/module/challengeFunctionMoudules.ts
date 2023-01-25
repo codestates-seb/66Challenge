@@ -1,65 +1,22 @@
 import { getCookie } from './cookies';
-// export async function getAllChallenges(page, size) {
-//   try {
-//     const response = await axios
-//       .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/challenges`)
-//       .then((res) => console.log(res));
-//     return response;
-//   } catch (e) {
-//     console.error(e);
-//   }
-// }
-// export async function postChallenge({ cookie, userId, habitId }) {
-//   try {
-//     const response = await axios
-//       .post(
-//         `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges`,
-//         {
-//           userId,
-//           habitId,
-//         },
-//         {
-//           headers: {
-//             Authorization: cookie,`,
-//           },
-//         },
-//       )
-//       .then((res) => console.log(res));
-//     return response;
-//   } catch (e) {
-//     console.error(e);
-//   }
-// }
-// export async function getChallengeAuths(cookie) {
-//   try {
-//     const response = await axios
-//       .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/auths`, {
-//         headers: {
-//           Authorization: cookie,,
-//         },
-//       })
-//       .then((res) => console.log(res));
-//     return response;
-//   } catch (e) {
-//     console.error(e);
-//   }
-// }
-export async function postAuth({ challengeId, body, cookie }) {
+import axios, { AxiosError } from 'axios';
+export async function postAuth({ challengeId, body }) {
   try {
     const response = await axios
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/${challengeId}/auths`,
-        { body },
+        body,
         {
           headers: {
             Authorization: getCookie('accessJwtToken'),
+            'Content-Type': 'multipart/form-data',
           },
         },
       )
       .then((res) => console.log(res));
     return response;
   } catch (e) {
-    console.error(e);
+    console.log(e);
   }
 }
 export async function deleteAuth({ challengeId, authId }) {
@@ -97,11 +54,11 @@ export async function patchAuths({ challengeId, authId, body }) {
     console.error(e);
   }
 }
-export async function getUserChallenges(userId, page, size) {
+export async function getUserSuccessChallenges(userId: number) {
   try {
     const response = await axios
       .get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/users/${userId}?page=${page}&size=${size}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/users/${userId}/success?page=1&size=90000`,
         {
           headers: {
             Authorization: getCookie('accessJwtToken'),
@@ -112,5 +69,24 @@ export async function getUserChallenges(userId, page, size) {
     return response;
   } catch (e) {
     console.error(e);
+  }
+}
+export async function getUserChallenges(userId: number) {
+  try {
+    const response = await axios
+      .get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/users/${userId}/challenge?page=1&size=90000`,
+        {
+          headers: {
+            Authorization: getCookie('accessJwtToken'),
+          },
+        },
+      )
+      .then((res) => res.data);
+    return response;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      return e.response.status;
+    }
   }
 }
