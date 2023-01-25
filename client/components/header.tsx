@@ -14,17 +14,15 @@ import { FC } from 'react';
 
 const Header: FC = () => {
   const router = useRouter();
-  const pathArr: string[] = router.asPath.split('/').slice(1); // path의 요소를 나눔
-  const last = pathArr[pathArr.length - 1]; // path의 마지막 요소
-  const beforeLast = pathArr[pathArr.length - 2]; // path의 마지막에서 두번째요소
-  const pathHead = pathArr[0].concat(pathArr[1]);
+  const slicer: RegExp = /\/|\?/;
+  const pathArr: string[] = router.asPath.split(slicer).slice(1);
 
-  const [isLogo, setIsLogo] = useState(false);
-  const [isMyPage, setIsMyPage] = useState(false);
-  const [pageTitle, setPageTitle] = useState(null);
-  const [isCanShare, setIsCanShare] = useState(false);
+  const [isLogo, setIsLogo] = useState<boolean>(false);
+  const [isMyPage, setIsMyPage] = useState<boolean>(false);
+  const [pageTitle, setPageTitle] = useState<string | null>(null);
+  const [isCanShare, setIsCanShare] = useState<boolean>(false);
 
-  const titleList = {
+  const titleList: object = {
     login: '로그인',
     signup: '회원가입',
     madehabit: '내가 만든 습관',
@@ -36,22 +34,25 @@ const Header: FC = () => {
     auth: '습관 인증하기',
   };
   // path별 페이지제목
+
   useEffect(() => {
+    console.log(pathArr);
+
+    function titleDetect(pathArr): void {
+      for (let i = pathArr.length - 1; i >= 0; i--) {
+        if (titleList[pathArr[i]]) {
+          setPageTitle(titleList[pathArr[i]]);
+          return;
+        }
+      }
+      setPageTitle(null);
+    }
+
     function logoDetact(): void {
       if (pageTitle) {
         setIsLogo(false);
       } else {
         setIsLogo(true);
-      }
-    }
-
-    function titleDetect(path1, path2): void {
-      if (titleList[path1]) {
-        setPageTitle(titleList[path1]);
-      } else if (titleList[path2]) {
-        setPageTitle(titleList[path2]);
-      } else {
-        setPageTitle(null);
       }
     }
 
@@ -70,11 +71,11 @@ const Header: FC = () => {
         setIsCanShare(false);
       }
     }
-    titleDetect(last, beforeLast);
+    titleDetect(pathArr);
     logoDetact();
     settingsDetect();
     shareDetect();
-  }, [last, pageTitle]);
+  }, [pathArr]);
 
   const LeftSide: FC = () => {
     // 폰트 정해야함 혹은 타이포그래피?
@@ -128,7 +129,9 @@ const Header: FC = () => {
           {isMyPage ? (
             <IoSettings className="h-8 w-8" />
           ) : (
-            <IoSearch className="h-8 w-8" />
+            <Link href={'/habit/search'}>
+              <IoSearch className="h-8 w-8" />
+            </Link>
           )}
         </div>
       );
