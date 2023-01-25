@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { ReviewArticle } from '../../../../components/reviewArticle';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useIntersection } from '../../../../hooks/useIntersection';
 import type { reviewArticleProps } from '../../../../components/reviewArticle';
 
@@ -13,14 +13,15 @@ export default function HabitDetailReview() {
   const [setTarget] = useIntersection(url, page, setPage, setReviewData);
 
   return (
-    <div className="habit-detail-review-container px-5">
-      {reviewData.map((el) => {
-        return (
-          <div className="habit-detail-review-wrapper" key={el.reviewId}>
-            <ReviewArticle {...el} habitId={+habitId} />
-          </div>
-        );
-      })}
+    <div className="habit-detail-review-container px-5 pt-5">
+      {reviewData.length !== 0 &&
+        reviewData.map((el) => {
+          return (
+            <div className="habit-detail-review-wrapper" key={el.reviewId}>
+              <ReviewArticle {...el} habitId={+habitId} />
+            </div>
+          );
+        })}
       <div ref={setTarget}></div>
     </div>
   );
