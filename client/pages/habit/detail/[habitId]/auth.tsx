@@ -13,7 +13,7 @@ export default function HabitDetailAuth() {
   const [setTarget] = useIntersection(url, page, setPage, setAuthData);
 
   return (
-    <div className="habit-detail-auth-container px-5">
+    <div className="habit-detail-auth-container px-5 pt-5">
       {authData.map((el) => {
         return (
           <div className="habit-detail-auth-wrapper" key={el.authId}>

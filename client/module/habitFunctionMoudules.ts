@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import type {
   habitGeneralProps,
   postHabitProps,
@@ -7,15 +7,16 @@ import type {
   getHabitsSearchCategoryProps,
 } from './moduleInterface';
 import { getCookie } from './cookies';
-export async function postHabit({ data }: postHabitProps) {
+export async function postHabit({ data }) {
   try {
     const response = await axios
       .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits`, data, {
         headers: {
           Authorization: getCookie('accessJwtToken'),
+          'Content-Type': 'multipart/form-data',
         },
       })
-      .then((res) => console.log(res));
+      .then((res) => res.data);
     return response;
   } catch (e) {
     console.error(e);
@@ -90,7 +91,7 @@ export async function postStartChallenge({
   userId,
 }: habitGeneralProps) {
   try {
-    const response = await axios
+    const response: number = await axios
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/challenges?userId=${userId}`,
         null,
@@ -100,13 +101,14 @@ export async function postStartChallenge({
           },
         },
       )
-      .then((res) => console.log(res));
+      .then((res) => res.status);
     return response;
   } catch (e) {
-    console.error(e);
+    if (e instanceof AxiosError) {
+      return e.response.status;
+    }
   }
 }
-
 export async function getHabitStatistics(habitId: string) {
   try {
     const response = await axios

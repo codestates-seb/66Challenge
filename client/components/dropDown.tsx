@@ -7,6 +7,7 @@ import {
   postReviewReport,
 } from '../module/reportFunctionMoudules';
 import { deleteHabitReview } from '../module/reviewFunctionModules';
+import { deleteHabitAuth } from '../module/authFunctionMoudules';
 import { reportData } from '../data/reportData';
 import { useAppSelector } from '../ducks/store';
 
@@ -18,15 +19,21 @@ interface propsValue {
   dropDownType: string;
   boolean: boolean;
   authId?: number;
+  authorUserId?: number;
   habitId?: number;
+  hostUserId?: number;
   reviewId?: number;
+  reviewerUserId?: number;
 }
 export function DropDown({
   dropDownType,
   boolean,
   authId,
+  authorUserId,
   habitId,
+  hostUserId,
   reviewId,
+  reviewerUserId,
 }: propsValue) {
   const [arrowDirection, setArrowDirection] = useState<IarrowValue>({
     className: '',
@@ -55,11 +62,17 @@ export function DropDown({
       return;
     }
     if (dropDownType === 'review') {
-      postReviewReport({ habitId, reviewId, reportType, userId });
+      postReviewReport({
+        habitId,
+        reviewId,
+        reportType,
+        userId,
+        reviewerUserId,
+      });
     } else if (dropDownType === 'auth') {
-      postAuthReport({ habitId, authId, reportType, userId });
+      postAuthReport({ habitId, authId, reportType, userId, authorUserId });
     } else if (dropDownType === 'habit') {
-      postHabitReport({ habitId, userId, reportType });
+      postHabitReport({ habitId, userId, reportType, hostUserId });
     }
     setIsReportOpen(false);
   };
@@ -74,6 +87,7 @@ export function DropDown({
       deleteHabitReview({ habitId, reviewId });
     } else if (dropDownType === 'auth') {
       //인증 삭제 비동기 함수 호출
+      deleteHabitAuth({ authId });
     }
     setIsDeleteOpen(false);
   };
@@ -95,14 +109,14 @@ export function DropDown({
       {arrowDirection.boolean === false ? null : (
         <div className="flex flex-col w-full absolute top-[18px] right-0 ">
           <span
-            className="text-xs border border-[#e5e5e5]  bg-white text-center py-[5px]"
+            className="text-sm border border-[#e5e5e5]  bg-white text-center py-[5px]"
             onClick={(_) => setIsReportOpen(true)}
           >
             신고하기
           </span>
           {boolean === true ? (
             <span
-              className="text-xs border-x border-b border-[#e5e5e5]  bg-white  text-center py-[5px]"
+              className="text-sm border-x border-b border-[#e5e5e5]  bg-white  text-center py-[5px]"
               onClick={(_) => setIsDeleteOpen(true)}
             >
               삭제하기

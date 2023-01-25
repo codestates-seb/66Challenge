@@ -1,21 +1,28 @@
 import axios from 'axios';
 import { getCookie } from './cookies';
 import type {
-  postReportGeneralProps,
+  postReportHabitProps,
   postReportAuthPorps,
   postReportReviewPorps,
 } from './moduleInterface';
 
 export async function postHabitReport({
   habitId,
+  hostUserId,
   userId,
   reportType,
-}: postReportGeneralProps) {
+}: postReportHabitProps) {
   try {
     const response = await axios
       .post(
         `${process.env.NEXT_PUBLIC_SEVER_URL}/habits/${habitId}/reports`,
-        { habitId, reportType, reporter: userId },
+        {
+          postId: habitId,
+          postType: 'HABIT',
+          reportType,
+          reporterUserId: userId,
+          reportedUserId: hostUserId,
+        },
         {
           headers: {
             Authorization: getCookie('accessJwtToken'),
@@ -32,6 +39,7 @@ export async function postHabitReport({
 export async function postAuthReport({
   habitId,
   authId,
+  authorUserId,
   reportType,
   userId,
 }: postReportAuthPorps) {
@@ -39,7 +47,13 @@ export async function postAuthReport({
     const response = await axios
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/auths/${authId}/reports`,
-        { authId, reportType, reporter: userId },
+        {
+          postId: authId,
+          postType: 'AUTH',
+          reportType,
+          reporterUserId: userId,
+          reportedUserId: authorUserId,
+        },
         {
           headers: {
             Authorization: getCookie('accessJwtToken'),
@@ -56,6 +70,7 @@ export async function postAuthReport({
 export async function postReviewReport({
   habitId,
   reviewId,
+  reviewerUserId,
   reportType,
   userId,
 }: postReportReviewPorps) {
@@ -63,7 +78,13 @@ export async function postReviewReport({
     const response = await axios
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews/${reviewId}/reports`,
-        { reviewId, reportType, reporter: userId },
+        {
+          postId: reviewId,
+          postType: 'REVIEW',
+          reportType,
+          reporterUserId: userId,
+          reportedUserId: reviewerUserId,
+        },
         {
           headers: {
             Authorization: getCookie('accessJwtToken'),

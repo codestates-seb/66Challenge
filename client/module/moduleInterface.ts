@@ -84,6 +84,11 @@ interface patchHabitReviewProps extends deleteHabitReviewProps {
 interface getAuthProps extends pageAndSize {
   habitId: number;
 }
+
+interface deleteAuthProps {
+  authId: number;
+}
+
 // authFunctionModule
 
 // reportFunctionModule
@@ -93,12 +98,18 @@ interface postReportGeneralProps {
   reportType: string;
 }
 
+interface postReportHabitProps extends postReportGeneralProps {
+  hostUserId: number;
+}
+
 interface postReportAuthPorps extends postReportGeneralProps {
   authId: number;
+  authorUserId: number;
 }
 
 interface postReportReviewPorps extends postReportGeneralProps {
   reviewId: number;
+  reviewerUserId: number;
 }
 // reportFunctionModule
 
@@ -117,7 +128,9 @@ export type {
   getHabitsSearchProps,
   getHabitsSearchCategoryProps,
   postReportGeneralProps,
+  postReportHabitProps,
   postReportAuthPorps,
   postReportReviewPorps,
   getAuthProps,
+  deleteAuthProps,
 };
