@@ -109,7 +109,7 @@ public class ChallengeController {
     @ApiOperation(value = "인증글 등록")
     @PostMapping("/{chaellenge-id}/auths")
     public ResponseEntity createAuth(@PathVariable("chaellenge-id") @Positive Long challengeId,
-                                     @RequestPart(value = "file", required = false) MultipartFile multipartFile,
+                                     @RequestPart("file") MultipartFile multipartFile,
                                      @RequestPart("data") @Valid AuthDto.Post postDto) {
         Challenge challenge = challengeService.findChallenge(challengeId);
         challenge.todayAuthCheck(LocalDateTime.now());
@@ -124,7 +124,7 @@ public class ChallengeController {
     @ApiOperation(value = "인증글 수정")
     @PatchMapping("/{challenge-id}/auths/{auth-id}")
     public ResponseEntity updateAuth(@PathVariable("auth-id") @Positive Long authId,
-                                     @RequestPart("file") MultipartFile multipartFile,
+                                     @RequestPart(value = "file", required = false) MultipartFile multipartFile,
                                      @RequestPart("data") @Valid AuthDto.Patch patchDto) {
         Auth auth = Auth.builder().authId(authId).body(patchDto.getBody()).build();
 
