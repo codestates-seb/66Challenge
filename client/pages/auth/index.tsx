@@ -77,9 +77,7 @@ export default function Auth() {
     if (authImage && authImage.length > 0) {
       setVerify({ ...verify, imgVerify: 'success' });
       const file = authImage[0];
-      setImgFile(
-        'https://s3.ap-northeast-2.amazonaws.com/challenge66.file.bucket/images/3cb6c7f7-8af9-4957-92d4-eb46785277de.jpeg',
-      );
+      setImgFile(URL.createObjectURL(file));
     }
   }, [authImage]);
 
