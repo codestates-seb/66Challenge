@@ -9,7 +9,7 @@ export function useIntersection(
   url: string,
   page: number,
   setPage: React.Dispatch<React.SetStateAction<number>>,
-  setData: React.Dispatch<React.SetStateAction<Array<any>>>,
+  setData: React.Dispatch<React.SetStateAction<Array<unknown>>>,
 ): Array<React.Dispatch<React.SetStateAction<HTMLElement>>> {
   const [target, setTarget] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);

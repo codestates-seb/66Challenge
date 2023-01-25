@@ -47,29 +47,6 @@ interface postHabitProps {
   data: PostHabitData;
 }
 
-interface getHabitAuthsReviewsProps extends pageAndSize {
-  habitId: number;
-}
-
-interface postAuthReportProps extends deleteHabitProps {
-  authReportPostDto: string;
-  authId: number;
-}
-
-interface postHabitReviewProps extends habitGeneralProps {
-  body: string;
-  score: number;
-}
-
-interface deleteHabitReviewProps extends deleteHabitProps {
-  reviewId: number;
-}
-
-interface patchHabitReviewProps extends deleteHabitReviewProps {
-  body: string;
-  score: number;
-}
-
 interface getHabitsSearchProps extends pageAndSize {
   keyword: string;
 }
@@ -79,6 +56,52 @@ interface getHabitsSearchCategoryProps extends pageAndSize {
 }
 // habitFunctionModule
 
+// reviewFunctionModule
+interface getReviewsProps extends pageAndSize {
+  habitId: number;
+}
+
+interface postHabitReviewProps {
+  habitId: number;
+  userId: number;
+  body: string;
+  score: number;
+}
+
+interface deleteHabitReviewProps {
+  reviewId: number;
+  habitId: number;
+}
+
+interface patchHabitReviewProps extends deleteHabitReviewProps {
+  body: string;
+  score: number;
+}
+
+// reviewFunctionModule
+
+// authFunctionModule
+interface getAuthProps extends pageAndSize {
+  habitId: number;
+}
+// authFunctionModule
+
+// reportFunctionModule
+interface postReportGeneralProps {
+  habitId: number;
+  userId: number;
+  reportType: string;
+}
+
+interface postReportAuthPorps extends postReportGeneralProps {
+  authId: number;
+}
+
+interface postReportReviewPorps extends postReportGeneralProps {
+  reviewId: number;
+}
+// reportFunctionModule
+
 export type {
   SignUpProps,
   UserGeneralProps,
@@ -87,11 +110,14 @@ export type {
   habitGeneralProps,
   postHabitProps,
   deleteHabitProps,
-  getHabitAuthsReviewsProps,
-  postAuthReportProps,
+  getReviewsProps,
   postHabitReviewProps,
   deleteHabitReviewProps,
   patchHabitReviewProps,
   getHabitsSearchProps,
   getHabitsSearchCategoryProps,
+  postReportGeneralProps,
+  postReportAuthPorps,
+  postReportReviewPorps,
+  getAuthProps,
 };
