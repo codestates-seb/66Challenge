@@ -1,7 +1,11 @@
 package challenge.server.review.repository;
 
+import challenge.server.review.entity.Review;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 import static challenge.server.habit.entity.QHabit.habit;
 import static challenge.server.review.entity.QReview.review;
@@ -24,5 +28,25 @@ public class ReviewCustomRepositoryImpl implements ReviewCustomRepository {
                 .leftJoin(habit.reviews, review)
                 .on(habit.habitId.eq(review.habit.habitId))
                 .fetchOne();
+    }
+
+    @Override
+    public List<Review> findAllByHabitHabitId(Long lastReviewId, Long habitId, int page, int size) {
+        return jpaQueryFactory
+                .selectFrom(review)
+                .where(
+                        review.habit.habitId.eq(habitId),
+                        ltReviewId(lastReviewId)
+                ).orderBy(review.reviewId.desc())
+                .offset(page - 1)
+                .limit(size)
+                .fetch();
+    }
+
+    private BooleanExpression ltReviewId(Long lastReviewId) {
+        if (lastReviewId == null) {
+            return null;
+        }
+        return habit.habitId.lt(lastReviewId);
     }
 }

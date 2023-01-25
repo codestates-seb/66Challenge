@@ -42,9 +42,8 @@ public class ReviewService {
                 Sort.by("reviewId").descending())).getContent();
     }
 
-    public List<Review> findAllByHabit(Long habitId, int page, int size) {
-        return reviewRepository.findAllByHabitHabitId(habitId,
-                PageRequest.of(page - 1, size, Sort.by("reviewId").descending())).getContent();
+    public List<Review> findAllByHabit(Long lastReviewId, Long habitId, int page, int size) {
+        return reviewRepository.findAllByHabitHabitId(lastReviewId, habitId, page, size);
     }
 
     public void deleteReview(Long reviewId) {
