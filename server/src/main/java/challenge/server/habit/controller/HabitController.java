@@ -56,17 +56,16 @@ public class HabitController {
     public ResponseEntity postHabit(@RequestPart("thumbImg") MultipartFile thumbImg,
                                     @RequestPart("succImg") MultipartFile succImg,
                                     @RequestPart("failImg") MultipartFile failImg,
-                                    @RequestPart("data") @Valid HabitDto.Post habitPostDto,
-                                    @RequestParam @Positive Long userId) {
-        // TODO 이미지 파일 리스트로 받기
-        // TODO 아래 과정 컨트롤러 말고 DTO에서 처리하기
+                                    @RequestPart("data") @Valid HabitDto.Post habitPostDto) {
+        //TODO이미지 파일 리스트로 받기
+//TODO아래 과정 컨트롤러 말고 DTO에서 처리하기
         Habit habit = habitMapper.habitPostDtoToHabit(habitPostDto);
         habit.setThumbImgUrl(fileUploadService.save(thumbImg));
-        habit.setThumbImgUrl(fileUploadService.save(succImg));
-        habit.setThumbImgUrl(fileUploadService.save(failImg));
+        habit.setSuccImgUrl(fileUploadService.save(succImg));
+        habit.setFailImgUrl(fileUploadService.save(failImg));
 
         Habit createHabit = habitService.createHabit(habit);
-        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(createHabit, userId), HttpStatus.CREATED);
+        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(createHabit, habitPostDto.getHostUserId()), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{habit-id}")
@@ -79,8 +78,8 @@ public class HabitController {
 
         Habit habit = habitMapper.habitPatchDtoToHabit(habitPatchDto);
         if(thumbImg!=null) habit.setThumbImgUrl(fileUploadService.save(thumbImg));
-        if(succImg!=null) habit.setThumbImgUrl(fileUploadService.save(succImg));
-        if(failImg!=null) habit.setThumbImgUrl(fileUploadService.save(failImg));
+        if(succImg!=null) habit.setSuccImgUrl(fileUploadService.save(succImg));
+        if(failImg!=null) habit.setFailImgUrl(fileUploadService.save(failImg));
 
         habit.setHabitId(habitId);
         Habit updateHabit = habitService.updateHabit(habit);
@@ -99,7 +98,7 @@ public class HabitController {
                                           @RequestParam @Positive int page,
                                           @RequestParam @Positive int size,
                                           @RequestParam(required = false) @Positive Long userId) {
-        // TODO userId null일 때 challengeStatus, isBooked 조회
+        //TODO userId null일 때 challengeStatus, isBooked조회
         List<Habit> habits;
         if(keyword==null) habits = habitService.findAll(page,size);
         else habits = habitService.findAllByKeyword(keyword,page,size);
@@ -112,7 +111,7 @@ public class HabitController {
                                            @RequestParam @Positive int page,
                                            @RequestParam @Positive int size,
                                            @RequestParam(required = false) @Positive Long userId) {
-        // TODO userId null일 때 challengeStatus, isBooked 조회
+        //TODO userId null일 때 challengeStatus, isBooked조회
         List<Habit> habits = habitService.findAllByCategory(categoryId,page,size);
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
@@ -121,7 +120,7 @@ public class HabitController {
     @GetMapping("/{habit-id}")
     public ResponseEntity getHabit(@PathVariable("habit-id") @Positive Long habitId,
                                    @RequestParam(required = false) @Positive Long userId) {
-        // TODO userId null일 때 challengeStatus, isBooked 조회
+        //TODO userId null일 때 challengeStatus, isBooked조회
         Habit findHabit = habitService.findHabit(habitId);
         return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(findHabit, userId), HttpStatus.OK);
     }
@@ -145,7 +144,7 @@ public class HabitController {
     // 습관 조회 - 통계 탭 - 통계 DTO
     @GetMapping("/{habit-id}/statistics")
     public ResponseEntity getHabitByStatistics(@PathVariable("habit-id") @Positive Long habitId) {
-        // TODO 통계 테이블 설정 후 추가 예정
+        //TODO통계 테이블 설정 후 추가 예정
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -224,7 +223,7 @@ public class HabitController {
     // 습관 북마크 - 북마크 등록
     @PostMapping("/{habit-id}/bookmarks")
     public ResponseEntity postBookmark(@PathVariable("habit-id") @Positive Long habitId,
-                                        @RequestParam @Positive Long userId) {
+                                       @RequestParam @Positive Long userId) {
         Bookmark bookmark = bookmarkService.createBookmark(habitId, userId);
         return new ResponseEntity<>(bookmarkMapper.bookmarkToBookmarkResponseDto(bookmark), HttpStatus.CREATED);
     }
@@ -232,7 +231,7 @@ public class HabitController {
     // 습관 북마크 - 북마크 취소
     @DeleteMapping("/{habit-id}/bookmarks")
     public ResponseEntity deleteBookmark(@PathVariable("habit-id") @Positive Long habitId,
-                                       @RequestParam @Positive Long userId) {
+                                         @RequestParam @Positive Long userId) {
 
         Bookmark findBookmark = bookmarkService.findBookmarkByUserAndHabit(userId, habitId);
         bookmarkService.deleteBookmark(findBookmark.getBookmarkId());

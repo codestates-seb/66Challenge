@@ -54,7 +54,7 @@ public class HabitDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Detail {
-        private Long hostUserId;
+        private String hostUsername;
         private String subTitle;
         private String authType;
         private String authStartTime;

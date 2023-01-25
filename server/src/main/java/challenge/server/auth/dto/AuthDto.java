@@ -23,6 +23,7 @@ public class AuthDto {
     public static class Response {
         private Long authId;
         private Long authorUserId;
+        private String authorUsername;
         private String body;
         private String createdAt;
         private String authImageUrl;

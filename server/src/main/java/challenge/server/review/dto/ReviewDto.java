@@ -35,6 +35,7 @@ public class ReviewDto {
     public static class Response {
         private Long reviewId;
         private Long reviewerUserId;
+        private String reviewerUsername;
         private String body;
         private int score;
         private String createdAt;
