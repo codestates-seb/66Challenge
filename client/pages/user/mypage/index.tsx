@@ -1,31 +1,20 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
-import { getCookie } from '../../../module/cookies';
-import { useSelector } from 'react-redux';
 import { useAppSelector } from '../../../ducks/store';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { FC } from 'react';
+import { getUserInfo } from '../../../module/userFunctionMoudules';
 import { MyPageMenuList } from '../../../components/myPageMenuList';
 
-const MyPage: FC = () => {
-  // console.log(getCookie('accessJwtToken'));
+const MyPage = () => {
   const userId = useAppSelector((state) => state.loginIdentity.userId);
-  // const userId = 21;
   const [userInfo, setUserInfo] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, {
-        headers: {
-          Authorization: `${getCookie('accessJwtToken')}`,
-        },
-      })
-      .then((data): void => {
-        setUserInfo(data.data);
-        console.log(data.data);
-      });
+    getUserInfo({ userId }).then((data) => {
+      setUserInfo(data);
+    });
   }, []);
 
   const handleHabitDetail = (id: number): void => {
@@ -36,7 +25,7 @@ const MyPage: FC = () => {
     width: ${(props) => `${props.width}%`};
   `;
 
-  const Profile: FC = () => {
+  const Profile = () => {
     return (
       <div className="flex flex-row items-center justify-center solid border-b-black border-b border-t-black border-t">
         <div className="absolute left-0 ml-10 w-16 h-16 rounded-full border">
@@ -59,7 +48,7 @@ const MyPage: FC = () => {
     );
   };
 
-  const ActiveChallenges: FC = () => {
+  const ActiveChallenges = () => {
     return (
       <div className="border mx-1 pb-1 mt-2 mb-2 solid border-black rounded-xl">
         <div className="mt-2 ml-4 mb-1 font-semibold w-max border-y border-gray-400 ">

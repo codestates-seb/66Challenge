@@ -52,10 +52,11 @@ export const Modal = ({
   const closeModalHandler = () => {
     setIsOpen(!isOpen);
   };
+
   return (
     <div className="modal-container">
       <div
-        className="modal-backdrop fixed inset-0 bg-slate-200/50 flex justify-center items-center"
+        className="modal-backdrop inset-0 bg-slate-200/50 flex justify-center items-center"
         onClick={closeModalHandler}
       >
         <div
