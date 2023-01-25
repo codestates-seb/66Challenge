@@ -3,15 +3,13 @@
 // Todo 2. 훅을 사용하는 컴포넌트에서 맨 하단에 div 엘리먼트를 만들어주시고, ref의 속성값으로 훅에서 반환되는 setTarget을 넣어주시면 됩니다.
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import type { HabitElementProps } from '../components/habitElement';
 
+// (추후 수정) setData의 type에서 Array 안에 들어가는 객체의 타입을 지정해줘야 함
 export function useIntersection(
   url: string,
   page: number,
   setPage: React.Dispatch<React.SetStateAction<number>>,
-  setHabitWrapperData: React.Dispatch<
-    React.SetStateAction<Array<HabitElementProps>>
-  >,
+  setData: React.Dispatch<React.SetStateAction<Array<unknown>>>,
 ): Array<React.Dispatch<React.SetStateAction<HTMLElement>>> {
   const [target, setTarget] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -49,11 +47,11 @@ export function useIntersection(
   }, [target, isLoaded, stop]);
 
   useEffect(() => {
+    console.log(`${url}page=${page}&size=30`);
     if (isLoaded && !stop) {
-      axios.get(`${url}/${page}`).then((res) => {
-        setHabitWrapperData((habitWrapperData) =>
-          habitWrapperData.concat(res.data),
-        );
+      axios.get(`${url}page=${page}&size=30`).then((res) => {
+        console.log(res.data);
+        setData((data) => data.concat(res.data));
         setPage((page) => page + 1);
         setIsLoaded(false);
 
