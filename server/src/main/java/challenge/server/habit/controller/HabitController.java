@@ -77,13 +77,13 @@ public class HabitController {
                                      @RequestParam @Positive Long userId) {
 
         Habit habit = habitMapper.habitPatchDtoToHabit(habitPatchDto);
-        if(thumbImg!=null) habit.setThumbImgUrl(fileUploadService.save(thumbImg));
-        if(succImg!=null) habit.setSuccImgUrl(fileUploadService.save(succImg));
-        if(failImg!=null) habit.setFailImgUrl(fileUploadService.save(failImg));
+        if (thumbImg != null) habit.setThumbImgUrl(fileUploadService.save(thumbImg));
+        if (succImg != null) habit.setThumbImgUrl(fileUploadService.save(succImg));
+        if (failImg != null) habit.setThumbImgUrl(fileUploadService.save(failImg));
 
         habit.setHabitId(habitId);
         Habit updateHabit = habitService.updateHabit(habit);
-        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(updateHabit,userId), HttpStatus.OK);
+        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(updateHabit, userId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{habit-id}")
@@ -94,25 +94,27 @@ public class HabitController {
 
     // 습관 검색(첫 화면 모두 / 키워드 조회) - 응답 DTO
     @GetMapping("/search")
-    public ResponseEntity getAllByKeyword(@RequestParam(required = false) String keyword,
+    public ResponseEntity getAllByKeyword(@RequestParam(required = false) @Positive Long lastHabitId,
+                                          @RequestParam(required = false) String keyword,
                                           @RequestParam @Positive int page,
                                           @RequestParam @Positive int size,
                                           @RequestParam(required = false) @Positive Long userId) {
         //TODO userId null일 때 challengeStatus, isBooked조회
         List<Habit> habits;
-        if(keyword==null) habits = habitService.findAll(page,size);
-        else habits = habitService.findAllByKeyword(keyword,page,size);
+        if (keyword == null) habits = habitService.findAll(lastHabitId, page, size);
+        else habits = habitService.findAllByKeyword(lastHabitId, keyword, page, size);
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
 
     // 습관 검색(카테고리 조회) - 응답 DTO
     @GetMapping("/search/{category-id}")
     public ResponseEntity getAllByCategory(@PathVariable("category-id") Long categoryId,
+                                           @RequestParam(required = false) @Positive Long lastHabitId,
                                            @RequestParam @Positive int page,
                                            @RequestParam @Positive int size,
                                            @RequestParam(required = false) @Positive Long userId) {
         //TODO userId null일 때 challengeStatus, isBooked조회
-        List<Habit> habits = habitService.findAllByCategory(categoryId,page,size);
+        List<Habit> habits = habitService.findAllByCategory(lastHabitId, categoryId, page, size);
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
 
@@ -198,9 +200,10 @@ public class HabitController {
     // 습관 조회 - 인증 탭 - Auth 리스트 DTO(특정 습관 id에 해당하는)
     @GetMapping("/{habit-id}/auths")
     public ResponseEntity getAuthsByHabit(@PathVariable("habit-id") @Positive Long habitId,
+                                          @RequestParam(required = false) @Positive Long lastAuthId,
                                           @RequestParam @Positive int page,
                                           @RequestParam @Positive int size) {
-        List<Auth> auths = authService.findAllByHabit(habitId, page, size);
+        List<Auth> auths = authService.findAllByHabit(lastAuthId, habitId, page, size);
         return new ResponseEntity(authMapper.toDtos(auths), HttpStatus.OK);
     }
 

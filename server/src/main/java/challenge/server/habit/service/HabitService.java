@@ -8,6 +8,7 @@ import challenge.server.habit.repository.HabitRepository;
 import challenge.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,37 +32,33 @@ public class HabitService {
     @Transactional
     public Habit updateHabit(Habit habit) {
         Habit findHabit = findVerifiedHabit(habit.getHabitId());
-        Habit updatingHabit = beanUtils.copyNonNullProperties(habit,findHabit);
+        Habit updatingHabit = beanUtils.copyNonNullProperties(habit, findHabit);
 
         return habitRepository.save(updatingHabit);
     }
 
-    public Habit findHabit(Long habitId){
+    public Habit findHabit(Long habitId) {
         return findVerifiedHabit(habitId);
     }
 
     // 전체 습관 조회
-    public List<Habit> findAll(int page, int size) {
-        return habitRepository.findAll(
-                PageRequest.of(page-1, size, Sort.by("habitId").descending())).getContent();
+    public List<Habit> findAll(Long lastHabitId, int page, int size) {
+        return habitRepository.findAllNoOffset(lastHabitId, page, size);
     }
 
     // 제목 keyword로 검색(조회)
-    public List<Habit> findAllByKeyword(String keyword, int page, int size) {
-        return habitRepository.findByTitleIsContaining(keyword,
-                PageRequest.of(page-1, size)).getContent();
+    public List<Habit> findAllByKeyword(Long lastHabitId, String keyword, int page, int size) {
+        return habitRepository.findByTitleIsContaining(lastHabitId, keyword, page, size);
     }
 
     // 특정 카테고리의 습관 조회
-    public List<Habit> findAllByCategory(Long categoryId, int page, int size) {
-        return habitRepository.findByCategoryCategoryId(categoryId,
-                PageRequest.of(page-1, size, Sort.by("habitId").descending())).getContent();
+    public List<Habit> findAllByCategory(Long lastHabitId, Long categoryId, int page, int size) {
+        return habitRepository.findByCategory(lastHabitId, categoryId, page, size);
     }
 
     // 특정 사용자(작성자)가 만든 습관 조회
-    public List<Habit> findAllByUser(Long userId, int page, int size) {
-        return habitRepository.findByHostUserId(userId,
-                PageRequest.of(page-1,size,Sort.by("habitId").descending())).getContent();
+    public List<Habit> findAllByUser(Long lastHabitId, Long userId, int page, int size) {
+        return habitRepository.findByHostUserId(lastHabitId, userId, page, size);
     }
 
     @Transactional
@@ -75,6 +72,6 @@ public class HabitService {
 
     public Habit findVerifiedHabit(Long habitId) {
         return habitRepository.findById(habitId)
-                .orElseThrow(()-> new BusinessLogicException(ExceptionCode.HABIT_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.HABIT_NOT_FOUND));
     }
 }

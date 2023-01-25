@@ -4,8 +4,14 @@ import challenge.server.auth.entity.Auth;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.habit.entity.QHabit;
 import challenge.server.review.entity.QReview;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;

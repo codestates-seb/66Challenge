@@ -19,13 +19,12 @@ import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -308,7 +307,7 @@ public class UserService {
 
     // 내가 만든 습관 조회
     // mapper 만들어서 테스트 필요(mapper 없이 응답 통신 가는 것은 Postman 확인 완료)
-    public List<UserDto.HabitResponse> findHostHabits(Long userId, int page, int size) {
+    public List<UserDto.HabitResponse> findHostHabits(Long lastHabitId, Long userId, int page, int size) {
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없는 로직
         /*
         Long loggedInUserId = verifyLoggedInUser(userId);
@@ -317,7 +316,7 @@ public class UserService {
          */
         User findUser = findVerifiedUser(userId);
 
-        List<Habit> habits = habitRepository.findByHostUserId(findUser.getUserId(), PageRequest.of(page - 1, size, Sort.by("habitId").descending())).getContent();
+        List<Habit> habits = habitRepository.findByHostUserId(lastHabitId, findUser.getUserId(), page, size);
 
         List<UserDto.HabitResponse> habitResponses = new ArrayList<>();
         for (int i = 0; i < habits.size(); i++) {

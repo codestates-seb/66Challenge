@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
-    Page<Bookmark> findAllByUserUserId(Long userId, Pageable pageable);
+public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, BookmarkCustomRepository {
+//    Page<Bookmark> findAllByUserUserId(Long userId, Pageable pageable);
     /*
     특정 회원이 찜한 습관 조회
     select b.habit_id
