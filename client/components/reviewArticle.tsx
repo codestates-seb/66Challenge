@@ -7,8 +7,8 @@ import { DateFormat } from '../module/dateFormat';
 interface reviewArticleProps {
   habitId: number;
   reviewId: number;
-  reviewer: string;
-  reviewUserId: number;
+  reviewerUsername: string;
+  reviewerUserId: number;
   body: string;
   createdAt: string;
   score: number;
@@ -20,8 +20,8 @@ export type { reviewArticleProps };
 export const ReviewArticle = ({
   habitId,
   reviewId,
-  reviewer,
-  reviewUserId,
+  reviewerUsername,
+  reviewerUserId,
   body,
   createdAt,
   score,
@@ -34,7 +34,7 @@ export const ReviewArticle = ({
   const [editUserBoolean, setEditUserBoolean] = useState(false);
 
   useEffect(() => {
-    if (userId === reviewUserId) {
+    if (userId === reviewerUserId) {
       setEditUserBoolean(true);
     } else {
       setEditUserBoolean(false);
@@ -46,7 +46,7 @@ export const ReviewArticle = ({
         <div className="review-article-wrapper flex flex-col relative items-center w-full">
           <div className="review-article-header w-full flex justify-between items-center mb-2 ">
             <div className="flex w-full items-center gap-2.5">
-              <span className="text-base">{reviewer}</span>
+              <span className="text-base">{reviewerUsername}</span>
               <span className="flex gap-1">
                 <AiFillStar className="text-subColor" />
                 <span className="text-sm ">{score}</span>
@@ -54,13 +54,16 @@ export const ReviewArticle = ({
               <span className="text-sm text-[#7d7d7d]">
                 {lastModifiedAt
                   ? `${DateFormat(lastModifiedAt)}에 수정됨`
-                  : DateFormat(createdAt)}
+                  : createdAt
+                  ? DateFormat(createdAt)
+                  : ''}
               </span>
             </div>
             <DropDown
               dropDownType="review"
               boolean={editUserBoolean}
               reviewId={reviewId}
+              reviewerUserId={reviewerUserId}
               habitId={habitId}
             />
           </div>
