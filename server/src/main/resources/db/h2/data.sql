@@ -1,5 +1,12 @@
-insert into category (type) values ('자기계발');
 insert into category (type) values ('운동');
+insert into category (type) values ('식습관');
+insert into category (type) values ('학습');
+insert into category (type) values ('일상생활');
+insert into category (type) values ('취미');
+insert into category (type) values ('셀프케어');
+insert into category (type) values ('에코');
+insert into category (type) values ('마음챙김');
+insert into category (type) values ('기타');
 insert into users (email, password, username) values ('jpetran0@google.cn', 'Ju9skkz', 'bhellwing0');
 insert into users (email, password, username) values ('svanderwalt1@sciencedirect.com', 'SPLcH1AJRR', 'mcrighton1');
 insert into users (email, password, username) values ('jbaudacci2@twitpic.com', 'moMZriaon', 'mnormand2');
