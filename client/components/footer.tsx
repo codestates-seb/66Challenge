@@ -6,26 +6,32 @@ import { SiTailwindcss } from 'react-icons/si';
 import { IoLogoPwa } from 'react-icons/io5';
 import { GrMysql } from 'react-icons/gr';
 
+interface memberDataType {
+  id: number;
+  name: string;
+  gitUrl: string;
+}
+
 export const Footer = () => {
-  const FeMemberData = [
+  const feMemberData: Array<memberDataType> = [
     { id: 1, name: '박정우(팀장)', gitUrl: 'https://github.com/jwParkDev' },
     { id: 2, name: '김동규', gitUrl: 'https://github.com/rbaam' },
     { id: 3, name: '배성진', gitUrl: 'https://github.com/Menat91' },
     { id: 4, name: '하수환', gitUrl: 'https://github.com/hasuhwan' },
   ];
 
-  const BeMemberData = [
+  const beMemberData: Array<memberDataType> = [
     { id: 1, name: '강은영', gitUrl: 'https://github.com/greenkey20' },
     { id: 2, name: '김찬빈', gitUrl: 'https://github.com/dev-jambin' },
     { id: 3, name: '선우예림', gitUrl: 'https://github.com/yerimsw' },
   ];
 
-  const FeMemberList = FeMemberData.map((member) => {
+  const FeMemberList = feMemberData.map((member) => {
     return (
-      <div id={member.id}>
+      <div id={String(member.id)} key={member.id}>
         <div className="flex justify-between">
           <span className="text-gray-pink"> {member.name}</span>
-          <a href={member.gitUrl}>
+          <a href={member.gitUrl} target="_blank" rel="noreferrer">
             <BsGithub className="h-5 w-5" />
           </a>
         </div>
@@ -33,13 +39,13 @@ export const Footer = () => {
     );
   });
 
-  const BeMemberList = BeMemberData.map((member) => {
+  const BeMemberList = beMemberData.map((member) => {
     return (
-      <div id={member.id}>
+      <div id={String(member.id)} key={member.id}>
         <div className="flex justify-between">
           <span className="text-gray-pink"> {member.name}</span>
 
-          <a href={member.gitUrl}>
+          <a href={member.gitUrl} target="_blank" rel="noreferrer">
             <BsGithub className="h-5 w-5" />
           </a>
         </div>

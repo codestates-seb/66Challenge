@@ -15,8 +15,8 @@ interface SignUpProps {
 }
 
 interface UserGeneralProps {
-  cookie: string;
-  userId: string;
+  userId: number | null;
+  password?: string;
 }
 
 interface PatchUserInfoProps extends UserGeneralProps {
@@ -25,50 +25,27 @@ interface PatchUserInfoProps extends UserGeneralProps {
 }
 
 interface getUserCertificateProps extends UserGeneralProps {
-  habitId: string;
+  habitId: number;
 }
 // userFunctionModule
 
 // habitFunctionModule
 interface deleteHabitProps {
-  cookie: string;
-  habitId: string;
+  habitId: number;
 }
 
 interface habitGeneralProps extends deleteHabitProps {
-  userId: string;
+  userId: number;
 }
 
 interface PostHabitData extends HabitFormValues {
-  habitImage: string;
+  habitImage: File | null;
+  successImage: File | null;
+  failImage: File | null;
 }
 
 interface postHabitProps {
   data: PostHabitData;
-  cookie: string;
-}
-
-interface getHabitAuthsReviewsProps extends pageAndSize {
-  habitId: string;
-}
-
-interface postAuthReportProps extends deleteHabitProps {
-  authReportPostDto: string;
-  authId: string;
-}
-
-interface postHabitReviewProps extends habitGeneralProps {
-  body: string;
-  score: number;
-}
-
-interface deleteHabitReviewProps extends deleteHabitProps {
-  reviewId: string;
-}
-
-interface patchHabitReviewProps extends deleteHabitReviewProps {
-  body: string;
-  score: number;
 }
 
 interface getHabitsSearchProps extends pageAndSize {
@@ -76,9 +53,55 @@ interface getHabitsSearchProps extends pageAndSize {
 }
 
 interface getHabitsSearchCategoryProps extends pageAndSize {
-  categoryId: string;
+  categoryId: number;
 }
 // habitFunctionModule
+
+// reviewFunctionModule
+interface getReviewsProps extends pageAndSize {
+  habitId: number;
+}
+
+interface postHabitReviewProps {
+  habitId: number;
+  userId: number;
+  body: string;
+  score: number;
+}
+
+interface deleteHabitReviewProps {
+  reviewId: number;
+  habitId: number;
+}
+
+interface patchHabitReviewProps extends deleteHabitReviewProps {
+  body: string;
+  score: number;
+}
+
+// reviewFunctionModule
+
+// authFunctionModule
+interface getAuthProps extends pageAndSize {
+  habitId: number;
+}
+// authFunctionModule
+
+// reportFunctionModule
+interface postReportGeneralProps {
+  habitId: number;
+  userId: number;
+  reportType: string;
+}
+
+interface postReportAuthPorps extends postReportGeneralProps {
+  authId: number;
+}
+
+interface postReportReviewPorps extends postReportGeneralProps {
+  reviewId: number;
+}
+// reportFunctionModule
 
 export type {
   SignUpProps,
@@ -88,11 +111,14 @@ export type {
   habitGeneralProps,
   postHabitProps,
   deleteHabitProps,
-  getHabitAuthsReviewsProps,
-  postAuthReportProps,
+  getReviewsProps,
   postHabitReviewProps,
   deleteHabitReviewProps,
   patchHabitReviewProps,
   getHabitsSearchProps,
   getHabitsSearchCategoryProps,
+  postReportGeneralProps,
+  postReportAuthPorps,
+  postReportReviewPorps,
+  getAuthProps,
 };

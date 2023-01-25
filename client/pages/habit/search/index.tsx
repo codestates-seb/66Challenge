@@ -5,19 +5,26 @@ import { HabitWrapperVertical } from '../../../components/habitWrapperVertical';
 import { useIntersection } from '../../../hooks/useIntersection';
 import { MdExpandMore } from 'react-icons/md';
 import { LoadingIndicator } from '../../../components/loadingIndicator';
-
 import { useRouter } from 'next/router';
-import { ScrollToTopButton } from '../../../components/scrollToTopButton';
+
+interface IarrowValue {
+  className: string;
+  boolean: boolean;
+}
+interface IcategoryList {
+  categoryId: number;
+  name: string;
+}
 export default function SearchHabit() {
   const router = useRouter();
 
-  const [arrowDirection, setArrowDirection] = useState({
+  const [arrowDirection, setArrowDirection] = useState<IarrowValue>({
     className: '',
-    boolean: router.query.categoryId !== undefined ? true : false,
+    boolean: false,
   });
-  const upArrow = 'rotate-180 duration-500';
-  const downArrow = 'rotate-0';
-  const arrowDirectionHandle = () => {
+  const upArrow: string = 'rotate-180 duration-500';
+  const downArrow: string = 'rotate-0';
+  const arrowDirectionHandle = (): void => {
     if (arrowDirection.boolean === false) {
       setArrowDirection({ className: upArrow, boolean: true });
     } else {
@@ -27,36 +34,23 @@ export default function SearchHabit() {
   const [search, setSearch] = useState('');
   const [searchHabits, setSearchHabits] = useState([]);
   const [doing, setDoing] = useState('all');
-  const [page, setPage] = useState(0);
-  const [active, setActive] = useState(
-    router.query.categoryId !== undefined ? router.query.categoryId : 0,
+  const [page, setPage] = useState(1);
+  const [active, setActive] = useState(0);
+  const [url, setUrl] = useState(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=""&`,
   );
-  const [url, setUrl] = useState('http://localhost:4000/habitdata');
   const [setTarget] = useIntersection(url, page, setPage, setSearchHabits);
-  const categoryListKor = [
-    '전체',
-    '운동',
-    '식습관',
-    '학습',
-    '일상생활',
-    '자기관리',
-    '환경',
-    '취미',
-    '기타',
+  const categoryList: IcategoryList[] = [
+    { categoryId: 0, name: '전체' },
+    { categoryId: 1, name: '운동' },
+    { categoryId: 2, name: '식습관' },
+    { categoryId: 3, name: '학습' },
+    { categoryId: 4, name: '일상생활' },
+    { categoryId: 5, name: '자기관리' },
+    { categoryId: 6, name: '환경' },
+    { categoryId: 7, name: '취미' },
+    { categoryId: 8, name: '기타' },
   ];
-  const categoryList = [
-    { categoryId: '0', name: 'all' },
-    { categoryId: '1', name: 'health' },
-    { categoryId: '2', name: 'eat' },
-    { categoryId: '3', name: 'study' },
-    { categoryId: '4', name: 'life' },
-    { categoryId: '5', name: 'self' },
-    { categoryId: '6', name: 'environment' },
-    { categoryId: '7', name: 'hobby' },
-    { categoryId: '8', name: 'extra' },
-  ];
-  console.log('categoryId : ', router.query.categoryId);
-  console.log('active : ', active);
   const onSearchHandle = useCallback((e) => {
     setSearch(e.target.value);
   }, []);
@@ -64,30 +58,42 @@ export default function SearchHabit() {
     //키워드 비동기 함수 호출
     if (search === '') {
       setDoing('all');
-      setPage(0);
+      setPage(1);
       setSearchHabits([]);
-      setUrl('http://localhost:4000/habitdata');
+      setUrl(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=""&`);
     } else {
       setDoing('search');
-      setPage(0);
+      setPage(1);
       setSearchHabits([]);
-      setUrl(`http://localhost:4000/categorydata/${search}`);
+      setUrl(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=${search}&`,
+      );
     }
   };
   useEffect(() => {
-    if (active !== '0') {
+    if (active !== 0) {
       setDoing('category');
-      setPage(0);
+      setPage(1);
       setSearchHabits([]);
-      setUrl(`http://localhost:4000/categorydata/${active}`);
+      setUrl(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?category=${active}&`,
+      );
     } else {
       setDoing('all');
-      setPage(0);
+      setPage(1);
       setSearchHabits([]);
-      setUrl('http://localhost:4000/habitdata');
+      setUrl(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=""&`);
     }
   }, [active]);
-
+  useEffect(() => {
+    const categoryId: number | undefined =
+      router.query.categoryId !== undefined
+        ? Number(router.query.categoryId)
+        : undefined;
+    if (categoryId !== undefined) {
+      setActive(categoryId);
+    }
+  }, []);
   return (
     <div className=" w-full overflow-y-scroll scrollbar-hide absolute flex flex-col items-center p-4 pb-[100px]">
       <form className="w-4/5 flex justify-center mt-3 mb-6 items-center relative">
@@ -124,13 +130,13 @@ export default function SearchHabit() {
             <div className=" w-[100px] m-1" key={index}>
               <span
                 className={`${
-                  active === String(index) ? 'bg-subColor' : 'bg-mainColor'
+                  active === index ? 'bg-subColor' : 'bg-mainColor'
                 } w-full h-full rounded-full text-iconColor flex duration-300  justify-center items-center text-sm py-[5px]`}
                 onClick={() => {
                   setActive(category.categoryId);
                 }}
               >
-                {categoryListKor[index]}
+                {categoryList[index].name}
               </span>
             </div>
           );
@@ -145,7 +151,7 @@ export default function SearchHabit() {
               doing === 'all'
                 ? '전체 습관'
                 : doing === 'category'
-                ? `${categoryListKor[active]} 습관`
+                ? `${categoryList[active].name} 습관`
                 : `${search}에 대한 습관`
             }
             habitWrapperData={searchHabits}
