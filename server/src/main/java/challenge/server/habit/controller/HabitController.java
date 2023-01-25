@@ -1,5 +1,6 @@
 package challenge.server.habit.controller;
 
+import challenge.server.auth.dto.AuthDto;
 import challenge.server.auth.entity.Auth;
 import challenge.server.auth.mapper.AuthMapper;
 import challenge.server.auth.service.AuthService;
@@ -206,6 +207,29 @@ public class HabitController {
                                           @RequestParam @Positive int size) {
         List<Auth> auths = authService.findAllByHabit(lastAuthId, habitId, page, size);
         return new ResponseEntity(authMapper.toDtos(auths), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{habit-id}/auths/{auth-id}")
+    public ResponseEntity updateAuth(@PathVariable("auth-id") @Positive Long authId,
+                                     @RequestPart(value = "file", required = false) MultipartFile multipartFile,
+                                     @RequestPart("data") @Valid AuthDto.Patch patchDto) {
+        Auth auth = Auth.builder().authId(authId).body(patchDto.getBody()).build();
+
+        if (multipartFile != null) {
+            String authImageUrl = fileUploadService.save(multipartFile);
+            auth.changeImageUrl(authImageUrl);
+        }
+
+        Auth updateAuth = authService.updateAuth(auth);
+
+        return new ResponseEntity<>(authMapper.toDto(updateAuth), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{habit-id}/auths/{auth-id}")
+    public ResponseEntity deleteAuth(@PathVariable("auth-id") @Positive Long authId) {
+        authService.deleteAuth(authId);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     // 습관 조회 - 인증 탭 - 인증 신고
