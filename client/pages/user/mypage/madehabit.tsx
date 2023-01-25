@@ -2,7 +2,7 @@ import { HabitWrapperVertical } from '../../../components/habitWrapperVertical';
 import { useState } from 'react';
 import { useIntersection } from '../../../hooks/useIntersection';
 
-export default function MadeHabit() {
+const MadeHabit = () => {
   const [madeHabits, setMadeHabits] = useState([]);
   const [page, setPage] = useState(0);
   const url: string = 'http://localhost:4000/habitdata';
@@ -17,3 +17,5 @@ export default function MadeHabit() {
     </div>
   );
 }
+
+export default MadeHabit

@@ -13,7 +13,11 @@ const MyPage = () => {
 
   useEffect(() => {
     getUserInfo({ userId }).then((data) => {
-      setUserInfo(data);
+      if (data) {
+        setUserInfo(data);
+      } else {
+        router.push('/user/login');
+      }
     });
   }, []);
 
@@ -29,13 +33,18 @@ const MyPage = () => {
     return (
       <div className="flex flex-row items-center justify-center solid border-b-black border-b border-t-black border-t">
         <div className="absolute left-0 ml-10 w-16 h-16 rounded-full border">
-          프로필
+          {' '}
+          {/* TODO : 프로필 사진 추가 */}
+          <img
+            src="https://s3.ap-northeast-2.amazonaws.com/challenge66.file.bucket/images/3cb6c7f7-8af9-4957-92d4-eb46785277de.jpeg"
+            className="w-full h-full rounded-full"
+          />
         </div>
         <div className="flex flex-col items-center">
           <div className="mt-2 text-[0.6rem] text-right">
             반가워요!{' '}
             <span className="text-green-600 text-[0.8rem]">
-              {userInfo.biggestNumOfChallengeHabitDays}
+              {userInfo.biggestProgressDays}
             </span>
             일째 개근중인
           </div>
@@ -105,7 +114,7 @@ const MyPage = () => {
         <main className="flex flex-col items-stretch">
           <Profile />
           <ActiveChallenges />
-          <MyPageMenuList />
+          <MyPageMenuList email={userInfo.email} />
         </main>
       )}
     </>
