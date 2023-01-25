@@ -78,7 +78,7 @@ const Login: React.FC = () => {
     'after:absolute after:bottom-[-12px] after:border-[5px] after:border-transparent after:left-2/4 after:border-t-[7px] after:border-t-mainColor after:translate-y-[-100%] after:border-b-0 after:translate-x-[-50%]';
 
   return (
-    <div className="login-container w-[300px] mx-auto flex flex-col justify-center items-center pt-[100px]">
+    <div className="login-container w-[300px] mx-auto flex flex-col justify-center items-center -mb-[100px] -mt-[56px] h-[100vh]">
       <div className="logo flex justify-center w-full mb-[40px]">
         <img src="/image/logo/logoVertical.svg" />
       </div>
@@ -89,13 +89,19 @@ const Login: React.FC = () => {
       </div>
       <div className="sns-login w-full flex justify-evenly pb-10 mb-10 border-b border-[#e5e5e5] ">
         <div className="google-login">
-          <img src="/image/logo/google.svg" />
+          <a href="http://13.209.179.193:8080/oauth2/authorization/google">
+            <img src="/image/logo/google.svg" />
+          </a>
         </div>
         <div className="kakao-login">
-          <img src="/image/logo/kakao.svg" />
+          <a href="http://13.209.179.193:8080/oauth2/authorization/kakao">
+            <img src="/image/logo/kakao.svg" />
+          </a>
         </div>
         <div className="naver-login">
-          <img src="/image/logo/naver.svg" />
+          <a href="http://13.209.179.193:8080/oauth2/authorization/naver">
+            <img src="/image/logo/naver.svg" />
+          </a>
         </div>
       </div>
       <div className="login-form-wrapper w-full">

@@ -1,27 +1,19 @@
 interface slideDataType {
   bgImgUrl: string;
-  contText: string;
-  contSubText: string;
   bannerLink: string;
 }
 
 export const slideData: Array<slideDataType> = [
   {
-    bgImgUrl: '',
-    contText: 'test용 첫 번째 슬라이드입니다.',
-    contSubText: '여기는 부제가 들어가겠죠',
+    bgImgUrl: '/image/slideImg/slideImg1.svg',
     bannerLink: '',
   },
   {
-    bgImgUrl: '',
-    contText: 'test용 두 번째 슬라이드입니다.',
-    contSubText: '여기는 부제가 들어가겠죠',
+    bgImgUrl: '/image/slideImg/slideImg2.svg',
     bannerLink: '',
   },
   {
-    bgImgUrl: '',
-    contText: 'test용 세 번째 슬라이드입니다.',
-    contSubText: '여기는 부제가 들어가겠죠',
+    bgImgUrl: '/image/slideImg/slideImg3.svg',
     bannerLink: '',
   },
 ];
