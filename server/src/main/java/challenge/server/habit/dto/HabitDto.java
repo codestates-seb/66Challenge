@@ -60,6 +60,7 @@ public class HabitDto {
         private String authStartTime;
         private String authEndTime;
         private String challengeStatus;
+        private Integer challengers;
     }
 
     @Getter

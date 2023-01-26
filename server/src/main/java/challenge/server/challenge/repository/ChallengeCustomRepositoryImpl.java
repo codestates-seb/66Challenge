@@ -81,4 +81,15 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
 //                        conditionEq2(startDatetime, endDatetime)
 //                ).fetch();
     }
+
+    @Override
+    public Integer findChallengers(Long habitId){
+        return Math.toIntExact(jpaQueryFactory
+                .select(habit.habitId.count())
+                .from(habit)
+                .where(habit.habitId.eq(habitId))
+                .leftJoin(habit.challenges, challenge)
+                .on(habit.habitId.eq(challenge.habit.habitId))
+                .fetchOne());
+    }
 }
