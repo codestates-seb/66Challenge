@@ -6,6 +6,7 @@ import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.mapper.HabitMapperImpl;
 import challenge.server.security.dto.LogoutDto;
+import challenge.server.user.dto.EmailVerificationDto;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.mapper.UserMapperImpl;
@@ -18,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -40,17 +42,26 @@ public class UserController {
     @GetMapping("/emails/check")
     public ResponseEntity<Boolean> checkEmailDuplicate(@RequestParam @Email String email) {
         return new ResponseEntity<>(userService.verifyExistEmail(email), HttpStatus.OK);
-
-        // API 통신용
-        //return ResponseEntity.ok(false);
     }
 
     @GetMapping("/usernames/check")
     public ResponseEntity<Boolean> checkUsernameDuplicate(@RequestParam @NotBlank String username) {
         return new ResponseEntity<>(userService.verifyExistUsername(username), HttpStatus.OK);
+    }
 
-        // API 통신용
-        //return new ResponseEntity<>(false, HttpStatus.OK);
+    // 회원 가입 시 이메일 인증 요청
+    @GetMapping("/email-verification-requests")
+    public ResponseEntity sendEmailVerificationMail(@RequestParam @Email String email) throws MessagingException {
+        userService.sendEmailVerificationMail(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 회원 가입 시 이메일 인증 처리
+    @GetMapping("/email-verifications")
+    public ResponseEntity<String> verifyEmail(@RequestParam @Email String email,
+                                              @RequestParam String verificationCode) {
+        userService.verifyEmail(email, verificationCode);
+        return new ResponseEntity<>("이메일 인증이 완료되었습니다! Challenge66 회원 가입 페이지로 돌아가 가입 절차를 계속 진행해 주세요.", HttpStatus.OK);
     }
 
     @PostMapping

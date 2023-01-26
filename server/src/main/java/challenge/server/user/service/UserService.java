@@ -13,17 +13,22 @@ import challenge.server.helper.event.UserRegistrationApplicationEvent;
 import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.security.utils.LoggedInUserInfoUtils;
 import challenge.server.user.dto.UserDto;
+import challenge.server.user.entity.EmailVerification;
 import challenge.server.user.entity.User;
 import challenge.server.user.mapper.UserMapperImpl;
+import challenge.server.user.repository.EmailVerificationRepository;
 import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,6 +44,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
+    private final EmailVerificationRepository emailVerificationRepository;
     private final BookmarkRepository bookmarkRepository;
     private final HabitRepository habitRepository;
     private final HabitService habitService;
@@ -46,10 +52,13 @@ public class UserService {
     private final UserMapperImpl userMapper;
     private final UserRepository userRepository;
     private final ApplicationEventPublisher publisher; // todo 회원 가입 시 이메일 전송 관련
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final LoggedInUserInfoUtils loggedInUserInfoUtils;
     private final FileUploadService fileUploadService;
+
+    private final String verificationCode = createVerificationCode(); // 회원 가입 시 이메일 인증 코드 생성
 
     public Boolean verifyExistEmail(String email) {
         Boolean existEmail = false;
@@ -85,6 +94,32 @@ public class UserService {
         return passwordEncoder.matches(user.getPassword(), findUser.getPassword());
     }
 
+    @Transactional
+    public void sendEmailVerificationMail(String email) throws MessagingException {
+        // 인증용 이메일 정보(이메일, 인증 코드, 코드 만료 여부, 코드 만료 기한)를 DB에 저장
+        EmailVerification emailVerification = EmailVerification.builder().build();
+        emailVerificationRepository.save(emailVerification.createEmailVerification(email, verificationCode, false));
+
+        // 인증용 이메일 전송
+        emailService.send(email, verificationCode);
+    }
+
+    @Transactional
+    public void verifyEmail(String email, String verificationCode) {
+    }
+
+    // 인증 코드 생성
+    public String createVerificationCode() {
+        StringBuffer verificationCode = new StringBuffer();
+        Random rnd = new Random();
+        int lengthOfCode = 8;
+
+        for (int i = 0; i < lengthOfCode; i++) {
+            verificationCode.append(rnd.nextInt(10));
+        }
+
+        return verificationCode.toString();
+    }
 
     @Transactional
     public User createUser(User user) {
