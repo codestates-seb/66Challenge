@@ -1,5 +1,9 @@
-importScripts('https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/8.8.0/firebase-messaging.js');
+importScripts(
+  'https://www.gstatic.com/firebasejs/9.2.0/firebase-app-compat.js',
+);
+importScripts(
+  'https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging-compat.js',
+);
 const firebaseConfig = {
   apiKey: 'AIzaSyCyu7PAZoZkoFeihqUfT11U27iNK_PKnYg',
   authDomain: 'challenge-65eff.firebaseapp.com',
@@ -14,17 +18,12 @@ firebase.initializeApp(firebaseConfig);
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
 const messaging = firebase.messaging();
-console.log(messaging);
 
 messaging.onBackgroundMessage((payload) => {
-  console.log(
-    '[firebase-messaging-sw.js] Received background message ',
-    payload,
-  );
   // Customize notification here
-  const notificationTitle = 'Background Message Title';
+  const notificationTitle = payload.notification.title;
   const notificationOptions = {
-    body: 'Background Message body.',
+    body: payload.notification.body,
     icon: '/firebase-logo.png',
   };
 
