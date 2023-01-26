@@ -6,6 +6,7 @@ public enum ExceptionCode {
     USER_EXISTS(409, "User exists"),
     REVIEW_EXISTS(409, "Review exists"),
     AUTH_EXISTS(409, "Auth exists"),
+    CHALLENEGE_EXISTS(409,"Challenge exists"),
     USER_NOT_FOUND(404, "User not found"),
     AUTH_NOT_FOUND(404, "Auth not found"),
     CHALLENGE_NOT_FOUND(404, "Challenge not found"),
