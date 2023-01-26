@@ -24,7 +24,7 @@ export const CertificationModal = () => {
         alt="prizetemplit"
       />
 
-      <div className="border-2 absolute left-14 top-1/4 w-full">
+      <div className="absolute left-14 top-1/4 w-full">
         <h2 className="text-center text-2xl mb-10">인증서</h2>
         <div className="flex justify-center">
           <div className="mx-3 mb-16">
