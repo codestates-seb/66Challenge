@@ -17,11 +17,11 @@ public class EmailVerificationCustomRepositoryImpl implements EmailVerificationC
 
 
     @Override
-    public Optional<EmailVerification> findValidVerificationByEmail(String email, String verificationToken, LocalDateTime currentTime) {
+    public Optional<EmailVerification> findValidVerificationByEmail(String email, String verificationCode, LocalDateTime currentTime) {
         EmailVerification result = jpaQueryFactory
                 .selectFrom(emailVerification)
                 .where(emailVerification.email.eq(email),
-                        emailVerification.verificationToken.eq(verificationToken),
+                        emailVerification.verificationCode.eq(verificationCode),
                         emailVerification.expiryTime.goe(currentTime), // 만료 시간 >= 현재 시간
                         emailVerification.isExpired.eq(false))
                 .fetchFirst();
