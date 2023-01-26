@@ -65,6 +65,7 @@ export const HabitElement: React.FC<HabitElementProps> = ({
           alt="habit image"
           width={500}
           height={500}
+          className="w-52 h-52"
         />
         <div
           className="absolute bottom-0 right-0 p-1"
