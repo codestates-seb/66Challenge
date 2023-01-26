@@ -37,6 +37,10 @@ public class User extends BaseTimeEntity {
     @Column(length = 255, nullable = false, unique = true)
     private String username;
 
+    // 회원 가입 시 이메일 인증 관련
+    private String refreshToken;
+    private Boolean isEmailVerified;
+
     // JWT 구현 시 추가
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
@@ -47,7 +51,7 @@ public class User extends BaseTimeEntity {
     private Status status/* = Status.ACTIVE*/;
 
     // todo 회원 탈퇴/강퇴 시 찜하기, 신고 내역, challenges(+인증 내역, 후기)은 삭제 + 해당 회원이 개설한 habit은 놔두나?
-    // todo 회원 상태를 3(banned)으로 바꾸는 조건/event 정의/구현?
+    // 회원 상태를 3(banned)으로 바꾸는 조건/event 정의/구현?
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
@@ -67,6 +71,15 @@ public class User extends BaseTimeEntity {
 
     public void deleteRoles() {
         this.roles = null;
+    }
+
+    // 회원 가입 시 이메일 인증 관련
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void succeedEmailVerification() {
+        this.isEmailVerified = true;
     }
 
     public enum Status {
