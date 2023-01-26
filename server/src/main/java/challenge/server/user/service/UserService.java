@@ -132,47 +132,6 @@ public class UserService {
     }
 
     @Transactional
-    public void sendEmailVerificationMail(String email) throws MessagingException {
-        // 인증 대상 이메일이 이미 가입된 회원인지 한 번 확인
-        if (verifyExistEmail(email)) {
-            throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
-        }
-
-        // 인증 대상 이메일이 이미 인증 요청을 보냈다면 + 미인증 상태라면
-        // 인증 대상 이메일이 이미 인증 요청을 보냈다면 + 인증 상태인데 아직 회원 가입을 하지 않은 상태라면
-
-        // 인증용 이메일 정보(이메일, 인증 코드, 코드 만료 여부, 코드 만료 기한)를 DB에 저장
-        EmailVerification emailVerification = EmailVerification.builder().build();
-        emailVerificationRepository.save(emailVerification.createEmailVerification(email, verificationCode, false));
-
-        // 인증용 이메일 전송
-        emailService.send(email, verificationCode);
-    }
-
-    @Transactional
-    public void verifyEmail(String email, String verificationCode) {
-        Optional<EmailVerification> optionalEmailVerification = emailVerificationRepository.findValidVerificationByEmail(email, verificationCode, LocalDateTime.now());
-        EmailVerification emailVerification = optionalEmailVerification.orElseThrow(() -> new BusinessLogicException(ExceptionCode.EMAIL_VERIFICATION_FAILED));
-
-        emailVerification.useVerificationCode(); // 해당 인증 정보는 사용한 것으로 처리 -> 재 인증 요청 시 사용할 수 없도록
-        emailVerificationRepository.save(emailVerification);
-        log.info("이메일 인증 처리 완료!");
-    }
-
-    // 인증 코드 생성
-    public String createVerificationCode() {
-        StringBuffer verificationCode = new StringBuffer();
-        Random rnd = new Random();
-        int lengthOfCode = 8;
-
-        for (int i = 0; i < lengthOfCode; i++) {
-            verificationCode.append(rnd.nextInt(10));
-        }
-
-        return verificationCode.toString();
-    }
-
-    @Transactional
     public User createUser(User user) {
         //log.info("-------- createUser 중복 회원 검사 --------");
         //System.out.println(user.getEmail());
