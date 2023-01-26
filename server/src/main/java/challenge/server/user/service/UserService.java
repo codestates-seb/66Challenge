@@ -94,6 +94,7 @@ public class UserService {
         return passwordEncoder.matches(user.getPassword(), findUser.getPassword());
     }
 
+
     @Transactional
     public void sendEmailVerificationMail(String email) throws MessagingException {
         // 인증용 이메일 정보(이메일, 인증 코드, 코드 만료 여부, 코드 만료 기한)를 DB에 저장
