@@ -55,29 +55,29 @@ export const Footer = () => {
 
   return (
     <>
-      <div className="bg-footerColor text-center text-sm">
-        <h4 className="text-gray-pink text-base font-bold py-4 dark:text-white">
+      <div className="bg-footerColor text-center text-sm mt-5">
+        <h4 className="text-gray-pink text-base font-bold pt-10 pb-5 dark:text-white">
           66 Challenge
         </h4>
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-10">
           <div className="mx-2 w-28">
             <h4 className="font-semibold mb-2 text-gray-pink">FE</h4>
-            <div className="font-medium text-footerMemberTextColor">
+            <div className="font-medium text-gray-pink flex flex-col gap-1">
               {FeMemberList}
             </div>
           </div>
           <div className="mx-2 w-28">
             <h4 className="font-semibold mb-2 text-gray-pink">BE</h4>
-            <div className="font-medium text-footerMemberTextColor">
+            <div className="font-medium text-gray-pink flex flex-col gap-1">
               {BeMemberList}
             </div>
           </div>
         </div>
-        <div className="text-gray-pink my-2">
+        <div className="text-gray-pink py-5 border-b-2">
           제작기간: 2023.01.03 ~ 2023.02.03
         </div>
 
-        <div className="text-gray-pink border-2 rounded-lg px-2 my-2">
+        <div className="text-gray-pink px-2 py-5 border-b-2">
           <p className="text-gray-pink my-1">Made by these</p>
           <ul className="flex justify-center my-3">
             <li className="mx-2">
@@ -98,12 +98,12 @@ export const Footer = () => {
           </ul>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center pt-5 pb-10">
           <a href="https://github.com/codestates-seb/seb41_main_028">
-            <BsGithub className="cursor-pointer mb-6 mx-2 w-6 h-7 text-gray-pink" />
+            <BsGithub className="cursor-pointer mx-2 w-6 h-7 text-gray-pink" />
           </a>
           <a href="https://www.notion.so/codestates/5aaf9053ee9c41bfb866e9ac4f4763ea">
-            <SiNotion className="cursor-pointer mb-6 mx-2 w-6 h-7 text-gray-pink" />
+            <SiNotion className="cursor-pointer mx-2 w-6 h-7 text-gray-pink" />
           </a>
         </div>
       </div>

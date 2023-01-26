@@ -41,7 +41,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   };
   return (
     <PersistGate persistor={persistor} loading={<LoadingIndicator />}>
-      <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
+      {Component.getLayout ? (
+        getLayout(<Component {...pageProps} />)
+      ) : (
+        <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
+      )}
     </PersistGate>
   );
 }
