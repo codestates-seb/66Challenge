@@ -4,6 +4,7 @@ import type {
   UserGeneralProps,
   PatchUserInfoProps,
   getUserCertificateProps,
+  profileImageProps,
 } from './moduleInterface';
 /*사용하는 방법 
 1. 쓰고자하는 함수를 찾는다
@@ -182,6 +183,44 @@ export async function getPasswordCheck({ userId }: UserGeneralProps) {
         },
       )
       .then((res) => console.log(res));
+    return response;
+  } catch (e) {
+    console.error(e);
+  }
+}
+export async function profileChange({
+  userId,
+  profileImage,
+}: profileImageProps) {
+  try {
+    const response = await axios.patch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`,
+      {
+        file: profileImage,
+      },
+      {
+        headers: {
+          Authorization: getCookie('accessJwtToken'),
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+    return response;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function profileDelete({ userId }) {
+  try {
+    const response = await axios.delete(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/profiles`,
+      {
+        headers: {
+          Authorization: getCookie('accessJwtToken'),
+        },
+      },
+    );
     return response;
   } catch (e) {
     console.error(e);

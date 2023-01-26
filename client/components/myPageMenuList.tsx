@@ -12,12 +12,7 @@ interface ItemProps {
   path: string;
 }
 
-// TODO : 실제 데이터 오면 더미데이터를 바꿔야 함
-const testSuccess = [
-  { challengeId: 45, progressDays: 2, habitId: 1, subTitle: 'Mr', title: 'aa' },
-];
-
-export const MyPageMenuList = ({ email }) => {
+export const MyPageMenuList = ({ email, successArr }) => {
   const [isCertActive, setIsCertActive] = useState(false);
   const [isCertOpen, setIsCertOpen] = useState(false);
   const [certId, setCertId] = useState(null);
@@ -31,13 +26,13 @@ export const MyPageMenuList = ({ email }) => {
             <div
               key={el.challengeId}
               className={`flex place-content-between border solid border-black h-8 items-center mb-1 mx-2 rounded-xl ${
-                el.title ? '' : 'justify-center'
+                el.subTitle ? '' : 'justify-center'
               }`}
             >
-              <span className={`${el.title ? 'ml-5' : 'text-xl'}`}>
-                {el.title || '성공 데이터 없음'}
+              <span className={`${el.subTitle ? 'ml-5' : 'text-xl'}`}>
+                {el.subTitle || '성공 데이터 없음'}
               </span>
-              {el.title ? (
+              {el.subTitle ? (
                 <button
                   className={`border-2 text-sm mr-4`}
                   onClick={(): void => {
@@ -117,7 +112,7 @@ export const MyPageMenuList = ({ email }) => {
           <SlArrowRight className="inline align-middle dark:bg-white" />
         </div>
       </div>
-      {isCertActive && <CertDropDown success={testSuccess} />}
+      {isCertActive && <CertDropDown success={successArr} />}
       {/* TODO : 친구 초대(SNS기능), 고객센터 추가 */}
       <MenuItem title="친구 초대" path="/user/mypage" />
       <MenuItem title="고객 센터" path="/user/mypage" />
