@@ -114,6 +114,11 @@ interface postReportReviewPorps extends postReportGeneralProps {
 }
 // reportFunctionModule
 
+interface profileImageProps {
+  userId: number;
+  profileImage: File | null;
+}
+
 export type {
   SignUpProps,
   UserGeneralProps,
@@ -134,4 +139,5 @@ export type {
   postReportReviewPorps,
   getAuthProps,
   deleteAuthProps,
+  profileImageProps,
 };
