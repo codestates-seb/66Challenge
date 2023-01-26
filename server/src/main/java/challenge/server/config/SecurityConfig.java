@@ -72,7 +72,9 @@ public class SecurityConfig { // todo https 적용
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.addExposedHeader("Authorization");
+//        configuration.addExposedHeader("Authorization");
+//        configuration.addExposedHeader("Refresh");
+        configuration.setExposedHeaders(Arrays.asList("Refresh", "Authorization"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
