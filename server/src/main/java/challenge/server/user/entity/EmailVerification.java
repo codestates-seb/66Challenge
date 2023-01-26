@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmailVerification extends BaseTimeEntity {
@@ -20,20 +21,21 @@ public class EmailVerification extends BaseTimeEntity {
     @Column(nullable = false, updatable = false, unique = true)
     private String email;
 
-    private String verificationToken;
+    private String verificationCode;
     private Boolean isExpired;
 
     private LocalDateTime expiryTime;
 
-    @Builder
-    public EmailVerification(String email, String verificationToken, Boolean isExpired) {
+    public EmailVerification createEmailVerification(String email, String verificationCode, Boolean isExpired) {
         this.email = email;
-        this.verificationToken = verificationToken;
+        this.verificationCode = verificationCode;
         this.isExpired = isExpired;
         this.expiryTime = LocalDateTime.now().plusMinutes(MAX_EXPIRY_TIME);
+
+        return this;
     }
 
-    public void useVerificationToken() {
+    public void useVerificationCode() {
         this.isExpired = true;
     }
 }
