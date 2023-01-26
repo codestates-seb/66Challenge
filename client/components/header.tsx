@@ -20,7 +20,6 @@ const Header: FC = () => {
   const [isLogo, setIsLogo] = useState<boolean>(false);
   const [isMyPage, setIsMyPage] = useState<boolean>(false);
   const [pageTitle, setPageTitle] = useState<string | null>(null);
-  const [isCanShare, setIsCanShare] = useState<boolean>(false);
 
   const titleList: object = {
     login: '로그인',
@@ -32,6 +31,8 @@ const Header: FC = () => {
     edit: '습관 수정하기',
     detail: '습관 상세보기',
     auth: '습관 인증하기',
+    statistic: '습관 통계',
+    review: '습관 후기',
   };
   // path별 페이지제목
 
@@ -62,17 +63,9 @@ const Header: FC = () => {
       }
     }
 
-    function shareDetect(): void {
-      if (pathArr.includes('detail')) {
-        setIsCanShare(true);
-      } else {
-        setIsCanShare(false);
-      }
-    }
     titleDetect(pathArr);
     logoDetact();
     settingsDetect();
-    shareDetect();
   }, [pathArr]);
 
   const LeftSide: FC = () => {
@@ -93,7 +86,7 @@ const Header: FC = () => {
     const Back: FC = () => {
       return (
         <div className="flex flex-row items-center h-full ml-2">
-          <IoArrowBack className="h-9 w-9" onClick={() => router.back()} />
+          <IoArrowBack className="h-6 w-6" onClick={() => router.back()} />
         </div>
       );
     };
@@ -118,17 +111,14 @@ const Header: FC = () => {
   };
 
   const RightSide: FC = () => {
-    const Share: FC = () => {
-      return <IoShareSocialSharp className="h-8 w-8 mr-2" />;
-    };
     const Search: FC = () => {
       return (
         <div className="mr-3">
           {isMyPage ? (
-            <IoSettings className="h-8 w-8" /> // TODO : 세부설정 추가되면 변경할 것
+            <IoSettings className="h-6 w-6" /> // TODO : 세부설정 추가되면 변경할 것
           ) : (
             <Link href={'/habit/search'}>
-              <IoSearch className="h-8 w-8" />
+              <IoSearch className="h-6 w-6" />
             </Link>
           )}
         </div>
@@ -137,7 +127,6 @@ const Header: FC = () => {
 
     return (
       <div className="basis-1/4 flex flex-row justify-end items-center">
-        {isCanShare ? <Share /> : null}
         <Search />
       </div>
     );
@@ -145,12 +134,12 @@ const Header: FC = () => {
 
   return (
     <header className="sticky top-0 bg-white z-50">
-      <head>
+      <div>
         <link
           href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@700&display=swap"
           rel="stylesheet"
         />
-      </head>
+      </div>
 
       <div className="box-border flex flex-row h-14 justify-between ">
         <LeftSide />

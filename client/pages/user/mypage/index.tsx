@@ -5,21 +5,51 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { getUserInfo } from '../../../module/userFunctionMoudules';
 import { MyPageMenuList } from '../../../components/myPageMenuList';
+import { Modal } from '../../../components/modal';
+import Image from 'next/image';
+import {
+  profileChange,
+  profileDelete,
+} from '../../../module/userFunctionMoudules';
+
+import logo from '../../../public/image/66logo.png';
+import { useForm } from 'react-hook-form';
+import { FileUploader } from '../../../components/fileUploader';
+
+interface ProfileEditType {
+  userId: number;
+  profileImage: File | null;
+}
 
 const MyPage = () => {
   const userId = useAppSelector((state) => state.loginIdentity.userId);
   const [userInfo, setUserInfo] = useState(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const router = useRouter();
+
+  const { register, watch, reset } = useForm<ProfileEditType>();
+
+  const { profileImage } = watch();
+  const [profileImagePreview, setProfileImagePreview] = useState('');
+
+  useEffect(() => {
+    if (profileImage && profileImage.length > 0) {
+      const file = profileImage[0];
+      setProfileImagePreview(URL.createObjectURL(file));
+    }
+  }, [profileImage]);
 
   useEffect(() => {
     getUserInfo({ userId }).then((data) => {
+      console.log(data);
       if (data) {
         setUserInfo(data);
+        setProfileImagePreview(data.profileImageUrl);
       } else {
         router.push('/user/login');
       }
     });
-  }, []);
+  }, [isProfileModalOpen]);
 
   const handleHabitDetail = (id: number): void => {
     router.push(`/habit/detail/${id}`);
@@ -29,16 +59,81 @@ const MyPage = () => {
     width: ${(props) => `${props.width}%`};
   `;
 
+  const profileEdit = (): void => {
+    setIsProfileModalOpen(!isProfileModalOpen);
+  };
+
+  const profileEditModal = (imageUrl: string | null): JSX.Element => {
+    return (
+      <div className="flex flex-col w-full items-center">
+        <div className="w-full text-center text-xl">프로필 사진 변경</div>
+        <FileUploader
+          imgFilePreview={profileImagePreview}
+          register={register('profileImage')}
+        />
+        {profileImagePreview ? (
+          <div className=" flex justify-center w-full items-center bg-mainColor rounded-full h-[40px] mb-5">
+            <span
+              className="text-base text-iconColor"
+              onClick={() => {
+                setProfileImagePreview('');
+                reset({
+                  profileImage: null,
+                });
+              }}
+            >
+              삭제하기
+            </span>
+          </div>
+        ) : null}
+      </div>
+    );
+  };
+
   const Profile = () => {
     return (
       <div className="flex flex-row items-center justify-center solid border-b-black border-b border-t-black border-t">
-        <div className="absolute left-0 ml-10 w-16 h-16 rounded-full border">
-          {' '}
-          {/* TODO : 프로필 사진 추가 */}
-          <img
-            src="https://s3.ap-northeast-2.amazonaws.com/challenge66.file.bucket/images/3cb6c7f7-8af9-4957-92d4-eb46785277de.jpeg"
-            className="w-full h-full rounded-full"
+        {isProfileModalOpen ? (
+          <Modal
+            isOpen={isProfileModalOpen}
+            setIsOpen={setIsProfileModalOpen}
+            buttonName="변경"
+            onClick={() => {
+              if (profileImage) {
+                profileChange({ userId, profileImage: profileImage[0] }).then(
+                  (res) => {
+                    setUserInfo(Object.assign({}, userInfo, res.data));
+                  },
+                );
+              } else {
+                profileDelete({ userId }).then((res) => {
+                  setUserInfo(
+                    Object.assign({}, userInfo, { profileImageUrl: null }),
+                  );
+                });
+              }
+              setIsProfileModalOpen(!isProfileModalOpen);
+            }}
+            children={profileEditModal(userInfo.profileImageUrl)}
           />
+        ) : (
+          ''
+        )}
+        <div
+          className="absolute left-0 ml-16 w-[4.75rem] h-[4.75rem] rounded-full border flex justify-center items-center"
+          onClick={profileEdit}
+        >
+          {userInfo.profileImageUrl ? (
+            <Image
+              src={userInfo.profileImageUrl}
+              alt="프로필 사진"
+              className="w-full h-full rounded-full"
+              width={500}
+              height={500}
+            />
+          ) : (
+            <Image src={logo} alt="66logo" className="w-10 h-10" />
+          )}
         </div>
         <div className="flex flex-col items-center">
           <div className="mt-2 text-[0.6rem] text-right">
@@ -65,7 +160,7 @@ const MyPage = () => {
         </div>
         <div className=" mx-2 h-12 rounded-xl flex flex-nowrap overflow-x-auto">
           {userInfo.activeChallenges.map((e) => {
-            const progress = Math.ceil((e.authDays / 66) * 100);
+            const progress = Math.ceil((e.progressDays / 66) * 100);
             return (
               <button
                 onClick={() => handleHabitDetail(e.challengeId)}
@@ -97,8 +192,8 @@ const MyPage = () => {
                 ></ProgressBar>
                 <div className="z-30">
                   <span className="text-center ">
-                    {e.habitSubTitle}
-                    <span className="text-xs">{` (${e.authDays}/66)`}</span>
+                    {e.subTitle}
+                    <span className="text-xs">{` (${e.progressDays}/66)`}</span>
                   </span>
                 </div>
               </button>
@@ -114,7 +209,12 @@ const MyPage = () => {
         <main className="flex flex-col items-stretch">
           <Profile />
           <ActiveChallenges />
-          <MyPageMenuList email={userInfo.email} />
+          <MyPageMenuList
+            email={userInfo.email}
+            successArr={userInfo.activeChallenges.filter(
+              (e) => e.progressDays >= 66,
+            )}
+          />
         </main>
       )}
     </>

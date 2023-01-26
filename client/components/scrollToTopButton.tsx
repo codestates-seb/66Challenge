@@ -20,13 +20,15 @@ export function ScrollToTopButton() {
     });
   }, []);
   return (
-    <div
-      className={`${
-        showTopBtn === false ? 'hidden' : null
-      } w-[40px] h-[40px] rounded-full bg-mainColor flex justify-center items-center z-49 right-4 bottom-16 fixed animate-dropDown`}
-      onClick={scrollToTop}
-    >
-      <FaArrowUp size={25} className="text-iconColor" />
+    <div className="w-full min-w-[360px] max-w-[460px] fixed bottom-28">
+      <div
+        className={`${
+          showTopBtn === false ? 'hidden' : null
+        } w-[40px] h-[40px] rounded-full bg-mainColor flex justify-center items-center z-49 right-4 absolute  animate-dropDown`}
+        onClick={scrollToTop}
+      >
+        <FaArrowUp size={25} className="text-iconColor" />
+      </div>
     </div>
   );
 }
