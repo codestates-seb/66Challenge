@@ -2,6 +2,7 @@ import { SlideBanner } from '../components/slideBanner';
 import Iframe from 'react-iframe';
 import {
   slideData,
+  subSlideData,
   categoryData,
   habitWrapperData,
 } from '../data/homeStaticData';
@@ -9,6 +10,13 @@ import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
 import Image from 'next/image';
 import React from 'react';
+import { Footer } from '../components/footer';
+
+interface tokenType {
+  access_token: string;
+  refresh_token: string;
+}
+
 const Home: React.FC = () => {
   const router = useRouter();
   const cateIconClick = (categoryId: string) => {
@@ -21,8 +29,8 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div>
-      <SlideBanner bannerCont={slideData} t={2000} />
+    <div className="-mb-[50px]">
+      <SlideBanner bannerCont={slideData} t={2000} pagination={true} />
       <div className="main-category px-[20px]">
         <ul className="main-category-list grid grid-cols-4 my-[20px]">
           {categoryData.map((el, idx) => {
@@ -49,7 +57,16 @@ const Home: React.FC = () => {
           })}
         </ul>
       </div>
-      <div className="main-video w-full h-full">
+      <div className="border-t-[10px] border-borderColor">
+        <HabitWrapperHorizontal
+          habitWrapperTitle="실시간 인기 습관"
+          habitWrapperData={habitWrapperData}
+        />
+      </div>
+      <div className="py-[20px]">
+        <SlideBanner bannerCont={subSlideData} t={4000} pagination={false} />
+      </div>
+      {/* <div className="main-video w-full h-full">
         <Iframe
           className="w-full min-h-[250px]"
           url="https://www.youtube.com/embed/cdZZpaB2kDM"
@@ -58,17 +75,14 @@ const Home: React.FC = () => {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
         ></Iframe>
-      </div>
+      </div> */}
       <div>
-        <HabitWrapperHorizontal
-          habitWrapperTitle="실시간 인기 습관"
-          habitWrapperData={habitWrapperData}
-        />
         <HabitWrapperHorizontal
           habitWrapperTitle="20대 여성이라면 필수!"
           habitWrapperData={habitWrapperData}
         />
       </div>
+      <Footer />
     </div>
   );
 };

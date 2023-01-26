@@ -25,9 +25,14 @@ interface BannerContType {
 interface SlideBannerProps {
   bannerCont: Array<BannerContType>;
   t: number;
+  pagination: boolean;
 }
 
-export const SlideBanner: React.FC<SlideBannerProps> = ({ bannerCont, t }) => {
+export const SlideBanner: React.FC<SlideBannerProps> = ({
+  bannerCont,
+  t,
+  pagination,
+}) => {
   const router = useRouter();
   const bannerClickEvent = (bannerLink: string): void => {
     router.push(bannerLink);
@@ -48,7 +53,7 @@ export const SlideBanner: React.FC<SlideBannerProps> = ({ bannerCont, t }) => {
   };
 
   return (
-    <div className="slidebanner-container relative min-h-[200px] overflow-hidden">
+    <div className="slidebanner-container relative overflow-hidden">
       <Flicking
         className="[&>div]:flex"
         plugins={plugins}
@@ -59,7 +64,7 @@ export const SlideBanner: React.FC<SlideBannerProps> = ({ bannerCont, t }) => {
         {bannerCont.map((el: BannerContType, idx: number) => {
           return (
             <div
-              className={`sildebanner-background w-screen max-w-[460px] min-h-[200px] flex-[0_0_auto] flex flex-col justify-center items-center relative`}
+              className={`sildebanner-background w-screen max-w-[460px] flex-[0_0_auto] flex flex-col justify-center items-center relative`}
               key={idx}
               onClick={(_) => bannerClickEvent(el.bannerLink)}
             >
@@ -73,11 +78,13 @@ export const SlideBanner: React.FC<SlideBannerProps> = ({ bannerCont, t }) => {
           );
         })}
       </Flicking>
-      <div className="slidebanner-pagination absolute right-2.5 top-2.5 bg-black/50 text-white text-center tracking-wider text-xs min-w-[40pdx] p1y-0.5 pr-1 pl-1.5 rounded-xl flex justify-between ">
-        <span>{currendIdx + 1}</span>
-        <span>/</span>
-        <span>{bannerCont.length}</span>
-      </div>
+      {pagination && (
+        <div className="slidebanner-pagination absolute right-2.5 top-2.5 bg-black/50 text-white text-center tracking-wider text-xs min-w-[40pdx] p1y-0.5 pr-1 pl-1.5 rounded-xl flex justify-between ">
+          <span>{currendIdx + 1}</span>
+          <span>/</span>
+          <span>{bannerCont.length}</span>
+        </div>
+      )}
     </div>
   );
 };
