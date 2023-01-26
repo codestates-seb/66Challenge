@@ -21,7 +21,7 @@ export function EditHabitBottomNav({
     //수정 페이지 이동해야함. 프롭스로 전달 예정 프롭스가 있을 경우 수정 페이지
   };
   return (
-    <div className="flex bg-white h-[3rem] px-6  w-full fixed bottom-0 min-w[300px] justify-center items-center border-t">
+    <div className="flex bg-white h-[3rem] px-6 w-full fixed bottom-0 min-w[300px] justify-center items-center border-t min-w-[360px] max-w-[460px]">
       <button
         className="bg-mainColor h-3/4 w-1/2 rounded-lg mr-2.5 text-iconColor text-base"
         onClick={editHabitHandle}

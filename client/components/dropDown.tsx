@@ -10,7 +10,7 @@ import { deleteHabitReview } from '../module/reviewFunctionModules';
 import { deleteHabitAuth } from '../module/authFunctionMoudules';
 import { reportData } from '../data/reportData';
 import { useAppSelector } from '../ducks/store';
-
+import { KaKaoShare } from '../module/kakaoShare';
 interface IarrowValue {
   className: string;
   boolean: boolean;
@@ -24,6 +24,11 @@ interface propsValue {
   hostUserId?: number;
   reviewId?: number;
   reviewerUserId?: number;
+  habitData?: {
+    title: string;
+    imageUrl: string | null;
+    habitId: number;
+  };
 }
 export function DropDown({
   dropDownType,
@@ -34,6 +39,7 @@ export function DropDown({
   hostUserId,
   reviewId,
   reviewerUserId,
+  habitData,
 }: propsValue) {
   const [arrowDirection, setArrowDirection] = useState<IarrowValue>({
     className: '',
@@ -55,7 +61,7 @@ export function DropDown({
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
-
+  const [isShareOpen, setIsShareOpen] = useState<boolean>(false);
   //props로 넘겨받는거에서 인증글이냐,리뷰냐 판단하여 비동기 함수 조건부 호출
   const declarationHandle = () => {
     if (reportType.length === 0) {
@@ -112,6 +118,14 @@ export function DropDown({
       />
       {arrowDirection.boolean === false ? null : (
         <div className="flex flex-col w-full absolute top-[18px] right-0 ">
+          {dropDownType === 'habit' ? (
+            <span
+              className="text-sm border border-[#e5e5e5]  bg-white text-center py-[5px]"
+              onClick={(_) => setIsShareOpen(true)}
+            >
+              공유하기
+            </span>
+          ) : null}
           <span
             className="text-sm border border-[#e5e5e5]  bg-white text-center py-[5px]"
             onClick={(_) => setIsReportOpen(true)}
@@ -135,6 +149,11 @@ export function DropDown({
             </>
           ) : null}
         </div>
+      )}
+      {isShareOpen && (
+        <Modal isOpen={isShareOpen} setIsOpen={setIsShareOpen}>
+          <KaKaoShare habitData={habitData} />
+        </Modal>
       )}
       {isReportOpen && (
         <Modal

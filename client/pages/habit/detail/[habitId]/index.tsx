@@ -72,6 +72,11 @@ const HabitDetail: React.FC = () => {
               dropDownType="habit"
               boolean={false}
               hostUserId={habitData?.overview?.hostUserId}
+              habitData={{
+                title: habitData?.overview?.title,
+                imageUrl: habitData?.overview?.thumbImgUrl,
+                habitId: habitData?.overview?.habitId,
+              }}
             />
           </div>
           <div className="habit-detail-metainfo-container flex items-center gap-2.5">
