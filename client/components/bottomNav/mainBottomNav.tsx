@@ -99,7 +99,7 @@ export function MainBottomNav({ param }) {
     }
   };
   return (
-    <div className="flex bg-mainColor h-[50px] px-6  w-full fixed bottom-0 min-w[300px] justify-center">
+    <div className="flex bg-mainColor h-[50px] px-6 w-full   fixed bottom-0 min-w-[360px] max-w-[460px] justify-center">
       <ul className="flex relative items-center  justify-center">
         <span
           className={`bg-subColor duration-500 ${menus[active]?.dis} border-4 border-white h-14 w-14 absolute -top-7 -left-0 rounded-full `}

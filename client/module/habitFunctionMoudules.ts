@@ -63,7 +63,7 @@ export async function postBookMark({ habitId, userId }: habitGeneralProps) {
           },
         },
       )
-      .then((res) => console.log(res));
+      .then((res) => res.data);
     return response;
   } catch (e) {
     console.error(e);
@@ -80,7 +80,7 @@ export async function deleteBookMark({ habitId, userId }: habitGeneralProps) {
           },
         },
       )
-      .then((res) => console.log(res));
+      .then((res) => res.data);
     return response;
   } catch (e) {
     console.error(e);

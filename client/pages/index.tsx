@@ -9,7 +9,6 @@ import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
 import Image from 'next/image';
 import React from 'react';
-
 const Home: React.FC = () => {
   const router = useRouter();
   const cateIconClick = (categoryId: string) => {
