@@ -55,9 +55,6 @@ spring:
     init:
       data-locations: classpath*:db/h2/data.sql
       mode: always
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor

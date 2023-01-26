@@ -10,8 +10,6 @@ import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.mapper.UserMapperImpl;
 import challenge.server.user.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,7 +26,6 @@ import java.util.List;
 
 import static challenge.server.habit.entity.QHabit.habit;
 
-@Api
 @RestController
 @RequestMapping("/users")
 @Validated
@@ -40,7 +37,6 @@ public class UserController {
     private final BookmarkService bookmarkService;
     private final FileUploadService fileUploadService;
 
-    @ApiOperation(value = "이메일 중복 여부 확인", notes = "true 응답 = 중복되는 이메일 존재 / false 응답 = 중복되는 이메일 없음")
     @GetMapping("/emails/check")
     public ResponseEntity<Boolean> checkEmailDuplicate(@RequestParam @Email String email) {
         return new ResponseEntity<>(userService.verifyExistEmail(email), HttpStatus.OK);
@@ -49,7 +45,6 @@ public class UserController {
         //return ResponseEntity.ok(false);
     }
 
-    @ApiOperation(value = "회원 닉네임 중복 여부 확인", notes = "true 응답 = 중복되는 닉네임 존재 / false 응답 = 중복되는 닉네임 없음")
     @GetMapping("/usernames/check")
     public ResponseEntity<Boolean> checkUsernameDuplicate(@RequestParam @NotBlank String username) {
         return new ResponseEntity<>(userService.verifyExistUsername(username), HttpStatus.OK);
@@ -58,7 +53,6 @@ public class UserController {
         //return new ResponseEntity<>(false, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "회원 가입", notes = "Sign Up 버튼을 클릭할 경우 회원 가입 요청을 보냅니다.")
     @PostMapping
     public ResponseEntity postUser(@Valid @RequestBody UserDto.Post requestBody) {
         User user = userMapper.userPostDtoToUser(requestBody);
@@ -70,7 +64,6 @@ public class UserController {
     }
 
     /*
-    @ApiOperation(value = "회원 프로필 사진 등록")
     @PostMapping("/{user-id}/profiles")
     public ResponseEntity postProfileImage(@PathVariable("user-id") @Positive Long userId,
                                            @RequestPart("file") MultipartFile multipartFile) {
@@ -83,7 +76,6 @@ public class UserController {
     }
     */
 
-    @ApiOperation(value = "회원 정보 수정")
     @PatchMapping(value = "/{user-id}"/*, consumes = {"multipart/form-data"}*/)
     public ResponseEntity patchUser(@PathVariable("user-id") @Positive Long userId,
                                     @RequestPart(value = "file", required = false) MultipartFile multipartFile,
@@ -103,7 +95,6 @@ public class UserController {
         //return new ResponseEntity<>(createUserPatchResponseDto(), HttpStatus.OK); // todo 회원 정보 수정 후 어떤 화면으로 연결/이동하지?
     }
 
-    @ApiOperation(value = "프로필 사진 삭제")
     @DeleteMapping("/{user-id}/profiles")
     public ResponseEntity deleteProfileImage(@PathVariable("user-id") @Positive Long userId) {
         userService.deleteProfileImage(userId);
@@ -112,7 +103,6 @@ public class UserController {
 
     // 관리자가 처리하거나, 또는 특정 조건이 만족되었을 때에 이벤트 발생시켜 처리
     /*
-    @ApiOperation(value = "5회 이상 신고 당한 회원 정지")
     @PatchMapping("/reports/{user-id}")
     public ResponseEntity banUser(@PathVariable("user-id") @Positive Long userId) {
         // API 통신용
@@ -120,7 +110,6 @@ public class UserController {
     }
      */
 
-    @ApiOperation(value = "회원 개인 정보 통합 조회(마이페이지)")
     @GetMapping("/{user-id}")
     public ResponseEntity getUser(@PathVariable("user-id") @Positive Long userId) {
         UserDto.UserDetailsDb userDetailsDb = userService.findUserDetails(userId);
@@ -131,7 +120,6 @@ public class UserController {
     }
 
     /*
-    @ApiOperation(value = "내가 진행 중인 습관의 카테고리 조회") // 회원 개인 정보 통합 조회(마이페이지) 시 함께 조회하도록 처리
     @GetMapping("/{user-id}/habits/categories")
     public ResponseEntity getActiveCategories(@PathVariable("user-id") @Positive Long userId) {
         // API 통신용
@@ -146,7 +134,6 @@ public class UserController {
     해당 습관 제작자는 해당 버튼이 보이지 않음
      */
     // 회원이 찜한 습관들의 목록 출력
-    @ApiOperation(value = "회원이 찜한 습관들의 목록 출력")
     @GetMapping("/{user-id}/bookmarks")
     public ResponseEntity getBookmarks(@PathVariable("user-id") @Positive Long userId,
                                        @RequestParam(required = false) @Positive Long lastHabitId,
@@ -160,7 +147,6 @@ public class UserController {
 //        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "내가 만든 습관 조회")
     @GetMapping("/{user-id}/habits/hosts")
     public ResponseEntity getHostHabits(@PathVariable("user-id") @Positive Long userId,
                                         @RequestParam(required = false) @Positive Long lastHabitId,
@@ -174,7 +160,6 @@ public class UserController {
 //        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "인증서 발급")
     @GetMapping("/{user-id}/habits/{habit-id}/certificates")
     public ResponseEntity getHabitCertificate(@PathVariable("habit-id") @Positive Long habit_id,
                                               @PathVariable("user-id") @Positive Long user_id) {
@@ -186,7 +171,6 @@ public class UserController {
     }
 
     /* 2023.1.13(금) 15h10 habit controller가 처리하는 것이 맞음!
-    @ApiOperation(value = "특정 습관 달성 회원 목록 조회(달성 시간 내림차순)")
     @GetMapping("/challenges/success")
     public ResponseEntity getSuccessUsers(@Positive @RequestParam int page,
                                           @Positive @RequestParam int size) {
@@ -196,7 +180,6 @@ public class UserController {
     }
      */
 
-    @ApiOperation(value = "비밀번호 일치 여부 확인", notes = "true 응답 = 비밀번호 일치 / false = 비밀번호 불일치")
     @GetMapping("/{user-id}/passwords/check")
     public ResponseEntity<Boolean> checkPasswordCorrect(@PathVariable("user-id") @Positive Long userId,
                                                         @Valid @RequestBody UserDto.CheckPassword requestBody) {
@@ -208,14 +191,12 @@ public class UserController {
 //        return ResponseEntity.ok(true);
     }
 
-    @ApiOperation(value = "회원 탈퇴")
     @DeleteMapping("/{user-id}")
     public ResponseEntity deleteUser(@PathVariable("user-id") @Positive Long userId) {
         userService.quitUser(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//    @ApiOperation(value = "로그아웃")
 //    public ResponseEntity logout(LogoutDto logoutDto) {
 //
 //    }

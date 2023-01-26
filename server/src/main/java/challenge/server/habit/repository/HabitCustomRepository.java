@@ -10,4 +10,8 @@ public interface HabitCustomRepository {
     List<Habit> findByHostUserId(Long lastHabitId, Long userId, int page, int size);
 
     List<Habit> findAllNoOffset(Long lastHabitId, int page, int size);
+
+    List<Habit> findAllByScore(Long lastHabitId, int page, int size);   // 추천순 정렬
+
+    List<Habit> findAllByPopularity(Long lastHabitId, int page, int size);  // 인기순 정렬
 }
