@@ -37,7 +37,7 @@ export default function SearchHabit() {
   const [page, setPage] = useState(1);
   const [active, setActive] = useState(0);
   const [url, setUrl] = useState(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=""&`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?`,
   );
   const [setTarget] = useIntersection(url, page, setPage, setSearchHabits);
   const categoryList: IcategoryList[] = [
@@ -60,7 +60,7 @@ export default function SearchHabit() {
       setDoing('all');
       setPage(1);
       setSearchHabits([]);
-      setUrl(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=""&`);
+      setUrl(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?`);
     } else {
       setDoing('search');
       setPage(1);
@@ -82,7 +82,7 @@ export default function SearchHabit() {
       setDoing('all');
       setPage(1);
       setSearchHabits([]);
-      setUrl(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=""&`);
+      setUrl(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?`);
     }
   }, [active]);
   useEffect(() => {

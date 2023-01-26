@@ -1,3 +1,4 @@
+import React from 'react';
 import { RiKakaoTalkFill } from 'react-icons/ri';
 import { IoClose } from 'react-icons/io5';
 

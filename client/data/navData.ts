@@ -44,7 +44,7 @@ export const detailNavFunc = (
   {
     navTitle: '통계',
     navTo: `/habit/detail/${habitId}/statistic`,
-    pathname: `/habit/detail/[habitId]}/statistic`,
+    pathname: `/habit/detail/[habitId]/statistic`,
   },
   {
     navTitle: '후기',

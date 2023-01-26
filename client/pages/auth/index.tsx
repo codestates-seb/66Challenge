@@ -3,6 +3,9 @@ import { AiFillCamera } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { useAppSelector } from '../../ducks/store';
+import { getUserChallenges } from '../../module/challengeFunctionMoudules';
+import { useRouter } from 'next/router';
+import { postAuth } from '../../module/challengeFunctionMoudules';
 interface IauthFormValue {
   memo: string;
   authImage: File | null;
@@ -13,34 +16,32 @@ interface IverifyForm {
   memoVerify: string;
   agreeVerify: string;
 }
+interface IresponseDataValue {
+  authIds?: null;
+  challengeId?: number;
+  challenger?: null;
+  habitTitle?: string | null;
+  review?: null;
+  score?: number;
+  status?: string;
+  usedWildcard?: number;
+}
 export default function Auth() {
   //추후 데이터 받아와서 더미데이터 대체해야함
   const { userId } = useAppSelector((state) => state.loginIdentity);
-
-  const dummyArr = [
-    'habit1habit1habit1habit1habit1habit1habit1habit1habit1',
-    'habit2',
-    'habit3',
-    'habit4',
-    'habit5',
-    'habit6',
-    'habit7',
-    'habit8',
-    'habit9',
-    'habit10',
-    'habit11',
-  ];
+  const router = useRouter();
   const { register, handleSubmit, reset, getValues, watch } =
     useForm<IauthFormValue>();
   const memoRegExp: RegExp = /[A-Za-z0-9가-힇ㄱ-ㅎ]{2,20}/;
   const [active, setActive] = useState(-1); //active에는 habitId가 들어가야한다.
   const [imgFile, setImgFile] = useState('');
-  const [verify, setVerify] = useState({
+  const [verify, setVerify] = useState<IverifyForm>({
     imgVerify: 'fail',
     chooseHabitVerify: 'fail',
     memoVerify: '',
     agreeVerify: 'fail',
   });
+  const [ingData, setIngData] = useState<IresponseDataValue[]>([]);
   const { authImage } = watch();
   const deleteImgHandle = (): void => {
     setImgFile('');
@@ -61,14 +62,24 @@ export default function Auth() {
       setVerify({ ...verify, memoVerify: 'success' });
     }
   };
-  const postAuthHandle = (data: IauthFormValue): void => {
+
+  const postAuthHandle = async (data: IauthFormValue): Promise<void> => {
     const { memo } = data;
     if (memoRegExp.test(memo)) {
       //{memo,imgFile,active} 보내야함.
       //reset()
       //router 이용하여 상세페이지 인증탭으로 이동
       const formData = new FormData();
-      formData.append('authImage', authImage[0]);
+      console.log(authImage[0]);
+      formData.append(
+        'data',
+        new Blob([JSON.stringify({ body: memo })], {
+          type: 'application/json',
+        }),
+      );
+      formData.append('file', authImage[0]);
+
+      const response = await postAuth({ challengeId: active, body: formData });
     } else {
       setVerify({ ...verify, memoVerify: 'fail' });
     }
@@ -80,6 +91,19 @@ export default function Auth() {
       setImgFile(URL.createObjectURL(file));
     }
   }, [authImage]);
+  useEffect(() => {
+    async function axiosFunc() {
+      const response: IresponseDataValue[] | number = await getUserChallenges(
+        userId,
+      );
+      if (typeof response === 'number') {
+        router.push('/user/login');
+      } else {
+        setIngData(response);
+      }
+    }
+    axiosFunc();
+  }, []);
 
   return (
     <div className="h-screen w-full px-10 flex flex-col pt-5 overvflow-y-scroll scrollbar-hide">
@@ -87,22 +111,26 @@ export default function Auth() {
         <span className="font-bold text-base">내가 진행중인 습관</span>
       </div>
       <div className="flex flex-col flex-wrap w-full  h-1/6 overflow-x-scroll scrollbar-hide p-2 border-y  border-mainColor  items-center">
-        {dummyArr.length === 0 ? (
+        {ingData.length === 0 ? (
           <span>진행중인 습관이 없습니다.</span>
         ) : (
-          dummyArr.map((el, index) => {
+          ingData.map((el) => {
             return (
-              <div className=" w-[120px] h-1/2 p-2" key={index}>
+              <div className=" w-[120px] h-1/2 p-2" key={el.challengeId}>
                 <span
                   className={`${
-                    active === index ? 'bg-subColor' : 'bg-mainColor'
+                    active === el.challengeId ? 'bg-subColor' : 'bg-mainColor'
                   } w-full h-full rounded-full text-iconColor flex duration-300  justify-center items-center text-base`}
                   onClick={() => {
-                    setActive(index);
+                    setActive(el.challengeId);
                     setVerify({ ...verify, chooseHabitVerify: 'success' });
                   }}
                 >
-                  {el.length > 10 ? el.slice(0, 10) + '...' : el}
+                  {el.habitTitle === null
+                    ? null
+                    : el.habitTitle.length > 10
+                    ? el.habitTitle.slice(0, 10) + '...'
+                    : el.habitTitle}
                 </span>
               </div>
             );

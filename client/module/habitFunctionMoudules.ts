@@ -7,15 +7,16 @@ import type {
   getHabitsSearchCategoryProps,
 } from './moduleInterface';
 import { getCookie } from './cookies';
-export async function postHabit({ data }: postHabitProps) {
+export async function postHabit({ data }) {
   try {
     const response = await axios
       .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits`, data, {
         headers: {
           Authorization: getCookie('accessJwtToken'),
+          'Content-Type': 'multipart/form-data',
         },
       })
-      .then((res) => console.log(res));
+      .then((res) => res.data);
     return response;
   } catch (e) {
     console.error(e);
@@ -62,7 +63,7 @@ export async function postBookMark({ habitId, userId }: habitGeneralProps) {
           },
         },
       )
-      .then((res) => console.log(res));
+      .then((res) => res.data);
     return response;
   } catch (e) {
     console.error(e);
@@ -79,7 +80,7 @@ export async function deleteBookMark({ habitId, userId }: habitGeneralProps) {
           },
         },
       )
-      .then((res) => console.log(res));
+      .then((res) => res.data);
     return response;
   } catch (e) {
     console.error(e);

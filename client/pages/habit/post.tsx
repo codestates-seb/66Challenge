@@ -1,6 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { FileUploader } from '../../components/fileUploader';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useAppSelector } from '../../ducks/store';
+import { postHabit } from '../../module/habitFunctionMoudules';
+import { useRouter } from 'next/router';
 
 interface HabitFormValues {
   title: string;
@@ -17,8 +20,10 @@ interface HabitFormValues {
 export type { HabitFormValues };
 
 const Post = () => {
+  const { userId } = useAppSelector((state) => state.loginIdentity);
   const { register, handleSubmit, getValues, setFocus, watch, reset } =
     useForm<HabitFormValues>();
+  const router = useRouter();
 
   const { habitImage, successImage, failImage } = watch();
   const [habitImagePreview, setHabitImagePreview] = useState('');
@@ -73,7 +78,7 @@ const Post = () => {
     }
   };
 
-  const postButtonClick = (data: HabitFormValues) => {
+  const postButtonClick = async (data: HabitFormValues) => {
     const {
       title,
       subtitle,
@@ -104,18 +109,33 @@ const Post = () => {
       setVerify({ ...verify, failImageVerify: 'fail' });
     } else {
       const formData = new FormData();
-      formData.append('habitImage', habitImage[0]);
-      formData.append('successImage', successImage[0]);
-      formData.append('failImage', failImage[0]);
-
-      console.log(data);
-
-      // 데이터 통신
+      formData.append('thumbImg', habitImage[0]);
+      formData.append('succImg', successImage[0]);
+      formData.append('failImg', failImage[0]);
+      formData.append(
+        'data',
+        new Blob(
+          [
+            JSON.stringify({
+              title,
+              subTitle: subtitle,
+              body,
+              category,
+              authEndTime,
+              authStartTime,
+              authType: 'photo',
+              hostUserId: userId,
+            }),
+          ],
+          {
+            type: 'application/json',
+          },
+        ),
+      );
+      await postHabit({ data: formData }).then((data) => {
+        router.push(`/habit/detail/${data.overview.habitId}`);
+      });
       // reset();
-      // console.log(habitImage[0]);
-      // for (let value of formData.values()) {
-      //   console.log(value);
-      // }
     }
   };
 
