@@ -8,6 +8,9 @@ import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.bookmark.mapper.BookmarkMapper;
 import challenge.server.bookmark.service.BookmarkService;
 import challenge.server.challenge.dto.ChallengeDto;
+import challenge.server.challenge.entity.Challenge;
+import challenge.server.challenge.mapper.ChallengeMapper;
+import challenge.server.challenge.service.ChallengeService;
 import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.dto.HabitDto;
 import challenge.server.habit.entity.Habit;
@@ -52,14 +55,16 @@ public class HabitController {
     private final ReviewMapper reviewMapper;
     private final FileUploadService fileUploadService;
     private final UserService userService;
+    private final ChallengeService challengeService;
+    private final ChallengeMapper challengeMapper;
 
     @PostMapping
     public ResponseEntity postHabit(@RequestPart("thumbImg") MultipartFile thumbImg,
                                     @RequestPart("succImg") MultipartFile succImg,
                                     @RequestPart("failImg") MultipartFile failImg,
                                     @RequestPart("data") @Valid HabitDto.Post habitPostDto) {
-        //TODO이미지 파일 리스트로 받기
-//TODO아래 과정 컨트롤러 말고 DTO에서 처리하기
+        // TODO 이미지 파일 리스트로 받기
+        // TODO 아래 과정 컨트롤러 말고 DTO에서 처리하기
         Habit habit = habitMapper.habitPostDtoToHabit(habitPostDto);
         habit.setThumbImgUrl(fileUploadService.save(thumbImg));
         habit.setSuccImgUrl(fileUploadService.save(succImg));
@@ -100,7 +105,6 @@ public class HabitController {
                                           @RequestParam @Positive int page,
                                           @RequestParam @Positive int size,
                                           @RequestParam(required = false) @Positive Long userId) {
-        //TODO userId null일 때 challengeStatus, isBooked조회
         List<Habit> habits;
         if (keyword == null) habits = habitService.findAll(lastHabitId, page, size);
         else habits = habitService.findAllByKeyword(lastHabitId, keyword, page, size);
@@ -114,34 +118,57 @@ public class HabitController {
                                            @RequestParam @Positive int page,
                                            @RequestParam @Positive int size,
                                            @RequestParam(required = false) @Positive Long userId) {
-        //TODO userId null일 때 challengeStatus, isBooked조회
+
         List<Habit> habits = habitService.findAllByCategory(lastHabitId, categoryId, page, size);
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
+
+    // TODO 습관 조회 - 추천/인기/신규 순
+//    @GetMapping
+//    public ResponseEntity getAllBySort(@RequestParam String sort,
+//                                       @RequestParam @Positive int page,
+//                                       @RequestParam @Positive int size,
+//                                       @RequestParam(required = false) @Positive Long lastHabitId,
+//                                       @RequestParam(required = false) @Positive Long userId) {
+//
+//        List<Habit> habits = habitService.findAllBySort(lastHabitId, page, size, sort);
+//        return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
+//    }
 
     // 습관 조회 - 상세 조회
     @GetMapping("/{habit-id}")
     public ResponseEntity getHabit(@PathVariable("habit-id") @Positive Long habitId,
                                    @RequestParam(required = false) @Positive Long userId) {
-        //TODO userId null일 때 challengeStatus, isBooked조회
+
         Habit findHabit = habitService.findHabit(habitId);
         return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(findHabit, userId), HttpStatus.OK);
     }
 
+    // TODO Advanced :: 습관 시작,포기 challengeId로 통신하기 -> Habit ResponseDto에 challengeId 포함하기.
     // 습관 조회 - 상세정보 탭 - 습관 시작하기 - Challenge DTO
     @PostMapping("/{habit-id}/challenges")
     public ResponseEntity postChallenge(@PathVariable("habit-id") @Positive Long habitId,
                                         @RequestParam @Positive Long userId) {
-        ChallengeDto.Response responseDto = createChallengeResponseDto();
-        return new ResponseEntity(responseDto, HttpStatus.CREATED);
+
+        // TODO toEntity Mapper 생성
+        Challenge challenge = Challenge.builder()
+                .habit(habitService.findHabit(habitId))
+                .user(userService.findUser(userId))
+                .status(Challenge.Status.CHALLENGE)
+                .build();
+        Challenge createChallenge = challengeService.createChallenge(userId, habitId, challenge);
+
+        return new ResponseEntity(challengeMapper.toDto(createChallenge), HttpStatus.CREATED);
     }
 
     // 습관 조회 - 상세정보 탭 - 습관 상태 변경
-    @PatchMapping("/{habit-id}/challenges/{challenge-id}/status")
-    public ResponseEntity changeChallengeStatus(@PathVariable("challenge-id") @Positive Long challengeId,
-                                                @RequestParam("statusId") @Positive Long statusId) {
-        ChallengeDto.Response responseDto = createChallengeResponseDto();
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    @PatchMapping("/{habit-id}/challenges")
+    public ResponseEntity changeChallengeStatus(@PathVariable("habit-id") @Positive Long habitId,
+                                                @RequestParam @Positive Long userId,
+                                                @RequestParam String status) {
+
+        Challenge changeChallnge = challengeService.changeStatus(userId,habitId,status);
+        return new ResponseEntity<>(challengeMapper.toDto(changeChallnge), HttpStatus.OK);
     }
 
     // 습관 조회 - 통계 탭 - 통계 DTO
@@ -214,12 +241,7 @@ public class HabitController {
                                      @RequestPart(value = "file", required = false) MultipartFile multipartFile,
                                      @RequestPart("data") @Valid AuthDto.Patch patchDto) {
         Auth auth = Auth.builder().authId(authId).body(patchDto.getBody()).build();
-
-        if (multipartFile != null) {
-            String authImageUrl = fileUploadService.save(multipartFile);
-            auth.changeImageUrl(authImageUrl);
-        }
-
+        if (multipartFile != null) auth.changeImageUrl(fileUploadService.save(multipartFile));
         Auth updateAuth = authService.updateAuth(auth);
 
         return new ResponseEntity<>(authMapper.toDto(updateAuth), HttpStatus.OK);

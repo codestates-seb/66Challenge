@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import static challenge.server.challenge.entity.Challenge.Status.*;
 
@@ -34,16 +35,17 @@ public class ChallengeService {
     private final WildcardService wildcardService;
 
     @Transactional
-    public Challenge createChallenge(Challenge challenge) {
+    public Challenge createChallenge(Long userId, Long habitId, Challenge challenge) {
+        verifyExistsChallenge(userId, habitId);
         return challengeRepository.save(challenge);
     }
 
     @Transactional
-    public Challenge changeStatus(Long challengeId, Challenge.Status status) {
-        Challenge challenge = findVerifiedChallenge(challengeId);
-        challenge.changeStatus(status);
+    public Challenge changeStatus(Long userId, Long habitId, String status) {
+        Challenge findChallenge = findByUserIdAndHabitId(userId, habitId);
+        findChallenge.changeStatus(Challenge.Status.valueOf(status));
 
-        return challenge;
+        return challengeRepository.save(findChallenge);
     }
 
     public Challenge findChallenge(Long challengeId) {
@@ -126,5 +128,15 @@ public class ChallengeService {
     public Challenge findVerifiedChallenge(Long challengeId) {
         return challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+    }
+
+    public Challenge findByUserIdAndHabitId(Long userId, Long habitId) {
+        return challengeRepository.findByUserUserIdAndHabitHabitId(userId,habitId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+    }
+
+    public void verifyExistsChallenge(Long userId, Long habitId) {
+        Optional<Challenge> challenge = challengeRepository.findByUserUserIdAndHabitHabitId(userId, habitId);
+        if(challenge.isPresent()) throw new BusinessLogicException(ExceptionCode.CHALLENEGE_EXISTS);
     }
 }

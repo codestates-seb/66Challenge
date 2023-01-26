@@ -19,8 +19,6 @@ public class ChallengeDto {
         private String challenger;
         private String status;
         private int usedWildcard;
-        private String review;
-        private int score;
         private List<Long> authIds;
     }
 }
