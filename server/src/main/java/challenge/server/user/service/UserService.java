@@ -103,6 +103,7 @@ public class UserService {
         return passwordEncoder.matches(user.getPassword(), findUser.getPassword());
     }
 
+
     @Transactional
     public void sendEmailVerificationMail(String email) throws MessagingException {
         // 인증 대상 이메일이 이미 가입된 회원인지 한 번 확인
