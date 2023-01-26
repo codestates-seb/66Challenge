@@ -38,8 +38,8 @@ type PropsWithChildren<P> = P & { children?: React.ReactNode | undefined };
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  buttonName: string;
-  onClick: () => void;
+  buttonName?: string;
+  onClick?: () => void;
 }
 export type { ModalProps };
 
@@ -55,9 +55,9 @@ export const Modal = ({
   };
 
   return (
-    <div className="modal-container z-50">
+    <div className="modal-container z-50 ">
       <div
-        className="modal-backdrop inset-0 fixed bg-slate-200/50 flex justify-center items-center"
+        className="modal-backdrop inset-0 fixed min-w-[360px] max-w-[460px] bg-slate-200/50 flex justify-center items-center"
         onClick={closeModalHandler}
       >
         <div
@@ -74,15 +74,17 @@ export const Modal = ({
           </div>
           <div className="modal-content pt-5 pb-5">{children}</div>
           <div className="modal-veiw-bottom-button-block flex justify-center items-center">
-            <button
-              className="modal-veiw-bottom-button py-2 px-5 rounded bg-black hover:bg-stone-700 text-white"
-              onClick={() => {
-                // closeModalHandler();
-                onClick && onClick();
-              }}
-            >
-              {buttonName}
-            </button>
+            {buttonName === undefined || onClick === undefined ? null : (
+              <button
+                className="modal-veiw-bottom-button py-2 px-5 rounded bg-black hover:bg-stone-700 text-white"
+                onClick={() => {
+                  // closeModalHandler();
+                  onClick && onClick();
+                }}
+              >
+                {buttonName}
+              </button>
+            )}
           </div>
         </div>
       </div>

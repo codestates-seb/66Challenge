@@ -1,27 +1,19 @@
 interface slideDataType {
   bgImgUrl: string;
-  contText: string;
-  contSubText: string;
   bannerLink: string;
 }
 
 export const slideData: Array<slideDataType> = [
   {
-    bgImgUrl: '',
-    contText: 'test용 첫 번째 슬라이드입니다.',
-    contSubText: '여기는 부제가 들어가겠죠',
+    bgImgUrl: '/image/slideImg/slideImg1.svg',
     bannerLink: '',
   },
   {
-    bgImgUrl: '',
-    contText: 'test용 두 번째 슬라이드입니다.',
-    contSubText: '여기는 부제가 들어가겠죠',
+    bgImgUrl: '/image/slideImg/slideImg2.svg',
     bannerLink: '',
   },
   {
-    bgImgUrl: '',
-    contText: 'test용 세 번째 슬라이드입니다.',
-    contSubText: '여기는 부제가 들어가겠죠',
+    bgImgUrl: '/image/slideImg/slideImg3.svg',
     bannerLink: '',
   },
 ];
@@ -77,7 +69,7 @@ export const categoryData: Array<categoryDataType> = [
 
 interface habitWrapperDataType {
   habitId: number;
-  habitImage: string;
+  thumbImgUrl: string;
   title: string;
   body: string;
   isBooked: boolean;
@@ -86,28 +78,28 @@ interface habitWrapperDataType {
 export const habitWrapperData: Array<habitWrapperDataType> = [
   {
     habitId: 1,
-    habitImage: '/image/running.png',
+    thumbImgUrl: '/image/running.png',
     title: '달리기 3km',
     body: '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
     isBooked: false,
   },
   {
     habitId: 2,
-    habitImage: '/image/running.png',
+    thumbImgUrl: '/image/running.png',
     title: '달리기 3km',
     body: '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
     isBooked: false,
   },
   {
     habitId: 3,
-    habitImage: '/image/running.png',
+    thumbImgUrl: '/image/running.png',
     title: '달리기 3km',
     body: '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
     isBooked: false,
   },
   {
     habitId: 4,
-    habitImage: '/image/running.png',
+    thumbImgUrl: '/image/running.png',
     title: '달리기 3km',
     body: '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
     isBooked: false,

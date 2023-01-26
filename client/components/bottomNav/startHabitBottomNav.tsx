@@ -28,7 +28,7 @@ export function StartHabitBottomNav({
   const defaultClassName = 'h-3/4 w-full text-subColor ';
   const [isBookMark, setIsBookMark] = useState<IBookMarkValue>({
     boolean: false,
-    animate: 'h-3/4 w-1/4 text-subColor ',
+    animate: defaultClassName,
   });
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -61,7 +61,7 @@ export function StartHabitBottomNav({
     }
   }, [isBooked]);
   return (
-    <div className="flex bg-white h-[3rem]   w-full fixed bottom-0 border-t pr-2 min-w[300px] items-center">
+    <div className="flex bg-white h-[3rem] w-full  min-w-[360px] max-w-[460px] fixed bottom-0 border-t pr-2  items-center">
       <div className="w-[15%] h-full flex items-center justify-center">
         {isBookMark.boolean === false ? (
           <AiOutlineHeart
