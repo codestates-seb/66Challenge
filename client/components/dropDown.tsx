@@ -53,6 +53,7 @@ export function DropDown({
   const [reportType, setReportType] = useState<string>('');
   const [agreeCheck, isAgreeCheck] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 
   //props로 넘겨받는거에서 인증글이냐,리뷰냐 판단하여 비동기 함수 조건부 호출
@@ -77,7 +78,10 @@ export function DropDown({
     setIsReportOpen(false);
   };
 
-  const deleteAuthHandle = () => {
+  // TODO 수정 관련 모달 부분 구현 필요
+  const updateHandle = () => {};
+
+  const deleteHandle = () => {
     if (!agreeCheck) {
       alert('삭제 동의 여부를 체크해주세요');
       return;
@@ -115,12 +119,20 @@ export function DropDown({
             신고하기
           </span>
           {boolean === true ? (
-            <span
-              className="text-sm border-x border-b border-[#e5e5e5]  bg-white  text-center py-[5px]"
-              onClick={(_) => setIsDeleteOpen(true)}
-            >
-              삭제하기
-            </span>
+            <>
+              <span
+                className="text-sm border-x border-b border-[#e5e5e5]  bg-white  text-center py-[5px]"
+                onClick={(_) => setIsUpdateOpen(true)}
+              >
+                수정하기
+              </span>
+              <span
+                className="text-sm border-x border-b border-[#e5e5e5]  bg-white  text-center py-[5px]"
+                onClick={(_) => setIsDeleteOpen(true)}
+              >
+                삭제하기
+              </span>
+            </>
           ) : null}
         </div>
       )}
@@ -155,12 +167,32 @@ export function DropDown({
           </fieldset>
         </Modal>
       )}
+      {/* TODO 수정하기 관련 모달 구현 필요 */}
+      {isUpdateOpen && (
+        <Modal
+          isOpen={isUpdateOpen}
+          setIsOpen={setIsUpdateOpen}
+          buttonName="수정하기"
+          onClick={updateHandle}
+        >
+          <div className="text-xl font-semibold w-full text-center pb-5">
+            {dropDownType === 'review' ? '후기 수정' : '인증글 수정'}
+          </div>
+          <div>
+            <label
+              className="block text-mainColor text-base font-semibold"
+              htmlFor="agreecheck"
+            ></label>
+            <input className="" />
+          </div>
+        </Modal>
+      )}
       {isDeleteOpen && (
         <Modal
           isOpen={isDeleteOpen}
           setIsOpen={setIsDeleteOpen}
           buttonName="삭제하기"
-          onClick={deleteAuthHandle}
+          onClick={deleteHandle}
         >
           <div className="text-xl font-semibold w-full text-center pb-5">
             {dropDownType === 'review' ? '후기 삭제' : '인증글 삭제'}
