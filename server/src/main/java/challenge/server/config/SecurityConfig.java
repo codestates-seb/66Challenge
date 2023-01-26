@@ -1,5 +1,6 @@
 package challenge.server.config;
 
+import challenge.server.security.oauth.dto.OAuthAttributes;
 import challenge.server.security.oauth.handler.OAuth2MemberSuccessHandler;
 import challenge.server.security.oauth.service.CustomOAuth2UserService;
 import challenge.server.security.filter.JwtAuthenticationFilter;
@@ -10,6 +11,7 @@ import challenge.server.security.handler.UserAuthenticationFailureHandler;
 import challenge.server.security.handler.UserAuthenticationSuccessHandler;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.utils.CustomAuthorityUtils;
+import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +37,7 @@ public class SecurityConfig { // todo https 적용
     private final CustomAuthorityUtils authorityUtils;
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final UserService userService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -55,17 +58,12 @@ public class SecurityConfig { // todo https 적용
                 .and()
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll()) // todo 역할 기반 리소스별 접근 권한 부여 필요
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils))
+                        .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, userService))
                         .userInfoEndpoint() // oauth2 로그인 성공 후 가져올 때의 설정들
                         // 소셜로그인 성공 시 후속 조치를 진행할 UserService 인터페이스 구현체 등록
                         .userService(customOAuth2UserService));  // 리소스 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
 
         return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
