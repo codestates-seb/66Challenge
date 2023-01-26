@@ -25,7 +25,7 @@ const remoteImg = {
         hostname: 'media.istockphoto.com',
       },
       {
-        protocol: 'https',
+        protocol: 'http',
         hostname: 'challenge66.file.bucket.s3.ap-northeast-2.amazonaws.com',
         port: '',
         pathname: '/images/**',
