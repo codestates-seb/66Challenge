@@ -31,11 +31,11 @@ public class OAuthAttributes {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public static OAuthAttributes of(String socialName, String userNameAttributeName, Map<String, Object> attributes) {
+    public static OAuthAttributes of(String socialName, Map<String, Object> attributes) {
         if ("kakao".equals(socialName)) {
             return ofKakao("id", attributes);
         } else if ("google".equals(socialName)) {
-            return ofGoogle(userNameAttributeName, attributes);
+            return ofGoogle("sub", attributes);
         } else if ("naver".equals(socialName)) {
             return ofNaver("id", attributes);
         }
