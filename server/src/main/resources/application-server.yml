@@ -62,6 +62,21 @@ jasypt:
 mail:
   address:
     admin: ENC(JGBa0PpOXdYVZnt2VnvjmfjIiFzJzEsEMUU9EOaxGt0=)
+  smtp:
+    host: smtp.gmail.com
+    port: 587
+    username: ENC(edP1B1a/RbnqVHGC+0QQgtz1k2FNvq3GTlE1ys8zQM2x+2LbuUNP9g==)
+    password: ENC(U+pEognUB3Mckk7etx5oGQuuRj7b41gUNH6+M52CLhU=)
+    auth: true
+    starttls:
+      enable: true
+    subject:
+      member:
+        registration: Challenge66 회원 가입을 위한 인증 메일입니다
+    template:
+      name:
+        member:
+          join: email-registration-user
 jwt:
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 600
