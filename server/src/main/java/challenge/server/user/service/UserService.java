@@ -104,6 +104,32 @@ public class UserService {
         return passwordEncoder.matches(user.getPassword(), findUser.getPassword());
     }
 
+    @Transactional
+    public void sendEmailVerificationMail(String email) throws MessagingException {
+        // 인증용 이메일 정보(이메일, 인증 코드, 코드 만료 여부, 코드 만료 기한)를 DB에 저장
+        EmailVerification emailVerification = EmailVerification.builder().build();
+        emailVerificationRepository.save(emailVerification.createEmailVerification(email, verificationCode, false));
+
+        // 인증용 이메일 전송
+        emailService.send(email, verificationCode);
+    }
+
+    @Transactional
+    public void verifyEmail(String email, String verificationCode) {
+    }
+
+    // 인증 코드 생성
+    public String createVerificationCode() {
+        StringBuffer verificationCode = new StringBuffer();
+        Random rnd = new Random();
+        int lengthOfCode = 8;
+
+        for (int i = 0; i < lengthOfCode; i++) {
+            verificationCode.append(rnd.nextInt(10));
+        }
+
+        return verificationCode.toString();
+    }
 
     @Transactional
     public void sendEmailVerificationMail(String email) throws MessagingException {
