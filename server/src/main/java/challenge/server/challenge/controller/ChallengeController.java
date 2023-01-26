@@ -13,8 +13,6 @@ import challenge.server.challenge.service.ChallengeService;
 import challenge.server.challenge.service.WildcardService;
 import challenge.server.file.service.FileUploadService;
 import challenge.server.review.dto.ReviewDto;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +27,6 @@ import java.util.List;
 
 import static challenge.server.challenge.entity.Challenge.Status.*;
 
-@Api
 @RestController
 @RequestMapping("/challenges")
 @RequiredArgsConstructor
@@ -42,7 +39,6 @@ public class ChallengeController {
     private final ChallengeMapper mapper;
     private final AuthMapper authMapper;
 
-//    @ApiOperation(value = "챌린지 조회")
 //    @GetMapping("/{challenge-id}")
 //    public ResponseEntity findChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
 //        Challenge challenge = challengeService.findChallenge(challengeId);
@@ -68,7 +64,6 @@ public class ChallengeController {
         return new ResponseEntity<>(mapper.toDtos(challenges), HttpStatus.OK);
     }
 
-//    @ApiOperation(value = "모든 챌린지 조회")
 //    @GetMapping
 //    public ResponseEntity findAll(@RequestParam @Positive int page,
 //                                  @RequestParam @Positive int size) {
@@ -77,7 +72,6 @@ public class ChallengeController {
 //        return new ResponseEntity<>(mapper.toDtos(findAll), HttpStatus.OK);
 //    }
 
-//    @ApiOperation(value = "도전중인 모든 챌린지 조회")
 //    @GetMapping("/challenge")
 //    public ResponseEntity findAllByChallenge(@RequestParam @Positive int page,
 //                                          @RequestParam @Positive int size) {
@@ -86,7 +80,6 @@ public class ChallengeController {
 //        return new ResponseEntity<>(mapper.toDtos(findAllByChallenge), HttpStatus.OK);
 //    }
 
-//    @ApiOperation(value = "성공한 모든 챌린지 조회")
 //    @GetMapping("/success")
 //    public ResponseEntity findAllBySuccess(@RequestParam @Positive int page,
 //                                        @RequestParam @Positive int size) {
@@ -95,7 +88,6 @@ public class ChallengeController {
 //        return new ResponseEntity<>(mapper.toDtos(findAllBySuccess), HttpStatus.OK);
 //    }
 
-//    @ApiOperation(value = "실패한 모든 챌린지 조회")
 //    @GetMapping("/fail")
 //    public ResponseEntity findAllByFail(@RequestParam @Positive int page,
 //                                          @RequestParam @Positive int size) {
@@ -118,7 +110,6 @@ public class ChallengeController {
         return new ResponseEntity<>(authMapper.toDto(createAuth), HttpStatus.CREATED);
     }
 
-//    @ApiOperation(value = "인증글 조회")
 //    @GetMapping("/{challenge-id}/auths/{auth-id}")
 //    public ResponseEntity findAuth(@PathVariable("auth-id") @Positive Long authId) {
 //        Auth auth = authService.findAuth(authId);
@@ -126,7 +117,6 @@ public class ChallengeController {
 //        return new ResponseEntity<>(authMapper.toDto(auth), HttpStatus.OK);
 //    }
 
-//    @ApiOperation(value = "특정 챌린지의 모든 인증글 조회")
 //    @GetMapping("/{chaellenge-id}/auths")
 //    public ResponseEntity findAuthsByChallenge(@PathVariable("chaellenge-id") @Positive Long challengeId,
 //                                               @RequestParam @Positive int page,
@@ -138,7 +128,6 @@ public class ChallengeController {
 //    }
 
 
-//    @ApiOperation(value = "특정 챌린지의 모든 와일드카드 조회")
 //    @GetMapping("/{challenge-id}/wildcards")
 //    public ResponseEntity findWildcardsByChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
 //        List<Wildcard> wildcards = wildcardService.findAllByChallenge(challengeId);

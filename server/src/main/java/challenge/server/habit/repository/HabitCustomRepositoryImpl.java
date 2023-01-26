@@ -68,6 +68,16 @@ public class HabitCustomRepositoryImpl implements HabitCustomRepository {
                 .fetch();
     }
 
+    @Override
+    public List<Habit> findAllByScore(Long lastHabitId, int page, int size) {
+        return null;
+    }
+
+    @Override
+    public List<Habit> findAllByPopularity(Long lastHabitId, int page, int size) {
+        return null;
+    }
+
     // no-offset 방식 처리하는 메서드
     private BooleanExpression ltHabitId(Long lastHabitId) {
         if (lastHabitId == null) {

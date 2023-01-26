@@ -2,8 +2,6 @@ package challenge.server.challenge.dto;
 
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.challenge.entity.Wildcard;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.util.List;
