@@ -69,6 +69,10 @@ dependencies {
 
 	// devtools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// 이메일 전송 관련
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // 템플릿 메일 전송 구현
 }
 
 tasks.named('test') {
