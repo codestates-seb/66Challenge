@@ -48,6 +48,9 @@ export const loginIdentitySlice = createSlice({
       state.userId = null;
       removeCookie('accessJwtToken');
     },
+    oauthLogin: (state): void => {
+      state.isLogin = true;
+    },
   },
   extraReducers: (builder): void => {
     builder.addCase(
@@ -59,5 +62,5 @@ export const loginIdentitySlice = createSlice({
     );
   },
 });
-export const { initLoginIdentity } = loginIdentitySlice.actions;
+export const { initLoginIdentity, oauthLogin } = loginIdentitySlice.actions;
 export { loginRequest };

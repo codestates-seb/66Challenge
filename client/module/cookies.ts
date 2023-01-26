@@ -6,7 +6,7 @@ interface Ioption {
 }
 export const setCookie = (
   name: string,
-  value: string,
+  value: string | string[],
   option: Ioption,
 ): void => {
   cookies.set(name, value, option);

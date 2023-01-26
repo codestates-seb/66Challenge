@@ -14,13 +14,19 @@ export default function HabitDetailAuth() {
 
   return (
     <div className="habit-detail-auth-container px-5 pt-5">
-      {authData.map((el) => {
-        return (
-          <div className="habit-detail-auth-wrapper" key={el.authId}>
-            <AuthArticle {...el} habitId={+habitId} />
-          </div>
-        );
-      })}
+      {authData.length !== 0 ? (
+        authData.map((el) => {
+          return (
+            <div className="habit-detail-auth-wrapper" key={el.authId}>
+              <AuthArticle {...el} habitId={+habitId} />
+            </div>
+          );
+        })
+      ) : (
+        <div className="h-screen -mt-[116px] -mb-[100px] flex justify-center items-center">
+          아직 등록된 인증글이 없습니다.
+        </div>
+      )}
       <div ref={setTarget}></div>
     </div>
   );
