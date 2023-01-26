@@ -1,12 +1,10 @@
-import { useForm } from 'react-hook-form';
 import { useState, useEffect, useCallback } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { HabitWrapperVertical } from '../../../components/habitWrapperVertical';
 import { useIntersection } from '../../../hooks/useIntersection';
 import { MdExpandMore } from 'react-icons/md';
-import { LoadingIndicator } from '../../../components/loadingIndicator';
 import { useRouter } from 'next/router';
-
+import { useAppSelector } from '../../../ducks/store';
 interface IarrowValue {
   className: string;
   boolean: boolean;
@@ -14,6 +12,15 @@ interface IarrowValue {
 interface IcategoryList {
   categoryId: number;
   name: string;
+}
+interface IhabitValue {
+  body: string;
+  habitId: number;
+  hostUserId: number;
+  isBooked: boolean;
+  score: number;
+  thumbImgUrl: null | string;
+  title: string;
 }
 export default function SearchHabit() {
   const router = useRouter();
@@ -32,7 +39,7 @@ export default function SearchHabit() {
     }
   };
   const [search, setSearch] = useState('');
-  const [searchHabits, setSearchHabits] = useState([]);
+  const [searchHabits, setSearchHabits] = useState<IhabitValue[]>([]);
   const [doing, setDoing] = useState('all');
   const [page, setPage] = useState(1);
   const [active, setActive] = useState(0);
@@ -40,6 +47,7 @@ export default function SearchHabit() {
     `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?`,
   );
   const [setTarget] = useIntersection(url, page, setPage, setSearchHabits);
+  const { userId } = useAppSelector((state) => state.loginIdentity);
   const categoryList: IcategoryList[] = [
     { categoryId: 0, name: '전체' },
     { categoryId: 1, name: '운동' },
@@ -60,13 +68,23 @@ export default function SearchHabit() {
       setDoing('all');
       setPage(1);
       setSearchHabits([]);
-      setUrl(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?`);
+      if (userId === null) {
+        setUrl(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?`);
+      }
+      setUrl(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?userId=${userId}&`,
+      );
     } else {
       setDoing('search');
       setPage(1);
       setSearchHabits([]);
+      if (userId === null) {
+        setUrl(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=${search}&`,
+        );
+      }
       setUrl(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=${search}&`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?keyword=${search}&userId=${userId}&`,
       );
     }
   };
@@ -75,9 +93,15 @@ export default function SearchHabit() {
       setDoing('category');
       setPage(1);
       setSearchHabits([]);
-      setUrl(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?category=${active}&`,
-      );
+      if (userId === null) {
+        setUrl(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search/${active}?`,
+        );
+      } else {
+        setUrl(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search/${active}?userId=${userId}&`,
+        );
+      }
     } else {
       setDoing('all');
       setPage(1);
@@ -95,10 +119,10 @@ export default function SearchHabit() {
     }
   }, []);
   return (
-    <div className=" w-full overflow-y-scroll scrollbar-hide absolute flex flex-col items-center p-4 pb-[100px]">
-      <form className="w-4/5 flex justify-center mt-3 mb-6 items-center relative">
+    <div className=" w-full min-w-[360px] max-w-[460px] overflow-y-scroll scrollbar-hide absolute flex flex-col items-center p-4 pb-[100px]">
+      <form className="w-4/5 flex justify-center mt-3 mb-6 items-center relative ">
         <input
-          className="w-full border border-mainColor rounded-full text-sm h-[40px] pl-3 pr-[40px] focus:border-subColor outline-none focus:shadow-[0_0_0.5rem] focus:shadow-subColor focus:outline-[1px] focus:outline-[#379fef];"
+          className="w-full border border-mainColor rounded-full text-sm h-[40px]  pl-3 pr-[40px] focus:border-subColor outline-none focus:shadow-[0_0_0.5rem] focus:shadow-subColor focus:outline-[1px] focus:outline-[#379fef];"
           autoComplete="off"
           placeholder="찾고자 하는 습관을 검색해주세요."
           value={search}
@@ -143,20 +167,16 @@ export default function SearchHabit() {
         })}
       </div>
       <div>
-        {searchHabits.length === 0 ? (
-          <LoadingIndicator />
-        ) : (
-          <HabitWrapperVertical
-            habitWrapperTitle={
-              doing === 'all'
-                ? '전체 습관'
-                : doing === 'category'
-                ? `${categoryList[active].name} 습관`
-                : `${search}에 대한 습관`
-            }
-            habitWrapperData={searchHabits}
-          />
-        )}
+        <HabitWrapperVertical
+          habitWrapperTitle={
+            doing === 'all'
+              ? '전체 습관'
+              : doing === 'category'
+              ? `${categoryList[active].name} 습관`
+              : `${search}에 대한 습관`
+          }
+          habitWrapperData={searchHabits}
+        />
       </div>
       <div ref={setTarget} className="w-full  h-16"></div>
     </div>

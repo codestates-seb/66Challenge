@@ -1,6 +1,5 @@
 import { HabitElement } from './habitElement';
 import type { HabitWrapperProps } from './habitElement';
-
 export const HabitWrapperVertical: React.FC<HabitWrapperProps> = ({
   habitWrapperTitle,
   habitWrapperData,
@@ -13,6 +12,7 @@ export const HabitWrapperVertical: React.FC<HabitWrapperProps> = ({
       <div className="habit-wrapper-content">
         <ul className="habit-wrapper-list grid gap-4 grid-cols-2">
           {habitWrapperData.map((el) => {
+            console.log(el);
             return (
               <li className="habit-element" key={el.habitId}>
                 <HabitElement {...el} />
