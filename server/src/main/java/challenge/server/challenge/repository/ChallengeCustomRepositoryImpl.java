@@ -87,7 +87,7 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
         return Math.toIntExact(jpaQueryFactory
                 .select(habit.habitId.count())
                 .from(habit)
-                .where(habit.habitId.eq(habitId))
+                .where(habit.habitId.eq(habitId).and(challenge.status.eq(CHALLENGE)))
                 .leftJoin(habit.challenges, challenge)
                 .on(habit.habitId.eq(challenge.habit.habitId))
                 .fetchOne());
