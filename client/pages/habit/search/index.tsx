@@ -119,8 +119,8 @@ export default function SearchHabit() {
     }
   }, []);
   return (
-    <div className=" w-full min-w-[360px] max-w-[460px] overflow-y-scroll scrollbar-hide absolute flex flex-col items-center p-4 pb-[100px]">
-      <form className="w-4/5 flex justify-center mt-3 mb-6 items-center relative ">
+    <div className="w-full min-w-[360px] max-w-[460px] overflow-y-scroll scrollbar-hide flex flex-col items-center p-4 pb-[100px]">
+      <form className="w-4/5 flex  justify-center mt-3 mb-6 items-center relative ">
         <input
           className="w-full border border-mainColor rounded-full text-sm h-[40px]  pl-3 pr-[40px] focus:border-subColor outline-none focus:shadow-[0_0_0.5rem] focus:shadow-subColor focus:outline-[1px] focus:outline-[#379fef];"
           autoComplete="off"
@@ -146,12 +146,12 @@ export default function SearchHabit() {
         className={
           arrowDirection.boolean === false
             ? 'hidden'
-            : 'flex w-full flex-wrap  scrollbar-hide p-2 border-y  border-mainColor  items-center justify-center'
+            : 'grid grid-cols-3 scrollbar-hide p-2 gap-2 border-y w-full  border-mainColor  items-center justify-center'
         }
       >
         {categoryList.map((category, index) => {
           return (
-            <div className=" w-[100px] m-1" key={index}>
+            <div className=" w-full m-1" key={index}>
               <span
                 className={`${
                   active === index ? 'bg-subColor' : 'bg-mainColor'
