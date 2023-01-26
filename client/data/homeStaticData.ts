@@ -69,7 +69,7 @@ export const categoryData: Array<categoryDataType> = [
 
 interface habitWrapperDataType {
   habitId: number;
-  habitImage: string;
+  thumbImgUrl: string;
   title: string;
   body: string;
   isBooked: boolean;
@@ -78,28 +78,28 @@ interface habitWrapperDataType {
 export const habitWrapperData: Array<habitWrapperDataType> = [
   {
     habitId: 1,
-    habitImage: '/image/running.png',
+    thumbImgUrl: '/image/running.png',
     title: '달리기 3km',
     body: '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
     isBooked: false,
   },
   {
     habitId: 2,
-    habitImage: '/image/running.png',
+    thumbImgUrl: '/image/running.png',
     title: '달리기 3km',
     body: '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
     isBooked: false,
   },
   {
     habitId: 3,
-    habitImage: '/image/running.png',
+    thumbImgUrl: '/image/running.png',
     title: '달리기 3km',
     body: '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
     isBooked: false,
   },
   {
     habitId: 4,
-    habitImage: '/image/running.png',
+    thumbImgUrl: '/image/running.png',
     title: '달리기 3km',
     body: '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
     isBooked: false,
