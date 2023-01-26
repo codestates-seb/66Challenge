@@ -5,15 +5,26 @@ interface slideDataType {
 
 export const slideData: Array<slideDataType> = [
   {
-    bgImgUrl: '/image/slideImg/slideImg1.svg',
+    bgImgUrl: '/image/slideImg/homeMain/slideImg1.svg',
     bannerLink: '',
   },
   {
-    bgImgUrl: '/image/slideImg/slideImg2.svg',
+    bgImgUrl: '/image/slideImg/homeMain/slideImg2.svg',
     bannerLink: '',
   },
   {
-    bgImgUrl: '/image/slideImg/slideImg3.svg',
+    bgImgUrl: '/image/slideImg/homeMain/slideImg3.svg',
+    bannerLink: '',
+  },
+];
+
+export const subSlideData: Array<slideDataType> = [
+  {
+    bgImgUrl: '/image/slideImg/homeSub/slideImg1.svg',
+    bannerLink: '',
+  },
+  {
+    bgImgUrl: '/image/slideImg/homeSub/slideImg2.svg',
     bannerLink: '',
   },
 ];
