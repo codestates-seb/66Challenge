@@ -45,11 +45,11 @@ const Login: React.FC = () => {
       await dispatch(loginRequest({ username, password })).then((data) => {
         const response: number | IresponseData = data.payload;
         if (response.status === 401) {
-          alert('이메일이나 비밀번호 확인해주세용');
+          alert('이메일이나 비밀번호를 확인해주세요');
         } else {
+          router.push('/');
           setEmailVerify(false);
           setPasswordView(false);
-          router.push('/');
         }
       });
     } else if (!emailVerify || !emailRegExp.test(username)) {

@@ -172,7 +172,7 @@ const Post = () => {
     'text-base w-full rounded-md px-2 pt-[2px] border focus:border-mainColor duration-500 outline-0 mb-1';
 
   return (
-    <div className="habit-post-container w-[300px] mx-auto flex flex-col mt-[40px]">
+    <div className="habit-post-container w-full px-[40px] mx-auto flex flex-col mt-[40px]">
       <form
         className="login-form"
         onSubmit={handleSubmit((data) => {

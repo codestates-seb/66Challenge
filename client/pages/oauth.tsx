@@ -11,22 +11,24 @@ const OauthLogin = () => {
 
   useEffect(() => {
     if (router.isReady) {
-      const { access_token, refresh_token } = router.query;
+      console.log(router.query);
+      const { access_token, refresh_token, user_id } = router.query;
       setCookie('accessJwtToken', access_token, { path: '/' });
-      dispatch(oauthLogin());
+      setCookie('refreshJwtToken', refresh_token, { path: '/' });
+      dispatch(oauthLogin(user_id));
       router.push('/');
     }
   }, [router.isReady]);
 
   return (
-    <div className="h-screen flex items-center">
+    <div className="h-screen flex items-center -mb-[100px]">
       <LoadingIndicator />
     </div>
   );
 };
 
-OauthLogin.getLayout = function getLayout(page: ReactElement) {
-  return <>{page}</>;
-};
+// OauthLogin.getLayout = function getLayout(page: ReactElement) {
+//   return <>{page}</>;
+// };
 
 export default OauthLogin;

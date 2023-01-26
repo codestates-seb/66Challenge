@@ -78,6 +78,94 @@ export const categoryData: Array<categoryDataType> = [
   },
 ];
 
+interface youtubeLinkType {
+  link: string;
+  category: string;
+}
+
+export const youtubeLink: Array<youtubeLinkType> = [
+  {
+    link: 'https://www.youtube.com/embed/Y5i1v_3Mdl8',
+    category: 'selfcare',
+  },
+  {
+    link: 'https://www.youtube.com/embed/B9LIYb3BIQ8',
+    category: 'selfcare',
+  },
+  {
+    link: 'https://www.youtube.com/embed/01aV_PbiT30',
+    category: 'selfcare',
+  },
+  {
+    link: 'https://www.youtube.com/embed/xieox2a0wGo',
+    category: 'selfcare',
+  },
+  {
+    link: 'https://www.youtube.com/embed/jdxujfAz1zA',
+    category: 'selfcare',
+  },
+  {
+    link: 'https://www.youtube.com/embed/mx0EODaNd6g',
+    category: 'study',
+  },
+  {
+    link: 'https://www.youtube.com/embed/nDFrSyh3Ylo',
+    category: 'study',
+  },
+  {
+    link: 'https://www.youtube.com/embed/A5CCe1-Q0t4',
+    category: 'exercise',
+  },
+  {
+    link: 'https://www.youtube.com/embed/iw3eEjp6wYU',
+    category: 'exercise',
+  },
+  {
+    link: 'https://www.youtube.com/embed/LDOn0eWTd4o',
+    category: 'selfcare',
+  },
+  {
+    link: 'https://www.youtube.com/embed/Nhzeggclrlw',
+    category: 'selfcare',
+  },
+  {
+    link: 'https://www.youtube.com/embed/sCC0QlesMkc',
+    category: 'exercise',
+  },
+  {
+    link: 'https://www.youtube.com/embed/MPAxkj6RNZk',
+    category: 'exercise',
+  },
+  {
+    link: 'https://www.youtube.com/embed/C7tx1U8QfiE',
+    category: 'selfcare',
+  },
+  {
+    link: 'https://www.youtube.com/embed/leHu_0ZqlIQ',
+    category: 'habit',
+  },
+  {
+    link: 'https://www.youtube.com/embed/xiE2wL9hS2w',
+    category: 'habit',
+  },
+  {
+    link: 'https://www.youtube.com/embed/9xYATLdxdck',
+    category: 'habit',
+  },
+  {
+    link: 'https://www.youtube.com/embed/iVqvX90ucxI',
+    category: 'habit',
+  },
+  {
+    link: 'https://www.youtube.com/embed/pzvzsqcBKa8',
+    category: 'habit',
+  },
+  {
+    link: 'https://www.youtube.com/embed/zaxG5oDJsN8',
+    category: 'habit',
+  },
+];
+
 interface habitWrapperDataType {
   habitId: number;
   thumbImgUrl: string;
