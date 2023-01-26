@@ -9,4 +9,5 @@ import java.util.List;
 public interface ChallengeCustomRepository {
     List<Auth> findAuthsByChallengeId(Long challengeId);
     List<Challenge> findAllByNotAuthToday(Challenge.Status status, LocalDateTime startDatetime, LocalDateTime endDatetime);
+    Integer findChallengers(Long habitId);
 }

@@ -133,6 +133,7 @@ public class HabitMapperImpl {
                 .authEndTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthEndTime()).substring(0,5))
                 // challenge 테이블에서 userId(로그인한 사용자)와 habitId로 챌린지 상태 조회.
                 .challengeStatus(getChallengeStatus(userId, habit.getHabitId()))
+                .challengers(challengeRepository.findChallengers(habit.getHabitId()))
                 .build();
         return detail;
     }
