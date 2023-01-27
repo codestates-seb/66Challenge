@@ -38,7 +38,7 @@ spring:
             user_name_attribute: response
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(wuFZ3dc42L0tHf9CpaXqfJbbT3sCOvD9nJVe7TVO53vy4fW/XtvuKjU/LV8cwU5Ha+CD/5BTXJoGVqWhJqnne6PmqPnseQRzGmhemueUOz3OkjUBlqwb1ET3at9mqxzGOYaQAOgHtD+Mjxdhm0xchncmiHpt0FckByAOvB1UoSw=)
+    url: ENC(O7BRz1MiPx1RXMCIkum+l7l9fdDxhpnox0NwQb9ldHPzMPEHYqB7BwCqGULRfAsYptX2RtmOZ40ABP0TW6wRnPth5rKuyXNKFvaOCRMC3hBYQIpZYQRIPMs2J7ZZZ4ehS/ZwAJPvTsfh1Axk3MtvXxxBRdEfhykmcj2+yBvGSlI=)
     username: ENC(xspPILIAzHK+xciWhlmMVQ==)
     password: ENC(sX8vFMX8vHZldLvVu2TFMjKnev0JaZFK)
   jpa:
