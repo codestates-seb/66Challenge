@@ -55,6 +55,10 @@ spring:
     init:
       data-locations: classpath*:db/h2/data.sql
       mode: always
+  servlet:
+    multipart:
+      maxFileSize: 50MB
+      maxRequestSize: 50MB
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
