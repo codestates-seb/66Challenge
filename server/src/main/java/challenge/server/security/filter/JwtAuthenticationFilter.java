@@ -1,5 +1,6 @@
 package challenge.server.security.filter;
 
+import challenge.server.security.dto.LoginDto;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.user.dto.UserDto;
 import challenge.server.security.user.entity.User;
