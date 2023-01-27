@@ -35,20 +35,25 @@ export const FileUploader = ({
 }: FileUploaderProps) => {
   const { name } = register;
 
+  const ifPreviewClassName: string = `border rounded`;
+
   return (
     <div className="file-uploader-container">
       <label
-        className="file-uploader-label flex justify-center items-center w-[302px] mx-auto h-[202px] border rounded"
+        className={`${
+          imgFilePreview ? null : ifPreviewClassName
+        } file-uploader-label flex justify-center items-center w-[302px] mx-auto h-[202px]`}
         htmlFor={`uploader-input-${name}`}
       >
         {imgFilePreview ? (
-          <div className="file-uploader-preview w-[400px] h-[200px]">
+          <div className="file-uploader-preview">
             <Image
-              className="object-contain w-full h-full"
+              className="object-contain w-[202px] h-[202px]"
               src={imgFilePreview}
               alt="uploaded image"
-              width={500}
-              height={500}
+              width={1000}
+              height={1000}
+              style={{ objectFit: 'cover' }}
             />
           </div>
         ) : (
@@ -61,7 +66,7 @@ export const FileUploader = ({
         className="file-uploader-input hidden"
         id={`uploader-input-${name}`}
         type="file"
-        accept="image/*"
+        accept=".jpeg, .png, .jpg"
         {...register}
       />
     </div>

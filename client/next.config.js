@@ -30,6 +30,12 @@ const remoteImg = {
         port: '',
         pathname: '/images/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'runningmagazine.ca',
+        port: '',
+        pathname: '/wp-content/**',
+      },
     ],
   },
 };
