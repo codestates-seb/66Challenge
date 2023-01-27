@@ -10,6 +10,7 @@ interface IhabitDetail {
   isBooked?: boolean;
   challengeStatus?: string;
   habitId?: number;
+  challengers?: number;
 }
 export function HabitPageBottomNav() {
   //user가 접근한 습관에 대해 시작 여부에 따른 분배
@@ -29,8 +30,14 @@ export function HabitPageBottomNav() {
         userId,
       });
       const { hostUserId, isBooked, habitId } = response.overview;
-      const { challengeStatus } = response.detail;
-      setHabitInfo({ hostUserId, isBooked, challengeStatus, habitId });
+      const { challengeStatus, challengers } = response.detail;
+      setHabitInfo({
+        hostUserId,
+        isBooked,
+        challengeStatus,
+        habitId,
+        challengers,
+      });
     }
     axiosFunc();
   }, [router.isReady]);
@@ -57,6 +64,7 @@ export function HabitPageBottomNav() {
         habitId={habitInfo.habitId}
         userId={userId}
         challengeStatus={habitInfo.challengeStatus}
+        challengers={habitInfo.challengers}
       />
     );
   } else {

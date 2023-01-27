@@ -6,6 +6,7 @@ import {
   IoSettings,
   IoArrowBack,
   IoShareSocialSharp,
+  IoHome,
 } from 'react-icons/io5';
 
 import Image from 'next/image';
@@ -19,6 +20,7 @@ const Header: FC = () => {
 
   const [isLogo, setIsLogo] = useState<boolean>(false);
   const [isMyPage, setIsMyPage] = useState<boolean>(false);
+  const [isHomeNeed, setIsHomeNeed] = useState<boolean>(false);
   const [pageTitle, setPageTitle] = useState<string | null>(null);
 
   const titleList: object = {
@@ -47,6 +49,14 @@ const Header: FC = () => {
       setPageTitle(null);
     }
 
+    function homeDetect(pathArr): void {
+      if (pathArr.includes('detail')) {
+        setIsHomeNeed(true);
+      } else {
+        setIsHomeNeed(false);
+      }
+    }
+
     function logoDetact(): void {
       if (pageTitle) {
         setIsLogo(false);
@@ -64,6 +74,7 @@ const Header: FC = () => {
     }
 
     titleDetect(pathArr);
+    homeDetect(pathArr);
     logoDetact();
     settingsDetect();
   }, [pathArr]);
@@ -113,7 +124,14 @@ const Header: FC = () => {
   const RightSide: FC = () => {
     const Search: FC = () => {
       return (
-        <div className="mr-3">
+        <div className="mr-3 flex">
+          {isHomeNeed ? (
+            <Link href={'/'}>
+              <IoHome className="h-6 w-6 mr-2" />
+            </Link>
+          ) : (
+            ''
+          )}
           {isMyPage ? (
             <IoSettings className="h-6 w-6" /> // TODO : 세부설정 추가되면 변경할 것
           ) : (
@@ -133,18 +151,20 @@ const Header: FC = () => {
   };
 
   return (
-    <header className="sticky top-0 bg-white z-50">
-      <div>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@700&display=swap"
-          rel="stylesheet"
-        />
-      </div>
+    <header className="sticky top-0 bg-white">
+      <div className="z-40">
+        <div>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@700&display=swap"
+            rel="stylesheet"
+          />
+        </div>
 
-      <div className="box-border flex flex-row h-14 justify-between ">
-        <LeftSide />
-        <MiddleSide />
-        <RightSide />
+        <div className="box-border flex flex-row h-14 justify-between ">
+          <LeftSide />
+          <MiddleSide />
+          <RightSide />
+        </div>
       </div>
     </header>
   );

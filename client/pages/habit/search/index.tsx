@@ -119,7 +119,7 @@ export default function SearchHabit() {
     }
   }, []);
   return (
-    <div className="w-full min-w-[360px] max-w-[460px] overflow-y-scroll scrollbar-hide flex flex-col items-center p-4 pb-[100px]">
+    <div className="w-full min-w-[360px] max-w-[460px] overflow-y-scroll scrollbar-hide flex flex-col items-center p-4 pb-0">
       <form className="w-4/5 flex  justify-center mt-3 mb-6 items-center relative ">
         <input
           className="w-full border border-mainColor rounded-full text-sm h-[40px]  pl-3 pr-[40px] focus:border-subColor outline-none focus:shadow-[0_0_0.5rem] focus:shadow-subColor focus:outline-[1px] focus:outline-[#379fef];"
@@ -136,7 +136,7 @@ export default function SearchHabit() {
         />
       </form>
       <div
-        className="flex items-center w-full mb-3 pl-4"
+        className="flex items-center w-full mb-3"
         onClick={arrowDirectionHandle}
       >
         <span className="text-base font-semibold mr-2 mt-[2px]">카테고리</span>
@@ -166,7 +166,7 @@ export default function SearchHabit() {
           );
         })}
       </div>
-      <div>
+      <div className="-mx-5">
         <HabitWrapperVertical
           habitWrapperTitle={
             doing === 'all'
@@ -178,7 +178,7 @@ export default function SearchHabit() {
           habitWrapperData={searchHabits}
         />
       </div>
-      <div ref={setTarget} className="w-full  h-16"></div>
+      <div ref={setTarget} className="w-full"></div>
     </div>
   );
 }

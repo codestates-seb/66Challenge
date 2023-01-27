@@ -15,6 +15,7 @@ import {
 import logo from '../../../public/image/66logo.png';
 import { useForm } from 'react-hook-form';
 import { FileUploader } from '../../../components/fileUploader';
+import { KaKaoShare } from '../../../module/kakaoShare';
 
 interface ProfileEditType {
   userId: number;
@@ -120,7 +121,7 @@ const MyPage = () => {
           ''
         )}
         <div
-          className="absolute left-0 ml-16 w-[4.75rem] h-[4.75rem] rounded-full border flex justify-center items-center"
+          className="ml-[-4rem] mr-2 w-[4.75rem] h-[4.75rem] rounded-full border flex justify-center items-center"
           onClick={profileEdit}
         >
           {userInfo.profileImageUrl ? (
