@@ -68,7 +68,7 @@ export const HabitElement: React.FC<HabitElementProps> = ({
           alt="habit image"
           width={500}
           height={500}
-          className="w-full pt-full"
+          className="w-full aspect-square"
           style={{ objectFit: 'cover' }}
         />
         <div

@@ -21,7 +21,7 @@ export const slideData: Array<slideDataType> = [
 export const subSlideData: Array<slideDataType> = [
   {
     bgImgUrl: '/image/slideImg/homeSub/slideImg1.svg',
-    bannerLink: '',
+    bannerLink: '/contents/youtube',
   },
   {
     bgImgUrl: '/image/slideImg/homeSub/slideImg2.svg',
