@@ -34,7 +34,7 @@ public class EmailService {
             text += "안녕하세요!<br>";
             text += "Challenge66 회원 가입을 위한 이메일 인증입니다.<br>";
             text += "아래 링크를 클릭하여 이메일 주소 인증을 완료해 주세요.<br><br>";
-            text += "13.209.179.193:8080/users/email-verifications?email=" + email + "&verificationCode=" + verificationCode + "<br><br>";
+            text += "<a href='13.209.179.193:8080/users/email-verifications?email=" + email + "&verificationCode=" + verificationCode + "' target='_blank'>링크 클릭!</a><br><br>";
             text += "감사합니다!";
 
             mimeMessageHelper.setText(text, true);
