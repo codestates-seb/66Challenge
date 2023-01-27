@@ -13,10 +13,12 @@ export async function postAuth({ challengeId, body }) {
           },
         },
       )
-      .then((res) => console.log(res));
+      .then((res) => res.data);
     return response;
   } catch (e) {
-    console.log(e);
+    if (e instanceof AxiosError) {
+      return e.response.status;
+    }
   }
 }
 export async function deleteAuth({ challengeId, authId }) {

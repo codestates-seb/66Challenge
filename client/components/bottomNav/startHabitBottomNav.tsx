@@ -32,6 +32,7 @@ export function StartHabitBottomNav({
   });
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [isStart, setIsStart] = useState(false);
   const bookMarkHandle = async () => {
     //login 여부 확인 후 false면 로그인 페이지로 경로 설정
     //북마크 관련 비동기 요청 함수
@@ -80,7 +81,7 @@ export function StartHabitBottomNav({
         onClick={() => {
           startHabitHandle();
         }}
-        disabled={challengeStatus !== 'NONE'}
+        disabled={challengeStatus !== 'NONE' || isStart === true}
       >
         Start
       </button>
@@ -98,7 +99,7 @@ export function StartHabitBottomNav({
               router.push('/user/login');
             } else {
               setIsOpen(false);
-              router.push(`/habit/detail/${habitId}`);
+              setIsStart(true);
             }
           }}
         >
