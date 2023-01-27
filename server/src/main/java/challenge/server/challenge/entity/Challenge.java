@@ -85,8 +85,8 @@ public class Challenge extends BaseTimeEntity {
     }
 
     // 2023.1.24(화) 6h UserServiceTest 관련 추가
-    private LocalDateTime createdAt;
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+//    private LocalDateTime createdAt;
+//    public void setCreatedAt(LocalDateTime createdAt) {
+//        this.createdAt = createdAt;
+//    }
 }
