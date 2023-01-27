@@ -5,6 +5,8 @@ import challenge.server.challenge.entity.Challenge;
 import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
+import challenge.server.habit.entity.Habit;
+import challenge.server.habit.service.HabitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +15,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -29,6 +30,7 @@ import static challenge.server.challenge.entity.Challenge.Status.*;
 @Transactional(readOnly = true)
 public class ChallengeService {
 
+    private final HabitService habitService;
     private final ChallengeRepository challengeRepository;
     private static final DateTimeFormatter formatter
             = DateTimeFormatter.ofPattern("mm:ss:SSS");
@@ -37,15 +39,20 @@ public class ChallengeService {
     @Transactional
     public Challenge createChallenge(Long userId, Long habitId, Challenge challenge) {
         verifyExistsChallenge(userId, habitId);
-        return challengeRepository.save(challenge);
+        Challenge saveChallenge = challengeRepository.save(challenge);
+
+        habitService.updateChallengers(habitId, challengeRepository.findChallengers(habitId));
+        return saveChallenge;
     }
 
     @Transactional
     public Challenge changeStatus(Long userId, Long habitId, String status) {
         Challenge findChallenge = findByUserIdAndHabitId(userId, habitId);
         findChallenge.changeStatus(Challenge.Status.valueOf(status));
+        Challenge saveChallenge = challengeRepository.save(findChallenge);
 
-        return challengeRepository.save(findChallenge);
+        habitService.updateChallengers(habitId, challengeRepository.findChallengers(habitId));
+        return saveChallenge;
     }
 
     public Challenge findChallenge(Long challengeId) {

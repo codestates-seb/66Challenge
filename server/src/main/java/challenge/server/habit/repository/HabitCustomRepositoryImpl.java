@@ -70,12 +70,35 @@ public class HabitCustomRepositoryImpl implements HabitCustomRepository {
 
     @Override
     public List<Habit> findAllByScore(Long lastHabitId, int page, int size) {
-        return null;
+        return jpaQueryFactory
+                .selectFrom(habit)
+                .where(ltHabitId(lastHabitId))
+                .orderBy(habit.avgScore.desc(), habit.bookmarks.size().desc(), habit.habitId.desc())
+                .offset(page - 1)
+                .limit(size)
+                .fetch();
     }
 
     @Override
     public List<Habit> findAllByPopularity(Long lastHabitId, int page, int size) {
-        return null;
+        return jpaQueryFactory
+                .selectFrom(habit)
+                .where(ltHabitId(lastHabitId))
+                .orderBy(habit.challengers.desc(),habit.bookmarks.size().desc(),habit.habitId.desc())
+                .offset(page-1)
+                .limit(size)
+                .fetch();
+    }
+
+    @Override
+    public List<Habit> findAllByNewest(Long lastHabitId, int page, int size) {
+        return jpaQueryFactory
+                .selectFrom(habit)
+                .where(ltHabitId(lastHabitId))
+                .orderBy(habit.habitId.desc())
+                .offset(page-1)
+                .limit(size)
+                .fetch();
     }
 
     // no-offset 방식 처리하는 메서드
@@ -86,3 +109,5 @@ public class HabitCustomRepositoryImpl implements HabitCustomRepository {
         return habit.habitId.lt(lastHabitId);
     }
 }
+
+

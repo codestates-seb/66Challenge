@@ -63,9 +63,12 @@ public class Challenge extends BaseTimeEntity {
         LocalDate nowDate = localDateTime.toLocalDate();
         LocalTime nowTime = localDateTime.toLocalTime();
 
-        if (this.lastAuthAt.toLocalDate().equals(nowDate)) {
-            throw new BusinessLogicException(ExceptionCode.AUTH_EXISTS);
+        if (this.lastAuthAt != null) {
+            if (this.lastAuthAt.toLocalDate().equals(nowDate)) {
+                throw new BusinessLogicException(ExceptionCode.AUTH_EXISTS);
+            }
         }
+
         if (nowTime.isBefore(startTime) || nowTime.isAfter(endTime)) {
             throw new BusinessLogicException(ExceptionCode.AUTH_NOT_TIME);
         }
@@ -85,8 +88,8 @@ public class Challenge extends BaseTimeEntity {
     }
 
     // 2023.1.24(화) 6h UserServiceTest 관련 추가
-    private LocalDateTime createdAt;
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+//    private LocalDateTime createdAt;
+//    public void setCreatedAt(LocalDateTime createdAt) {
+//        this.createdAt = createdAt;
+//    }
 }

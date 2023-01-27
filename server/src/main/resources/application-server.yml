@@ -13,7 +13,7 @@ spring:
           kakao:
             client-id: ENC(1HIZn2QzKn4nRunWgWlDbmi6D948IfN/0vuLeoPwwc8oJxlsWOfoU7/K3pOUWG4v)   # REST API 키
             client-secret: ENC(w/Ip7Zu91manw2kqhhRPO6St73p2GOaOhtigoc+qT4pNbH+FKvuALyd7cq9nv1Zt)
-            redirect-uri: "http://13.209.179.193:8080/login/oauth2/code/kakao"
+            redirect-uri: "http://3.38.232.88:8080/login/oauth2/code/kakao"
             client-authentication-method: POST
             authorization-grant-type: authorization_code
             scope: profile_nickname, profile_image, account_email, gender, age_range  # 동의 항목
@@ -21,7 +21,7 @@ spring:
           naver:
             client-id: ENC(FuYscwF2S65D3gZ1dFQP2VNW6gd5ZxGs5yqltpIvHTw=)   # REST API 키
             client-secret: ENC(35dAwGDL/QoXHR0wUz7dxtlrjk6qk8Bq)
-            redirect-uri: "http://13.209.179.193:8080/login/oauth2/code/naver"
+            redirect-uri: "http://3.38.232.88:8080/login/oauth2/code/naver"
             authorization-grant-type: authorization_code
             scope: name, email, profile_image, gender, age  # 동의 항목
             client-name: Naver
@@ -38,7 +38,7 @@ spring:
             user_name_attribute: response
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(Wtjg9OW9Vj1sFhFZwAIPLv9fq4WEjizOS7AG+KWPSMKccZK07ikUYe73+uCBRLlXu9k7DctAOn5XGHItKXped7qSwjF2W9VqiPDVmgmMVXbdBM2uqJev/5oWgW9PKUuTdfSba6v26vpcb42WswgdwIqoV8KI7joMB184GQhc43qf3DREB1KSaG6w5p9tc5Oey90wm7MKqQChqGH61gzPYw==)
+    url: jdbc:mysql://challenge66.c4brwzsvasjc.ap-northeast-2.rds.amazonaws.com:3306/challenge66?useSSL=false&createDatabaseIfNotExist=true&characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
     username: ENC(xspPILIAzHK+xciWhlmMVQ==)
     password: ENC(sX8vFMX8vHZldLvVu2TFMjKnev0JaZFK)
   jpa:
@@ -55,6 +55,10 @@ spring:
     init:
       data-locations: classpath*:db/h2/data.sql
       mode: always
+  servlet:
+    multipart:
+      maxFileSize: 50MB
+      maxRequestSize: 50MB
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
@@ -66,10 +70,11 @@ mail:
     host: smtp.gmail.com
     port: 587
     username: ENC(edP1B1a/RbnqVHGC+0QQgtz1k2FNvq3GTlE1ys8zQM2x+2LbuUNP9g==)
-    password: ENC(U+pEognUB3Mckk7etx5oGQuuRj7b41gUNH6+M52CLhU=)
+    password: ENC(ZdqLu7VmBKSrvvWZjPEMcpkKuEiXeYCdSdJvU9Vq0+A=)
     auth: true
     starttls:
       enable: true
+      required: true
     subject:
       member:
         registration: Challenge66 회원 가입을 위한 인증 메일입니다

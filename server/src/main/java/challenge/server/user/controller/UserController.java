@@ -50,13 +50,14 @@ public class UserController {
     }
 
     // 회원 가입 시 이메일 인증 요청
-    @GetMapping("/email-verification-requests")
+    @PostMapping("/email-verification-requests")
     public ResponseEntity sendEmailVerificationMail(@RequestParam @Email String email) throws MessagingException {
         userService.sendEmailVerificationMail(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // 회원 가입 시 이메일 인증 처리
+    // todo 회원이 자신의 이메일에 온 링크를 클릭하면 이 요청이 될 줄 알았는데, 아닌 것 같음(코드 만료 시간이 지나도 내부 처리 없이 그냥 완료되었다고 텍스트가 뜸) vs Postman에서 요청해야 이 로직이 작동함
     @GetMapping("/email-verifications")
     public ResponseEntity<String> verifyEmail(@RequestParam @Email String email,
                                               @RequestParam String verificationCode) {

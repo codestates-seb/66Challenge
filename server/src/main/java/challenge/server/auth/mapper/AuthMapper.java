@@ -13,6 +13,7 @@ public interface AuthMapper {
 
     Auth toEntity(AuthDto.Patch patchDto);
 
+    @Mapping(source = "auth.challenge.habit.habitId", target = "habitId")
     @Mapping(source = "auth.challenge.user.userId", target = "authorUserId")
     @Mapping(source = "auth.challenge.user.username", target = "authorUsername")
     AuthDto.Response toDto(Auth auth);

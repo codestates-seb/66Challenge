@@ -37,6 +37,13 @@ public class HabitService {
         return habitRepository.save(updatingHabit);
     }
 
+    @Transactional
+    public Habit updateChallengers(Long habitId, int challengers) {
+        Habit findHabit = findVerifiedHabit(habitId);
+        findHabit.changeChallengers(challengers);
+        return habitRepository.save(findHabit);
+    }
+
     public Habit findHabit(Long habitId) {
         return findVerifiedHabit(habitId);
     }
@@ -56,6 +63,18 @@ public class HabitService {
         return habitRepository.findByCategory(lastHabitId, categoryId, page, size);
     }
 
+    public List<Habit> findAllByScore(Long lastHabitId, int page, int size) {
+        return habitRepository.findAllByScore(lastHabitId, page, size);
+    }
+
+    public List<Habit> findAllByPopularity(Long lastHabitId, int page, int size) {
+        return habitRepository.findAllByPopularity(lastHabitId, page, size);
+    }
+
+    public List<Habit> findAllByNewest(Long lastHabitId, int page, int size) {
+        return habitRepository.findAllByNewest(lastHabitId, page, size);
+    }
+
     // 특정 사용자(작성자)가 만든 습관 조회
     public List<Habit> findAllByUser(Long lastHabitId, Long userId, int page, int size) {
         return habitRepository.findByHostUserId(lastHabitId, userId, page, size);
@@ -73,5 +92,11 @@ public class HabitService {
     public Habit findVerifiedHabit(Long habitId) {
         return habitRepository.findById(habitId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.HABIT_NOT_FOUND));
+    }
+
+    @Transactional
+    public void calcAvgScore(Long habitId) {
+        Habit habit = findVerifiedHabit(habitId);
+        habit.calcAvgScore();
     }
 }
