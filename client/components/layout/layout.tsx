@@ -10,8 +10,8 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="desktop-section bg-slate-100">
-      <div className="app-section min-w-[360px] max-w-[460px] bg-white">
+    <div className="desktop-section bg-slate-100 flex justify-center">
+      <div className="app-section w-full min-w-[360px] max-w-[460px] bg-white">
         <Header />
         <TopNav />
         <main className="pb-[100px]">{children}</main>

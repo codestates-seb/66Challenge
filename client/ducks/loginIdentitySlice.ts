@@ -18,8 +18,12 @@ const loginRequest = createAsyncThunk(
         url: `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
         data,
       }).then((res) => res);
-      const jwtToken: string = response.headers.authorization;
-      setCookie('accessJwtToken', jwtToken, { path: '/' });
+      // TODO refresh 토큰 관련해서 처리해야 함
+      console.log(response.headers);
+      const accessToken: string = response.headers.authorization;
+      const refreshToken: string = response.headers.refresh;
+      setCookie('accessJwtToken', accessToken, { path: '/' });
+      setCookie('refreshJwtToken', refreshToken, { path: '/' });
       const userId: number = response.data.userId;
       return userId;
     } catch (err) {
@@ -48,8 +52,9 @@ export const loginIdentitySlice = createSlice({
       state.userId = null;
       removeCookie('accessJwtToken');
     },
-    oauthLogin: (state): void => {
+    oauthLogin: (state, action): void => {
       state.isLogin = true;
+      state.userId = action.payload;
     },
   },
   extraReducers: (builder): void => {

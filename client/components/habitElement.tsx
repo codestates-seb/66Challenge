@@ -58,13 +58,18 @@ export const HabitElement: React.FC<HabitElementProps> = ({
     router.push(`/habit/detail/${habitId}`);
   };
   return (
-    <div className={`habit-element-wrapper`} onClick={goDetailPageHandle}>
+    <div
+      className={`habit-element-wrapper flex flex-col`}
+      onClick={goDetailPageHandle}
+    >
       <div className="habit-element-image mb-2.5 relative">
         <Image
           src={thumbImgUrl === null ? '/image/running.png' : thumbImgUrl}
           alt="habit image"
           width={500}
           height={500}
+          className="w-full pt-full"
+          style={{ objectFit: 'cover' }}
         />
         <div
           className="absolute bottom-0 right-0 p-1"

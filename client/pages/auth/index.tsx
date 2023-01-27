@@ -6,6 +6,7 @@ import { useAppSelector } from '../../ducks/store';
 import { getUserChallenges } from '../../module/challengeFunctionMoudules';
 import { useRouter } from 'next/router';
 import { postAuth } from '../../module/challengeFunctionMoudules';
+import { Modal } from '../../components/modal';
 interface IauthFormValue {
   memo: string;
   authImage: File | null;
@@ -33,7 +34,7 @@ export default function Auth() {
   const { register, handleSubmit, reset, getValues, watch } =
     useForm<IauthFormValue>();
   const memoRegExp: RegExp = /[A-Za-z0-9가-힇ㄱ-ㅎ]{2,20}/;
-  const [active, setActive] = useState(-1); //active에는 habitId가 들어가야한다.
+  const [active, setActive] = useState(-1);
   const [imgFile, setImgFile] = useState('');
   const [verify, setVerify] = useState<IverifyForm>({
     imgVerify: 'fail',
@@ -42,6 +43,7 @@ export default function Auth() {
     agreeVerify: 'fail',
   });
   const [ingData, setIngData] = useState<IresponseDataValue[]>([]);
+  const [authState, setAuthState] = useState('auth');
   const { authImage } = watch();
   const deleteImgHandle = (): void => {
     setImgFile('');
@@ -66,11 +68,7 @@ export default function Auth() {
   const postAuthHandle = async (data: IauthFormValue): Promise<void> => {
     const { memo } = data;
     if (memoRegExp.test(memo)) {
-      //{memo,imgFile,active} 보내야함.
-      //reset()
-      //router 이용하여 상세페이지 인증탭으로 이동
       const formData = new FormData();
-      console.log(authImage[0]);
       formData.append(
         'data',
         new Blob([JSON.stringify({ body: memo })], {
@@ -79,7 +77,25 @@ export default function Auth() {
       );
       formData.append('file', authImage[0]);
 
-      const response = await postAuth({ challengeId: active, body: formData });
+      const response: number | any = await postAuth({
+        challengeId: active,
+        body: formData,
+      });
+      if (response === 409) {
+        setAuthState('exist');
+        setTimeout(() => {
+          setAuthState('');
+        }, 1500);
+      } else if (response === 400) {
+        setAuthState('overTime');
+        setTimeout(() => {
+          setAuthState('');
+        }, 1500);
+      } else if (response === 500) {
+        confirm('준비 중 입니다.');
+      } else {
+        router.push(`habit/detail/${response.habitId}/auth`);
+      }
     } else {
       setVerify({ ...verify, memoVerify: 'fail' });
     }
@@ -106,9 +122,22 @@ export default function Auth() {
   }, []);
 
   return (
-    <div className="h-screen w-full px-10 flex flex-col pt-5 overvflow-y-scroll scrollbar-hide">
+    <div className="h-screen w-full px-10 flex flex-col pt-5 overvflow-y-scroll scrollbar-hide relative items-center">
       <div className="mb-4 w-full">
         <span className="font-bold text-base">내가 진행중인 습관</span>
+      </div>
+      <div
+        className={`${
+          authState === 'exist' || authState === 'overTime' ? 'flex' : 'hidden'
+        } absolute w-3/4 bg-white border-2 border-subColor top-72 rounded-full justify-center h-10 items-center animate-dropDown`}
+      >
+        <span className="text-subColor font-semibold">
+          {authState === 'exist'
+            ? '이미 인증한 습관입니다!'
+            : authState === 'overTime'
+            ? '인증 가능한 시간이 아닙니다.'
+            : null}
+        </span>
       </div>
       <div className="flex flex-col flex-wrap w-full  h-1/6 overflow-x-scroll scrollbar-hide p-2 border-y  border-mainColor  items-center">
         {ingData.length === 0 ? (
@@ -137,8 +166,9 @@ export default function Auth() {
           })
         )}
       </div>
+
       <form
-        className="file-uploader-container"
+        className="file-uploader-container w-full"
         onSubmit={handleSubmit(postAuthHandle)}
       >
         <label
@@ -218,7 +248,10 @@ export default function Auth() {
           type="submit"
           value="인증 등록"
           className="border py-2.5 px-5 text-base font-semibold w-full rounded-md bg-mainColor text-iconColor duration-500 outline-0 mb-1 disabled:opacity-20"
-          disabled={!Object.values(verify).every((el) => el === 'success')}
+          disabled={
+            !Object.values(verify).every((el) => el === 'success') ||
+            authState !== 'auth'
+          }
         />
       </form>
     </div>

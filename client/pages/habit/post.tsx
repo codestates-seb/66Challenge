@@ -132,14 +132,10 @@ const Post = () => {
       formData.append('thumbImg', habitImage[0]);
       formData.append('succImg', successImage[0]);
       formData.append('failImg', failImage[0]);
-      for (let value of formData.values()) {
-        console.log(value);
-      }
 
-      await postHabit({ data: formData }).then((data) => {
-        console.log(data);
-        router.push(`/habit/detail/${data?.overview?.habitId}`);
-      });
+      const response = await postHabit({ data: formData });
+      console.log(response);
+      router.push(`/habit/detail/${response?.overview?.habitId}`);
       // reset();
     }
   };
@@ -172,7 +168,7 @@ const Post = () => {
     'text-base w-full rounded-md px-2 pt-[2px] border focus:border-mainColor duration-500 outline-0 mb-1';
 
   return (
-    <div className="habit-post-container w-[300px] mx-auto flex flex-col mt-[40px]">
+    <div className="habit-post-container w-full px-[40px] mx-auto flex flex-col mt-[40px]">
       <form
         className="login-form"
         onSubmit={handleSubmit((data) => {
@@ -278,6 +274,9 @@ const Post = () => {
             imgFilePreview={habitImagePreview}
             register={register('habitImage')}
           />
+          <span className="pt-2.5 text-sm text-center font-semibold">
+            사진의 가로 ・ 세로의 비율은 1:1이 권장됩니다.
+          </span>
           {verify.habitImageVerify === 'fail' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
               습관을 잘 설명할 수 있는 이미지를 업로드 해주세요.
@@ -379,6 +378,9 @@ const Post = () => {
               register={register('failImage')}
             />
           </div>
+          <span className="pt-2.5 text-sm text-center font-semibold">
+            사진의 가로 ・ 세로의 비율은 1:1이 권장됩니다.
+          </span>
           {verify.successImageVerify === 'fail' ||
           verify.failImageVerify === 'fail' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
