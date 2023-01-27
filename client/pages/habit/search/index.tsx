@@ -136,7 +136,7 @@ export default function SearchHabit() {
         />
       </form>
       <div
-        className="flex items-center w-full mb-3 pl-4"
+        className="flex items-center w-full mb-3"
         onClick={arrowDirectionHandle}
       >
         <span className="text-base font-semibold mr-2 mt-[2px]">카테고리</span>
@@ -166,7 +166,7 @@ export default function SearchHabit() {
           );
         })}
       </div>
-      <div>
+      <div className="-mx-5">
         <HabitWrapperVertical
           habitWrapperTitle={
             doing === 'all'
