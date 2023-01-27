@@ -1,5 +1,6 @@
 package challenge.server.security.filter;
 
+import challenge.server.security.dto.LoginDto;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.user.dto.UserDto;
 import challenge.server.security.user.entity.User;
@@ -95,7 +96,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return accessToken;
     }
 
-    public String delegateRefreshToken(User user) {
+    private String delegateRefreshToken(User user) {
         String subject = user.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration((jwtTokenizer.getRefreshTokenExpirationMinutes()));
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
