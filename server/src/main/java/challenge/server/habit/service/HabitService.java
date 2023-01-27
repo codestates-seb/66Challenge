@@ -37,6 +37,13 @@ public class HabitService {
         return habitRepository.save(updatingHabit);
     }
 
+    @Transactional
+    public Habit updateChallengers(Long habitId, int challengers) {
+        Habit findHabit = findVerifiedHabit(habitId);
+        findHabit.changeChallengers(challengers);
+        return habitRepository.save(findHabit);
+    }
+
     public Habit findHabit(Long habitId) {
         return findVerifiedHabit(habitId);
     }
