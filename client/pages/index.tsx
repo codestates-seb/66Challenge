@@ -1,5 +1,4 @@
 import { SlideBanner } from '../components/slideBanner';
-import Iframe from 'react-iframe';
 import {
   slideData,
   subSlideData,
@@ -11,11 +10,6 @@ import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
 import Image from 'next/image';
 import React from 'react';
 import { Footer } from '../components/footer';
-
-interface tokenType {
-  access_token: string;
-  refresh_token: string;
-}
 
 const Home: React.FC = () => {
   const router = useRouter();
@@ -66,16 +60,6 @@ const Home: React.FC = () => {
       <div className="py-[20px]">
         <SlideBanner bannerCont={subSlideData} t={4000} pagination={false} />
       </div>
-      {/* <div className="main-video w-full h-full">
-        <Iframe
-          className="w-full min-h-[250px]"
-          url="https://www.youtube.com/embed/cdZZpaB2kDM"
-          title="YouTube video player"
-          frameBorder={0}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-        ></Iframe>
-      </div> */}
       <div>
         <HabitWrapperHorizontal
           habitWrapperTitle="20대 여성이라면 필수!"
