@@ -135,6 +135,16 @@ public class HabitController {
 //        return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
 //    }
 
+    @GetMapping("/sort/recommend")
+    public ResponseEntity getAllByScore(@RequestParam @Positive int page,
+                                        @RequestParam @Positive int size,
+                                        @RequestParam(required = false) @Positive Long lastHabitId,
+                                        @RequestParam(required = false) @Positive Long userId) {
+
+        List<Habit> habits = habitService.findAllByScore(lastHabitId, page, size);
+        return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
+    }
+
     // 습관 조회 - 상세 조회
     @GetMapping("/{habit-id}")
     public ResponseEntity getHabit(@PathVariable("habit-id") @Positive Long habitId,
@@ -197,6 +207,7 @@ public class HabitController {
         review.setUser(userService.findUser(userId));
         review.setHabit(habitService.findHabit(habitId));
         Review createReview = reviewService.createReview(review);
+        habitService.calcAvgScore(createReview.getHabit().getHabitId());
 
         return new ResponseEntity(reviewMapper.toDto(createReview), HttpStatus.CREATED);
     }
@@ -208,6 +219,8 @@ public class HabitController {
         Review review = reviewMapper.toEntity(reviewPatchDto);
         review.setReviewId(reviewId);
         Review updateReview = reviewService.updateReview(review);
+        habitService.calcAvgScore(updateReview.getHabit().getHabitId());
+
         return new ResponseEntity(reviewMapper.toDto(updateReview), HttpStatus.OK);
     }
 
@@ -215,6 +228,9 @@ public class HabitController {
     @DeleteMapping("/{habit-id}/reviews/{review-id}")
     public ResponseEntity deleteReview(@PathVariable("review-id") @Positive Long reviewId) {
         reviewService.deleteReview(reviewId);
+        Review review = reviewService.findVerifiedReview(reviewId);
+        habitService.calcAvgScore(review.getHabit().getHabitId());
+
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
