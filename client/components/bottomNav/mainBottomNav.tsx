@@ -108,14 +108,16 @@ export function MainBottomNav({ param }) {
           return (
             <li key={i} className="w-14">
               <div
-                className="flex flex-col text-center pt-6"
-                onClick={() => setActive(i)}
+                className="flex flex-col text-center pt-6 cursor-pointer"
+                onClick={() => {
+                  setActive(i);
+                  onClickHandle(menu.link);
+                }}
               >
                 <span
-                  className={`flex justify-center text-xl text-iconColor cursor-pointer duration-500 z-50 ${
+                  className={`flex justify-center text-xl text-iconColor  duration-500 z-50 ${
                     i === active && '-mt-11 text-iconColor '
                   }`}
-                  onClick={() => onClickHandle(menu.link)}
                 >
                   {menu.icon}
                 </span>
