@@ -60,6 +60,14 @@ public class HabitService {
         return habitRepository.findAllByScore(lastHabitId, page, size);
     }
 
+    public List<Habit> findAllByPopularity(Long lastHabitId, int page, int size) {
+        return habitRepository.findAllByPopularity(lastHabitId, page, size);
+    }
+
+    public List<Habit> findAllByNewest(Long lastHabitId, int page, int size) {
+        return habitRepository.findAllByNewest(lastHabitId, page, size);
+    }
+
     // 특정 사용자(작성자)가 만든 습관 조회
     public List<Habit> findAllByUser(Long lastHabitId, Long userId, int page, int size) {
         return habitRepository.findByHostUserId(lastHabitId, userId, page, size);

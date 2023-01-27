@@ -83,13 +83,23 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
     }
 
     @Override
-    public Integer findChallengers(Long habitId){
+    public Integer findChallengers(Long habitId) {
         return Math.toIntExact(jpaQueryFactory
-                .select(habit.habitId.count())
-                .from(habit)
-                .where(habit.habitId.eq(habitId).and(challenge.status.eq(CHALLENGE)))
-                .leftJoin(habit.challenges, challenge)
-                .on(habit.habitId.eq(challenge.habit.habitId))
+                .select(challenge.challengeId.count())
+                .from(challenge)
+                .where(challenge.habit.habitId.eq(habitId).and(challenge.status.eq(CHALLENGE)))
                 .fetchOne());
     }
 }
+
+//    @Override
+//    public Integer findChallengers(Long habitId){
+//        return Math.toIntExact(jpaQueryFactory
+//                .select(habit.habitId.count())
+//                .from(habit)
+//                .where(habit.habitId.eq(habitId).and(challenge.status.eq(CHALLENGE)))
+//                .leftJoin(habit.challenges, challenge)
+//                .on(habit.habitId.eq(challenge.habit.habitId))
+//                .fetchOne());
+//    }
+

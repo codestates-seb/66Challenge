@@ -31,12 +31,12 @@ public class Habit extends BaseTimeEntity {
     private LocalTime authStartTime;
     private LocalTime authEndTime;
     private String authType;
+    private Integer challengers;
+    private Double avgScore;
 
     private String thumbImgUrl;
     private String succImgUrl;
     private String failImgUrl;
-
-    private Double avgScore;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID")
@@ -59,5 +59,9 @@ public class Habit extends BaseTimeEntity {
         int count = reviews.size();
         int score = reviews.stream().map(Review::getScore).mapToInt(i -> i).sum();
         this.avgScore = (double) (round((score / count) * 10) / 10);
+    }
+
+    public void changeChallengers(int challengers) {
+        this.challengers = challengers;
     }
 }
