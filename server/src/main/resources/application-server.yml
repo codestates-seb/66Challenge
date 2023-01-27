@@ -66,10 +66,11 @@ mail:
     host: smtp.gmail.com
     port: 587
     username: ENC(edP1B1a/RbnqVHGC+0QQgtz1k2FNvq3GTlE1ys8zQM2x+2LbuUNP9g==)
-    password: ENC(U+pEognUB3Mckk7etx5oGQuuRj7b41gUNH6+M52CLhU=)
+    password: ENC(ZdqLu7VmBKSrvvWZjPEMcpkKuEiXeYCdSdJvU9Vq0+A=)
     auth: true
     starttls:
       enable: true
+      required: true
     subject:
       member:
         registration: Challenge66 회원 가입을 위한 인증 메일입니다
