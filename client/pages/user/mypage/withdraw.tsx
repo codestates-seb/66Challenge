@@ -43,7 +43,7 @@ const Withdraw: FC = () => {
         }}
         className="border-2"
       >
-        탈
+        탈퇴하기
       </button>
     </div>
   );
