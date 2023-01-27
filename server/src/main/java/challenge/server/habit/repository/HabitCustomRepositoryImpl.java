@@ -70,7 +70,13 @@ public class HabitCustomRepositoryImpl implements HabitCustomRepository {
 
     @Override
     public List<Habit> findAllByScore(Long lastHabitId, int page, int size) {
-        return null;
+        return jpaQueryFactory
+                .selectFrom(habit)
+                .where(ltHabitId(lastHabitId))
+                .orderBy(habit.avgScore.desc(), habit.bookmarks.size().desc(), habit.habitId.desc())
+                .offset(page - 1)
+                .limit(size)
+                .fetch();
     }
 
     @Override
@@ -86,3 +92,5 @@ public class HabitCustomRepositoryImpl implements HabitCustomRepository {
         return habit.habitId.lt(lastHabitId);
     }
 }
+
+

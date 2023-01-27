@@ -107,7 +107,7 @@ public class HabitMapperImpl {
                 .title(habit.getTitle())
                 .body(habit.getBody())
                 .thumbImgUrl(habit.getThumbImgUrl())
-                .score(getHabitScore(habit.getHabitId()))
+                .score(habit.getAvgScore() == null ? 0 : habit.getAvgScore())
                 // bookmark 테이블에서 userId(로그인한 사용자)와 habitId로 조회
                 .isBooked(!bookmarkRepository.findByUserUserIdAndHabitHabitId(userId, habit.getHabitId()).isEmpty())
                 .build();
