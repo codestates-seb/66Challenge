@@ -53,11 +53,7 @@ const HabitDetail: React.FC = () => {
       <div className="habit-detail-top">
         <div className="habit-detail-top-image">
           <Image
-            src={
-              habitData?.overview?.thumbImgUrl
-                ? habitData.overview.thumbImgUrl
-                : '/image/running.png'
-            }
+            src={habitData?.overview?.thumbImgUrl}
             alt="habit image"
             width={500}
             height={500}
@@ -112,31 +108,27 @@ const HabitDetail: React.FC = () => {
         <p>인증 사진의 올바른 예와 잘못된 예는 아래와 같습니다.</p>
         <div className="pt-5 flex gap-5">
           <div className="flex flex-col">
-            <Image
-              src={
-                habitData?.image?.succImgUrl
-                  ? habitData.image.succImgUrl
-                  : `/image/running.png`
-              }
-              alt="correct auth image"
-              width={500}
-              height={500}
-            />
+            <div className="min-h-[150px] flex items-center">
+              <Image
+                src={habitData?.image?.succImgUrl}
+                alt="correct auth image"
+                width={500}
+                height={500}
+              />
+            </div>
             <div className="text-center text-green-600 pt-2.5 text-sm font-bold">
               {'올바른 인증사진'}
             </div>
           </div>
           <div className="flex flex-col">
-            <Image
-              src={
-                habitData?.image?.failImgUrl
-                  ? habitData.image.failImgUrl
-                  : `/image/running.png`
-              }
-              alt="incorrect auth image"
-              width={500}
-              height={500}
-            />
+            <div className="min-h-[150px] flex items-center">
+              <Image
+                src={habitData?.image?.failImgUrl}
+                alt="incorrect auth image"
+                width={500}
+                height={500}
+              />
+            </div>
             <div className="text-center text-rose-600 pt-2.5 text-sm font-bold">
               {'잘못된 인증사진'}
             </div>

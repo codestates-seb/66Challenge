@@ -14,14 +14,19 @@ export default function HabitDetailReview() {
 
   return (
     <div className="habit-detail-review-container px-5 pt-5">
-      {reviewData.length !== 0 &&
+      {reviewData.length !== 0 ? (
         reviewData.map((el) => {
           return (
             <div className="habit-detail-review-wrapper" key={el.reviewId}>
               <ReviewArticle {...el} habitId={+habitId} />
             </div>
           );
-        })}
+        })
+      ) : (
+        <div className="h-screen -mt-[116px] -mb-[100px] flex justify-center items-center">
+          아직 등록된 후기가 없습니다.
+        </div>
+      )}
       <div ref={setTarget}></div>
     </div>
   );

@@ -109,9 +109,6 @@ const Post = () => {
       setVerify({ ...verify, failImageVerify: 'fail' });
     } else {
       const formData = new FormData();
-      formData.append('thumbImg', habitImage[0]);
-      formData.append('succImg', successImage[0]);
-      formData.append('failImg', failImage[0]);
       formData.append(
         'data',
         new Blob(
@@ -132,8 +129,16 @@ const Post = () => {
           },
         ),
       );
+      formData.append('thumbImg', habitImage[0]);
+      formData.append('succImg', successImage[0]);
+      formData.append('failImg', failImage[0]);
+      for (let value of formData.values()) {
+        console.log(value);
+      }
+
       await postHabit({ data: formData }).then((data) => {
-        router.push(`/habit/detail/${data.overview.habitId}`);
+        console.log(data);
+        router.push(`/habit/detail/${data?.overview?.habitId}`);
       });
       // reset();
     }
@@ -167,7 +172,7 @@ const Post = () => {
     'text-base w-full rounded-md px-2 pt-[2px] border focus:border-mainColor duration-500 outline-0 mb-1';
 
   return (
-    <div className="habit-post-container w-[300px] mx-auto flex flex-col mt-[40px]">
+    <div className="habit-post-container w-full px-[40px] mx-auto flex flex-col mt-[40px]">
       <form
         className="login-form"
         onSubmit={handleSubmit((data) => {
@@ -256,9 +261,8 @@ const Post = () => {
             <option value="study">학습</option>
             <option value="life">일상생활</option>
             <option value="hobby">취미</option>
-            <option value="selfcare">셀프케어</option>
-            <option value="eco">에코</option>
-            <option value="mind">마음챙김</option>
+            <option value="selfcare">자기관리</option>
+            <option value="eco">환경</option>
             <option value="etc">기타</option>
           </select>
           {verify.categoryVerify === 'fail' ? (

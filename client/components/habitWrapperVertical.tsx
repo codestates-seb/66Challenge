@@ -1,6 +1,5 @@
 import { HabitElement } from './habitElement';
 import type { HabitWrapperProps } from './habitElement';
-
 export const HabitWrapperVertical: React.FC<HabitWrapperProps> = ({
   habitWrapperTitle,
   habitWrapperData,

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useAppSelector } from '../ducks/store';
@@ -11,6 +11,7 @@ interface HabitElementProps {
   body: string;
   habitId: number;
   isBooked: boolean;
+  hostUserId?: number;
 }
 
 interface HabitWrapperProps {
@@ -26,10 +27,11 @@ export const HabitElement: React.FC<HabitElementProps> = ({
   body,
   thumbImgUrl,
   isBooked,
+  hostUserId,
 }) => {
   const router = useRouter();
-  const { userId, isLogin } = useAppSelector((state) => state.loginIdentity);
-  const [isBookMark, setIsBookMark] = useState(isLogin ? isBooked : false);
+  const { userId } = useAppSelector((state) => state.loginIdentity);
+  const [isBookMark, setIsBookMark] = useState(false);
 
   const bookMarkHandler = async () => {
     // login 여부 확인 후 false면 로그인 페이지로 경로 설정
@@ -47,16 +49,33 @@ export const HabitElement: React.FC<HabitElementProps> = ({
 
     setIsBookMark(!isBookMark);
   };
-
+  useEffect(() => {
+    if (isBooked === true) {
+      setIsBookMark(true);
+    }
+  }, [isBooked]);
+  const goDetailPageHandle = () => {
+    router.push(`/habit/detail/${habitId}`);
+  };
   return (
-    <div className={`habit-element-wrapper`}>
+    <div className={`habit-element-wrapper`} onClick={goDetailPageHandle}>
       <div className="habit-element-image mb-2.5 relative">
-        <Image src={thumbImgUrl} alt="habit image" width={500} height={500} />
+        <Image
+          src={thumbImgUrl === null ? '/image/running.png' : thumbImgUrl}
+          alt="habit image"
+          width={500}
+          height={500}
+          className="w-52 h-52"
+        />
         <div
           className="absolute bottom-0 right-0 p-1"
-          onClick={bookMarkHandler}
+          onClick={(e) => {
+            e.stopPropagation();
+            bookMarkHandler();
+          }}
         >
-          {isBookMark ? (
+          {hostUserId === undefined ||
+          hostUserId === userId ? null : isBookMark ? (
             <AiFillHeart className="text-subColor animate-bookMark" />
           ) : (
             <AiOutlineHeart className="text-borderColor" />
