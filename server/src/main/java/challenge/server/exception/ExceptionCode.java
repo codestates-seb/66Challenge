@@ -24,7 +24,8 @@ public enum ExceptionCode {
     REPORT_NOT_FOUND(404, "Report not found"),
     TOO_MANY_REPORTS(400, "Too many reports"),
     DUPLICATED_REPORT(400,"Duplicated report"),
-    BOOKMARK_EXISTS(409, "Bookmark exists");
+    BOOKMARK_EXISTS(409, "Bookmark exists"),
+    EMAIL_VERIFICATION_FAILED(404, "Email verification failed");
 
     @Getter
     private int status;
