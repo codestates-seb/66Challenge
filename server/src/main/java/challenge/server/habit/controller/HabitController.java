@@ -123,18 +123,6 @@ public class HabitController {
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
 
-    // TODO 습관 조회 - 추천/인기/신규 순
-//    @GetMapping
-//    public ResponseEntity getAllBySort(@RequestParam String sort,
-//                                       @RequestParam @Positive int page,
-//                                       @RequestParam @Positive int size,
-//                                       @RequestParam(required = false) @Positive Long lastHabitId,
-//                                       @RequestParam(required = false) @Positive Long userId) {
-//
-//        List<Habit> habits = habitService.findAllBySort(lastHabitId, page, size, sort);
-//        return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
-//    }
-
     @GetMapping("/sort/recommend")
     public ResponseEntity getAllByScore(@RequestParam @Positive int page,
                                         @RequestParam @Positive int size,
@@ -142,6 +130,26 @@ public class HabitController {
                                         @RequestParam(required = false) @Positive Long userId) {
 
         List<Habit> habits = habitService.findAllByScore(lastHabitId, page, size);
+        return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/popularity")
+    public ResponseEntity getAllByPopularity(@RequestParam @Positive int page,
+                                             @RequestParam @Positive int size,
+                                             @RequestParam(required = false) @Positive Long lastHabitId,
+                                             @RequestParam(required = false) @Positive Long userId) {
+
+        List<Habit> habits = habitService.findAllByPopularity(lastHabitId, page, size);
+        return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/newest")
+    public ResponseEntity getAllByNewest(@RequestParam @Positive int page,
+                                         @RequestParam @Positive int size,
+                                         @RequestParam(required = false) @Positive Long lastHabitId,
+                                         @RequestParam(required = false) @Positive Long userId) {
+
+        List<Habit> habits = habitService.findAllByNewest(lastHabitId, page, size);
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
 

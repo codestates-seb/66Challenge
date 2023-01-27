@@ -129,11 +129,11 @@ public class HabitMapperImpl {
                 .hostUsername(habit.getHost().getUsername())
                 .subTitle(habit.getSubTitle())
                 .authType(habit.getAuthType())
-                .authStartTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthStartTime()).substring(0,5))
-                .authEndTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthEndTime()).substring(0,5))
+                .authStartTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthStartTime()).substring(0, 5))
+                .authEndTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthEndTime()).substring(0, 5))
                 // challenge 테이블에서 userId(로그인한 사용자)와 habitId로 챌린지 상태 조회.
                 .challengeStatus(getChallengeStatus(userId, habit.getHabitId()))
-                .challengers(challengeRepository.findChallengers(habit.getHabitId()))
+                .challengers(habit.getChallengers() == null ? 0 : habit.getChallengers())
                 .build();
         return detail;
     }
