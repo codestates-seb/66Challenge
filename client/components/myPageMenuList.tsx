@@ -23,33 +23,42 @@ export const MyPageMenuList = ({ email, successArr }) => {
   const CertDropDown = ({ success }): JSX.Element => {
     return (
       <div className="flex flex-col items-stretch">
-        {success.map((el) => {
-          return (
-            <div
-              key={el.challengeId}
-              className={`flex place-content-between border solid border-black h-8 items-center mb-1 mx-2 rounded-xl ${
-                el.subTitle ? '' : 'justify-center'
-              }`}
-            >
-              <span className={`${el.subTitle ? 'ml-5' : 'text-xl'}`}>
-                {el.subTitle || '성공 데이터 없음'}
-              </span>
-              {el.subTitle ? (
-                <button
-                  className={`border-2 text-sm mr-4`}
-                  onClick={(): void => {
-                    setCertId(el.habitId);
-                    setIsCertOpen(!isCertOpen);
-                  }}
-                >
-                  발급
-                </button>
-              ) : (
-                ''
-              )}
-            </div>
-          );
-        })}
+        {success.length > 0 ? (
+          success.map((el) => {
+            return (
+              <div
+                key={el.challengeId}
+                className={`flex place-content-between border solid border-black h-8 items-center mb-1 mx-2 rounded-xl ${
+                  el.subTitle ? '' : 'justify-center'
+                }`}
+              >
+                <span className={`${el.subTitle ? 'ml-5' : 'text-xl'}`}>
+                  {el.subTitle || '성공 데이터 없음'}
+                </span>
+                {el.subTitle ? (
+                  <button
+                    className={`border-2 text-sm mr-4`}
+                    onClick={(): void => {
+                      setCertId(el.habitId);
+                      setIsCertOpen(!isCertOpen);
+                    }}
+                  >
+                    발급
+                  </button>
+                ) : (
+                  ''
+                )}
+              </div>
+            );
+          })
+        ) : (
+          <div
+            className="flex place-content-between border solid border-black h-8 items-center mb-1 mx-2 rounded-xl 
+                justify-center"
+          >
+            <span className="text-xl">성공 데이터 없음</span>{' '}
+          </div>
+        )}
       </div>
     );
   };
