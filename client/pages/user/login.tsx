@@ -14,7 +14,8 @@ interface IresponseData {
   message?: string;
 }
 const Login: React.FC = () => {
-  const { register, handleSubmit, getValues, setFocus } = useForm<FormValues>();
+  const { register, handleSubmit, getValues, setFocus, reset } =
+    useForm<FormValues>();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [emailVerify, setEmailVerify] = useState(true);
@@ -48,8 +49,7 @@ const Login: React.FC = () => {
           alert('이메일이나 비밀번호를 확인해주세요');
         } else {
           router.push('/');
-          setEmailVerify(false);
-          setPasswordView(false);
+          reset();
         }
       });
     } else if (!emailVerify || !emailRegExp.test(username)) {
