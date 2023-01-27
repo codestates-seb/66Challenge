@@ -41,10 +41,7 @@ public class ChallengeService {
         verifyExistsChallenge(userId, habitId);
         Challenge saveChallenge = challengeRepository.save(challenge);
 
-        Habit findHabit = habitService.findHabit(habitId);
-        findHabit.changeChallengers(challengeRepository.findChallengers(habitId));
-        habitService.updateHabit(findHabit);
-
+        habitService.updateChallengers(habitId, challengeRepository.findChallengers(habitId));
         return saveChallenge;
     }
 
@@ -54,10 +51,7 @@ public class ChallengeService {
         findChallenge.changeStatus(Challenge.Status.valueOf(status));
         Challenge saveChallenge = challengeRepository.save(findChallenge);
 
-        Habit findHabit = habitService.findHabit(habitId);
-        findHabit.changeChallengers(challengeRepository.findChallengers(habitId));
-        habitService.updateHabit(findHabit);
-
+        habitService.updateChallengers(habitId, challengeRepository.findChallengers(habitId));
         return saveChallenge;
     }
 
