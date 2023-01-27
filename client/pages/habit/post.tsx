@@ -132,14 +132,9 @@ const Post = () => {
       formData.append('thumbImg', habitImage[0]);
       formData.append('succImg', successImage[0]);
       formData.append('failImg', failImage[0]);
-      for (let value of formData.values()) {
-        console.log(value);
-      }
 
-      await postHabit({ data: formData }).then((data) => {
-        console.log(data);
-        router.push(`/habit/detail/${data?.overview?.habitId}`);
-      });
+      const response = await postHabit({ data: formData });
+      router.push(`/habit/detail/${response.overview.habitId}`);
       // reset();
     }
   };

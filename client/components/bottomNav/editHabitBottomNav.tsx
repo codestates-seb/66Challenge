@@ -6,13 +6,16 @@ interface IPropValue {
   habitId: number;
   userId: number;
   challengeStatus: string;
+  challengers: number;
 }
 export function EditHabitBottomNav({
   habitId,
   userId,
   challengeStatus,
+  challengers,
 }: IPropValue) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isStart, setIsStart] = useState(false);
   const router = useRouter();
   const startHabitHandle = (): void => {
     setIsOpen(true);
@@ -22,16 +25,19 @@ export function EditHabitBottomNav({
   };
   return (
     <div className="flex bg-white h-[3rem] px-6 w-full fixed bottom-0 min-w[300px] justify-center items-center border-t min-w-[360px] max-w-[460px]">
+      {challengers !== 0 || isStart === true ? null : (
+        <button
+          className="bg-mainColor h-3/4 w-1/2 rounded-lg mr-2.5 text-iconColor text-base"
+          onClick={editHabitHandle}
+        >
+          Edit
+        </button>
+      )}
+
       <button
-        className="bg-mainColor h-3/4 w-1/2 rounded-lg mr-2.5 text-iconColor text-base"
-        onClick={editHabitHandle}
-      >
-        Edit
-      </button>
-      <button
-        className="bg-mainColor h-3/4 w-full rounded-lg ml-2.5 text-iconColor text-base"
+        className="bg-mainColor h-3/4 w-full rounded-lg ml-2.5 text-iconColor text-base disabled:opacity-50"
         onClick={startHabitHandle}
-        disabled={challengeStatus !== 'NONE'}
+        disabled={challengeStatus !== 'NONE' || isStart === true}
       >
         Start
       </button>
@@ -48,6 +54,8 @@ export function EditHabitBottomNav({
             if (response !== 201) {
               router.push('/user/login');
             }
+            setIsOpen(false);
+            setIsStart(true);
           }}
         >
           <div className="flex flex-col items-center">
