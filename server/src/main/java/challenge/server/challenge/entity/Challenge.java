@@ -63,9 +63,12 @@ public class Challenge extends BaseTimeEntity {
         LocalDate nowDate = localDateTime.toLocalDate();
         LocalTime nowTime = localDateTime.toLocalTime();
 
-        if (this.lastAuthAt.toLocalDate().equals(nowDate)) {
-            throw new BusinessLogicException(ExceptionCode.AUTH_EXISTS);
+        if (this.lastAuthAt != null) {
+            if (this.lastAuthAt.toLocalDate().equals(nowDate)) {
+                throw new BusinessLogicException(ExceptionCode.AUTH_EXISTS);
+            }
         }
+
         if (nowTime.isBefore(startTime) || nowTime.isAfter(endTime)) {
             throw new BusinessLogicException(ExceptionCode.AUTH_NOT_TIME);
         }
