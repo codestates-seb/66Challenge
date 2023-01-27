@@ -142,7 +142,7 @@ public class UserService {
         verifyExistUser(user.getEmail());
 
         // 이메일 인증을 받았는지 확인
-        verifyEmailVerified(user.getEmail());
+//        verifyEmailVerified(user.getEmail());
 
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
