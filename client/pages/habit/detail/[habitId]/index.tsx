@@ -89,7 +89,9 @@ const HabitDetail: React.FC = () => {
       <div className="habit-detail-middle p-5 border-b border-borderColor">
         <div className="habit-detail-body">
           <h3 className="text-lg font-semibold pb-5">상세내용</h3>
-          <p className="pb-2.5">{habitData?.overview?.body}</p>
+          <p className="pb-2.5 w-full whitespace-normal break-words">
+            {habitData?.overview?.body}
+          </p>
         </div>
       </div>
       <div className="habit-detail-bottom p-5">
