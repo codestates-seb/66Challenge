@@ -20,7 +20,6 @@ import challenge.server.user.repository.EmailVerificationRepository;
 import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.Email;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,8 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -142,7 +139,7 @@ public class UserService {
         verifyExistUser(user.getEmail());
 
         // 이메일 인증을 받았는지 확인
-//        verifyEmailVerified(user.getEmail());
+        verifyEmailVerified(user.getEmail());
 
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
@@ -231,7 +228,7 @@ public class UserService {
         EmailVerification emailVerification = optionalEmailVerification.orElseThrow(() -> new BusinessLogicException(ExceptionCode.EMAIL_VERIFICATION_FAILED));
 
         // 이메일 인증 테이블에 정보 있는데, 인증 여부가 여전히 false이면(vs 유효 시간 안에 인증되었을 때만 true로 바뀌어 저장되어 있음), 예외 처리
-        if (!emailVerification.getIsExpired()) {
+        if (!emailVerification.getIsValidated()) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_VERIFICATION_FAILED);
         }
     }

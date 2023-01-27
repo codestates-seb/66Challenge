@@ -53,8 +53,8 @@ public class SecurityConfig { // todo https 적용
                 .exceptionHandling()
                 .authenticationEntryPoint(new UserAuthenticationEntryPoint())
                 .accessDeniedHandler(new UserAccessDeniedHandler())
-                .and()
-                .apply(new CustomFilterConfigurer())
+//                .and()
+//                .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll()) // todo 역할 기반 리소스별 접근 권한 부여 필요
                 .oauth2Login(oauth2 -> oauth2
@@ -81,6 +81,7 @@ public class SecurityConfig { // todo https 적용
         return source;
     }
 
+    /*
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
@@ -98,4 +99,5 @@ public class SecurityConfig { // todo https 적용
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
+     */
 }

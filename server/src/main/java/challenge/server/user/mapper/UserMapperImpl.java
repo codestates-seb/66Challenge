@@ -2,6 +2,7 @@ package challenge.server.user.mapper;
 
 import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.habit.entity.Habit;
+import challenge.server.security.dto.SecurityDto;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -114,5 +115,30 @@ public class UserMapperImpl {
         user.password(requestBody.getPassword());
 
         return user.build();
+    }
+
+    // 2023.1.27(금) 14h45 로그아웃(+로그인) controller 구현 시 추가
+    public User loginRequestDtoToUser(SecurityDto.LoginRequestDto requestBody) {
+        if (requestBody == null) {
+            return null;
+        }
+
+        /*
+        User.UserBuilder user = User.builder();
+
+        user.email(requestBody.getUsername());
+        user.password(requestBody.getPassword());
+         */
+        return User.builder()
+                .email(requestBody.getUsername())
+                .password(requestBody.getPassword())
+                .build();
+    }
+
+    public UserDto.Redis userToRedisUser(User user) {
+        return UserDto.Redis.builder()
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .build();
     }
 }
