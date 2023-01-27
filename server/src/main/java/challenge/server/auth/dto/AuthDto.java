@@ -22,6 +22,7 @@ public class AuthDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Response {
         private Long authId;
+        private Long habitId;
         private Long authorUserId;
         private String authorUsername;
         private String body;
