@@ -23,7 +23,7 @@ public class EmailVerificationCustomRepositoryImpl implements EmailVerificationC
                 .where(emailVerification.email.eq(email),
                         emailVerification.verificationCode.eq(verificationCode),
                         emailVerification.expiryTime.goe(currentTime), // 만료 시간 >= 현재 시간
-                        emailVerification.isExpired.eq(false)) // 인증 정보를 아직 사용하지 않음 = 아직 유효한 인증 정보임
+                        emailVerification.isValidated.eq(false)) // 인증 정보를 아직 사용하지 않음 = 아직 유효한 인증 정보임
                 .fetchFirst();
 
         return Optional.ofNullable(result);

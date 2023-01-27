@@ -74,7 +74,7 @@ public class User extends BaseTimeEntity {
     }
 
     // 회원 가입 시 이메일 인증 관련
-    public void updateRefreshToken(String refreshToken) {
+    public void saveRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
 

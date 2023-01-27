@@ -239,4 +239,13 @@ public class UserDto {
         private LocalDateTime createdAt;
         private LocalDateTime completedAt;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Redis {
+        private Long userId;
+        private String email;
+    }
 }
