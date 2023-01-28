@@ -38,7 +38,7 @@ spring:
             user_name_attribute: response
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://challenge66.ctdssl3yscyh.ap-northeast-2.rds.amazonaws.com:13306/66challenge?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://main-project.ctdssl3yscyh.ap-northeast-2.rds.amazonaws.com/challenge66:13306/challenge66?useSSL=false&characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
     username: ENC(xspPILIAzHK+xciWhlmMVQ==)
     password: ENC(sX8vFMX8vHZldLvVu2TFMjKnev0JaZFK)
   jpa:
