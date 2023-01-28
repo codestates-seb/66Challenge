@@ -7,7 +7,11 @@ First, run the development server:
 ```bash
 npm run dev
 # or
+<<<<<<< HEAD
 yarn dev3
+=======
+yarn dev2
+>>>>>>> upstream/devFront
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
