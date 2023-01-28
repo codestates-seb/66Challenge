@@ -13,7 +13,7 @@ spring:
           kakao:
             client-id: ENC(1HIZn2QzKn4nRunWgWlDbmi6D948IfN/0vuLeoPwwc8oJxlsWOfoU7/K3pOUWG4v)   # REST API 키
             client-secret: ENC(w/Ip7Zu91manw2kqhhRPO6St73p2GOaOhtigoc+qT4pNbH+FKvuALyd7cq9nv1Zt)
-            redirect-uri: "http://3.37.58.32:8080/login/oauth2/code/kakao"
+            redirect-uri: "http://3.38.232.88:8080/login/oauth2/code/kakao"
             client-authentication-method: POST
             authorization-grant-type: authorization_code
             scope: profile_nickname, profile_image, account_email, gender, age_range  # 동의 항목
@@ -21,7 +21,7 @@ spring:
           naver:
             client-id: ENC(FuYscwF2S65D3gZ1dFQP2VNW6gd5ZxGs5yqltpIvHTw=)   # REST API 키
             client-secret: ENC(35dAwGDL/QoXHR0wUz7dxtlrjk6qk8Bq)
-            redirect-uri: "http://3.37.58.32:8080/login/oauth2/code/naver"
+            redirect-uri: "http://3.38.232.88:8080/login/oauth2/code/naver"
             authorization-grant-type: authorization_code
             scope: name, email, profile_image, gender, age  # 동의 항목
             client-name: Naver
@@ -38,7 +38,7 @@ spring:
             user_name_attribute: response
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://main-project.ctdssl3yscyh.ap-northeast-2.rds.amazonaws.com:13306/challenge66?useSSL=false&characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
+    url: jdbc:mysql://challenge66.c4brwzsvasjc.ap-northeast-2.rds.amazonaws.com:3306/challenge66?useSSL=false&characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
     username: ENC(xspPILIAzHK+xciWhlmMVQ==)
     password: ENC(sX8vFMX8vHZldLvVu2TFMjKnev0JaZFK)
   jpa:
