@@ -226,3 +226,17 @@ export async function profileDelete({ userId }) {
     console.error(e);
   }
 }
+export async function postUserEmailAuth(email: string) {
+  try {
+    const response = await axios
+      .post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/email-verification-requests?email=${email}`,
+        {
+          email,
+        },
+      )
+      .then((res) => res.status);
+  } catch (e) {
+    return e.response.status;
+  }
+}
