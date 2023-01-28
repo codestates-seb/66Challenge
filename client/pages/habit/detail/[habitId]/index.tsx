@@ -36,6 +36,8 @@ interface habitDataType {
   image?: habitDetailImage;
 }
 
+export type { habitDataType };
+
 const HabitDetail: React.FC = () => {
   const router = useRouter();
   const habitId = +router.query.habitId;
