@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 env:
-  S3_BUCKET_NAME: main-challenge66-s3-bucket
+  S3_BUCKET_NAME: challenge66-s3-bucket
 
 jobs:
   build:
@@ -67,7 +67,7 @@ jobs:
       # CodeDeploy에게 배포 명령을 내립니다.
       - name: Code Deploy
         run: >
-          aws deploy create-deployment --application-name main-challenge66-CodeDeployApp
+          aws deploy create-deployment --application-name stackoverflow
           --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name main-challenge66-CodeDeployApp-group
+          --deployment-group-name challenge66-group
           --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=server-deploy.zip
