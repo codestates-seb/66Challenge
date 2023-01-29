@@ -67,13 +67,13 @@ const MyPage = () => {
   const profileEditModal = (imageUrl: string | null): JSX.Element => {
     return (
       <div className="flex flex-col w-full items-center">
-        <div className="w-full text-center text-xl">프로필 사진 변경</div>
+        <div className="w-full text-center text-xl mb-3">프로필 사진 변경</div>
         <FileUploader
           imgFilePreview={profileImagePreview}
           register={register('profileImage')}
         />
         {profileImagePreview ? (
-          <div className=" flex justify-center w-full items-center bg-mainColor rounded-full h-[40px] mb-5">
+          <div className="flex justify-center w-full items-center bg-mainColor rounded-full h-[40px]  mt-4">
             <span
               className="text-base text-iconColor"
               onClick={() => {

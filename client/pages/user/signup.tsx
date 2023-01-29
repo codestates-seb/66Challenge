@@ -5,7 +5,9 @@ import {
   getUserEmailOverlapVerify,
   getUsernameOverlapVerify,
   postUserSignUp,
+  postUserEmailAuth,
 } from '../../module/userFunctionMoudules';
+import { Modal } from '../../components/modal';
 interface IformValue {
   email: string;
   username: string;
@@ -29,6 +31,9 @@ const SignUp: React.FC = () => {
     passwordCheckVerify: '',
     agreeVerify: 'fail',
   });
+  const [authState, setAuthState] = useState('');
+  const [emailInputDisable, setEmailInputDisable] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const inputContainerDefaultClassName: string =
     'flex flex-col w-full h-[80px] mb-5';
   const labelDefaultClassName: string = 'text-base font-semibold mb-1';
@@ -47,8 +52,10 @@ const SignUp: React.FC = () => {
         );
         if (response === true) {
           setVerify({ ...verify, [verifyKey]: 'overlap' });
-        } else {
+          setIsOpen(false);
+        } else if (response === false) {
           setVerify({ ...verify, [verifyKey]: 'success' });
+          setIsOpen(true);
         }
       } else if (verifyKey === 'usernameVerify') {
         const response: boolean = await getUsernameOverlapVerify(
@@ -56,7 +63,7 @@ const SignUp: React.FC = () => {
         );
         if (response === true) {
           setVerify({ ...verify, [verifyKey]: 'overlap' });
-        } else {
+        } else if (response === false) {
           setVerify({ ...verify, [verifyKey]: 'success' });
         }
       } else {
@@ -95,6 +102,11 @@ const SignUp: React.FC = () => {
       if (response === 201) {
         router.push('/user/login');
         reset();
+      } else if (response === 404) {
+        setAuthState('none');
+        setTimeout(() => {
+          setAuthState('');
+        }, 1500);
       } else {
         alert('준비 중 입니다...');
       }
@@ -123,6 +135,7 @@ const SignUp: React.FC = () => {
                 blurHandle(emailRegExp.test(getValues('email')), 'emailVerify');
               },
             })}
+            disabled={emailInputDisable === true}
             required
           />
           {verify.emailVerify === 'fail' ? (
@@ -246,6 +259,31 @@ const SignUp: React.FC = () => {
           }
         />
       </form>
+      {isOpen === true ? (
+        <Modal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          buttonName="발송하기"
+          onClick={async () => {
+            await postUserEmailAuth(getValues('email'));
+            setIsOpen(false);
+            setEmailInputDisable(true);
+          }}
+        >
+          <span>
+            작성하신 이메일로 발송된 메일을 인증하셔야 회원가입이 가능합니다.
+          </span>
+        </Modal>
+      ) : null}
+      <div
+        className={`${
+          authState === 'none' ? 'flex' : 'hidden'
+        } absolute w-3/4 bg-white border-2 border-subColor top-72 rounded-full justify-center h-10 items-center animate-dropDown`}
+      >
+        <span className="text-subColor font-semibold">
+          이메일 인증을 하셔야 합니다!
+        </span>
+      </div>
     </div>
   );
 };

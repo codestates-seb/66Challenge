@@ -68,7 +68,7 @@ const Post = () => {
 
   const titleRegExp = /^[A-Za-z0-9가-힇\s]{5,20}$/;
   const subtitleRegExp = /^[A-Za-z0-9가-힇\s]{5,10}$/;
-  const bodyRegExp = /^[A-Za-z0-9가-힇\s`~!@#$%^&*()-_=+]{100,}$/;
+  const bodyRegExp = /^[A-Za-z0-9가-힇\s`~!@#$%^&*()-_=+]{50,}$/;
 
   const blurHandle = (verifyBoolean: boolean, verifyKey: string): void => {
     if (verifyBoolean) {
@@ -136,7 +136,7 @@ const Post = () => {
       const response = await postHabit({ data: formData });
       console.log(response);
       router.push(`/habit/detail/${response?.overview?.habitId}`);
-      // reset();
+      reset();
     }
   };
 
@@ -291,7 +291,7 @@ const Post = () => {
           <textarea
             id="body"
             className={`min-h-[150px] ${inputDefaultClassName}`}
-            placeholder="습관에 대한 소개글을 최소 100자 이상 작성해주세요."
+            placeholder="습관에 대한 소개글을 최소 50자 이상 작성해주세요."
             onKeyDown={(e) => {
               InputElKeyEvent(e, 'authStartTime');
             }}
