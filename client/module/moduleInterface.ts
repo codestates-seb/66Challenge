@@ -38,14 +38,8 @@ interface habitGeneralProps extends deleteHabitProps {
   userId: number;
 }
 
-interface PostHabitData extends HabitFormValues {
-  habitImage: File | null;
-  successImage: File | null;
-  failImage: File | null;
-}
-
 interface postHabitProps {
-  data: PostHabitData;
+  data: HabitFormValues;
 }
 
 interface getHabitsSearchProps extends pageAndSize {
@@ -56,9 +50,15 @@ interface getHabitsSearchCategoryProps extends pageAndSize {
   categoryId: number;
 }
 
-interface getHabitsInHomeProps extends pageAndSize {
+interface getHabitsInHomeProps {
+  page?: string;
+  size: string;
   type: string;
   userId?: number;
+}
+
+interface patchHabitDetailProps extends habitGeneralProps {
+  data: unknown;
 }
 
 // habitFunctionModule
@@ -132,6 +132,7 @@ export type {
   getUserCertificateProps,
   habitGeneralProps,
   postHabitProps,
+  patchHabitDetailProps,
   deleteHabitProps,
   getReviewsProps,
   postHabitReviewProps,

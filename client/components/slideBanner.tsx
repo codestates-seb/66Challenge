@@ -26,12 +26,14 @@ interface SlideBannerProps {
   bannerCont: Array<BannerContType>;
   t: number;
   pagination: boolean;
+  maxHeight?: string;
 }
 
 export const SlideBanner: React.FC<SlideBannerProps> = ({
   bannerCont,
   t,
   pagination,
+  maxHeight,
 }) => {
   const router = useRouter();
   const bannerClickEvent = (bannerLink: string): void => {
@@ -55,7 +57,7 @@ export const SlideBanner: React.FC<SlideBannerProps> = ({
   return (
     <div className="slidebanner-container relative overflow-hidden">
       <Flicking
-        className="[&>div]:flex"
+        className={`[&>div]:flex ${maxHeight}`}
         plugins={plugins}
         circular={true}
         horizontal={true}

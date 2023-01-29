@@ -1,10 +1,5 @@
 import { SlideBanner } from '../components/slideBanner';
-import {
-  slideData,
-  subSlideData,
-  categoryData,
-  habitWrapperData,
-} from '../data/homeStaticData';
+import { slideData, subSlideData, categoryData } from '../data/homeStaticData';
 import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
 import Image from 'next/image';
@@ -43,14 +38,14 @@ const Home: React.FC = () => {
       userId,
       type: 'popularity',
       page: '1',
-      size: '30',
-    }).then((data) => setHabitsInHome1(data.slice(0, 10)));
+      size: '10',
+    }).then((data) => setHabitsInHome1(data));
     getHabitsInHome({
       userId,
       type: 'recommend',
       page: '1',
-      size: '30',
-    }).then((data) => setHabitsInHome2(data.slice(0, 10)));
+      size: '10',
+    }).then((data) => setHabitsInHome2(data));
   }, []);
 
   return (
@@ -89,7 +84,12 @@ const Home: React.FC = () => {
         />
       </div>
       <div className="py-[20px]">
-        <SlideBanner bannerCont={subSlideData} t={4000} pagination={false} />
+        <SlideBanner
+          bannerCont={subSlideData}
+          t={4000}
+          pagination={false}
+          maxHeight="[&>div]:max-h-[200px]"
+        />
       </div>
       <div>
         <HabitWrapperHorizontal

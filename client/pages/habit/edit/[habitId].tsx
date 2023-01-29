@@ -2,38 +2,75 @@ import { useForm } from 'react-hook-form';
 import { FileUploader } from '../../../components/fileUploader';
 import { useState, useEffect } from 'react';
 import { useAppSelector } from '../../../ducks/store';
-import { postHabit } from '../../../module/habitFunctionMoudules';
+import { patchHabitDetail } from '../../../module/habitFunctionMoudules';
 import { useRouter } from 'next/router';
-
-interface HabitFormValues {
-  title: string;
-  subtitle: string;
-  body: string;
-  category: string;
-  authEndTime: string;
-  authStartTime: string;
-  habitImage: File | null;
-  successImage: File | null;
-  failImage: File | null;
-}
-
-export type { HabitFormValues };
+import { ReactQuillWrapper } from '../../../module/reactQuill';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import { getHabitDetail } from '../../../module/habitFunctionMoudules';
+import type { HabitFormValues } from '../post';
+import type { habitDataType } from '../detail/[habitId]';
+import { habitCategoryData } from '../../../data/categoryData';
 
 const EditHabit = () => {
   const { userId } = useAppSelector((state) => state.loginIdentity);
   const { register, handleSubmit, getValues, setFocus, watch, reset } =
     useForm<HabitFormValues>();
   const router = useRouter();
+  const habitId = +router.query.habitId;
+  const [baseData, setBaseData] = useState<habitDataType>({});
 
-  useEffect(() => {
-    if (router.isReady) {
-    }
-  }, [router.isReady]);
+  const [bodyData, setBodyData] = useState<string>('');
+  const [bodyHTMLData, setBodyHTMLData] = useState<string>('');
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, false] }],
+      ['bold', 'underline'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+        { align: [] },
+      ],
+    ],
+  };
+
+  const formats = [
+    'header',
+    'font',
+    'size',
+    'bold',
+    'italic',
+    'underline',
+    'list',
+    'bullet',
+    'align',
+    'indent',
+    'color',
+  ];
+  const bodyDataHandle = (
+    value: string,
+    editor: ReactQuill.UnprivilegedEditor,
+  ) => {
+    setBodyHTMLData(value);
+    setBodyData(editor.getText());
+  };
 
   const { habitImage, successImage, failImage } = watch();
   const [habitImagePreview, setHabitImagePreview] = useState('');
   const [successImagePreview, setSuccessImagePreview] = useState('');
   const [failImagePreview, setFailImagePreview] = useState('');
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    getHabitDetail({ userId, habitId }).then((data) => {
+      setBaseData(data);
+      setHabitImagePreview(data.overview.thumbImgUrl);
+      setSuccessImagePreview(data.image.succImgUrl);
+      setFailImagePreview(data.image.failImgUrl);
+    });
+  }, [router.isReady]);
 
   useEffect(() => {
     if (habitImage && habitImage.length > 0) {
@@ -53,27 +90,25 @@ const EditHabit = () => {
 
   useEffect(() => {
     if (failImage && failImage.length > 0) {
-      setVerify({ ...verify, failImageVerify: 'success' });
       const file = failImage[0];
       setFailImagePreview(URL.createObjectURL(file));
     }
   }, [failImage]);
 
   const [verify, setVerify] = useState({
-    titleVerify: '',
-    subtitleVerify: '',
-    categoryVerify: '',
-    habitImageVerify: '',
-    bodyVerify: '',
+    titleVerify: 'success',
+    subtitleVerify: 'success',
+    categoryVerify: 'success',
+    habitImageVerify: 'success',
+    bodyVerify: 'success',
     authTimeVerify: 'success',
-    successImageVerify: '',
-    failImageVerify: '',
+    successImageVerify: 'success',
     agreeVerify: 'fail',
   });
 
-  const titleRegExp = /^[A-Za-z0-9가-힇\s]{5,20}$/;
+  const titleRegExp = /^[A-Za-z0-9가-힇\s]{5,30}$/;
   const subtitleRegExp = /^[A-Za-z0-9가-힇\s]{5,10}$/;
-  const bodyRegExp = /^[A-Za-z0-9가-힇\s`~!@#$%^&*()-_=+]{100,}$/;
+  const bodyRegExp = /^[A-Za-z0-9가-힇\s`~!@#$%^&*()-_=+]{50,}$/;
 
   const blurHandle = (verifyBoolean: boolean, verifyKey: string): void => {
     if (verifyBoolean) {
@@ -84,10 +119,9 @@ const EditHabit = () => {
   };
 
   const postButtonClick = async (data: HabitFormValues) => {
-    const {
+    let {
       title,
       subtitle,
-      body,
       category,
       authEndTime,
       authStartTime,
@@ -96,51 +130,77 @@ const EditHabit = () => {
       failImage,
     } = data;
 
+    if (!title.length) {
+      title = baseData.overview.title;
+    }
+    if (!subtitle.length) {
+      subtitle = baseData.detail.subTitle;
+    }
+    if (!authEndTime.length) {
+      authEndTime = baseData.detail.authEndTime;
+    }
+    if (!authStartTime.length) {
+      authStartTime = baseData.detail.authStartTime;
+    }
+
     if (titleRegExp.test(title) === false) {
       setVerify({ ...verify, titleVerify: 'fail' });
     } else if (subtitleRegExp.test(subtitle) === false) {
       setVerify({ ...verify, subtitleVerify: 'fail' });
     } else if (category === 'default') {
       setVerify({ ...verify, categoryVerify: 'fail' });
-    } else if (habitImage.length === 0) {
-      setVerify({ ...verify, habitImageVerify: 'fail' });
-    } else if (bodyRegExp.test(body) === false) {
+    } else if (bodyRegExp.test(bodyData) === false) {
       setVerify({ ...verify, bodyVerify: 'fail' });
     } else if (authStartTime < authEndTime === false) {
       setVerify({ ...verify, authTimeVerify: 'fail' });
-    } else if (successImage.length === 0) {
-      setVerify({ ...verify, successImageVerify: 'fail' });
-    } else if (failImage.length === 0) {
-      setVerify({ ...verify, failImageVerify: 'fail' });
     } else {
       const formData = new FormData();
+      const changedData = { authType: 'photo' };
+      console.log(changedData);
+      if (title !== baseData.overview.title) {
+        changedData['title'] = title;
+      }
+      if (subtitle !== baseData.detail.subTitle) {
+        changedData['subTitle'] = subtitle;
+      }
+      if (bodyData !== baseData.overview.body) {
+        changedData['body'] = bodyData;
+      }
+      if (bodyHTMLData !== baseData.detail.bodyHTML) {
+        changedData['bodyHTML'] = bodyHTMLData;
+      }
+      if (category !== baseData.detail.category) {
+        changedData['category'] = category;
+      }
+      if (authEndTime !== baseData.detail.authEndTime) {
+        changedData['authEndTime'] = authEndTime;
+      }
+      if (authStartTime !== baseData.detail.authStartTime) {
+        changedData['authStartTime'] = authStartTime;
+      }
+
       formData.append(
         'data',
-        new Blob(
-          [
-            JSON.stringify({
-              title,
-              subTitle: subtitle,
-              body,
-              category,
-              authEndTime,
-              authStartTime,
-              authType: 'photo',
-              hostUserId: userId,
-            }),
-          ],
-          {
-            type: 'application/json',
-          },
-        ),
+        new Blob([JSON.stringify(changedData)], {
+          type: 'application/json',
+        }),
       );
-      formData.append('thumbImg', habitImage[0]);
-      formData.append('succImg', successImage[0]);
-      formData.append('failImg', failImage[0]);
+      if (habitImagePreview !== baseData.overview.thumbImgUrl) {
+        formData.append('thumbImg', habitImage[0]);
+      }
+      if (successImagePreview !== baseData.image.succImgUrl) {
+        formData.append('succImg', successImage[0]);
+      }
+      if (failImagePreview !== baseData.image.failImgUrl) {
+        formData.append('failImg', failImage[0]);
+      }
 
-      const response = await postHabit({ data: formData });
-      console.log(response);
-      router.push(`/habit/detail/${response?.overview?.habitId}`);
+      const response = await patchHabitDetail({
+        habitId,
+        userId,
+        data: formData,
+      });
+      // router.push(`/habit/detail/${response?.overview?.habitId}`);
       reset();
     }
   };
@@ -148,7 +208,6 @@ const EditHabit = () => {
   type nextInput =
     | 'title'
     | 'subtitle'
-    | 'body'
     | 'category'
     | 'authEndTime'
     | 'authStartTime';
@@ -193,6 +252,7 @@ const EditHabit = () => {
             id="title"
             className={`h-[35px] ${inputDefaultClassName}`}
             placeholder="습관명을 5~20자 이내로 입력해주세요."
+            defaultValue={baseData?.overview?.title}
             onKeyDown={(e) => {
               InputElKeyEvent(e, 'subtitle');
             }}
@@ -218,6 +278,7 @@ const EditHabit = () => {
             id="subtitle"
             className={`h-[35px] ${inputDefaultClassName}`}
             placeholder="부제를 5~10자 이내로 입력해주세요."
+            defaultValue={baseData?.detail?.subTitle}
             onKeyDown={(e) => {
               InputElKeyEvent(e, 'category');
             }}
@@ -244,7 +305,7 @@ const EditHabit = () => {
           <select
             id="category"
             className={`h-[35px] ${inputDefaultClassName} bg-white`}
-            defaultValue="default"
+            defaultValue={baseData?.detail?.category}
             {...register('category', {
               onBlur: () => {
                 blurHandle(
@@ -254,17 +315,13 @@ const EditHabit = () => {
               },
             })}
           >
-            <option value="default" disabled>
-              카테고리를 선택해주세요.
-            </option>
-            <option value="exercise">운동</option>
-            <option value="dietary">식습관</option>
-            <option value="study">학습</option>
-            <option value="life">일상생활</option>
-            <option value="hobby">취미</option>
-            <option value="selfcare">자기관리</option>
-            <option value="eco">환경</option>
-            <option value="etc">기타</option>
+            {habitCategoryData.map((el) => {
+              return (
+                <option value={el.value} key={el.value}>
+                  {el.title}
+                </option>
+              );
+            })}
           </select>
           {verify.categoryVerify === 'fail' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
@@ -293,19 +350,21 @@ const EditHabit = () => {
           <label htmlFor="body" className="text-base font-semibold mb-1">
             습관 소개
           </label>
-          <textarea
+          <ReactQuillWrapper
             id="body"
-            className={`min-h-[150px] ${inputDefaultClassName}`}
-            placeholder="습관에 대한 소개글을 최소 100자 이상 작성해주세요."
-            onKeyDown={(e) => {
-              InputElKeyEvent(e, 'authStartTime');
+            className="[&>div.ql-container]:h-[400px] rounded-md [&>div.ql-toolbar]:rounded-t-md [&>div.ql-container]:rounded-b-md [&>div.ql-container]:text-base"
+            placeholder="습관에 대한 소개글을 최소 50자 이상 작성해주세요."
+            theme="snow"
+            defaultValue={baseData?.detail?.bodyHTML}
+            modules={modules}
+            formats={formats}
+            onChange={(value, delta, source, editor) =>
+              bodyDataHandle(value, editor)
+            }
+            onBlur={(previousSelection, source, editor) => {
+              blurHandle(bodyRegExp.test(editor.getText()), 'bodyVerify');
             }}
-            {...register('body', {
-              onBlur: () => {
-                blurHandle(bodyRegExp.test(getValues('body')), 'bodyVerify');
-              },
-            })}
-          ></textarea>
+          />
           {verify.bodyVerify === 'fail' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
               습관에 대한 설명글을 작성해주세요.
@@ -322,12 +381,13 @@ const EditHabit = () => {
               id="authTime"
               type="time"
               className={`h-[70px] text-base w-full rounded-tl-md text-center bg-slate-50 rounded-bl-md px-2 pt-[30px] border border-r-0 focus:border-mainColor focus:border-r outline-0 mb-1`}
-              defaultValue="00:00"
+              defaultValue={baseData?.detail?.authStartTime}
               onKeyDown={(e) => {
                 InputElKeyEvent(e, 'authEndTime');
               }}
               {...register('authStartTime', {
                 onBlur: () => {
+                  console.log(getValues('authStartTime'));
                   blurHandle(
                     getValues('authStartTime') < getValues('authEndTime'),
                     'authTimeVerify',
@@ -338,12 +398,13 @@ const EditHabit = () => {
             <input
               type="time"
               className={`h-[70px] text-base w-full rounded-tr-md text-center bg-slate-50 rounded-br-md px-2 pt-[30px] border focus:border-mainColor outline-0 mb-1`}
-              defaultValue="23:59"
+              defaultValue={baseData?.detail?.authEndTime}
               onKeyDown={(e) => {
                 InputElKeyEvent(e);
               }}
               {...register('authEndTime', {
                 onBlur: () => {
+                  console.log(getValues('authEndTime'));
                   blurHandle(
                     getValues('authStartTime') < getValues('authEndTime'),
                     'authTimeVerify',
@@ -369,14 +430,14 @@ const EditHabit = () => {
           <div className="text-base font-semibold mb-1">습관 인증 사진</div>
           <div className="flex flex-col">
             <div className="text-center text-green-600 py-2.5 text-sm font-bold">
-              올바른 인증 사례
+              올바른 인증 사례(필수)
             </div>
             <FileUploader
               imgFilePreview={successImagePreview}
               register={register('successImage')}
             />
             <div className="text-center text-rose-600 pt-5 pb-2.5 text-sm font-bold">
-              잘못된 인증 사례
+              잘못된 인증 사례(선택)
             </div>
             <FileUploader
               imgFilePreview={failImagePreview}
@@ -386,8 +447,7 @@ const EditHabit = () => {
           <span className="pt-2.5 text-sm text-center font-semibold">
             사진의 가로 ・ 세로의 비율은 1:1이 권장됩니다.
           </span>
-          {verify.successImageVerify === 'fail' ||
-          verify.failImageVerify === 'fail' ? (
+          {verify.successImageVerify === 'fail' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
               습관 형성을 위한 인증 사진의 올바른 사례와 잘못된 사례에 대한
               이미지를 모두 업로드 해주세요.
@@ -423,7 +483,7 @@ const EditHabit = () => {
             type="submit"
             disabled={!Object.values(verify).every((el) => el === 'success')}
           >
-            등록하기
+            수정하기
           </button>
         </div>
       </form>

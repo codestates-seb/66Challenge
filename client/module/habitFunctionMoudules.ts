@@ -5,6 +5,7 @@ import type {
   getHabitsSearchProps,
   getHabitsSearchCategoryProps,
   getHabitsInHomeProps,
+  patchHabitDetailProps,
 } from './moduleInterface';
 import { getCookie } from './cookies';
 import { GrRestroomWomen } from 'react-icons/gr';
@@ -38,6 +39,24 @@ export async function getHabitDetail({ habitId, userId }: habitGeneralProps) {
     console.error(e);
   }
 }
+export async function patchHabitDetail({
+  habitId,
+  userId,
+  data,
+}: patchHabitDetailProps) {
+  try {
+    const response = await axios
+      .patch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}?userId=${userId}`,
+        data,
+      )
+      .then((res) => res.data);
+    return response;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export async function deleteHabit({ habitId }: deleteHabitProps) {
   try {
     const response = await axios
@@ -167,7 +186,7 @@ export async function getHabitsInHome({
   try {
     const response = await axios
       .get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/sort/${type}/?${
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/sort/${type}?${
           userId ? 'userId=' + userId + '&' : ''
         }page=${page}&size=${size}`,
       )
