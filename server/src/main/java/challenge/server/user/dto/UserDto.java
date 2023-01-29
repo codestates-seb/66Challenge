@@ -115,6 +115,8 @@ public class UserDto {
         private String username;
 
         private String profileImageUrl;
+        private String age; // Java에서 숫자로 변환
+        private String gender; // female, male
 
 //        private String password;
 //        private String userStatus;
