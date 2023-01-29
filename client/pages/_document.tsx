@@ -83,10 +83,6 @@ export default class MyDocument extends Document {
             content="/image/favicons/ms-icon-144x144.png"
           />
           <meta name="theme-color" content="#ffffff" />
-          <meta
-            http-equiv="Content-Security-Policy"
-            content="upgrade-insecure-requests"
-          />
         </Head>
         <body>
           <Main />
