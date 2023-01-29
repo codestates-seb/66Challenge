@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static challenge.server.user.entity.QEmailVerification.emailVerification;
+import static challenge.server.security.user.entity.QEmailVerification.emailVerification;
+
 
 @Repository
 @RequiredArgsConstructor
