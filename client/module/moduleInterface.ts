@@ -16,12 +16,12 @@ interface SignUpProps {
 
 interface UserGeneralProps {
   userId: number | null;
-  password?: string;
+  password?: string | null;
 }
 
 interface PatchUserInfoProps extends UserGeneralProps {
-  username: string;
-  password: string;
+  username?: string | null;
+  password?: string | null;
 }
 
 interface getUserCertificateProps extends UserGeneralProps {
