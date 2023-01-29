@@ -29,7 +29,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private final AuthenticationManager authenticationManager;
+    public AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
     private final UserService userService;
 
