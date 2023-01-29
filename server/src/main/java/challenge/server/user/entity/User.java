@@ -38,7 +38,8 @@ public class User extends BaseTimeEntity {
     @Column(length = 255, nullable = false, unique = true)
     private String username;
 
-    private int age = 0;
+    @ColumnDefault(value = "0")
+    private int age;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;

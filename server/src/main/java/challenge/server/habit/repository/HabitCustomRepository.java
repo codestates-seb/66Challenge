@@ -1,6 +1,7 @@
 package challenge.server.habit.repository;
 
 import challenge.server.habit.entity.Habit;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public interface HabitCustomRepository {
 
     List<Habit> findAllNoOffset(Long lastHabitId, int size);
 
-    List<Habit> findAllByScore(int page, int size);   // 추천순 정렬
+    List<Habit> findAllByScore(Pageable pageable);   // 추천순 정렬
 
-    List<Habit> findAllByPopularity(int page, int size);  // 인기순 정렬
+    List<Habit> findAllByPopularity(Pageable pageable);  // 인기순 정렬
 
     List<Habit> findAllByNewest(Long lastHabitId, int size);  // 신규순 정렬
 }

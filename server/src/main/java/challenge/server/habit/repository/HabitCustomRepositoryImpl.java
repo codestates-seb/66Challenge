@@ -4,6 +4,7 @@ import challenge.server.habit.entity.Habit;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -65,22 +66,22 @@ public class HabitCustomRepositoryImpl implements HabitCustomRepository {
     }
 
     @Override
-    public List<Habit> findAllByScore(int page, int size) {
+    public List<Habit> findAllByScore(Pageable pageable) {
         return jpaQueryFactory
                 .selectFrom(habit)
                 .orderBy(habit.avgScore.desc(), habit.bookmarks.size().desc(), habit.habitId.desc())
-                .offset(page)
-                .limit(size)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
     @Override
-    public List<Habit> findAllByPopularity(int page, int size) {
+    public List<Habit> findAllByPopularity(Pageable pageable) {
         return jpaQueryFactory
                 .selectFrom(habit)
                 .orderBy(habit.challengers.desc(), habit.avgScore.desc(), habit.bookmarks.size().desc(), habit.habitId.desc())
-                .offset(page)
-                .limit(size)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
