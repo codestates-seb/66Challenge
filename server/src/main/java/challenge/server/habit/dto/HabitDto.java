@@ -1,8 +1,12 @@
 package challenge.server.habit.dto;
 
+import challenge.server.habit.entity.Habit;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
+
+import static challenge.server.challenge.entity.Challenge.Status.*;
+import static java.lang.Math.round;
 
 public class HabitDto {
     @Getter
@@ -84,4 +88,15 @@ public class HabitDto {
         Detail detail;
         Image image;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ResponseStatistics {
+        int challenge;
+        int success;
+        int fail;
+    }
+
 }
