@@ -47,12 +47,12 @@ export function KaKaoShare({ habitData }: IhabitData) {
           link: {
             mobileWebUrl:
               habitData === undefined
-                ? 'http://localhost:3000'
-                : `http://localhost:3000/habit/detail/${habitData.habitId}`,
+                ? 'http://13.209.20.62:3000/'
+                : `http://13.209.20.62:3000//habit/detail/${habitData.habitId}`,
             webUrl:
               habitData === undefined
-                ? 'http://localhost:3000'
-                : `http://localhost:3000/habit/detail/${habitData.habitId}`,
+                ? 'http://13.209.20.62:3000/'
+                : `http://13.209.20.62:3000//habit/detail/${habitData.habitId}`,
           },
         },
         buttons: [
@@ -61,12 +61,12 @@ export function KaKaoShare({ habitData }: IhabitData) {
             link: {
               mobileWebUrl:
                 habitData === undefined
-                  ? 'http://localhost:3000'
-                  : `http://localhost:3000/habit/detail/${habitData.habitId}`,
+                  ? 'http://13.209.20.62:3000/'
+                  : `http://13.209.20.62:3000//habit/detail/${habitData.habitId}`,
               webUrl:
                 habitData === undefined
-                  ? 'http://localhost:3000'
-                  : `http://localhost:3000/habit/detail/${habitData.habitId}`,
+                  ? 'http://13.209.20.62:3000/'
+                  : `http://13.209.20.62:3000//habit/detail/${habitData.habitId}`,
             },
           },
         ],

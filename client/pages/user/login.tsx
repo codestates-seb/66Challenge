@@ -80,7 +80,7 @@ const Login: React.FC = () => {
   return (
     <div className="login-container w-[300px] mx-auto flex flex-col justify-center items-center -mb-[100px] -mt-[56px] h-[100vh]">
       <div className="logo flex justify-center w-full mb-[40px]">
-        <img src="/image/logo/logoVertical.svg" />
+        <img src="/image/logo/LogoVertical.svg" />
       </div>
       <div
         className={`speech-bubble relative bg-mainColor text-white px-[14px] py-[6px] text-[12px] leading-[14px] rounded-[12px] animate-speechBubble mb-[10px] ${speechBubleBefore} ${speechBubleAfter}`}

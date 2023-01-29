@@ -231,9 +231,7 @@ export async function postUserEmailAuth(email: string) {
     const response = await axios
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/email-verification-requests?email=${email}`,
-        {
-          email,
-        },
+        null,
       )
       .then((res) => res.status);
   } catch (e) {
