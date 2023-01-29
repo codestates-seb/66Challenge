@@ -37,6 +37,7 @@ public class HabitMapperImpl {
                 .title(post.getTitle())
                 .subTitle(post.getSubTitle())
                 .body(post.getBody())
+                .mdBody(post.getMdBody())
 
                 .category(categoryService.findByType(post.getCategory()))
                 .host(userService.findUser(post.getHostUserId()))
@@ -58,6 +59,7 @@ public class HabitMapperImpl {
                 .title(patch.getTitle())
                 .subTitle(patch.getSubTitle())
                 .body(patch.getBody())
+                .mdBody(patch.getMdBody())
 
                 .category(categoryService.findByType(patch.getCategory()))
 
@@ -116,18 +118,18 @@ public class HabitMapperImpl {
         return overview;
     }
 
-    // TODO Refactor :: Review 테이블에 데이터가 없다면 0.0 리턴
-    private double getHabitScore(Long habitId) {
-        Double score = reviewRepository.findAverage(habitId);
-        if(score!=null) return Math.round(score * 100) / 100d;
-        else return 0d;
-    }
+//    private double getHabitScore(Long habitId) {
+//        Double score = reviewRepository.findAverage(habitId);
+//        if(score!=null) return Math.round(score * 100) / 100d;
+//        else return 0d;
+//    }
 
     protected Detail habitToDetail(Habit habit, Long userId) {
         if(habit==null) return null;
         Detail detail = Detail.builder()
                 .hostUsername(habit.getHost().getUsername())
                 .subTitle(habit.getSubTitle())
+                .mdBody(habit.getMdBody())
                 .authType(habit.getAuthType())
                 .authStartTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthStartTime()).substring(0, 5))
                 .authEndTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthEndTime()).substring(0, 5))
