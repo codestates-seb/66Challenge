@@ -1,6 +1,5 @@
 package challenge.server.security.controller;
 
-import challenge.server.security.dto.LoginDto;
 import challenge.server.security.dto.SecurityDto;
 import challenge.server.security.service.SecurityService;
 import challenge.server.user.entity.User;

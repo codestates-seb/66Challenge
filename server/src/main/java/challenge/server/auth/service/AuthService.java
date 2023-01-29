@@ -75,8 +75,4 @@ public class AuthService {
         return authRepository.findById(authId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.AUTH_NOT_FOUND));
     }
-
-    public List<Auth> findAllByHabit(Long lastId, Long habitId, int size) {
-        return authRepository.findAllByChallengeHabitHabitId(lastId, habitId, size);
-    }
 }
