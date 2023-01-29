@@ -61,14 +61,14 @@ public class HabitController {
     @PostMapping
     public ResponseEntity postHabit(@RequestPart("thumbImg") MultipartFile thumbImg,
                                     @RequestPart("succImg") MultipartFile succImg,
-                                    @RequestPart("failImg") MultipartFile failImg,
+                                    @RequestPart(value = "failImg", required = false) MultipartFile failImg,
                                     @RequestPart("data") @Valid HabitDto.Post habitPostDto) {
         // TODO 이미지 파일 리스트로 받기
         // TODO 아래 과정 컨트롤러 말고 DTO에서 처리하기
         Habit habit = habitMapper.habitPostDtoToHabit(habitPostDto);
         habit.setThumbImgUrl(fileUploadService.save(thumbImg));
         habit.setSuccImgUrl(fileUploadService.save(succImg));
-        habit.setFailImgUrl(fileUploadService.save(failImg));
+        if(failImg!=null) habit.setFailImgUrl(fileUploadService.save(failImg));
 
         Habit createHabit = habitService.createHabit(habit);
 
