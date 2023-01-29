@@ -32,6 +32,7 @@ const SignUp: React.FC = () => {
     agreeVerify: 'fail',
   });
   const [authState, setAuthState] = useState('');
+  const [emailInputDisable, setEmailInputDisable] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const inputContainerDefaultClassName: string =
     'flex flex-col w-full h-[80px] mb-5';
@@ -134,6 +135,7 @@ const SignUp: React.FC = () => {
                 blurHandle(emailRegExp.test(getValues('email')), 'emailVerify');
               },
             })}
+            disabled={emailInputDisable === true}
             required
           />
           {verify.emailVerify === 'fail' ? (
@@ -265,6 +267,7 @@ const SignUp: React.FC = () => {
           onClick={async () => {
             await postUserEmailAuth(getValues('email'));
             setIsOpen(false);
+            setEmailInputDisable(true);
           }}
         >
           <span>
