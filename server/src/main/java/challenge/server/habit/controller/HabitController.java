@@ -71,6 +71,7 @@ public class HabitController {
         habit.setFailImgUrl(fileUploadService.save(failImg));
 
         Habit createHabit = habitService.createHabit(habit);
+
         return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(createHabit, habitPostDto.getHostUserId()), HttpStatus.CREATED);
     }
 
@@ -186,9 +187,10 @@ public class HabitController {
 
     // 습관 조회 - 통계 탭 - 통계 DTO
     @GetMapping("/{habit-id}/statistics")
-    public ResponseEntity getHabitByStatistics(@PathVariable("habit-id") @Positive Long habitId) {
-        //TODO통계 테이블 설정 후 추가 예정
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity getHabitStatistics(@PathVariable("habit-id") @Positive Long habitId) {
+//        HabitStatistics habitStatistics = habitStatisticsService.getHabitStatistics(habitId);
+        Habit habit = habitService.findHabit(habitId);
+        return new ResponseEntity(habitMapper.makeHabitStatistics(habit), HttpStatus.OK);
     }
 
     // 습관 조회 - 후기 탭 - Review 리스트 DTO
