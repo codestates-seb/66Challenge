@@ -7,10 +7,19 @@ import type { authArticleProps } from '../../../../components/authArticle';
 export default function HabitDetailAuth() {
   const router = useRouter();
   const habitId = router.query.habitId;
-  const url: string = `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/auths?`;
+  const url: string = `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/auths/?`;
   const [authData, setAuthData] = useState<Array<authArticleProps>>([]);
-  const [page, setPage] = useState(1);
-  const [setTarget] = useIntersection(url, page, setPage, setAuthData);
+  const [lastId, setLastId] = useState<number>(null);
+  const size = 15;
+  const type = 'auth';
+  const [setTarget] = useIntersection(
+    url,
+    lastId,
+    setLastId,
+    setAuthData,
+    size,
+    type,
+  );
 
   return (
     <div className="habit-detail-auth-container px-5 pt-5">
