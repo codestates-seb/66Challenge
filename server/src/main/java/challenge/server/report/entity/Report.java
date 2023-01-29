@@ -35,9 +35,13 @@ public class Report extends BaseTimeEntity {
     private User reported;
 
     public enum ReportType {
-        PORNOGRAPHY(1),
-        ADVERTISEMENT(2),
-        ABUSE(3);
+        UNCORRECT(1),
+        DUPLICATION(2),
+        AD(3),
+        ABUSE(4),
+        OBSCENE(5),
+        PERSONALINFO(6),
+        ETC(7);
 
         @Getter
         private int num;

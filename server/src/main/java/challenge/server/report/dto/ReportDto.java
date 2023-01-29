@@ -10,7 +10,7 @@ public class ReportDto {
     @AllArgsConstructor
     public static class Post {
         private Long postId;
-        private String postType; // enum 타입 ORDINAL or STRING 정하기
+        private String postType;
         private String reportType;
         private Long reporterUserId;
         private Long reportedUserId;
@@ -23,7 +23,7 @@ public class ReportDto {
     public static class Response {
         private Long reportId;
         private Long postId;
-        private String postType; // enum 타입 ORDINAL or STRING 정하기
+        private String postType;
         private String reportType;
         private Long reporterUserId;
         private Long reportedUserId;
