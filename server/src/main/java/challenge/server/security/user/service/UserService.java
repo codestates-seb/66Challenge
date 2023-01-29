@@ -47,7 +47,6 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-    private final LogoutListRepository logoutListRepository;
     private final EmailVerificationRepository emailVerificationRepository;
     private final BookmarkRepository bookmarkRepository;
     private final HabitRepository habitRepository;
