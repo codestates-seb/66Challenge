@@ -115,16 +115,14 @@ export async function getUserCertificate({
   habitId,
 }: getUserCertificateProps) {
   try {
-    const response = await axios
-      .get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/${habitId}/certificates`,
-        {
-          headers: {
-            Authorization: getCookie('accessJwtToken'),
-          },
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/${habitId}/certificates`,
+      {
+        headers: {
+          Authorization: getCookie('accessJwtToken'),
         },
-      )
-      .then((res) => console.log(res));
+      },
+    );
     return response;
   } catch (e) {
     console.error(e);

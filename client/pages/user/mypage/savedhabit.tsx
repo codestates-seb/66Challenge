@@ -6,9 +6,20 @@ import { useAppSelector } from '../../../ducks/store';
 const SavedHabit: FC = () => {
   const userId: number = useAppSelector((state) => state.loginIdentity.userId);
   const [savedHabits, setSavedHabits] = useState([]);
-  const [page, setPage] = useState<number>(1);
   const url: string = `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/bookmarks?`;
-  const [setTarget] = useIntersection(url, page, setPage, setSavedHabits);
+  const [lastId, setLastId] = useState<number>(null);
+  const size = 15;
+  const type = 'habit';
+
+  const [setTarget] = useIntersection(
+    url,
+    lastId,
+    setLastId,
+    setSavedHabits,
+    size,
+    type,
+  );
+
   return (
     <div className="h-screen w-full overflow-y-scroll scrollbar-hide absolute">
       <HabitWrapperVertical

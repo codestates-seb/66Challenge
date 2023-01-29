@@ -7,6 +7,8 @@ import { CertificationModal } from './certificationModal';
 import { useAppDispatch } from '../ducks/store';
 import { initLoginIdentity } from '../ducks/loginIdentitySlice';
 import { KaKaoShare } from '../module/kakaoShare';
+import { getUserCertificate } from '../module/userFunctionMoudules';
+import { useAppSelector } from '../ducks/store';
 
 interface ItemProps {
   title: string;
@@ -18,6 +20,8 @@ export const MyPageMenuList = ({ email, successArr }) => {
   const [isCertOpen, setIsCertOpen] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [certId, setCertId] = useState(null);
+  const [certInfo, setCertInfo] = useState(null);
+  const userId = useAppSelector((state) => state.loginIdentity.userId);
   const dispatch = useAppDispatch();
 
   const CertDropDown = ({ success }): JSX.Element => {
@@ -39,6 +43,12 @@ export const MyPageMenuList = ({ email, successArr }) => {
                   <button
                     className={`border-2 text-sm mr-4`}
                     onClick={(): void => {
+                      getUserCertificate({
+                        userId,
+                        habitId: el.habitId,
+                      }).then((res) => {
+                        setCertInfo(res.data);
+                      });
                       setCertId(el.habitId);
                       setIsCertOpen(!isCertOpen);
                     }}
@@ -106,7 +116,7 @@ export const MyPageMenuList = ({ email, successArr }) => {
           onClick={() => {
             console.log(certId);
           }}
-          children={<CertificationModal />}
+          children={<CertificationModal data={certInfo} />}
         />
       )}
       {isInviteOpen && (
