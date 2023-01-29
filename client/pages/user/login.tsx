@@ -80,7 +80,7 @@ const Login: React.FC = () => {
   return (
     <div className="login-container w-[300px] mx-auto flex flex-col justify-center items-center -mb-[100px] -mt-[56px] h-[100vh]">
       <div className="logo flex justify-center w-full mb-[40px]">
-        <img src="/image/logo/logoVertical.svg" />
+        <img src="/image/logo/LogoVertical.svg" />
       </div>
       <div
         className={`speech-bubble relative bg-mainColor text-white px-[14px] py-[6px] text-[12px] leading-[14px] rounded-[12px] animate-speechBubble mb-[10px] ${speechBubleBefore} ${speechBubleAfter}`}
@@ -89,17 +89,23 @@ const Login: React.FC = () => {
       </div>
       <div className="sns-login w-full flex justify-evenly pb-10 mb-10 border-b border-[#e5e5e5] ">
         <div className="google-login">
-          <a href="http://13.209.179.193:8080/oauth2/authorization/google">
+          <a
+            href={`${process.env.NEXT_PUBLIC_SERVER_URL}/oauth2/authorization/google`}
+          >
             <img src="/image/logo/google.svg" />
           </a>
         </div>
         <div className="kakao-login">
-          <a href="http://13.209.179.193:8080/oauth2/authorization/kakao">
+          <a
+            href={`${process.env.NEXT_PUBLIC_SERVER_URL}/oauth2/authorization/kakao`}
+          >
             <img src="/image/logo/kakao.svg" />
           </a>
         </div>
         <div className="naver-login">
-          <a href="http://13.209.179.193:8080/oauth2/authorization/naver">
+          <a
+            href={`${process.env.NEXT_PUBLIC_SERVER_URL}/oauth2/authorization/naver`}
+          >
             <img src="/image/logo/naver.svg" />
           </a>
         </div>

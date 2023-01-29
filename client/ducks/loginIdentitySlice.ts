@@ -18,8 +18,7 @@ const loginRequest = createAsyncThunk(
         url: `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
         data,
       }).then((res) => res);
-      // TODO refresh 토큰 관련해서 처리해야 함
-      console.log(response.headers);
+
       const accessToken: string = response.headers.authorization;
       const refreshToken: string = response.headers.refresh;
       setCookie('accessJwtToken', accessToken, { path: '/' });

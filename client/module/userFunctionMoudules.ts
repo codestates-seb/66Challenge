@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 import type {
   SignUpProps,
   UserGeneralProps,
@@ -29,7 +29,9 @@ export async function postUserSignUp({
       .then((res) => res.status);
     return response;
   } catch (e) {
-    return e.response.status;
+    if (e instanceof AxiosError) {
+      return e.response.status;
+    }
   }
 }
 
@@ -91,30 +93,21 @@ export async function deleteUser({ userId }: UserGeneralProps) {
     console.error(e);
   }
 }
-export async function patchUserInfo({
-  userId,
-  username,
-  password,
-}: PatchUserInfoProps) {
+export async function patchUserInfo({ userId, body }) {
   try {
     const response = await axios
-      .patch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`,
-        {
-          username,
-          userId,
-          password,
+      .patch(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, body, {
+        headers: {
+          Authorization: getCookie('accessJwtToken'),
+          'Content-Type': 'multipart/form-data',
         },
-        {
-          headers: {
-            Authorization: getCookie('accessJwtToken'),
-          },
-        },
-      )
-      .then((res) => console.log(res));
+      })
+      .then((res) => res.status);
     return response;
   } catch (e) {
-    console.error(e);
+    if (e instanceof AxiosError) {
+      return e.response.status;
+    }
   }
 }
 export async function getUserCertificate({
@@ -122,16 +115,14 @@ export async function getUserCertificate({
   habitId,
 }: getUserCertificateProps) {
   try {
-    const response = await axios
-      .get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/${habitId}/certificates`,
-        {
-          headers: {
-            Authorization: getCookie('accessJwtToken'),
-          },
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/${habitId}/certificates`,
+      {
+        headers: {
+          Authorization: getCookie('accessJwtToken'),
         },
-      )
-      .then((res) => console.log(res));
+      },
+    );
     return response;
   } catch (e) {
     console.error(e);
@@ -224,5 +215,19 @@ export async function profileDelete({ userId }) {
     return response;
   } catch (e) {
     console.error(e);
+  }
+}
+export async function postUserEmailAuth(email: string) {
+  try {
+    const response = await axios
+      .post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/email-verification-requests?email=${email}`,
+        null,
+      )
+      .then((res) => res.status);
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      return e.response.status;
+    }
   }
 }
