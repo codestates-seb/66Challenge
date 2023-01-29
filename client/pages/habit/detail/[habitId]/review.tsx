@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { ReviewArticle } from '../../../../components/reviewArticle';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useIntersection } from '../../../../hooks/useIntersection';
 import type { reviewArticleProps } from '../../../../components/reviewArticle';
 
@@ -9,8 +9,17 @@ export default function HabitDetailReview() {
   const habitId = router.query.habitId;
   const url: string = `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews?`;
   const [reviewData, setReviewData] = useState<Array<reviewArticleProps>>([]);
-  const [page, setPage] = useState(1);
-  const [setTarget] = useIntersection(url, page, setPage, setReviewData);
+  const [lastId, setLastId] = useState<number>(null);
+  const size = 15;
+  const type = 'review';
+  const [setTarget] = useIntersection(
+    url,
+    lastId,
+    setLastId,
+    setReviewData,
+    size,
+    type,
+  );
 
   return (
     <div className="habit-detail-review-container px-5 pt-5">

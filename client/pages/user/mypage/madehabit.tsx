@@ -6,9 +6,19 @@ import { useAppSelector } from '../../../ducks/store';
 const MadeHabit: FC = () => {
   const userId: number = useAppSelector((state) => state.loginIdentity.userId);
   const [madeHabits, setMadeHabits] = useState([]);
-  const [page, setPage] = useState<number>(1);
   const url: string = `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/hosts?`;
-  const [setTarget] = useIntersection(url, page, setPage, setMadeHabits);
+  const [lastId, setLastId] = useState<number>(null);
+  const size = 15;
+  const type = 'habit';
+
+  const [setTarget] = useIntersection(
+    url,
+    lastId,
+    setLastId,
+    setMadeHabits,
+    size,
+    type,
+  );
   return (
     <div className="h-screen w-full overflow-y-scroll scrollbar-hide absolute">
       <HabitWrapperVertical
@@ -20,4 +30,4 @@ const MadeHabit: FC = () => {
   );
 };
 
-export default MadeHabit
+export default MadeHabit;

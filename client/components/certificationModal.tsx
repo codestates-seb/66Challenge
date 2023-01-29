@@ -2,7 +2,8 @@ import React from 'react';
 import { RiKakaoTalkFill } from 'react-icons/ri';
 import { IoClose } from 'react-icons/io5';
 
-export const CertificationModal = () => {
+export const CertificationModal = ({ data }) => {
+  console.log(data);
   const today = new Date();
   let year = today.getFullYear(); // 년도
   let month = today.getMonth() + 1; // 월
