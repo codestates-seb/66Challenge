@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
 
 import static challenge.server.challenge.entity.Challenge.Status.*;
 
-@Embeddable
+//@Embeddable
 @Getter
 @Builder
 @AllArgsConstructor

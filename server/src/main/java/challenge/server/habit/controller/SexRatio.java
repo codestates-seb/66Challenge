@@ -5,7 +5,7 @@ import lombok.*;
 
 import static challenge.server.security.user.entity.User.Gender.MALE;
 
-@Embeddable
+//@Embeddable
 @Getter
 @Builder
 @AllArgsConstructor
