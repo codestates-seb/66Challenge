@@ -1,4 +1,4 @@
-package challenge.server.user.entity;
+package challenge.server.security.user.entity;
 
 import challenge.server.audit.BaseTimeEntity;
 import lombok.*;

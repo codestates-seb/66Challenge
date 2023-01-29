@@ -1,6 +1,6 @@
 package challenge.server.security.oauth.dto;
 
-import challenge.server.user.entity.User;
+import challenge.server.security.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

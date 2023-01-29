@@ -4,7 +4,7 @@ import challenge.server.report.dto.ReportDto;
 import challenge.server.report.entity.Report;
 import challenge.server.report.entity.Report.PostType;
 import challenge.server.report.entity.Report.ReportType;
-import challenge.server.user.service.UserService;
+import challenge.server.security.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

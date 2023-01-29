@@ -1,8 +1,7 @@
-package challenge.server.user.repository;
+package challenge.server.security.user.repository;
 
-import challenge.server.user.dto.UserDto;
+import challenge.server.security.user.dto.UserDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserCustomRepository {

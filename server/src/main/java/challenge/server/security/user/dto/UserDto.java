@@ -1,12 +1,7 @@
-package challenge.server.user.dto;
+package challenge.server.security.user.dto;
 
-import challenge.server.challenge.entity.Challenge;
-import challenge.server.habit.entity.Habit;
-import challenge.server.user.entity.User;
+import challenge.server.security.user.entity.User;
 import challenge.server.validator.NotSpace;
-import challenge.server.validator.Password;
-import challenge.server.category.entity.Category;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
 import javax.validation.constraints.Email;

@@ -5,7 +5,7 @@ import challenge.server.auth.entity.Auth;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
 import challenge.server.habit.entity.Habit;
-import challenge.server.user.entity.User;
+import challenge.server.security.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;

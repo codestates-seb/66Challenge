@@ -1,11 +1,10 @@
-package challenge.server.user.entity;
+package challenge.server.security.user.entity;
 
 import challenge.server.audit.BaseTimeEntity;
 import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.habit.entity.Habit;
 import challenge.server.report.entity.Report;
-import com.nimbusds.openid.connect.sdk.claims.Gender;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;

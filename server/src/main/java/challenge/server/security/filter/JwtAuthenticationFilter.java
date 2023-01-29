@@ -1,25 +1,20 @@
 package challenge.server.security.filter;
 
 import challenge.server.security.jwt.JwtTokenizer;
-import challenge.server.user.dto.UserDto;
-import challenge.server.user.entity.User;
-import challenge.server.user.repository.UserRepository;
-import challenge.server.user.service.UserService;
+import challenge.server.security.user.dto.UserDto;
+import challenge.server.security.user.entity.User;
+import challenge.server.security.user.service.UserService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -29,8 +24,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static challenge.server.user.entity.User.Status.ACTIVE;
 
 @Slf4j
 @RequiredArgsConstructor
