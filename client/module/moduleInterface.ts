@@ -55,6 +55,12 @@ interface getHabitsSearchProps extends pageAndSize {
 interface getHabitsSearchCategoryProps extends pageAndSize {
   categoryId: number;
 }
+
+interface getHabitsInHomeProps extends pageAndSize {
+  type: string;
+  userId?: number;
+}
+
 // habitFunctionModule
 
 // reviewFunctionModule
@@ -133,6 +139,7 @@ export type {
   patchHabitReviewProps,
   getHabitsSearchProps,
   getHabitsSearchCategoryProps,
+  getHabitsInHomeProps,
   postReportGeneralProps,
   postReportHabitProps,
   postReportAuthPorps,

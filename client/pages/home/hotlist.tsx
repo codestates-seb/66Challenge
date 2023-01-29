@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { HabitWrapperVertical } from '../../components/habitWrapperVertical';
 import { useIntersection } from '../../hooks/useIntersection';
+import { useAppSelector } from '../../ducks/store';
 
 const HotList: React.FC = () => {
   const [habitWrapperData, setHabitWrapperData] = useState([]);
-  const [page, setPage] = useState(0);
-  const url: string = 'http://localhost:4000/habitdata?';
+  const [page, setPage] = useState(1);
+  const { userId } = useAppSelector((state) => state.loginIdentity);
+  const url: string = `${
+    process.env.NEXT_PUBLIC_SERVER_URL
+  }/habits/sort/popularity?${userId ? 'userId=' + userId + '&' : ''}`;
 
   const [setTarget] = useIntersection(url, page, setPage, setHabitWrapperData);
 
@@ -13,7 +17,7 @@ const HotList: React.FC = () => {
     <div className="hotlist-container">
       <div>
         <HabitWrapperVertical
-          habitWrapperTitle="실시간 인기 습관"
+          habitWrapperTitle="많은 사람들이 형성중인 습관 🔥"
           habitWrapperData={habitWrapperData}
         />
         <div ref={setTarget}></div>

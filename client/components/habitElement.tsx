@@ -86,7 +86,9 @@ export const HabitElement: React.FC<HabitElementProps> = ({
           )}
         </div>
       </div>
-      <div className="habit-element-title font-bold mb-[5px]">{title}</div>
+      <div className="habit-element-title font-bold mb-[5px] text-ellipsis overflow-hidden break-words line-clamp-1">
+        {title}
+      </div>
       <div className="habit-element-body text-ellipsis overflow-hidden break-words line-clamp-2 ">
         {body}
       </div>
