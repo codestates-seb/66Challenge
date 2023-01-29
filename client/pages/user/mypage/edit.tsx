@@ -6,6 +6,9 @@ import {
   getUsernameOverlapVerify,
   patchUserInfo,
 } from '../../../module/userFunctionMoudules';
+import { useAppSelector } from '../../../ducks/store';
+import { useAppDispatch } from '../../../ducks/store';
+import { initLoginIdentity } from '../../../ducks/loginIdentitySlice';
 interface IformValue {
   username: string;
   password: string;
@@ -29,9 +32,11 @@ interface IstateInfoValue {
 }
 const Edit: React.FC = () => {
   const router: NextRouter = useRouter();
+  const dispatch = useAppDispatch();
   const { register, handleSubmit, reset, getValues } = useForm<IformValue>({
     defaultValues: { username: '', password: '', passwordCheck: '' },
   });
+  const { userId } = useAppSelector((state) => state.loginIdentity);
   const [verify, setVerify] = useState<IstateVerifyValue>({
     usernameVerify: '',
     passwordVerify: '',
@@ -96,11 +101,24 @@ const Edit: React.FC = () => {
   };
   const editUserInfoHandle = async (data: IformValue): Promise<void> => {
     const { username, password, passwordCheck } = data;
-    //회원 가입 비동기 함수 호출 부분 에러가 없다면 로그인 페이지로 연동할 것 그 후 리셋
+    const formData = new FormData();
+    let response: number;
     if (username === '') {
-      //password만 보낼 것
+      formData.append(
+        'data',
+        new Blob([JSON.stringify({ username: null, password })], {
+          type: 'application/json',
+        }),
+      );
+      response = await patchUserInfo({ userId, body: formData });
     } else if (password === '') {
-      //username만 보낼 것
+      formData.append(
+        'data',
+        new Blob([JSON.stringify({ username, password: null })], {
+          type: 'application/json',
+        }),
+      );
+      response = await patchUserInfo({ userId, body: formData });
     }
     if (usernameRegExp.test(username) === false && username !== '') {
       setVerify({ ...verify, usernameVerify: 'fail' });
@@ -111,10 +129,20 @@ const Edit: React.FC = () => {
     if (password !== passwordCheck) {
       setVerify({ ...verify, passwordCheckVerify: 'fail' });
     } else {
-      // const response=await patchUserInfo({cookie,userId,username,password});
-      //reset();
+      formData.append(
+        'data',
+        new Blob([JSON.stringify({ username, password })], {
+          type: 'application/json',
+        }),
+      );
+      response = await patchUserInfo({ userId, body: formData });
     }
-    console.log(data);
+    if (response !== 200) {
+      dispatch(initLoginIdentity());
+      router.push('/user/login');
+    }
+    router.push('/user/mypage');
+    reset();
   };
 
   return (

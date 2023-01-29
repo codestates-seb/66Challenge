@@ -27,7 +27,7 @@ export const TopNav: React.FC = () => {
 
   if (page.length) {
     return (
-      <nav className="home-navigation-bar border-b b-borderColor sticky top-[56px] bg-white">
+      <nav className="home-navigation-bar border-b b-borderColor sticky top-[56px] bg-white z-[1]">
         <ul className="home-navigation-list flex h-[40px] px-[20px] z-40">
           {(page === 'home' ? homeNavData : detailNavData).map((el, idx) => {
             return (

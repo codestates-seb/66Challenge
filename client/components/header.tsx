@@ -151,7 +151,7 @@ const Header: FC = () => {
   };
 
   return (
-    <header className="sticky top-0 bg-white">
+    <header className="z-[1] sticky top-0 bg-white">
       <div className="z-40">
         <div>
           <link
