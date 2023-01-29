@@ -100,56 +100,51 @@ public class HabitController {
 
     // 습관 검색(첫 화면 모두 / 키워드 조회) - 응답 DTO
     @GetMapping("/search")
-    public ResponseEntity getAllByKeyword(@RequestParam(required = false) @Positive Long lastHabitId,
+    public ResponseEntity getAllByKeyword(@RequestParam(required = false) @Positive Long lastId,
                                           @RequestParam(required = false) String keyword,
-                                          @RequestParam @Positive int page,
                                           @RequestParam @Positive int size,
                                           @RequestParam(required = false) @Positive Long userId) {
         List<Habit> habits;
-        if (keyword == null) habits = habitService.findAll(lastHabitId, page, size);
-        else habits = habitService.findAllByKeyword(lastHabitId, keyword, page, size);
+        if (keyword == null) habits = habitService.findAll(lastId, size);
+        else habits = habitService.findAllByKeyword(lastId, keyword, size);
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
 
     // 습관 검색(카테고리 조회) - 응답 DTO
     @GetMapping("/search/{category-id}")
     public ResponseEntity getAllByCategory(@PathVariable("category-id") Long categoryId,
-                                           @RequestParam(required = false) @Positive Long lastHabitId,
-                                           @RequestParam @Positive int page,
+                                           @RequestParam(required = false) @Positive Long lastId,
                                            @RequestParam @Positive int size,
                                            @RequestParam(required = false) @Positive Long userId) {
 
-        List<Habit> habits = habitService.findAllByCategory(lastHabitId, categoryId, page, size);
+        List<Habit> habits = habitService.findAllByCategory(lastId, categoryId, size);
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
 
     @GetMapping("/sort/recommend")
-    public ResponseEntity getAllByScore(@RequestParam @Positive int page,
-                                        @RequestParam @Positive int size,
-                                        @RequestParam(required = false) @Positive Long lastHabitId,
+    public ResponseEntity getAllByScore(@RequestParam @Positive int size,
+                                        @RequestParam @Positive int page,
                                         @RequestParam(required = false) @Positive Long userId) {
 
-        List<Habit> habits = habitService.findAllByScore(lastHabitId, page, size);
+        List<Habit> habits = habitService.findAllByScore(page, size);
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
 
     @GetMapping("/sort/popularity")
-    public ResponseEntity getAllByPopularity(@RequestParam @Positive int page,
-                                             @RequestParam @Positive int size,
-                                             @RequestParam(required = false) @Positive Long lastHabitId,
+    public ResponseEntity getAllByPopularity(@RequestParam @Positive int size,
+                                             @RequestParam @Positive int page,
                                              @RequestParam(required = false) @Positive Long userId) {
 
-        List<Habit> habits = habitService.findAllByPopularity(lastHabitId, page, size);
+        List<Habit> habits = habitService.findAllByPopularity(page, size);
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
 
     @GetMapping("/sort/newest")
-    public ResponseEntity getAllByNewest(@RequestParam @Positive int page,
-                                         @RequestParam @Positive int size,
-                                         @RequestParam(required = false) @Positive Long lastHabitId,
+    public ResponseEntity getAllByNewest(@RequestParam @Positive int size,
+                                         @RequestParam(required = false) @Positive Long lastId,
                                          @RequestParam(required = false) @Positive Long userId) {
 
-        List<Habit> habits = habitService.findAllByNewest(lastHabitId, page, size);
+        List<Habit> habits = habitService.findAllByNewest(lastId, size);
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
 
@@ -185,7 +180,7 @@ public class HabitController {
                                                 @RequestParam @Positive Long userId,
                                                 @RequestParam String status) {
 
-        Challenge changeChallnge = challengeService.changeStatus(userId,habitId,status);
+        Challenge changeChallnge = challengeService.changeStatus(userId, habitId, status);
         return new ResponseEntity<>(challengeMapper.toDto(changeChallnge), HttpStatus.OK);
     }
 
@@ -199,10 +194,9 @@ public class HabitController {
     // 습관 조회 - 후기 탭 - Review 리스트 DTO
     @GetMapping("/{habit-id}/reviews")
     public ResponseEntity getReviewsByHabit(@PathVariable("habit-id") @Positive Long habitId,
-                                            @RequestParam(required = false) @Positive Long lastReviewId,
-                                            @RequestParam @Positive int page,
+                                            @RequestParam(required = false) @Positive Long lastId,
                                             @RequestParam @Positive int size) {
-        List<Review> reviews = reviewService.findAllByHabit(lastReviewId, habitId, page, size);
+        List<Review> reviews = reviewService.findAllByHabit(lastId, habitId, size);
         return new ResponseEntity(reviewMapper.toDtos(reviews), HttpStatus.OK);
     }
 
@@ -252,16 +246,6 @@ public class HabitController {
 
     // 습관 조회 - 인증 탭 - Auth 리스트 DTO(특정 습관 id에 해당하는)
     @GetMapping("/{habit-id}/auths")
-    public ResponseEntity getAuthsByHabit(@PathVariable("habit-id") @Positive Long habitId,
-                                          @RequestParam(required = false) @Positive Long lastAuthId,
-                                          @RequestParam @Positive int page,
-                                          @RequestParam @Positive int size) {
-        List<Auth> auths = authService.findAllByHabit(lastAuthId, habitId, page, size);
-        return new ResponseEntity(authMapper.toDtos(auths), HttpStatus.OK);
-    }
-
-    // 습관 조회 - 인증 탭 - Auth 리스트 DTO(특정 습관 id에 해당하는)
-    @GetMapping("/{habit-id}/auths/lastId")
     public ResponseEntity getAuthsByHabit(@PathVariable("habit-id") @Positive Long habitId,
                                           @RequestParam(required = false) @Positive Long lastId,
                                           @RequestParam @Positive int size) {
@@ -322,7 +306,7 @@ public class HabitController {
     }
 
     // 응답 더미데이터 - 챌린지 DTO
-    public ChallengeDto.Response createChallengeResponseDto(){
+    public ChallengeDto.Response createChallengeResponseDto() {
         return ChallengeDto.Response.builder()
                 .challengeId(1L).challenger("username")
                 .habitTitle("매일일기").status("CHALLENGE").build();

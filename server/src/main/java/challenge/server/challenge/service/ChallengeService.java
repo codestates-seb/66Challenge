@@ -66,35 +66,25 @@ public class ChallengeService {
     }
 
     // 특정 회원의 모든 챌린지 조회
-    public List<Challenge> findAllByUser(Long userId, int page, int size) {
+    public List<Challenge> findAllByUser(Long lastChallengeId, Long userId, int size) {
         // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
-        return challengeRepository.findAllByUserUserId(userId,
-                PageRequest.of(page - 1, size, Sort.by("challengeId").descending())).getContent();
+        return challengeRepository.findAllByUserUserId(lastChallengeId, userId, size);
     }
 
     // 특정 상태의 모든 챌린지 조회
-    public List<Challenge> findAllStatus(Challenge.Status status, int page, int size) {
+    public List<Challenge> findAllStatus(Long lastChallengeId, Challenge.Status status, int size) {
         // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
-        return challengeRepository.findAllByStatus(status,
-                PageRequest.of(page - 1, size, Sort.by("challengeId").descending())).getContent();
+        return challengeRepository.findAllByStatus(lastChallengeId, status, size);
     }
 
     // 특정 회원의 특정 상태의 모든 챌린지 조회
-    public List<Challenge> findAllByUserAndStatus(Long userId, Challenge.Status status, int page, int size) {
+    public List<Challenge> findAllByUserAndStatus(Long lastChallengeId, Long userId, Challenge.Status status, int size) {
         // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
-        return challengeRepository.findAllByUserUserIdAndStatus(userId, status,
-                PageRequest.of(page - 1, size, Sort.by("challengeId").descending())).getContent();
+        return challengeRepository.findAllByUserUserIdAndStatus(lastChallengeId, userId, status, size);
     }
 
-    public List<Challenge> findAllByUserAndStatusNoOffset(Long userId, Challenge.Status status, int page, int size) {
-        // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
-        return challengeRepository.findAllByUserUserIdAndStatus(userId, status,
-                PageRequest.of(page - 1, size, Sort.by("challengeId").descending())).getContent();
-    }
-
-    public List<Challenge> findAll(int page, int size) {
-        return challengeRepository.findAll(PageRequest.of(page - 1, size,
-                Sort.by("challengeId").descending())).getContent();
+    public List<Challenge> findAll(Long lastChallengeId, int size) {
+        return challengeRepository.findAllNoOffset(lastChallengeId, size);
     }
 
     /**

@@ -18,38 +18,24 @@ public class AuthCustomRepositoryImpl implements AuthCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Auth> findAllByChallengeChallengeId(Long lastAuthId, Long challengeId, int page, int size) {
+    public List<Auth> findAllByChallengeChallengeId(Long lastAuthId, Long challengeId, int size) {
         return jpaQueryFactory
                 .selectFrom(auth)
                 .where(
                         ltAuthId(lastAuthId),
                         auth.challenge.challengeId.eq(challengeId)
                 ).orderBy(auth.authId.desc())
-                .offset(page - 1)
                 .limit(size)
                 .fetch();
     }
 
     @Override
-    public List<Auth> findAllByChallengeHabitHabitId(Long lastAuthId, Long habitId, int page, int size) {
+    public List<Auth> findAllByChallengeHabitHabitId(Long lastAuthId, Long habitId, int size) {
         return jpaQueryFactory
                 .selectFrom(auth)
                 .where(
                         auth.challenge.habit.habitId.eq(habitId),
                         ltAuthId(lastAuthId)
-                ).orderBy(auth.authId.desc())
-                .offset(page - 1)
-                .limit(size)
-                .fetch();
-    }
-
-    @Override
-    public List<Auth> findAllByChallengeHabitHabitId(Long lastId, Long habitId, int size) {
-        return jpaQueryFactory
-                .selectFrom(auth)
-                .where(
-                        auth.challenge.habit.habitId.eq(habitId),
-                        ltAuthId(lastId)
                 ).orderBy(auth.authId.desc())
                 .limit(size)
                 .fetch();

@@ -18,7 +18,7 @@ public class BookmarkCustomRepositoryImpl implements BookmarkCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Habit> findAllByUserUserId(Long lastHabitId, Long userId, int page, int size) {
+    public List<Habit> findAllByUserUserId(Long lastHabitId, Long userId, int size) {
         return jpaQueryFactory
                 .select(habit)
                 .from(bookmark)
@@ -28,7 +28,6 @@ public class BookmarkCustomRepositoryImpl implements BookmarkCustomRepository {
                 .leftJoin(bookmark.habit, habit)
                 .on(bookmark.habit.habitId.eq(habit.habitId).and(ltHabitId(lastHabitId)))
                 .orderBy(habit.habitId.desc())
-                .offset(page - 1)
                 .limit(size)
                 .fetch();
     }

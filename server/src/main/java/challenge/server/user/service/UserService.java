@@ -373,7 +373,7 @@ public class UserService {
 
     // 내가 만든 습관 조회
     // mapper 만들어서 테스트 필요(mapper 없이 응답 통신 가는 것은 Postman 확인 완료)
-    public List<UserDto.HabitResponse> findHostHabits(Long lastHabitId, Long userId, int page, int size) {
+    public List<UserDto.HabitResponse> findHostHabits(Long lastHabitId, Long userId, int size) {
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없는 로직
         /*
         Long loggedInUserId = verifyLoggedInUser(userId);
@@ -382,7 +382,7 @@ public class UserService {
          */
         User findUser = findVerifiedUser(userId);
 
-        List<Habit> habits = habitRepository.findByHostUserId(lastHabitId, findUser.getUserId(), page, size);
+        List<Habit> habits = habitRepository.findByHostUserId(lastHabitId, findUser.getUserId(), size);
 
         List<UserDto.HabitResponse> habitResponses = new ArrayList<>();
         for (int i = 0; i < habits.size(); i++) {

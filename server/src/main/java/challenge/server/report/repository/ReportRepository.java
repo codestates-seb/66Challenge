@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReportRepository extends JpaRepository<Report, Long> {
+public interface ReportRepository extends JpaRepository<Report, Long>, ReportCustomRepository {
     // 사용자 하루 신고 조회
     List<Report> findByReporterAndCreatedAtIsGreaterThanEqual(Long reporterUserId, LocalDateTime localDateTime);
 

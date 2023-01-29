@@ -56,12 +56,12 @@ public class AuthService {
         return findVerifiedAuth(authId);
     }
 
-    public List<Auth> findAllByChallenge(Long lastAuthId, Long challengeId, int page, int size) {
-        return authRepository.findAllByChallengeChallengeId(lastAuthId, challengeId, page, size);
+    public List<Auth> findAllByChallenge(Long lastAuthId, Long challengeId, int size) {
+        return authRepository.findAllByChallengeChallengeId(lastAuthId, challengeId, size);
     }
 
-    public List<Auth> findAllByHabit(Long lastAuthId, Long habitId, int page, int size) {
-        return authRepository.findAllByChallengeHabitHabitId(lastAuthId, habitId, page, size);
+    public List<Auth> findAllByHabit(Long lastAuthId, Long habitId, int size) {
+        return authRepository.findAllByChallengeHabitHabitId(lastAuthId, habitId, size);
     }
 
     @Transactional
@@ -74,9 +74,5 @@ public class AuthService {
     private Auth findVerifiedAuth(Long authId) {
         return authRepository.findById(authId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.AUTH_NOT_FOUND));
-    }
-
-    public List<Auth> findAllByHabit(Long lastId, Long habitId, int size) {
-        return authRepository.findAllByChallengeHabitHabitId(lastId, habitId, size);
     }
 }
