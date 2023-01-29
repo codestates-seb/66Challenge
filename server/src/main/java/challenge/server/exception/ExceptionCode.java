@@ -25,7 +25,10 @@ public enum ExceptionCode {
     TOO_MANY_REPORTS(400, "Too many reports"),
     DUPLICATED_REPORT(400,"Duplicated report"),
     BOOKMARK_EXISTS(409, "Bookmark exists"),
-    EMAIL_VERIFICATION_FAILED(404, "Email verification failed");
+    EMAIL_VERIFICATION_FAILED(404, "Email verification failed"),
+    REFRESH_TOKEN_NOT_VALID(400, "Refresh token not valid"),
+    LOGOUT_USER(403, "Logout user"),
+    ACCESS_TOKEN_NOT_VALID(400, "Access token not valid");
 
     @Getter
     private int status;

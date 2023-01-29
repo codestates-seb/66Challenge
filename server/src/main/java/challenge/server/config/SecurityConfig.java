@@ -11,7 +11,7 @@ import challenge.server.security.handler.UserAuthenticationFailureHandler;
 import challenge.server.security.handler.UserAuthenticationSuccessHandler;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.utils.CustomAuthorityUtils;
-import challenge.server.user.repository.UserRepository;
+import challenge.server.user.service.LogoutListService;
 import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -44,6 +44,7 @@ public class SecurityConfig { // todo https 적용
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final UserService userService;
+    private final LogoutListService logoutListService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -97,7 +98,7 @@ public class SecurityConfig { // todo https 적용
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, logoutListService);
 
             builder
                     .addFilter(jwtAuthenticationFilter)

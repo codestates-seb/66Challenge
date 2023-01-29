@@ -1,9 +1,7 @@
 package challenge.server.security.filter;
 
-import challenge.server.exception.BusinessLogicException;
-import challenge.server.exception.ExceptionCode;
-import challenge.server.security.dto.LoginDto;
 import challenge.server.security.jwt.JwtTokenizer;
+import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.repository.UserRepository;
 import challenge.server.user.service.UserService;
@@ -22,7 +20,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -47,7 +44,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
-        LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
+        UserDto.LoginRequest loginDto = objectMapper.readValue(request.getInputStream(), UserDto.LoginRequest.class);
         log.info("# attemptAuthentication : loginDto.getEmail={}, login.getPassword={}",
                 loginDto.getUsername(), loginDto.getPassword());
 
@@ -75,7 +72,24 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         new ObjectMapper().writeValue(response.getOutputStream(), body);
     }
 
-    public String delegateAccessToken(User user) { // todo 원래 private 메서드였는데, 특별한 이유가 있을까?
+    public String reissueRefreshToken(User user, HttpServletResponse response) throws ServletException, IOException {
+        String accessToken = delegateAccessToken(user);
+        String refreshToken = delegateRefreshToken(user);
+
+        response.setHeader("Authorization", "Bearer " + accessToken);
+        response.setHeader("Refresh", refreshToken);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpStatus.OK.value());
+
+        Map<String, Long> body = new HashMap<>();
+        body.put("userId", user.getUserId()); // 로그인 후 userId를 응답 body에 전달
+
+        new ObjectMapper().writeValue(response.getOutputStream(), body);
+
+        return refreshToken;
+    }
+
+    private String delegateAccessToken(User user) {
         Map<String, Object> claims = new HashMap<>();
 //        claims.put("userId", user.getUserId());
         claims.put("username", user.getUsername());
