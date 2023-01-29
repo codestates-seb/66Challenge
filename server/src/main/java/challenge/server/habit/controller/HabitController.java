@@ -24,7 +24,7 @@ import challenge.server.review.dto.ReviewDto;
 import challenge.server.review.entity.Review;
 import challenge.server.review.mapper.ReviewMapper;
 import challenge.server.review.service.ReviewService;
-import challenge.server.user.service.UserService;
+import challenge.server.security.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -188,7 +188,6 @@ public class HabitController {
     // 습관 조회 - 통계 탭 - 통계 DTO
     @GetMapping("/{habit-id}/statistics")
     public ResponseEntity getHabitStatistics(@PathVariable("habit-id") @Positive Long habitId) {
-//        HabitStatistics habitStatistics = habitStatisticsService.getHabitStatistics(habitId);
         Habit habit = habitService.findHabit(habitId);
         return new ResponseEntity(habitMapper.makeHabitStatistics(habit), HttpStatus.OK);
     }

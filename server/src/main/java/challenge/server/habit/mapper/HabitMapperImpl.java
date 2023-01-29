@@ -9,7 +9,7 @@ import java.util.Optional;
 import challenge.server.category.service.CategoryService;
 import challenge.server.habit.dto.HabitDto;
 import challenge.server.review.repository.ReviewRepository;
-import challenge.server.user.service.UserService;
+import challenge.server.security.user.service.UserService;
 import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.challenge.entity.Challenge;

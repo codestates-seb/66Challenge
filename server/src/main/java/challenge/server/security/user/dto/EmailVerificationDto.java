@@ -1,4 +1,4 @@
-package challenge.server.user.dto;
+package challenge.server.security.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

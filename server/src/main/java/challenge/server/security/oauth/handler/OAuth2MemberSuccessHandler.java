@@ -2,14 +2,11 @@ package challenge.server.security.oauth.handler;
 
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.oauth.dto.OAuth2CustomUser;
-import challenge.server.security.oauth.dto.OAuthAttributes;
 import challenge.server.security.utils.CustomAuthorityUtils;
-import challenge.server.user.service.UserService;
+import challenge.server.security.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;

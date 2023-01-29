@@ -1,4 +1,4 @@
-package challenge.server.habit.statistics;
+package challenge.server.habit.controller;
 
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.habit.dto.HabitDto;
@@ -12,7 +12,7 @@ import static challenge.server.challenge.entity.Challenge.Status.*;
 import static java.lang.Math.round;
 
 @Slf4j
-//@Embeddable
+@Embeddable
 @Getter
 @Builder
 @AllArgsConstructor

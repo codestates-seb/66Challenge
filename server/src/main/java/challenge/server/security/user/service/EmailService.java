@@ -1,4 +1,4 @@
-package challenge.server.user.service;
+package challenge.server.security.user.service;
 
 import challenge.server.helper.email.MailHandler;
 import lombok.RequiredArgsConstructor;

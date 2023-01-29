@@ -1,6 +1,6 @@
-package challenge.server.user.repository;
+package challenge.server.security.user.repository;
 
-import challenge.server.user.entity.EmailVerification;
+import challenge.server.security.user.entity.EmailVerification;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -1,20 +1,14 @@
 package challenge.server.security.service;
 
-import challenge.server.exception.BusinessLogicException;
-import challenge.server.exception.ExceptionCode;
-import challenge.server.security.dto.SecurityDto;
 import challenge.server.security.filter.JwtAuthenticationFilter;
-import challenge.server.user.dto.UserDto;
-import challenge.server.user.entity.User;
-import challenge.server.user.mapper.UserMapperImpl;
-import challenge.server.user.repository.UserRepository;
-import challenge.server.user.service.UserService;
+import challenge.server.security.user.dto.UserDto;
+import challenge.server.security.user.mapper.UserMapperImpl;
+import challenge.server.security.user.repository.UserRepository;
+import challenge.server.security.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static challenge.server.user.entity.User.Status.ACTIVE;
 
 @Service
 @RequiredArgsConstructor

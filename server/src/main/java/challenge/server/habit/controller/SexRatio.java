@@ -1,14 +1,11 @@
-package challenge.server.habit.statistics;
+package challenge.server.habit.controller;
 
 import challenge.server.habit.entity.Habit;
-import challenge.server.user.entity.User;
 import lombok.*;
 
-import javax.persistence.Embeddable;
+import static challenge.server.security.user.entity.User.Gender.MALE;
 
-import static challenge.server.user.entity.User.Gender.MALE;
-
-//@Embeddable
+@Embeddable
 @Getter
 @Builder
 @AllArgsConstructor
