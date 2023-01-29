@@ -59,14 +59,14 @@ export const Footer = () => {
         <h4 className="text-gray-pink text-base font-bold pt-10 pb-5 dark:text-white">
           66 Challenge
         </h4>
-        <div className="flex justify-center gap-10">
-          <div className="mx-2 w-28">
+        <div className="flex justify-center gap-10 px-5">
+          <div className="mx-2 w-36">
             <h4 className="font-semibold mb-2 text-gray-pink">FE</h4>
             <div className="font-medium text-gray-pink flex flex-col gap-1">
               {FeMemberList}
             </div>
           </div>
-          <div className="mx-2 w-28">
+          <div className="mx-2 w-36">
             <h4 className="font-semibold mb-2 text-gray-pink">BE</h4>
             <div className="font-medium text-gray-pink flex flex-col gap-1">
               {BeMemberList}

@@ -1,12 +1,14 @@
 import axios, { AxiosError } from 'axios';
 import type {
   habitGeneralProps,
-  postHabitProps,
   deleteHabitProps,
   getHabitsSearchProps,
   getHabitsSearchCategoryProps,
+  getHabitsInHomeProps,
 } from './moduleInterface';
 import { getCookie } from './cookies';
+import { GrRestroomWomen } from 'react-icons/gr';
+
 export async function postHabit({ data }) {
   try {
     const response = await axios
@@ -150,6 +152,26 @@ export async function getHabitsSearchCategory({
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search/${categoryId}/?page=${page}&size=${size}`,
       )
       .then((res) => console.log(res));
+    return response;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function getHabitsInHome({
+  userId,
+  type,
+  page,
+  size,
+}: getHabitsInHomeProps) {
+  try {
+    const response = await axios
+      .get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/sort/${type}/?${
+          userId ? 'userId=' + userId + '&' : ''
+        }page=${page}&size=${size}`,
+      )
+      .then((res) => res.data);
     return response;
   } catch (e) {
     console.error(e);

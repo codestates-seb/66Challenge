@@ -9,7 +9,20 @@ import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
 import Image from 'next/image';
 import React from 'react';
+import { useAppSelector } from '../ducks/store';
 import { Footer } from '../components/footer';
+import { useState, useEffect } from 'react';
+import { getHabitsInHome } from '../module/habitFunctionMoudules';
+
+interface habitsType {
+  body: string;
+  habitId: number;
+  hostUserId: number;
+  isBooked: boolean;
+  score: number;
+  thumbImgUrl: string;
+  title: string;
+}
 
 const Home: React.FC = () => {
   const router = useRouter();
@@ -21,6 +34,24 @@ const Home: React.FC = () => {
       },
     });
   };
+  const { userId } = useAppSelector((state) => state.loginIdentity);
+  const [habitsInHome1, setHabitsInHome1] = useState<Array<habitsType>>([]);
+  const [habitsInHome2, setHabitsInHome2] = useState<Array<habitsType>>([]);
+
+  useEffect(() => {
+    getHabitsInHome({
+      userId,
+      type: 'popularity',
+      page: '1',
+      size: '30',
+    }).then((data) => setHabitsInHome1(data.slice(0, 10)));
+    getHabitsInHome({
+      userId,
+      type: 'recommend',
+      page: '1',
+      size: '30',
+    }).then((data) => setHabitsInHome2(data.slice(0, 10)));
+  }, []);
 
   return (
     <div className="-mb-[50px]">
@@ -54,7 +85,7 @@ const Home: React.FC = () => {
       <div className="border-t-[10px] border-borderColor">
         <HabitWrapperHorizontal
           habitWrapperTitle="실시간 인기 습관"
-          habitWrapperData={habitWrapperData}
+          habitWrapperData={habitsInHome1}
         />
       </div>
       <div className="py-[20px]">
@@ -63,7 +94,7 @@ const Home: React.FC = () => {
       <div>
         <HabitWrapperHorizontal
           habitWrapperTitle="20대 여성이라면 필수!"
-          habitWrapperData={habitWrapperData}
+          habitWrapperData={habitsInHome2}
         />
       </div>
       <Footer />
