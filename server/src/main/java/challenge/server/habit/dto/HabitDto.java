@@ -15,6 +15,7 @@ public class HabitDto {
         @NotNull
         private String category;
         private String body;
+        private String mdBody;
         private String authType;
         private String authStartTime;
         private String authEndTime;
@@ -28,6 +29,7 @@ public class HabitDto {
         @NotNull
         private String category;
         private String body;
+        private String mdBody;
         @NotNull
         private String authType;
         private String authStartTime;
@@ -56,6 +58,7 @@ public class HabitDto {
     public static class Detail {
         private String hostUsername;
         private String subTitle;
+        private String mdBody;
         private String authType;
         private String authStartTime;
         private String authEndTime;
