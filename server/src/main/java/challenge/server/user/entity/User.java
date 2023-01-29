@@ -5,6 +5,7 @@ import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.habit.entity.Habit;
 import challenge.server.report.entity.Report;
+import com.nimbusds.openid.connect.sdk.claims.Gender;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -36,6 +37,11 @@ public class User extends BaseTimeEntity {
 
     @Column(length = 255, nullable = false, unique = true)
     private String username;
+
+    private int age;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     // 회원 가입 시 이메일 인증 관련
     private String refreshToken;
@@ -91,6 +97,18 @@ public class User extends BaseTimeEntity {
         private final int num;
 
         Status(int num) {
+            this.num = num;
+        }
+    }
+
+    public enum Gender {
+        MALE(1),
+        FEMALE(2);
+
+        @Getter
+        private final int num;
+
+        Gender(int num) {
             this.num = num;
         }
     }
