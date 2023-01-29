@@ -30,18 +30,6 @@ public class AuthCustomRepositoryImpl implements AuthCustomRepository {
     }
 
     @Override
-    public List<Auth> findAllByChallengeHabitHabitId(Long lastAuthId, Long habitId, int size) {
-        return jpaQueryFactory
-                .selectFrom(auth)
-                .where(
-                        auth.challenge.habit.habitId.eq(habitId),
-                        ltAuthId(lastAuthId)
-                ).orderBy(auth.authId.desc())
-                .limit(size)
-                .fetch();
-    }
-
-    @Override
     public List<Auth> findAllByChallengeHabitHabitId(Long lastId, Long habitId, int size) {
         return jpaQueryFactory
                 .selectFrom(auth)

@@ -64,11 +64,11 @@ public class HabitService {
     }
 
     public List<Habit> findAllByScore(int page, int size) {
-        return habitRepository.findAllByScore(page, size);
+        return habitRepository.findAllByScore(PageRequest.of(page - 1, size));
     }
 
     public List<Habit> findAllByPopularity(int page, int size) {
-        return habitRepository.findAllByPopularity(page, size);
+        return habitRepository.findAllByPopularity(PageRequest.of(page - 1, size));
     }
 
     public List<Habit> findAllByNewest(Long lastHabitId, int size) {
