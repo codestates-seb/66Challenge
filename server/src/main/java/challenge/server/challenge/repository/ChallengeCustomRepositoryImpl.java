@@ -30,6 +30,43 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
+    public List<Challenge> findAllByStatus(Long lastChaallengeId, Challenge.Status status, int size) {
+        return jpaQueryFactory
+                .selectFrom(challenge)
+                .where(
+                        challenge.status.eq(status),
+                        ltChallengeId(lastChaallengeId)
+                ).orderBy(challenge.challengeId.desc())
+                .limit(size)
+                .fetch();
+    }
+
+    @Override
+    public List<Challenge> findAllByUserUserId(Long lastChaallengeId, Long userId, int size) {
+        return jpaQueryFactory
+                .selectFrom(challenge)
+                .where(
+                        challenge.user.userId.eq(userId),
+                        ltChallengeId(lastChaallengeId)
+                ).orderBy(challenge.challengeId.desc())
+                .limit(size)
+                .fetch();
+    }
+
+    @Override
+    public List<Challenge> findAllByUserUserIdAndStatus(Long lastChaallengeId, Long userId, Challenge.Status status, int size) {
+        return jpaQueryFactory
+                .selectFrom(challenge)
+                .where(
+                        challenge.user.userId.eq(userId),
+                        challenge.status.eq(status),
+                        ltChallengeId(lastChaallengeId)
+                ).orderBy(challenge.challengeId.desc())
+                .limit(size)
+                .fetch();
+    }
+
+    @Override
     public List<Auth> findAuthsByChallengeId(Long challengeId) {
         return jpaQueryFactory
                 .select(auth)
@@ -48,38 +85,8 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
                 .where(
                         challenge.status.eq(CHALLENGE),
                         challenge.lastAuthAt.notBetween(startDatetime, endDatetime)
-                        .or(challenge.lastAuthAt.isNull()))
+                                .or(challenge.lastAuthAt.isNull()))
                 .fetch();
-
-
-        // TODO: 추후 쿼리만으로 구현 가능하도록 도전
-        /**
-         * 1. 첼린지를 반환하고 첼린지 안에는 auth 테이블이 존재
-         * 2. 조건 1) 도전중인 첼린지로 추려져야 한다.
-         * 3. 조건 2) 각 첼린지에서 가장 최신인 인증 게시물(날짜와 비교가 필요함)
-         * 4. 결과 : 도전중인 첼린지만 반환
-         */
-//        return jpaQueryFactory
-//                .selectFrom(challenge)  // Challenge에서
-//                .leftJoin(challenge.auths, auth)    // auth와 leftjoin
-//                .on(challenge.challengeId.eq(auth.challenge.challengeId))   // challengeId 기준으로
-//                .where(challenge.status.eq(CHALLENGE)) // 도전중인 Challenge만
-//                .groupBy(challenge.challengeId, auth.createdAt) //  challengeId를 기준으로 group 만듦
-//                .having((auth.createdAt.max().lt(LocalDate.now().atStartOfDay())).or(auth.isNull()))    // 가장 최근의 auth 생성일이 startDatetime과 endDatetime 사이에 포함되지 않은 경우만
-//                .fetch();
-
-//        // distinct() - 중복 제거
-//        // 1. Auth 날짜별로 오름차순으로 데이터를 정렬
-//        // 2. challenge의 id or name 같은걸로 distinct()
-//        // challenge 1에 10시 40분 auth 1 10시 39분 auth 1 distinct()
-//        List<Challenge> result = queryFactory
-//                .select(challenge)
-//                .from(challenge)
-//                .leftJoin(challenge.auths, auth)
-//                .where(
-//                        conditionEq(status),
-//                        conditionEq2(startDatetime, endDatetime)
-//                ).fetch();
     }
 
     @Override
@@ -90,16 +97,21 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
                 .where(challenge.habit.habitId.eq(habitId).and(challenge.status.eq(CHALLENGE)))
                 .fetchOne());
     }
+
+    @Override
+    public List<Challenge> findAllNoOffset(Long lastChallengeId, int size) {
+        return jpaQueryFactory
+                .selectFrom(challenge)
+                .where(ltChallengeId(lastChallengeId))
+                .orderBy(challenge.challengeId.desc())
+                .limit(size)
+                .fetch();
+    }
+
+    private BooleanExpression ltChallengeId(Long lastChallengeId) {
+        if (lastChallengeId == null) {
+            return null;
+        }
+        return challenge.challengeId.lt(lastChallengeId);
+    }
 }
-
-//    @Override
-//    public Integer findChallengers(Long habitId){
-//        return Math.toIntExact(jpaQueryFactory
-//                .select(habit.habitId.count())
-//                .from(habit)
-//                .where(habit.habitId.eq(habitId).and(challenge.status.eq(CHALLENGE)))
-//                .leftJoin(habit.challenges, challenge)
-//                .on(habit.habitId.eq(challenge.habit.habitId))
-//                .fetchOne());
-//    }
-

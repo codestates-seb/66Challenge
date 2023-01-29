@@ -31,14 +31,23 @@ public class ReviewCustomRepositoryImpl implements ReviewCustomRepository {
     }
 
     @Override
-    public List<Review> findAllByHabitHabitId(Long lastReviewId, Long habitId, int page, int size) {
+    public List<Review> findAllByHabitHabitId(Long lastReviewId, Long habitId, int size) {
         return jpaQueryFactory
                 .selectFrom(review)
                 .where(
                         review.habit.habitId.eq(habitId),
                         ltReviewId(lastReviewId)
                 ).orderBy(review.reviewId.desc())
-                .offset(page - 1)
+                .limit(size)
+                .fetch();
+    }
+
+    @Override
+    public List<Review> findAllNoOffset(Long lasdtReviewId, int size) {
+        return jpaQueryFactory
+                .selectFrom(review)
+                .where(ltReviewId(lasdtReviewId))
+                .orderBy(review.reviewId.desc())
                 .limit(size)
                 .fetch();
     }

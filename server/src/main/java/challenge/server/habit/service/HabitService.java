@@ -49,35 +49,35 @@ public class HabitService {
     }
 
     // 전체 습관 조회
-    public List<Habit> findAll(Long lastHabitId, int page, int size) {
-        return habitRepository.findAllNoOffset(lastHabitId, page, size);
+    public List<Habit> findAll(Long lastHabitId, int size) {
+        return habitRepository.findAllNoOffset(lastHabitId, size);
     }
 
     // 제목 keyword로 검색(조회)
-    public List<Habit> findAllByKeyword(Long lastHabitId, String keyword, int page, int size) {
-        return habitRepository.findByTitleIsContaining(lastHabitId, keyword, page, size);
+    public List<Habit> findAllByKeyword(Long lastHabitId, String keyword, int size) {
+        return habitRepository.findByTitleIsContaining(lastHabitId, keyword, size);
     }
 
     // 특정 카테고리의 습관 조회
-    public List<Habit> findAllByCategory(Long lastHabitId, Long categoryId, int page, int size) {
-        return habitRepository.findByCategory(lastHabitId, categoryId, page, size);
+    public List<Habit> findAllByCategory(Long lastHabitId, Long categoryId, int size) {
+        return habitRepository.findByCategory(lastHabitId, categoryId, size);
     }
 
-    public List<Habit> findAllByScore(Long lastHabitId, int page, int size) {
-        return habitRepository.findAllByScore(lastHabitId, page, size);
+    public List<Habit> findAllByScore(int page, int size) {
+        return habitRepository.findAllByScore(page, size);
     }
 
-    public List<Habit> findAllByPopularity(Long lastHabitId, int page, int size) {
-        return habitRepository.findAllByPopularity(lastHabitId, page, size);
+    public List<Habit> findAllByPopularity(int page, int size) {
+        return habitRepository.findAllByPopularity(page, size);
     }
 
-    public List<Habit> findAllByNewest(Long lastHabitId, int page, int size) {
-        return habitRepository.findAllByNewest(lastHabitId, page, size);
+    public List<Habit> findAllByNewest(Long lastHabitId, int size) {
+        return habitRepository.findAllByNewest(lastHabitId, size);
     }
 
     // 특정 사용자(작성자)가 만든 습관 조회
-    public List<Habit> findAllByUser(Long lastHabitId, Long userId, int page, int size) {
-        return habitRepository.findByHostUserId(lastHabitId, userId, page, size);
+    public List<Habit> findAllByUser(Long lastHabitId, Long userId, int size) {
+        return habitRepository.findByHostUserId(lastHabitId, userId, size);
     }
 
     @Transactional

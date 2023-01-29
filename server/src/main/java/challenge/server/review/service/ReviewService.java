@@ -37,13 +37,12 @@ public class ReviewService {
         return findVerifiedReview(reviewId);
     }
 
-    public List<Review> findAll(int page, int size) {
-        return reviewRepository.findAll(PageRequest.of(page - 1, size,
-                Sort.by("reviewId").descending())).getContent();
+    public List<Review> findAll(Long lastReviewId, int size) {
+        return reviewRepository.findAllNoOffset(lastReviewId, size);
     }
 
-    public List<Review> findAllByHabit(Long lastReviewId, Long habitId, int page, int size) {
-        return reviewRepository.findAllByHabitHabitId(lastReviewId, habitId, page, size);
+    public List<Review> findAllByHabit(Long lastReviewId, Long habitId, int size) {
+        return reviewRepository.findAllByHabitHabitId(lastReviewId, habitId, size);
     }
 
     public void deleteReview(Long reviewId) {

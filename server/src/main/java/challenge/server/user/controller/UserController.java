@@ -148,10 +148,9 @@ public class UserController {
     // 회원이 찜한 습관들의 목록 출력
     @GetMapping("/{user-id}/bookmarks")
     public ResponseEntity getBookmarks(@PathVariable("user-id") @Positive Long userId,
-                                       @RequestParam(required = false) @Positive Long lastHabitId,
-                                       @RequestParam @Positive int page,
+                                       @RequestParam(required = false) @Positive Long lastId,
                                        @RequestParam @Positive int size) {
-        List<Habit> habits = bookmarkService.findBookmarkHabits(lastHabitId, userId, page, size);
+        List<Habit> habits = bookmarkService.findBookmarkHabits(lastId, userId, size);
         return new ResponseEntity<>(userMapper.habitsToUserDtoHabitResponses(habits), HttpStatus.OK);
 
         // API 통신용
@@ -161,10 +160,9 @@ public class UserController {
 
     @GetMapping("/{user-id}/habits/hosts")
     public ResponseEntity getHostHabits(@PathVariable("user-id") @Positive Long userId,
-                                        @RequestParam(required = false) @Positive Long lastHabitId,
-                                        @RequestParam @Positive int page,
+                                        @RequestParam(required = false) @Positive Long lastId,
                                         @RequestParam @Positive int size) {
-        List<UserDto.HabitResponse> habitResponses = userService.findHostHabits(lastHabitId, userId, page, size);
+        List<UserDto.HabitResponse> habitResponses = userService.findHostHabits(lastId, userId, size);
         return new ResponseEntity(habitResponses, HttpStatus.OK);
 
         // API 통신용

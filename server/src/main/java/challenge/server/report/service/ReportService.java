@@ -72,8 +72,8 @@ public class ReportService {
 //        reports.size() > n 이면, 해당 게시물 상태 조회 불가능으로 변경
 //    }
 
-    public List<Report> findAll(int page, int size) {
-        return reportRepository.findAll(PageRequest.of(page-1, size, Sort.by("reportId").descending())).getContent();
+    public List<Report> findAll(Long lastReportId, int size) {
+        return reportRepository.findAllNoOffset(lastReportId, size);
     }
 
 

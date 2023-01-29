@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface ReviewCustomRepository {
     Double findAverage(Long habitId);
-    List<Review> findAllByHabitHabitId(Long lastReviewId, Long habitId, int page, int size);
+    List<Review> findAllByHabitHabitId(Long lastReviewId, Long habitId, int size);
+
+    List<Review> findAllNoOffset(Long lasdtReviewId, int size);
 
 }

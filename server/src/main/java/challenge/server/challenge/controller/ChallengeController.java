@@ -48,50 +48,50 @@ public class ChallengeController {
 
     @GetMapping("/users/{user-id}/challenge")
     public ResponseEntity findAllByChallenge(@PathVariable("user-id") @Positive Long userId,
-                                        @RequestParam @Positive int page,
-                                        @RequestParam @Positive int size) {
-        List<Challenge> challenges = challengeService.findAllByUserAndStatus(userId, CHALLENGE, page, size);
+                                             @RequestParam(required = false) @Positive Long lastId,
+                                             @RequestParam @Positive int size) {
+        List<Challenge> challenges = challengeService.findAllByUserAndStatus(lastId, userId, CHALLENGE, size);
 
         return new ResponseEntity<>(mapper.toDtos(challenges), HttpStatus.OK);
     }
 
     @GetMapping("/users/{user-id}/success")
     public ResponseEntity findAllBySuccess(@PathVariable("user-id") @Positive Long userId,
-                                        @RequestParam @Positive int page,
-                                        @RequestParam @Positive int size) {
-        List<Challenge> challenges = challengeService.findAllByUserAndStatus(userId, SUCCESS, page, size);
+                                           @RequestParam(required = false) @Positive Long lastId,
+                                           @RequestParam @Positive int size) {
+        List<Challenge> challenges = challengeService.findAllByUserAndStatus(lastId, userId, SUCCESS, size);
 
         return new ResponseEntity<>(mapper.toDtos(challenges), HttpStatus.OK);
     }
 
 //    @GetMapping
-//    public ResponseEntity findAll(@RequestParam @Positive int page,
+//    public ResponseEntity findAll(
 //                                  @RequestParam @Positive int size) {
-//        List<Challenge> findAll = challengeService.findAll(page, size);
+//        List<Challenge> findAll = challengeService.findAll(size);
 //
 //        return new ResponseEntity<>(mapper.toDtos(findAll), HttpStatus.OK);
 //    }
 
 //    @GetMapping("/challenge")
-//    public ResponseEntity findAllByChallenge(@RequestParam @Positive int page,
+//    public ResponseEntity findAllByChallenge(
 //                                          @RequestParam @Positive int size) {
-//        List<Challenge> findAllByChallenge = challengeService.findAllStatus(CHALLENGE, page, size);
+//        List<Challenge> findAllByChallenge = challengeService.findAllStatus(CHALLENGE, size);
 //
 //        return new ResponseEntity<>(mapper.toDtos(findAllByChallenge), HttpStatus.OK);
 //    }
 
 //    @GetMapping("/success")
-//    public ResponseEntity findAllBySuccess(@RequestParam @Positive int page,
+//    public ResponseEntity findAllBySuccess(
 //                                        @RequestParam @Positive int size) {
-//        List<Challenge> findAllBySuccess = challengeService.findAllStatus(SUCCESS, page, size);
+//        List<Challenge> findAllBySuccess = challengeService.findAllStatus(SUCCESS, size);
 //
 //        return new ResponseEntity<>(mapper.toDtos(findAllBySuccess), HttpStatus.OK);
 //    }
 
 //    @GetMapping("/fail")
-//    public ResponseEntity findAllByFail(@RequestParam @Positive int page,
+//    public ResponseEntity findAllByFail(
 //                                          @RequestParam @Positive int size) {
-//        List<Challenge> findAllByFail = challengeService.findAllStatus(FAIL, page, size);
+//        List<Challenge> findAllByFail = challengeService.findAllStatus(FAIL, size);
 //
 //        return new ResponseEntity<>(mapper.toDtos(findAllByFail), HttpStatus.OK);
 //    }
@@ -119,9 +119,9 @@ public class ChallengeController {
 
 //    @GetMapping("/{chaellenge-id}/auths")
 //    public ResponseEntity findAuthsByChallenge(@PathVariable("chaellenge-id") @Positive Long challengeId,
-//                                               @RequestParam @Positive int page,
+//                                               
 //                                               @RequestParam @Positive int size) {
-//        List<Auth> findAuths = authService.findAllByChallenge(challengeId, page, size); // 쿼리문 비교1
+//        List<Auth> findAuths = authService.findAllByChallenge(challengeId, size); // 쿼리문 비교1
 //        challengeService.findAuthsByChallengeId(challengeId);   // 쿼리문 비교2
 //
 //        return new ResponseEntity<>(authMapper.toDtos(findAuths), HttpStatus.CREATED);

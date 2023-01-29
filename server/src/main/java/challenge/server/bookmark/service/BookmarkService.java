@@ -7,18 +7,14 @@ import challenge.server.exception.ExceptionCode;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.repository.HabitRepository;
 import challenge.server.habit.service.HabitService;
-import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.repository.UserRepository;
 import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,11 +30,11 @@ public class BookmarkService {
     private final HabitService habitService;
 
     // 회원이 찜한 습관들의 목록 출력
-    public List<Habit> findBookmarkHabits(Long lastHabitId, Long userId, int page, int size) {
+    public List<Habit> findBookmarkHabits(Long lastHabitId, Long userId, int size) {
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없음
 //        Long loggedInUserId = userService.verifyLoggedInUser(userId);
         User findUser = userService.findVerifiedUser(userId);
-        List<Habit> habits  = bookmarkRepository.findAllByUserUserId(lastHabitId, findUser.getUserId(), page, size);
+        List<Habit> habits  = bookmarkRepository.findAllByUserUserId(lastHabitId, findUser.getUserId(), size);
 
         return habits;
     }

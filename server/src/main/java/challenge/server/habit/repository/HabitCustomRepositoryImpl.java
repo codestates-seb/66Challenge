@@ -18,7 +18,7 @@ public class HabitCustomRepositoryImpl implements HabitCustomRepository {
 
 
     @Override
-    public List<Habit> findByTitleIsContaining(Long lastHabitId, String keyword, int page, int size) {
+    public List<Habit> findByTitleIsContaining(Long lastHabitId, String keyword, int size) {
         return jpaQueryFactory
                 .selectFrom(habit)
                 .where(
@@ -26,77 +26,70 @@ public class HabitCustomRepositoryImpl implements HabitCustomRepository {
                         ltHabitId(lastHabitId),
                         habit.title.contains(keyword)
                 ).orderBy(habit.habitId.desc())
-                .offset(page - 1)
                 .limit(size)
                 .fetch();
     }
 
     @Override
-    public List<Habit> findByCategory(Long lastHabitId, Long categoryId, int page, int size) {
+    public List<Habit> findByCategory(Long lastHabitId, Long categoryId, int size) {
         return jpaQueryFactory
                 .selectFrom(habit)
                 .where(
                         ltHabitId(lastHabitId),
                         habit.category.categoryId.eq(categoryId)
                 ).orderBy(habit.habitId.desc())
-                .offset(page - 1)
                 .limit(size)
                 .fetch();
     }
 
     @Override
-    public List<Habit> findByHostUserId(Long lastHabitId, Long userId, int page, int size) {
+    public List<Habit> findByHostUserId(Long lastHabitId, Long userId, int size) {
         return jpaQueryFactory
                 .selectFrom(habit)
                 .where(
                         ltHabitId(lastHabitId),
                         habit.host.userId.eq(userId)
                 ).orderBy(habit.habitId.desc())
-                .offset(page - 1)
                 .limit(size)
                 .fetch();
     }
 
     @Override
-    public List<Habit> findAllNoOffset(Long lastHabitId, int page, int size) {
+    public List<Habit> findAllNoOffset(Long lastHabitId, int size) {
         return jpaQueryFactory
                 .selectFrom(habit)
                 .where(ltHabitId(lastHabitId))
                 .orderBy(habit.habitId.desc())
-                .offset(page - 1)
                 .limit(size)
                 .fetch();
     }
 
     @Override
-    public List<Habit> findAllByScore(Long lastHabitId, int page, int size) {
+    public List<Habit> findAllByScore(int page, int size) {
         return jpaQueryFactory
                 .selectFrom(habit)
-                .where(ltHabitId(lastHabitId))
                 .orderBy(habit.avgScore.desc(), habit.bookmarks.size().desc(), habit.habitId.desc())
-                .offset(page - 1)
+                .offset(page)
                 .limit(size)
                 .fetch();
     }
 
     @Override
-    public List<Habit> findAllByPopularity(Long lastHabitId, int page, int size) {
+    public List<Habit> findAllByPopularity(int page, int size) {
         return jpaQueryFactory
                 .selectFrom(habit)
-                .where(ltHabitId(lastHabitId))
-                .orderBy(habit.challengers.desc(),habit.bookmarks.size().desc(),habit.habitId.desc())
-                .offset(page-1)
+                .orderBy(habit.challengers.desc(), habit.avgScore.desc(), habit.bookmarks.size().desc(), habit.habitId.desc())
+                .offset(page)
                 .limit(size)
                 .fetch();
     }
 
     @Override
-    public List<Habit> findAllByNewest(Long lastHabitId, int page, int size) {
+    public List<Habit> findAllByNewest(Long lastHabitId, int size) {
         return jpaQueryFactory
                 .selectFrom(habit)
                 .where(ltHabitId(lastHabitId))
                 .orderBy(habit.habitId.desc())
-                .offset(page-1)
                 .limit(size)
                 .fetch();
     }

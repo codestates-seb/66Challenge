@@ -11,12 +11,6 @@ import java.util.Optional;
 
 
 public interface ChallengeRepository extends JpaRepository<Challenge, Long>, ChallengeCustomRepository {
-    Page<Challenge> findAllByStatus(Status status, Pageable pageable);
-
-    Page<Challenge> findAllByUserUserId(Long userId, Pageable pageable);
-
-    Page<Challenge> findAllByUserUserIdAndStatus(Long userId, Challenge.Status status, Pageable pageable);
-
     // user '마이페이지' 관련 추가
     List<Challenge> findAllByUserUserIdAndStatusOrderByChallengeIdAsc(Long userId, Challenge.Status status);
 
