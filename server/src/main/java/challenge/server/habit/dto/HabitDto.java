@@ -19,10 +19,9 @@ public class HabitDto {
         private Long hostUserId;
         private String title;
         private String subTitle;
-        @NotNull
         private String category;
         private String body;
-        private String mdBody;
+        private String bodyHTML;
         private String authType;
         private String authStartTime;
         private String authEndTime;
@@ -33,11 +32,9 @@ public class HabitDto {
     public static class Patch {
         private String title;
         private String subTitle;
-        @NotNull
         private String category;
         private String body;
-        private String mdBody;
-        @NotNull
+        private String bodyHTML;
         private String authType;
         private String authStartTime;
         private String authEndTime;
@@ -65,7 +62,8 @@ public class HabitDto {
     public static class Detail {
         private String hostUsername;
         private String subTitle;
-        private String mdBody;
+        private String category;
+        private String bodyHTML;
         private String authType;
         private String authStartTime;
         private String authEndTime;
