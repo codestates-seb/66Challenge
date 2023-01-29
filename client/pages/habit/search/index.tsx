@@ -42,13 +42,22 @@ export default function SearchHabit() {
   const [search, setSearch] = useState('');
   const [searchHabits, setSearchHabits] = useState<IhabitValue[]>([]);
   const [doing, setDoing] = useState('all');
-  const [page, setPage] = useState(1);
+  const [lastId, setLastId] = useState(null);
   const [active, setActive] = useState(0);
+  const size = 15;
+  const type = 'habit';
 
   const [url, setUrl] = useState(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?`,
   );
-  const [setTarget] = useIntersection(url, page, setPage, setSearchHabits);
+  const [setTarget] = useIntersection(
+    url,
+    lastId,
+    setLastId,
+    setSearchHabits,
+    size,
+    type,
+  );
   const { userId } = useAppSelector((state) => state.loginIdentity);
   const categoryList: IcategoryList[] = [
     { categoryId: 0, name: '전체' },
@@ -68,7 +77,7 @@ export default function SearchHabit() {
     //키워드 비동기 함수 호출
     if (search === '') {
       setDoing('all');
-      setPage(1);
+      setLastId(null);
       setSearchHabits([]);
       if (userId === null) {
         setUrl(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?`);
@@ -82,7 +91,7 @@ export default function SearchHabit() {
         return;
       }
       setActiveSearch(search);
-      setPage(1);
+      setLastId(null);
       setSearchHabits([]);
       if (userId === null) {
         setUrl(
@@ -97,7 +106,7 @@ export default function SearchHabit() {
   useEffect(() => {
     if (active !== 0) {
       setDoing('category');
-      setPage(1);
+      setLastId(null);
       setSearchHabits([]);
       if (userId === null) {
         setUrl(
@@ -110,7 +119,7 @@ export default function SearchHabit() {
       }
     } else {
       setDoing('all');
-      setPage(1);
+      setLastId(null);
       setSearchHabits([]);
       setUrl(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?`);
     }
