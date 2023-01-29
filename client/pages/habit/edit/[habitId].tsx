@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
-import { FileUploader } from '../../components/fileUploader';
+import { FileUploader } from '../../../components/fileUploader';
 import { useState, useEffect } from 'react';
-import { useAppSelector } from '../../ducks/store';
-import { postHabit } from '../../module/habitFunctionMoudules';
+import { useAppSelector } from '../../../ducks/store';
+import { postHabit } from '../../../module/habitFunctionMoudules';
 import { useRouter } from 'next/router';
 
 interface HabitFormValues {
@@ -19,11 +19,16 @@ interface HabitFormValues {
 
 export type { HabitFormValues };
 
-const Post = () => {
+const EditHabit = () => {
   const { userId } = useAppSelector((state) => state.loginIdentity);
   const { register, handleSubmit, getValues, setFocus, watch, reset } =
     useForm<HabitFormValues>();
   const router = useRouter();
+
+  useEffect(() => {
+    if (router.isReady) {
+    }
+  }, [router.isReady]);
 
   const { habitImage, successImage, failImage } = watch();
   const [habitImagePreview, setHabitImagePreview] = useState('');
@@ -426,4 +431,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default EditHabit;

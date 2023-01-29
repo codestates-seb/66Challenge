@@ -119,7 +119,7 @@ export default function SearchHabit() {
     }
   }, []);
   return (
-    <div className="w-full min-w-[360px] max-w-[460px] overflow-y-scroll scrollbar-hide flex flex-col items-center p-4 pb-0">
+    <div className="w-full min-w-[360px] max-w-[460px] overflow-y-scroll scrollbar-hide flex flex-col items-center p-4 pb-0 min-h-screen">
       <form className="w-4/5 flex  justify-center mt-3 mb-6 items-center relative ">
         <input
           className="w-full border border-mainColor rounded-full text-sm h-[40px]  pl-3 pr-[40px] focus:border-subColor outline-none focus:shadow-[0_0_0.5rem] focus:shadow-subColor focus:outline-[1px] focus:outline-[#379fef];"
