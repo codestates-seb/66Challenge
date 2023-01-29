@@ -1,6 +1,9 @@
 package challenge.server.habit.dto;
 
+import challenge.server.habit.entity.AgeRatio;
 import challenge.server.habit.entity.Habit;
+import challenge.server.habit.entity.SexRatio;
+import challenge.server.habit.entity.StatusRatio;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -94,9 +97,9 @@ public class HabitDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ResponseStatistics {
-        int challenge;
-        int success;
-        int fail;
+        AgeRatio ageRatio;
+        SexRatio sexRatio;
+        StatusRatio statusRatio;
     }
 
 }

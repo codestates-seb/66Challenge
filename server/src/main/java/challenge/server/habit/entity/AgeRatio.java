@@ -1,29 +1,31 @@
-package challenge.server.habit.controller;
+package challenge.server.habit.entity;
 
 import challenge.server.challenge.entity.Challenge;
-import challenge.server.habit.entity.Habit;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.Embeddable;
-
-import static challenge.server.challenge.entity.Challenge.Status.*;
-
-//@Embeddable
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AgeRatio {
 
+    @ColumnDefault(value = "0")
     int teenager;
+    @ColumnDefault(value = "0")
     int twenties;
+    @ColumnDefault(value = "0")
     int thirties;
+    @ColumnDefault(value = "0")
     int forties;
+    @ColumnDefault(value = "0")
     int fifties;
+    @ColumnDefault(value = "0")
     int sixties;
+    @ColumnDefault(value = "0")
     int seventies;
 
-    public void makeStatistics(Habit habit) {
+    public AgeRatio makeStatistics(Habit habit) {
         if (habit != null) {
             int totalChallengeCount = habit.getChallenges().size();
 
@@ -91,7 +93,13 @@ public class AgeRatio {
             double seventiesCount = count;
 
             this.teenager = (int) Math.round(teenagerCount / totalChallengeCount * 100);
-//            this.twenties =
+            this.twenties = (int) Math.round(twentiesCount / totalChallengeCount * 100);
+            this.thirties = (int) Math.round(thirtiesCount / totalChallengeCount * 100);
+            this.forties = (int) Math.round(fortiesCount / totalChallengeCount * 100);
+            this.fifties = (int) Math.round(fiftiesCount / totalChallengeCount * 100);
+            this.sixties = (int) Math.round(sixtiesCount / totalChallengeCount * 100);
+            this.seventies = (int) Math.round(seventiesCount / totalChallengeCount * 100);
         }
+        return this;
     }
 }

@@ -8,6 +8,9 @@ import java.util.Optional;
 
 import challenge.server.category.service.CategoryService;
 import challenge.server.habit.dto.HabitDto;
+import challenge.server.habit.entity.AgeRatio;
+import challenge.server.habit.entity.SexRatio;
+import challenge.server.habit.entity.StatusRatio;
 import challenge.server.review.repository.ReviewRepository;
 import challenge.server.security.user.service.UserService;
 import challenge.server.challenge.repository.ChallengeRepository;
@@ -160,21 +163,13 @@ public class HabitMapperImpl {
 
     public HabitDto.ResponseStatistics makeHabitStatistics(Habit habit) {
         if (habit == null) return null;
-
-        int totalChallengeCount = habit.getChallenges().size();
-        double challengeCount = (double) habit.getChallenges().stream().filter(c -> c.getStatus() == CHALLENGE).count();
-        double successCount = (double) habit.getChallenges().stream().filter(c -> c.getStatus() == SUCCESS).count();
-        double failCount = (double) habit.getChallenges().stream().filter(c -> c.getStatus() == FAIL).count();
-
-        int challenge = (int) round(challengeCount / totalChallengeCount * 100);
-        int success = (int) round(successCount / totalChallengeCount * 100);
-        int fail = (int) round(failCount / totalChallengeCount * 100);
-
-        return HabitDto.ResponseStatistics
-                .builder()
-                .challenge(challenge)
-                .success(success)
-                .fail(fail)
+        AgeRatio ageRatio = AgeRatio.builder().build();
+        SexRatio sexRatio = SexRatio.builder().build();
+        StatusRatio statusRatio = StatusRatio.builder().build();
+        return ResponseStatistics.builder()
+                .ageRatio(ageRatio.makeStatistics(habit))
+                .statusRatio(statusRatio.makeStatistics(habit))
+                .sexRatio(sexRatio.makeStatistics(habit))
                 .build();
     }
 }

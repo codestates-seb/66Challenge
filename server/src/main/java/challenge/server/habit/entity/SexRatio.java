@@ -1,28 +1,33 @@
-package challenge.server.habit.controller;
+package challenge.server.habit.entity;
 
-import challenge.server.habit.entity.Habit;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
+import static challenge.server.security.user.entity.User.Gender.FEMALE;
 import static challenge.server.security.user.entity.User.Gender.MALE;
 
-//@Embeddable
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SexRatio {
+    @ColumnDefault(value = "0")
     int male;
+
+    @ColumnDefault(value = "0")
     int female;
 
-    public void makeStatistics(Habit habit) {
+    public SexRatio makeStatistics(Habit habit) {
         if (habit != null) {
             int totalChallengeCount = habit.getChallenges().size();
             double maleCount = habit.getChallenges().stream().
                     filter(challenge -> challenge.getUser().getGender() == MALE).count();
-            double femaleCount = totalChallengeCount - maleCount;
+            double femaleCount = habit.getChallenges().stream().
+                    filter(challenge -> challenge.getUser().getGender() == FEMALE).count();
 
             this.male = (int) Math.round(maleCount / totalChallengeCount * 100);
             this.female = (int) Math.round(femaleCount / totalChallengeCount * 100);
         }
+        return this;
     }
 }
