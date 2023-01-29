@@ -6,6 +6,7 @@ import challenge.server.security.dto.LoginDto;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.user.entity.User;
 import challenge.server.user.repository.UserRepository;
+import challenge.server.user.service.UserService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
@@ -34,14 +35,12 @@ import java.util.Map;
 
 import static challenge.server.user.entity.User.Status.ACTIVE;
 
-@Component
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    public AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @SneakyThrows
     @Override
@@ -50,30 +49,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
         LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
         log.info("# attemptAuthentication : loginDto.getEmail={}, login.getPassword={}",
-                loginDto.getUsername(),loginDto.getPassword());
+                loginDto.getUsername(), loginDto.getPassword());
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override
-//    @Transactional
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws ServletException, IOException {
         User user = (User) authResult.getPrincipal();
-        System.out.println("email = " + user.getEmail() + ", username = " + user.getUsername());
-
-        User findUser = userRepository.findByEmail(user.getUsername())
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-
-        // quit이나 banned 상태인 회원은 로그인 불가능 = active 상태인 회원만 로그인 가능
-        if (!findUser.getStatus().equals(ACTIVE)) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_USER);
-        }
-
-        // 비밀번호가 맞아야만 로그인 가능
-        if (!passwordEncoder.matches(user.getPassword(), findUser.getPassword())) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_USER);
-        }
+        System.out.println("email = " + user.getEmail() + ", username = " + user.getUsername() + ", password = " + user.getPassword()); // email = user1@naver.com, username = user1@naver.com, password = {bcrypt}$2a$10$EQKLOa1LlHu.jmw.yw3RR.gGKiLwAMcF2reXXu.2fmIk.SVqI6DUy
 
         String accessToken = delegateAccessToken(user);
         String refreshToken = delegateRefreshToken(user);
@@ -82,7 +67,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
 
-        findUser.saveRefreshToken(refreshToken);
+        userService.verifyLoginUser(user.getEmail(), user.getPassword(), refreshToken);
 
         Map<String, Long> body = new HashMap<>();
         body.put("userId", user.getUserId()); // 로그인 후 userId를 응답 body에 전달

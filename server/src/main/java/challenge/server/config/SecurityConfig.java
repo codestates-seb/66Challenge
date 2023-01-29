@@ -11,17 +11,23 @@ import challenge.server.security.handler.UserAuthenticationFailureHandler;
 import challenge.server.security.handler.UserAuthenticationSuccessHandler;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.utils.CustomAuthorityUtils;
+import challenge.server.user.repository.UserRepository;
 import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.ldap.LdapBindAuthenticationManagerFactory;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -53,10 +59,11 @@ public class SecurityConfig { // todo https 적용
                 .exceptionHandling()
                 .authenticationEntryPoint(new UserAuthenticationEntryPoint())
                 .accessDeniedHandler(new UserAccessDeniedHandler())
-//                .and()
-//                .apply(new CustomFilterConfigurer())
+                .and()
+                .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll()) // todo 역할 기반 리소스별 접근 권한 부여 필요
+//                .authenticationManager(new CustomAuthenticationManager())
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, userService))
                         .userInfoEndpoint() // oauth2 로그인 성공 후 가져올 때의 설정들
@@ -72,8 +79,6 @@ public class SecurityConfig { // todo https 적용
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-//        configuration.addExposedHeader("Authorization");
-//        configuration.addExposedHeader("Refresh");
         configuration.setExposedHeaders(Arrays.asList("Refresh", "Authorization"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -81,13 +86,13 @@ public class SecurityConfig { // todo https 적용
         return source;
     }
 
-    /*
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+//            builder.addFilter(new CustomFilter(authenticationManager));
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, userService);
             jwtAuthenticationFilter.setFilterProcessesUrl("/login");
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
@@ -99,5 +104,20 @@ public class SecurityConfig { // todo https 적용
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
-     */
+
+//    @Bean
+//    @Override
+//    public AuthenticationManager authenticationManagerBean() throws Exception {
+//        return super.authenticationManagerBean();
+//    }
+
+//    @Bean
+//    AuthenticationManager ldapAuthenticationManager(
+//            BaseLdapPathContextSource contextSource) {
+//        LdapBindAuthenticationManagerFactory factory =
+//                new LdapBindAuthenticationManagerFactory(contextSource);
+//        factory.setUserDnPatterns("uid={0},ou=people");
+//        factory.setUserDetailsContextMapper(new PersonContextMapper());
+//        return factory.createAuthenticationManager();
+//    }
 }

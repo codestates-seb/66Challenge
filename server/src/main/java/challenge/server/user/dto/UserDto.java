@@ -14,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class UserDto {
     @Getter
@@ -153,7 +154,7 @@ public class UserDto {
         //        private LocalDateTime earliestCreatedAt;
         private int biggestProgressDays;
         private List<UserDto.ChallengeDetailsDb> activeChallenges;
-        private List<UserDto.CategoryDb> activeCategories;
+        private Set<CategoryDb> activeCategories;
 //        @QueryProjection
 //        public UserDetailsDb(Long userId, String email, String username, LocalDateTime earliestCreatedAt) {
 //            this.userId = userId;

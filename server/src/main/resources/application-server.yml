@@ -51,6 +51,7 @@ spring:
       hibernate:
         format_sql: true  # SQL pretty print
     defer-datasource-initialization: true
+#    open-in-view: false
   sql:
     init:
       data-locations: classpath*:db/h2/data.sql
@@ -62,7 +63,7 @@ spring:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    key: challenge_66_jasypt_key # ${key}
+    key: ${key}
 mail:
   address:
     admin: ENC(JGBa0PpOXdYVZnt2VnvjmfjIiFzJzEsEMUU9EOaxGt0=)
