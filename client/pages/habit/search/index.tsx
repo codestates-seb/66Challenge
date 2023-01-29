@@ -47,7 +47,6 @@ export default function SearchHabit() {
   const size = 15;
   const type = 'habit';
 
-
   const [url, setUrl] = useState(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?`,
   );

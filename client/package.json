@@ -37,6 +37,7 @@
     "react-icons": "^4.7.1",
     "react-iframe": "^1.8.5",
     "react-kakao-login": "^2.1.1",
+    "react-quill": "^2.0.0",
     "react-redux": "^8.0.5",
     "redux-persist": "^6.0.0",
     "styled-components": "^5.3.6",

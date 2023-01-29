@@ -4,17 +4,19 @@ import { useState, useEffect } from 'react';
 import { useAppSelector } from '../../ducks/store';
 import { postHabit } from '../../module/habitFunctionMoudules';
 import { useRouter } from 'next/router';
+import { ReactQuillWrapper } from '../../module/reactQuill';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 interface HabitFormValues {
   title: string;
   subtitle: string;
-  body: string;
   category: string;
   authEndTime: string;
   authStartTime: string;
   habitImage: File | null;
   successImage: File | null;
-  failImage: File | null;
+  failImage?: File | null;
 }
 
 export type { HabitFormValues };
@@ -24,6 +26,43 @@ const Post = () => {
   const { register, handleSubmit, getValues, setFocus, watch, reset } =
     useForm<HabitFormValues>();
   const router = useRouter();
+
+  const [bodyData, setBodyData] = useState<string>('');
+  const [bodyHTMLData, setBodyHTMLData] = useState<string>('');
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, false] }],
+      ['bold', 'underline'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+        { align: [] },
+      ],
+    ],
+  };
+
+  const formats = [
+    'header',
+    'font',
+    'size',
+    'bold',
+    'italic',
+    'underline',
+    'list',
+    'bullet',
+    'align',
+    'indent',
+    'color',
+  ];
+  const bodyDataHandle = (
+    value: string,
+    editor: ReactQuill.UnprivilegedEditor,
+  ) => {
+    setBodyHTMLData(value);
+    setBodyData(editor.getText());
+  };
 
   const { habitImage, successImage, failImage } = watch();
   const [habitImagePreview, setHabitImagePreview] = useState('');
@@ -48,7 +87,6 @@ const Post = () => {
 
   useEffect(() => {
     if (failImage && failImage.length > 0) {
-      setVerify({ ...verify, failImageVerify: 'success' });
       const file = failImage[0];
       setFailImagePreview(URL.createObjectURL(file));
     }
@@ -62,11 +100,10 @@ const Post = () => {
     bodyVerify: '',
     authTimeVerify: 'success',
     successImageVerify: '',
-    failImageVerify: '',
     agreeVerify: 'fail',
   });
 
-  const titleRegExp = /^[A-Za-z0-9가-힇\s]{5,20}$/;
+  const titleRegExp = /^[A-Za-z0-9가-힇\s]{5,30}$/;
   const subtitleRegExp = /^[A-Za-z0-9가-힇\s]{5,10}$/;
   const bodyRegExp = /^[A-Za-z0-9가-힇\s`~!@#$%^&*()-_=+]{50,}$/;
 
@@ -82,7 +119,6 @@ const Post = () => {
     const {
       title,
       subtitle,
-      body,
       category,
       authEndTime,
       authStartTime,
@@ -99,14 +135,12 @@ const Post = () => {
       setVerify({ ...verify, categoryVerify: 'fail' });
     } else if (habitImage.length === 0) {
       setVerify({ ...verify, habitImageVerify: 'fail' });
-    } else if (bodyRegExp.test(body) === false) {
+    } else if (bodyRegExp.test(bodyData) === false) {
       setVerify({ ...verify, bodyVerify: 'fail' });
     } else if (authStartTime < authEndTime === false) {
       setVerify({ ...verify, authTimeVerify: 'fail' });
     } else if (successImage.length === 0) {
       setVerify({ ...verify, successImageVerify: 'fail' });
-    } else if (failImage.length === 0) {
-      setVerify({ ...verify, failImageVerify: 'fail' });
     } else {
       const formData = new FormData();
       formData.append(
@@ -116,7 +150,8 @@ const Post = () => {
             JSON.stringify({
               title,
               subTitle: subtitle,
-              body,
+              body: bodyData,
+              bodyHTML: bodyHTMLData,
               category,
               authEndTime,
               authStartTime,
@@ -134,7 +169,6 @@ const Post = () => {
       formData.append('failImg', failImage[0]);
 
       const response = await postHabit({ data: formData });
-      console.log(response);
       router.push(`/habit/detail/${response?.overview?.habitId}`);
       reset();
     }
@@ -143,7 +177,6 @@ const Post = () => {
   type nextInput =
     | 'title'
     | 'subtitle'
-    | 'body'
     | 'category'
     | 'authEndTime'
     | 'authStartTime';
@@ -288,19 +321,20 @@ const Post = () => {
           <label htmlFor="body" className="text-base font-semibold mb-1">
             습관 소개
           </label>
-          <textarea
+          <ReactQuillWrapper
             id="body"
-            className={`min-h-[150px] ${inputDefaultClassName}`}
+            className="[&>div.ql-container]:h-[400px] rounded-md [&>div.ql-toolbar]:rounded-t-md [&>div.ql-container]:rounded-b-md [&>div.ql-container]:text-base"
             placeholder="습관에 대한 소개글을 최소 50자 이상 작성해주세요."
-            onKeyDown={(e) => {
-              InputElKeyEvent(e, 'authStartTime');
+            theme="snow"
+            modules={modules}
+            formats={formats}
+            onChange={(value, delta, source, editor) =>
+              bodyDataHandle(value, editor)
+            }
+            onBlur={(previousSelection, source, editor) => {
+              blurHandle(bodyRegExp.test(editor.getText()), 'bodyVerify');
             }}
-            {...register('body', {
-              onBlur: () => {
-                blurHandle(bodyRegExp.test(getValues('body')), 'bodyVerify');
-              },
-            })}
-          ></textarea>
+          />
           {verify.bodyVerify === 'fail' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
               습관에 대한 설명글을 작성해주세요.
@@ -364,14 +398,14 @@ const Post = () => {
           <div className="text-base font-semibold mb-1">습관 인증 사진</div>
           <div className="flex flex-col">
             <div className="text-center text-green-600 py-2.5 text-sm font-bold">
-              올바른 인증 사례
+              올바른 인증 사례(필수)
             </div>
             <FileUploader
               imgFilePreview={successImagePreview}
               register={register('successImage')}
             />
             <div className="text-center text-rose-600 pt-5 pb-2.5 text-sm font-bold">
-              잘못된 인증 사례
+              잘못된 인증 사례(선택)
             </div>
             <FileUploader
               imgFilePreview={failImagePreview}
@@ -381,8 +415,7 @@ const Post = () => {
           <span className="pt-2.5 text-sm text-center font-semibold">
             사진의 가로 ・ 세로의 비율은 1:1이 권장됩니다.
           </span>
-          {verify.successImageVerify === 'fail' ||
-          verify.failImageVerify === 'fail' ? (
+          {verify.successImageVerify === 'fail' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
               습관 형성을 위한 인증 사진의 올바른 사례와 잘못된 사례에 대한
               이미지를 모두 업로드 해주세요.
