@@ -165,33 +165,6 @@ public class UserService {
     }
 
     @Transactional
-    public void verifyLoginUser(String email, String password, String refreshToken) {
-        // 로그인 시도하는 이메일 회원이 있는지 확인
-        User findUser = findLoginUserByEmail(email);
-
-        // quit이나 banned 상태인 회원은 로그인 불가능 = active 상태인 회원만 로그인 가능
-        if (!findUser.getStatus().equals(ACTIVE)) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_USER);
-        }
-
-        // 비밀번호가 맞아야만 로그인 가능
-//        if (!passwordEncoder.matches(password, findUser.getPassword())) {
-//            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_USER);
-//        }
-        if (!password.equals(findUser.getPassword())) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_USER);
-        }
-
-        // 위 조건들을 모두 만족해서 로그인 대상 회원인 경우
-        findUser.saveRefreshToken(refreshToken);
-    }
-
-    public User findLoginUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-    }
-
-    @Transactional
     public User addProfileImage(Long userId, MultipartFile multipartFile) {
         User findUser = findVerifiedUser(userId);
 
@@ -289,7 +262,7 @@ public class UserService {
 
         // 반환 자료형의 속성 중 컬렉션 준비
         List<UserDto.ChallengeDetailsDb> activeChallenges = new ArrayList<>();
-        Set<UserDto.CategoryDb> activeCategories = new HashSet<>(); // todo 2023.1.29(일) 11h10 카테고리들이 중복으로 출력됨
+        List<UserDto.CategoryDb> activeCategories = new ArrayList<>();
 
         // 오늘 날짜
         LocalDateTime today = LocalDateTime.now(); // 2023.1.19(목) 6h30 -> 2023.1.24(화) 7h 현재 주석 이해 안 됨
