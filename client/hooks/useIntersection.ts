@@ -79,61 +79,61 @@ export function useIntersection(
   return [setTarget];
 }
 
-// export function useIntersection(
-//   url: string,
-//   page: number,
-//   setPage: React.Dispatch<React.SetStateAction<number>>,
-//   setData: React.Dispatch<React.SetStateAction<Array<unknown>>>,
-// ): Array<React.Dispatch<React.SetStateAction<HTMLElement>>> {
-//   const [target, setTarget] = useState(null);
-//   const [isLoaded, setIsLoaded] = useState(false);
-//   const [stop, setStop] = useState(false);
-//   const router = useRouter();
+export function useIntersectionPage(
+  url: string,
+  page: number,
+  setPage: React.Dispatch<React.SetStateAction<number>>,
+  setData: React.Dispatch<React.SetStateAction<Array<unknown>>>,
+): Array<React.Dispatch<React.SetStateAction<HTMLElement>>> {
+  const [target, setTarget] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [stop, setStop] = useState(false);
+  const router = useRouter();
 
-//   const getMoreItem = () => {
-//     setIsLoaded(true);
-//   };
+  const getMoreItem = () => {
+    setIsLoaded(true);
+  };
 
-//   const onIntersect: IntersectionObserverCallback = async (
-//     [entry],
-//     observer,
-//   ) => {
-//     if (entry.isIntersecting && !isLoaded) {
-//       observer.unobserve(entry.target);
-//       await getMoreItem();
+  const onIntersect: IntersectionObserverCallback = async (
+    [entry],
+    observer,
+  ) => {
+    if (entry.isIntersecting && !isLoaded) {
+      observer.unobserve(entry.target);
+      await getMoreItem();
 
-//       observer.observe(entry.target);
-//     }
-//   };
+      observer.observe(entry.target);
+    }
+  };
 
-//   useEffect(() => {
-//     setStop(false);
-//   }, [url]);
+  useEffect(() => {
+    setStop(false);
+  }, [url]);
 
-//   useEffect(() => {
-//     let observer: IntersectionObserver;
-//     if (target && !stop) {
-//       observer = new IntersectionObserver(onIntersect, {
-//         threshold: 1,
-//       });
-//       observer.observe(target);
-//     }
-//     return () => observer && observer.disconnect();
-//   }, [target, isLoaded, stop]);
+  useEffect(() => {
+    let observer: IntersectionObserver;
+    if (target && !stop) {
+      observer = new IntersectionObserver(onIntersect, {
+        threshold: 1,
+      });
+      observer.observe(target);
+    }
+    return () => observer && observer.disconnect();
+  }, [target, isLoaded, stop]);
 
-//   useEffect(() => {
-//     if (isLoaded && !stop && router.isReady) {
-//       axios.get(`${url}page=${page}&size=30`).then((res) => {
-//         setData((data) => data.concat(res.data));
-//         setPage((page) => page + 1);
-//         setIsLoaded(false);
+  useEffect(() => {
+    if (isLoaded && !stop && router.isReady) {
+      axios.get(`${url}page=${page}&size=30`).then((res) => {
+        setData((data) => data.concat(res.data));
+        setPage((page) => page + 1);
+        setIsLoaded(false);
 
-//         if (res.data.length < 30) {
-//           setStop(true);
-//         }
-//       });
-//     }
-//   }, [isLoaded, stop, router.isReady]);
+        if (res.data.length < 30) {
+          setStop(true);
+        }
+      });
+    }
+  }, [isLoaded, stop, router.isReady]);
 
-//   return [setTarget];
-// }
+  return [setTarget];
+}

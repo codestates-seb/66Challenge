@@ -1,17 +1,12 @@
 import { SlideBanner } from '../components/slideBanner';
-import {
-  slideData,
-  subSlideData,
-  categoryData,
-  habitWrapperData,
-} from '../data/homeStaticData';
+import { slideData, subSlideData, categoryData } from '../data/homeStaticData';
 import { useRouter } from 'next/router';
 import { HabitWrapperHorizontal } from '../components/habitWrapperHorizontal';
 import Image from 'next/image';
 import React from 'react';
 import { useAppSelector } from '../ducks/store';
 import { Footer } from '../components/footer';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getHabitsInHome } from '../module/habitFunctionMoudules';
 
 interface habitsType {
@@ -43,18 +38,27 @@ const Home: React.FC = () => {
       userId,
       type: 'popularity',
       page: '1',
-      size: '30',
-    }).then((data) => setHabitsInHome1(data.slice(0, 10)));
+      size: '10',
+    }).then((data) => setHabitsInHome1(data));
     getHabitsInHome({
       userId,
       type: 'recommend',
       page: '1',
-      size: '30',
-    }).then((data) => setHabitsInHome2(data.slice(0, 10)));
+      size: '10',
+    }).then((data) => setHabitsInHome2(data));
   }, []);
-
+  const openScroll = useCallback(() => {
+    if (document.body.style.overflow === 'hidden') {
+      document.body.style.removeProperty('overflow');
+    }
+  }, []);
   return (
-    <div className="-mb-[50px]">
+    <div
+      className="-mb-[50px]"
+      onWheel={() => {
+        openScroll();
+      }}
+    >
       <SlideBanner bannerCont={slideData} t={2000} pagination={true} />
       <div className="main-category px-[20px]">
         <ul className="main-category-list grid grid-cols-4 my-[20px]">
@@ -89,7 +93,12 @@ const Home: React.FC = () => {
         />
       </div>
       <div className="py-[20px]">
-        <SlideBanner bannerCont={subSlideData} t={4000} pagination={false} />
+        <SlideBanner
+          bannerCont={subSlideData}
+          t={4000}
+          pagination={false}
+          maxHeight="[&>div]:max-h-[200px]"
+        />
       </div>
       <div>
         <HabitWrapperHorizontal

@@ -25,7 +25,7 @@ export const subSlideData: Array<slideDataType> = [
   },
   {
     bgImgUrl: '/image/slideImg/homeSub/slideImg2.svg',
-    bannerLink: '',
+    bannerLink: '/contents/book',
   },
 ];
 
@@ -173,34 +173,3 @@ interface habitWrapperDataType {
   body: string;
   isBooked: boolean;
 }
-
-export const habitWrapperData: Array<habitWrapperDataType> = [
-  {
-    habitId: 1,
-    thumbImgUrl: '/image/running.png',
-    title: '달리기 3km',
-    body: '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
-    isBooked: false,
-  },
-  {
-    habitId: 2,
-    thumbImgUrl: '/image/running.png',
-    title: '달리기 3km',
-    body: '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
-    isBooked: false,
-  },
-  {
-    habitId: 3,
-    thumbImgUrl: '/image/running.png',
-    title: '달리기 3km',
-    body: '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
-    isBooked: false,
-  },
-  {
-    habitId: 4,
-    thumbImgUrl: '/image/running.png',
-    title: '달리기 3km',
-    body: '매일 아침에 3km 달리기를 실천합니다. 상쾌한 아침을 맞이하며 건강도 챙겨보세요!',
-    isBooked: false,
-  },
-];

@@ -1,25 +1,21 @@
 import { useState } from 'react';
 import { HabitWrapperVertical } from '../../components/habitWrapperVertical';
-import { useIntersection } from '../../hooks/useIntersection';
+import { useIntersectionPage } from '../../hooks/useIntersection';
 import { useAppSelector } from '../../ducks/store';
 
 const HotList: React.FC = () => {
   const [habitWrapperData, setHabitWrapperData] = useState([]);
+  const [page, setPage] = useState(1);
   const { userId } = useAppSelector((state) => state.loginIdentity);
   const url: string = `${
     process.env.NEXT_PUBLIC_SERVER_URL
   }/habits/sort/popularity?${userId ? 'userId=' + userId + '&' : ''}`;
-  const [lastId, setLastId] = useState<number>(null);
-  const size = 15;
-  const type = 'habit';
 
-  const [setTarget] = useIntersection(
+  const [setTarget] = useIntersectionPage(
     url,
-    lastId,
-    setLastId,
+    page,
+    setPage,
     setHabitWrapperData,
-    size,
-    type,
   );
 
   return (

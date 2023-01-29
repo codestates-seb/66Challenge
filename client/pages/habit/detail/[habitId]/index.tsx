@@ -18,6 +18,8 @@ interface habitDetailOverview {
 interface habitDetailDetail {
   hostUsername: string;
   subTitle: string;
+  bodyHTML: string;
+  category: string;
   authType: string | null;
   authStartTime: string;
   authEndTime: string;
@@ -27,7 +29,7 @@ interface habitDetailDetail {
 
 interface habitDetailImage {
   succImgUrl: string | null;
-  failImgUrl: string | null;
+  failImgUrl?: string | null;
 }
 
 interface habitDataType {
@@ -55,7 +57,11 @@ const HabitDetail: React.FC = () => {
       <div className="habit-detail-top">
         <div className="habit-detail-top-image">
           <Image
-            src={habitData?.overview?.thumbImgUrl}
+            src={
+              Object.keys(habitData).length
+                ? habitData.overview.thumbImgUrl
+                : '/image/defaultImg.jpg'
+            }
             alt="habit image"
             width={500}
             height={500}
@@ -90,10 +96,10 @@ const HabitDetail: React.FC = () => {
       </div>
       <div className="habit-detail-middle p-5 border-b border-borderColor">
         <div className="habit-detail-body">
-          <h3 className="text-lg font-semibold pb-5">상세내용</h3>
-          <p className="pb-2.5 w-full whitespace-normal break-words">
-            {habitData?.overview?.body}
-          </p>
+          <h3 className="text-lg font-semibold pb-5 [&>p]:pb-2.5 [&>p]:w-full [&>p]:whitespace-normal [&>p]:break-words">
+            상세내용
+          </h3>
+          {habitData?.detail?.bodyHTML}
         </div>
       </div>
       <div className="habit-detail-bottom p-5">
@@ -110,11 +116,15 @@ const HabitDetail: React.FC = () => {
           까지 입니다.
         </p>
         <p>인증 사진의 올바른 예와 잘못된 예는 아래와 같습니다.</p>
-        <div className="pt-5 flex gap-5">
+        <div className="pt-5 flex justify-center gap-5">
           <div className="flex flex-col">
             <div className="min-h-[150px] flex items-center">
               <Image
-                src={habitData?.image?.succImgUrl}
+                src={
+                  Object.keys(habitData).length
+                    ? habitData.image.succImgUrl
+                    : '/image/defaultImg.jpg'
+                }
                 alt="correct auth image"
                 width={500}
                 height={500}
@@ -124,19 +134,21 @@ const HabitDetail: React.FC = () => {
               {'올바른 인증사진'}
             </div>
           </div>
-          <div className="flex flex-col">
-            <div className="min-h-[150px] flex items-center">
-              <Image
-                src={habitData?.image?.failImgUrl}
-                alt="incorrect auth image"
-                width={500}
-                height={500}
-              />
+          {habitData?.image?.failImgUrl && (
+            <div className="flex flex-col">
+              <div className="min-h-[150px] flex items-center">
+                <Image
+                  src={habitData.image.failImgUrl}
+                  alt="incorrect auth image"
+                  width={500}
+                  height={500}
+                />
+              </div>
+              <div className="text-center text-rose-600 pt-2.5 text-sm font-bold">
+                {'잘못된 인증사진'}
+              </div>
             </div>
-            <div className="text-center text-rose-600 pt-2.5 text-sm font-bold">
-              {'잘못된 인증사진'}
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
