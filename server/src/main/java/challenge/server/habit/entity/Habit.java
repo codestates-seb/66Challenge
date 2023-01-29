@@ -39,6 +39,7 @@ public class Habit extends BaseTimeEntity {
     private String succImgUrl;
     private String failImgUrl;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
