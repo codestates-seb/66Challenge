@@ -1,12 +1,9 @@
 package challenge.server.user.controller;
 
-import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.bookmark.service.BookmarkService;
 import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
-import challenge.server.habit.mapper.HabitMapperImpl;
-import challenge.server.security.dto.LogoutDto;
-import challenge.server.user.dto.EmailVerificationDto;
+import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.mapper.UserMapperImpl;
@@ -20,13 +17,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.util.List;
-
-import static challenge.server.habit.entity.QHabit.habit;
 
 @RestController
 @RequestMapping("/users")
@@ -207,8 +205,15 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//    public ResponseEntity logout(LogoutDto logoutDto) {
-//
+//    @PostMapping("/reissues")
+//    public ResponseEntity reissueToken(@Validated UserDto.TokenRequest requestBody, HttpServletResponse response) throws ServletException, IOException {
+//        userService.reissueToken(requestBody, response);
+//        return new ResponseEntity<>(HttpStatus.OK);
 //    }
 
+    @PostMapping("/{user-id}/logout")
+    public ResponseEntity logout(@Validated @RequestBody UserDto.LogoutRequest requestBody) {
+        userService.logout(requestBody);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

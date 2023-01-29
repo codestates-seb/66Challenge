@@ -1,8 +1,11 @@
 package challenge.server.response;
 
 import challenge.server.exception.ExceptionCode;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.StreamingHttpOutputMessage;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -46,6 +49,25 @@ public class ErrorResponse {
 
     public static ErrorResponse of(HttpStatus httpStatus, String message) {
         return new ErrorResponse(httpStatus.value(), message);
+    }
+
+    public ResponseEntity<?> fail(HttpStatus status, String message) {
+        Body body = Body.builder()
+                .state(status.value())
+                .message(message)
+                .build();
+
+        return ResponseEntity.ok(body);
+    }
+
+    @Getter
+    @Builder
+    private static class Body {
+        private int state;
+        private String result;
+        private String message;
+        private Object data;
+        private Object error;
     }
 
     @Getter

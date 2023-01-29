@@ -225,7 +225,7 @@ public class UserDto {
         private String body;
         //        private Long categoryId;
         private Boolean isBooked;
-//        private String hostUsername; // 현재 화면 정의서 상 습관 목록 및 상세 조회 페이지에 host 정보 없는데, 확인해보기
+        //        private String hostUsername; // 현재 화면 정의서 상 습관 목록 및 상세 조회 페이지에 host 정보 없는데, 확인해보기
         private String thumbImgUrl; // 사진 저장 방식 결정 필요
     }
 
@@ -248,5 +248,38 @@ public class UserDto {
     public static class Redis {
         private Long userId;
         private String email;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    @NoArgsConstructor
+    public static class LoginRequest {
+        private String username;
+        private String password;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    @NoArgsConstructor
+    public static class TokenRequest {
+        @NotBlank(message = "accessToken을 입력해 주세요.")
+        String accessToken;
+
+        @NotBlank(message = "refreshToken을 입력해 주세요.")
+        String refreshToken;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    @NoArgsConstructor
+    public static class LogoutRequest {
+        @NotBlank(message = "잘못된 요청입니다.")
+        String accessToken;
+
+        @NotBlank(message = "잘못된 요청입니다.")
+        String refreshToken;
     }
 }
