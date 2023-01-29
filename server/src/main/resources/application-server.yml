@@ -10,6 +10,7 @@ spring:
             client-id: ENC(YROBiwrWocFI0OGZCEDse+j/iHoWN4eO216IVv3+HaZP0tsMPfXIMkJqWGfyYFuty/rb4f7UDi9B/OByAgeNxGQbRgwcC7nHTi/lhasIXaRfW/ETFNQo4g==)
             client-secret: ENC(7a9NSzNM7KRlnEW5/UmYcKvcDNrbah0tPTV43EzKUZ1xJi1objqQLUANPHdpp6rv)
             scope: profile, email # 기본값이 openid, profile, email이지만 openid를 등록하게 되면 서비스마다(카카오, 네이버) OAuth2Service를 만들어야하기 때문에 profile, email만 scope로 지정
+            redirect-uri: "https://66challenge-server.store/login/oauth2/code/google"
           kakao:
             client-id: ENC(1HIZn2QzKn4nRunWgWlDbmi6D948IfN/0vuLeoPwwc8oJxlsWOfoU7/K3pOUWG4v)   # REST API 키
             client-secret: ENC(w/Ip7Zu91manw2kqhhRPO6St73p2GOaOhtigoc+qT4pNbH+FKvuALyd7cq9nv1Zt)
