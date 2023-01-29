@@ -151,18 +151,20 @@ const Header: FC = () => {
   };
 
   return (
-    <header className="sticky top-0 bg-white z-50">
-      <div>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@700&display=swap"
-          rel="stylesheet"
-        />
-      </div>
+    <header className="z-[1] sticky top-0 bg-white">
+      <div className="z-40">
+        <div>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@700&display=swap"
+            rel="stylesheet"
+          />
+        </div>
 
-      <div className="box-border flex flex-row h-14 justify-between ">
-        <LeftSide />
-        <MiddleSide />
-        <RightSide />
+        <div className="box-border flex flex-row h-14 justify-between ">
+          <LeftSide />
+          <MiddleSide />
+          <RightSide />
+        </div>
       </div>
     </header>
   );

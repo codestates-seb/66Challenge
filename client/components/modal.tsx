@@ -55,9 +55,9 @@ export const Modal = ({
   };
 
   return (
-    <div className="modal-container z-50 ">
+    <div className="modal-container z-50">
       <div
-        className="modal-backdrop inset-0 fixed min-w-[360px] max-w-[460px] bg-slate-200/50 flex justify-center items-center"
+        className="modal-backdrop inset-0 z-50 left-1/2 translate-x-[-50%] fixed min-w-[360px] max-w-[460px] w-full bg-slate-200/50 flex justify-center items-center"
         onClick={closeModalHandler}
       >
         <div
