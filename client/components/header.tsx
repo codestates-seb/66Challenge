@@ -8,7 +8,7 @@ import {
   IoShareSocialSharp,
   IoHome,
 } from 'react-icons/io5';
-
+import { PushSubscribe } from './pushSubscribe';
 import Image from 'next/image';
 import logo from '../public/image/66logo.png';
 import { FC } from 'react';
@@ -133,7 +133,10 @@ const Header: FC = () => {
             ''
           )}
           {isMyPage ? (
-            <IoSettings className="h-6 w-6" /> // TODO : 세부설정 추가되면 변경할 것
+            <div className="flex">
+              <PushSubscribe />
+              <IoSettings className="h-6 w-6 ml-2" />
+            </div>
           ) : (
             <Link href={'/habit/search'}>
               <IoSearch className="h-6 w-6" />
