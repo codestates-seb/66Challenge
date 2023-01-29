@@ -38,11 +38,13 @@ export default function SearchHabit() {
       setArrowDirection({ className: downArrow, boolean: false });
     }
   };
+  const [activeSearch, setActiveSearch] = useState('');
   const [search, setSearch] = useState('');
   const [searchHabits, setSearchHabits] = useState<IhabitValue[]>([]);
   const [doing, setDoing] = useState('all');
   const [page, setPage] = useState(1);
   const [active, setActive] = useState(0);
+
   const [url, setUrl] = useState(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/search?`,
   );
@@ -76,6 +78,10 @@ export default function SearchHabit() {
       );
     } else {
       setDoing('search');
+      if (search === activeSearch) {
+        return;
+      }
+      setActiveSearch(search);
       setPage(1);
       setSearchHabits([]);
       if (userId === null) {
@@ -173,7 +179,7 @@ export default function SearchHabit() {
               ? '전체 습관'
               : doing === 'category'
               ? `${categoryList[active].name} 습관`
-              : `${search}에 대한 습관`
+              : `${activeSearch}에 대한 습관`
           }
           habitWrapperData={searchHabits}
         />
