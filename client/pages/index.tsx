@@ -6,7 +6,7 @@ import Image from 'next/image';
 import React from 'react';
 import { useAppSelector } from '../ducks/store';
 import { Footer } from '../components/footer';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getHabitsInHome } from '../module/habitFunctionMoudules';
 
 interface habitsType {
@@ -47,9 +47,18 @@ const Home: React.FC = () => {
       size: '10',
     }).then((data) => setHabitsInHome2(data));
   }, []);
-
+  const openScroll = useCallback(() => {
+    if (document.body.style.overflow === 'hidden') {
+      document.body.style.removeProperty('overflow');
+    }
+  }, []);
   return (
-    <div className="-mb-[50px]">
+    <div
+      className="-mb-[50px]"
+      onWheel={() => {
+        openScroll();
+      }}
+    >
       <SlideBanner bannerCont={slideData} t={2000} pagination={true} />
       <div className="main-category px-[20px]">
         <ul className="main-category-list grid grid-cols-4 my-[20px]">
