@@ -254,15 +254,6 @@ public class HabitController {
         return new ResponseEntity(authMapper.toDtos(auths), HttpStatus.OK);
     }
 
-    // 습관 조회 - 인증 탭 - Auth 리스트 DTO(특정 습관 id에 해당하는)
-    @GetMapping("/{habit-id}/auths/lastId")
-    public ResponseEntity getAuthsByHabit(@PathVariable("habit-id") @Positive Long habitId,
-                                          @RequestParam(required = false) @Positive Long lastId,
-                                          @RequestParam @Positive int size) {
-        List<Auth> auths = authService.findAllByHabit(lastId, habitId, size);
-        return new ResponseEntity(authMapper.toDtos(auths), HttpStatus.OK);
-    }
-
     @PatchMapping("/{habit-id}/auths/{auth-id}")
     public ResponseEntity updateAuth(@PathVariable("auth-id") @Positive Long authId,
                                      @RequestPart(value = "file", required = false) MultipartFile multipartFile,
