@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { getCookie, setCookie, removeCookie } from './cookies';
-import { useAppDispatch } from '../ducks/store';
-import { initLoginIdentity } from '../ducks/loginIdentitySlice';
 
 interface onSilentRefreshType {
   refreshToken: string;
@@ -9,7 +7,8 @@ interface onSilentRefreshType {
 }
 
 export const onSilentRefresh = () => {
-  const dispatch = useAppDispatch();
+  console.log(getCookie('refreshJwtToken'));
+  if (!getCookie('refreshJwtToken')) return;
   const data: onSilentRefreshType = {
     refreshToken: getCookie('refreshJwtToken'),
     isRefresh: false,
@@ -24,8 +23,7 @@ export const onSilentRefresh = () => {
       }
     })
     .catch((error) => {
-      // TODO 일시적으로 로그아웃되도록 해놓았음 -> 추후 Refresh 토큰을 재발급 받는 형태로 수정 요함
-      dispatch(initLoginIdentity());
+      // TODO 추후 Refresh 토큰을 재발급 받는 형태로 수정 요함
       console.error(error);
     });
 };
