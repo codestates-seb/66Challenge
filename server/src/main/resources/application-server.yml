@@ -67,7 +67,7 @@ spring:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    key: challenge_66_jasypt_key # ${key}
+    key: ${key}
 mail:
   address:
     admin: ENC(JGBa0PpOXdYVZnt2VnvjmfjIiFzJzEsEMUU9EOaxGt0=)
