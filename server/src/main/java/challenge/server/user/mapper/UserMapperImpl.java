@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static challenge.server.user.entity.User.Gender.FEMALE;
+import static challenge.server.user.entity.User.Gender.MALE;
+
 @Component
 @RequiredArgsConstructor
 public class UserMapperImpl {
@@ -26,6 +29,13 @@ public class UserMapperImpl {
         user.email(requestBody.getEmail());
         user.password(requestBody.getPassword());
         user.username(requestBody.getUsername());
+        user.age(Integer.parseInt(requestBody.getAge()));
+
+        if (requestBody.getGender().equals("male")) {
+            user.gender(MALE);
+        } else {
+            user.gender(FEMALE);
+        }
 
         return user.build();
     }
@@ -56,6 +66,13 @@ public class UserMapperImpl {
         simpleResponse.email(user.getEmail());
         simpleResponse.username(user.getUsername());
         simpleResponse.profileImageUrl(user.getProfileImageUrl());
+        simpleResponse.age(String.valueOf(user.getAge()));
+
+        if (user.getGender() == MALE) {
+            simpleResponse.gender("male");
+        } else {
+            simpleResponse.gender("female");
+        }
 
         return simpleResponse.build();
     }

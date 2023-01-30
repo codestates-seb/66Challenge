@@ -100,12 +100,11 @@ public class UserDto {
     @NoArgsConstructor
     public static class SimpleResponse {
         private Long userId;
-
         private String email;
-
         private String username;
-
         private String profileImageUrl;
+        private String age;
+        private String gender;
     }
 
     @Getter
