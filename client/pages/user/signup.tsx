@@ -114,10 +114,10 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <div className="siginUpContatiner w-full h-screen flex flex-col px-10 items-center justify-center mx-auto">
+    <div className="siginUpContatiner w-full h-screen flex flex-col px-10 items-center justify-center mx-auto relative">
       <img src="/image/logo.svg" className="mb-[40px]" />
       <form
-        className="signUpForm w-full flex flex-col items-center"
+        className="signUpForm w-full flex flex-col items-center relative"
         onSubmit={handleSubmit(signUpHandle)}
       >
         <div className={inputContainerDefaultClassName}>
@@ -278,7 +278,9 @@ const SignUp: React.FC = () => {
       <div
         className={`${
           authState === 'none' ? 'flex' : 'hidden'
-        } absolute w-3/4 bg-white border-2 border-subColor top-72 rounded-full justify-center h-10 items-center animate-dropDown`}
+
+        } absolute w-3/4 bg-white border-2 border-subColor top-20 rounded-full justify-center h-10 items-center animate-dropDown`}
+
       >
         <span className="text-subColor font-semibold">
           이메일 인증을 하셔야 합니다!

@@ -21,7 +21,7 @@ const Login: React.FC = () => {
   const [emailVerify, setEmailVerify] = useState(true);
   const [passwordView, setPasswordView] = useState(false);
   const emailRegExp =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*[.][a-zA-Z]{2,3}$/i;
+    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*[.][a-zA-Z]{2,3}$/;
 
   const emailVerifyOnBlur = (verifyBoolean: boolean): void => {
     if (verifyBoolean) {
@@ -45,7 +45,8 @@ const Login: React.FC = () => {
     if (emailVerify && username && password) {
       await dispatch(loginRequest({ username, password })).then((data) => {
         const response: number | IresponseData = data.payload;
-        if (response.status === 401) {
+        console.log(response);
+        if (response.status === 401 || response.status === 403) {
           alert('이메일이나 비밀번호를 확인해주세요');
         } else {
           router.push('/');
