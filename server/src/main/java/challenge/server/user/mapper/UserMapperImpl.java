@@ -52,6 +52,18 @@ public class UserMapperImpl {
         user.profileImageUrl(requestBody.getProfileImageUrl());
         user.username(requestBody.getUsername());
 
+        if (requestBody.getAge() != null) {
+            user.age(Integer.parseInt(requestBody.getAge()));
+        }
+
+        if (requestBody.getGender() != null) {
+            if (requestBody.getGender().equals("male")) {
+                user.gender(MALE);
+            } else {
+                user.gender(FEMALE);
+            }
+        }
+
         return user.build();
     }
 
@@ -87,6 +99,13 @@ public class UserMapperImpl {
         patchResponse.userId(user.getUserId());
         patchResponse.username(user.getUsername());
         patchResponse.profileImageUrl(user.getProfileImageUrl());
+        patchResponse.age(String.valueOf(user.getAge()));
+
+        if (user.getGender() == MALE) {
+            patchResponse.gender("male");
+        } else {
+            patchResponse.gender("female");
+        }
 
         return patchResponse.build();
     }

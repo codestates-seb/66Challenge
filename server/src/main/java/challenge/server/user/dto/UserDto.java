@@ -66,7 +66,8 @@ public class UserDto {
                 message = "비밀번호는 공백이 아니어야 하며, 영문자 1개, 숫자 1개, 특수문자 1개를 각각 반드시 포함한 8~12글자로 이루어집니다.")
         //@Password
         private String password;
-
+        private String age;
+        private String gender;
         // 대소문자 구분 없이 active, quit, banned 3가지 중 1개 값만 가능한 조건 구현?
 //        private String userStatus;
     }

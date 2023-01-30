@@ -222,20 +222,16 @@ public class UserService {
             findUser.setProfileImageUrl(newImage);
         } // else if 기존 이미지가 있고 새로운 이미지가 없는 경우 = 이미지 유지(변동 없음)
         // else = 기존 이미지가 없고 새로운 이미지도 없는 경우 = 프로필 이미지 없음
-
-        /* todo 위 로직을 람다식으로 써보기
-        Optional.ofNullable(user.getProfileImageUrl())
-                        .ifPresent( if (oldImage != null) {
-                            fileUploadService.delete(oldImage);
-        }
-        profileImageUrl -> findUser.setProfileImageUrl(profileImageUrl);
-                        );
-         */
+        // todo 위 로직을 람다식으로 써보기
 
         Optional.ofNullable(user.getPassword())
                 .ifPresent(password -> findUser.setPassword(passwordEncoder.encode(password)));
         Optional.ofNullable(user.getUsername())
                 .ifPresent(username -> findUser.setUsername(username));
+        Optional.ofNullable(user.getAge())
+                .ifPresent(age -> findUser.setAge(age));
+        Optional.ofNullable(user.getGender())
+                .ifPresent(gender -> findUser.setGender(gender));
 
         return userRepository.save(findUser);
     }
