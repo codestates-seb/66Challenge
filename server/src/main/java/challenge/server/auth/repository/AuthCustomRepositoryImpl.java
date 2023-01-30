@@ -41,18 +41,6 @@ public class AuthCustomRepositoryImpl implements AuthCustomRepository {
                 .fetch();
     }
 
-    @Override
-    public List<Auth> findAllByChallengeHabitHabitId(Long lastId, Long habitId, int size) {
-        return jpaQueryFactory
-                .selectFrom(auth)
-                .where(
-                        auth.challenge.habit.habitId.eq(habitId),
-                        ltAuthId(lastId)
-                ).orderBy(auth.authId.desc())
-                .limit(size)
-                .fetch();
-    }
-
     private BooleanExpression ltAuthId(Long lastAuthId) {
         if (lastAuthId == null) {
             return null;
