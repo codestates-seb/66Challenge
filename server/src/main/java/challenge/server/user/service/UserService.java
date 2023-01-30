@@ -457,9 +457,8 @@ public class UserService {
         /*
         UserDto.StatisticsResponse statisticsResponse = UserDto.StatisticsResponse.builder()
                 .numOfAuthByChallengeList(numOfAuthByChallengeList)
-                .daysOfFailList(daysOfFailList)
-                .averageDaysOfFail(averageDaysOfFail)
-                .favoriteCategories(favoriteCategories)
+//                .averageDaysofFail()
+//                .myCategories()
                 .build();
 
         userDetailsDb.setStatisticsResponse(statisticsResponse);
