@@ -2,8 +2,8 @@ package challenge.server.security.utils;
 
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
-import challenge.server.security.user.entity.User;
-import challenge.server.security.user.repository.UserRepository;
+import challenge.server.user.entity.User;
+import challenge.server.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

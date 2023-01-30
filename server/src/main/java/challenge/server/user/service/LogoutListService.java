@@ -1,9 +1,9 @@
-package challenge.server.security.user.service;
+package challenge.server.user.service;
 
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
-import challenge.server.security.user.entity.LogoutList;
-import challenge.server.security.user.repository.LogoutListRepository;
+import challenge.server.user.entity.LogoutList;
+import challenge.server.user.repository.LogoutListRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

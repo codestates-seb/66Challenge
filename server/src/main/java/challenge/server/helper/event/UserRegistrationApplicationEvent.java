@@ -1,6 +1,6 @@
 package challenge.server.helper.event;
 
-import challenge.server.security.user.entity.User;
+import challenge.server.user.entity.User;
 import lombok.Getter;
 
 @Getter

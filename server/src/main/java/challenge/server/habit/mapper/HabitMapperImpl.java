@@ -12,7 +12,7 @@ import challenge.server.habit.entity.AgeRatio;
 import challenge.server.habit.entity.SexRatio;
 import challenge.server.habit.entity.StatusRatio;
 import challenge.server.review.repository.ReviewRepository;
-import challenge.server.security.user.service.UserService;
+import challenge.server.user.service.UserService;
 import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.challenge.entity.Challenge;
@@ -22,7 +22,6 @@ import challenge.server.habit.dto.HabitDto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static challenge.server.challenge.entity.Challenge.Status.*;
 import static java.lang.Math.round;
 
 @Component

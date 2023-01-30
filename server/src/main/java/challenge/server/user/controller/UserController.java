@@ -1,12 +1,12 @@
-package challenge.server.security.user.controller;
+package challenge.server.user.controller;
 
 import challenge.server.bookmark.service.BookmarkService;
 import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
-import challenge.server.security.user.dto.UserDto;
-import challenge.server.security.user.entity.User;
-import challenge.server.security.user.mapper.UserMapperImpl;
-import challenge.server.security.user.service.UserService;
+import challenge.server.user.dto.UserDto;
+import challenge.server.user.entity.User;
+import challenge.server.user.mapper.UserMapperImpl;
+import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
