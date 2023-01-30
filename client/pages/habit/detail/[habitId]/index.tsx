@@ -99,7 +99,9 @@ const HabitDetail: React.FC = () => {
           <h3 className="text-lg font-semibold pb-5 [&>p]:pb-2.5 [&>p]:w-full [&>p]:whitespace-normal [&>p]:break-words">
             상세내용
           </h3>
-          {habitData?.detail?.bodyHTML}
+          <div
+            dangerouslySetInnerHTML={{ __html: habitData?.detail?.bodyHTML }}
+          />
         </div>
       </div>
       <div className="habit-detail-bottom p-5">
