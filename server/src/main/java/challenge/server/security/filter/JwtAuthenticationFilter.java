@@ -1,6 +1,5 @@
 package challenge.server.security.filter;
 
-import challenge.server.security.dto.LoginDto;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.user.dto.UserDto;
 import challenge.server.security.user.entity.User;
@@ -29,7 +28,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    public AuthenticationManager authenticationManager;
+    public final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
     private final UserService userService;
 
