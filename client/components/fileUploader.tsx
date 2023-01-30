@@ -27,11 +27,13 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 interface FileUploaderProps {
   imgFilePreview: string;
   register: UseFormRegisterReturn;
+  disabled?: boolean;
 }
 
 export const FileUploader = ({
   imgFilePreview,
   register,
+  disabled,
 }: FileUploaderProps) => {
   const { name } = register;
 
@@ -68,6 +70,7 @@ export const FileUploader = ({
         type="file"
         accept=".jpeg, .png, .jpg"
         {...register}
+        disabled={disabled}
       />
     </div>
   );

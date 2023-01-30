@@ -92,6 +92,13 @@ const Post = () => {
     }
   }, [failImage]);
 
+  const deleteImgHandle = (): void => {
+    setFailImagePreview('');
+    reset({
+      failImage: null,
+    });
+  };
+
   const [verify, setVerify] = useState({
     titleVerify: '',
     subtitleVerify: '',
@@ -105,7 +112,6 @@ const Post = () => {
 
   const titleRegExp = /^[A-Za-z0-9가-힇\s]{5,30}$/;
   const subtitleRegExp = /^[A-Za-z0-9가-힇\s]{5,10}$/;
-  const bodyRegExp = /^[A-Za-z0-9가-힇\s`~!@#$%^&*()-_=+]{50,}$/;
 
   const blurHandle = (verifyBoolean: boolean, verifyKey: string): void => {
     if (verifyBoolean) {
@@ -142,7 +148,7 @@ const Post = () => {
       setVerify({ ...verify, categoryVerify: 'fail' });
     } else if (habitImage.length === 0) {
       setVerify({ ...verify, habitImageVerify: 'fail' });
-    } else if (bodyRegExp.test(bodyData) === false) {
+    } else if (bodyHTMLData.length < 50) {
       setVerify({ ...verify, bodyVerify: 'fail' });
     } else if (authStartTime < authEndTime === false) {
       setVerify({ ...verify, authTimeVerify: 'fail' });
@@ -227,7 +233,7 @@ const Post = () => {
             type="text"
             id="title"
             className={`h-[35px] ${inputDefaultClassName}`}
-            placeholder="습관명을 5~20자 이내로 입력해주세요."
+            placeholder="습관명을 5~30자 이내로 입력해주세요."
             onKeyDown={(e) => {
               InputElKeyEvent(e, 'subtitle');
             }}
@@ -339,12 +345,12 @@ const Post = () => {
               bodyDataHandle(value, editor)
             }
             onBlur={(previousSelection, source, editor) => {
-              blurHandle(bodyRegExp.test(editor.getText()), 'bodyVerify');
+              blurHandle(editor.getText().length < 50, 'bodyVerify');
             }}
           />
           {verify.bodyVerify === 'fail' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
-              습관에 대한 설명글을 작성해주세요.
+              습관에 대한 설명글을 50자 이상 작성해주세요.
             </span>
           ) : null}
         </div>
@@ -417,7 +423,18 @@ const Post = () => {
             <FileUploader
               imgFilePreview={failImagePreview}
               register={register('failImage')}
+              disabled={failImagePreview !== ''}
             />
+            {failImagePreview !== '' ? (
+              <div className=" flex justify-center w-full items-center bg-mainColor rounded-full h-[40px] mb-5">
+                <span
+                  className="text-base text-iconColor"
+                  onClick={deleteImgHandle}
+                >
+                  삭제하기
+                </span>
+              </div>
+            ) : null}
           </div>
           <span className="pt-2.5 text-sm text-center font-semibold">
             사진의 가로 ・ 세로의 비율은 1:1이 권장됩니다.
