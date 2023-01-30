@@ -47,7 +47,6 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-    private final LogoutListRepository logoutListRepository;
     private final EmailVerificationRepository emailVerificationRepository;
     private final BookmarkRepository bookmarkRepository;
     private final HabitRepository habitRepository;
@@ -63,6 +62,7 @@ public class UserService {
     private final FileUploadService fileUploadService;
     private final JwtTokenizer jwtTokenizer;
     private final JwtVerificationFilter jwtVerificationFilter;
+    private final LogoutListRepository logoutListRepository;
 
     private final String verificationCode = createVerificationCode(); // 회원 가입 시 이메일 인증 코드 생성
 
@@ -289,7 +289,7 @@ public class UserService {
 
         // 반환 자료형의 속성 중 컬렉션 준비
         List<UserDto.ChallengeDetailsDb> activeChallenges = new ArrayList<>();
-        Set<UserDto.CategoryDb> activeCategories = new HashSet<>(); // todo 2023.1.29(일) 11h10 카테고리들이 중복으로 출력됨
+        Set<UserDto.CategoryDb> activeCategories = new HashSet<>();
 
         // 오늘 날짜
         LocalDateTime today = LocalDateTime.now(); // 2023.1.19(목) 6h30 -> 2023.1.24(화) 7h 현재 주석 이해 안 됨
@@ -540,6 +540,7 @@ public class UserService {
     }
      */
 
+    @Transactional
     public void logout(UserDto.LogoutRequest requestBody) {
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
         String accessToken = requestBody.getAccessToken().substring(7);

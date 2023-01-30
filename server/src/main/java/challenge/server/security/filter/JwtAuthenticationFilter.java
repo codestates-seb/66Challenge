@@ -28,7 +28,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private final AuthenticationManager authenticationManager;
+    public final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
     private final UserService userService;
 
@@ -95,7 +95,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return accessToken;
     }
 
-    public String delegateRefreshToken(User user) {
+    private String delegateRefreshToken(User user) {
         String subject = user.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration((jwtTokenizer.getRefreshTokenExpirationMinutes()));
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
