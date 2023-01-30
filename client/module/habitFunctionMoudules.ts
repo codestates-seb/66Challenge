@@ -130,14 +130,16 @@ export async function postStartChallenge({
     }
   }
 }
-export async function getHabitStatistics(habitId: string) {
+export async function getHabitStatistics(habitId: number) {
   try {
     const response = await axios
       .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/statistics`)
-      .then((res) => console.log(res));
+      .then((res) => res.data);
     return response;
   } catch (e) {
-    console.error(e);
+    if (e instanceof AxiosError) {
+      return e.response.status;
+    }
   }
 }
 export async function getHabitsSearch({

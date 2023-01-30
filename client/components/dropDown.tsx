@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MdExpandMore } from 'react-icons/md';
 import { Modal } from './modal';
 import {

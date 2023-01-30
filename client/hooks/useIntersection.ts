@@ -55,7 +55,6 @@ export function useIntersection(
           }size=${size}`,
         )
         .then((res) => {
-          console.log(res);
           const newLastItem = res.data[res.data.length - 1];
           let newLastItemId: number | null;
           if (type === 'habit') {

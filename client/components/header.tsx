@@ -36,6 +36,8 @@ const Header: FC = () => {
     auth: '습관 인증하기',
     statistic: '습관 통계',
     review: '습관 후기',
+    youtube: '동기부여영상',
+    book: '도서',
   };
   // path별 페이지제목
 
