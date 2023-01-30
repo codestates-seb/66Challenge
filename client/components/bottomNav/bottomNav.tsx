@@ -16,7 +16,7 @@ export function BottomNav() {
     param = 'signup';
   } else if (pathname.includes('search')) {
     param = 'search';
-  } else if (pathname.includes('auth')) {
+  } else if (pathname.includes('auth') && !pathname.includes('oauth')) {
     param = 'auth';
   } else if (pathname.includes('post' || 'edit')) {
     param = 'post';

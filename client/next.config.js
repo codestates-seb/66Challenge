@@ -32,6 +32,12 @@ const remoteImg = {
       },
       {
         protocol: 'http',
+        hostname: 's3.ap-northeast-2.amazonaws.com',
+        port: '',
+        pathname: '/challenge66.file.bucket/images/**',
+      },
+      {
+        protocol: 'http',
         hostname: 'runningmagazine.ca',
         port: '',
         pathname: '/wp-content/**',
