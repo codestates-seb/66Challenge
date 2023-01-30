@@ -116,7 +116,7 @@ const Post = () => {
   };
 
   const postButtonClick = async (data: HabitFormValues) => {
-    const {
+    let {
       title,
       subtitle,
       category,
@@ -126,6 +126,13 @@ const Post = () => {
       successImage,
       failImage,
     } = data;
+
+    if (authStartTime === '') {
+      authStartTime = '00:00';
+    }
+    if (authEndTime === '') {
+      authEndTime = '23:59';
+    }
 
     if (titleRegExp.test(title) === false) {
       setVerify({ ...verify, titleVerify: 'fail' });

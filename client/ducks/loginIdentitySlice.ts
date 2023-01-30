@@ -2,6 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import { setCookie, removeCookie } from '../module/cookies';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { onLoginSuccess } from '../module/jsonWebToken';
+
 interface Idata {
   userId: number;
 }
@@ -18,10 +20,9 @@ const loginRequest = createAsyncThunk(
         url: `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
         data,
       }).then((res) => res);
-
       const accessToken: string = response.headers.authorization;
       const refreshToken: string = response.headers.refresh;
-      setCookie('accessJwtToken', accessToken, { path: '/' });
+      onLoginSuccess(accessToken);
       setCookie('refreshJwtToken', refreshToken, { path: '/' });
       const userId: number = response.data.userId;
       return userId;
@@ -52,7 +53,8 @@ export const loginIdentitySlice = createSlice({
       state.isLogin = false;
       state.userId = null;
       state.notificationToken = null;
-      removeCookie('accessJwtToken');
+      // removeCookie('accessJwtToken');
+      removeCookie('refreshJwtToken');
     },
     oauthLogin: (state, action): void => {
       state.isLogin = true;

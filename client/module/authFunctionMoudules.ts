@@ -21,7 +21,7 @@ export async function deleteHabitAuth({ authId }: deleteAuthProps) {
     const response = await axios
       .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/auths/${authId}`, {
         headers: {
-          Authorization: getCookie('accessJwtToken'),
+          // Authorization: getCookie('accessJwtToken'),
         },
       })
       .then((res) => console.log(res));
