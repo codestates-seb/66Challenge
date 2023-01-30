@@ -50,8 +50,9 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String refreshToken = delegateRefreshToken(email);     // Refresh Token 생성
         User user = userService.findByEmail(email);
         Long userId = user.getUserId();
-
-        userService.verifyLoginUser(email, refreshToken);
+        user.setRefreshToken(refreshToken);
+//        userService.verifyLoginUser(email, refreshToken);
+        userService.saveUser(user);
 
         String uri = createURI(accessToken, refreshToken, userId).toString();   // Access Token과 Refresh Token을 포함한 URL을 생성
         getRedirectStrategy().sendRedirect(request, response, uri);   // sendRedirect() 메서드를 이용해 Frontend 애플리케이션 쪽으로 리다이렉트

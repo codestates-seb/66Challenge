@@ -218,6 +218,11 @@ public class UserService {
         return userRepository.save(findUser);
     }
 
+    @Transactional
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
     // 회원 정보를 수정하려는 사람이 해당 회원이 맞는지 검증하는 로직이 필요한가? 아니면 요청 받을 때 Access Token을 받으면 그걸로 충분한가? -> 2023.1.19(목) 멘토링3 = 후자
     @Transactional/*(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)*/
     public User updateUser(User user) {
