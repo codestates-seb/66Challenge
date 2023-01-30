@@ -19,9 +19,9 @@ type AppPropsWithLayout = AppProps & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
 
-  // useEffect(() => {
-  //   onSilentRefresh();
-  // }, []);
+  useEffect(() => {
+    onSilentRefresh();
+  }, []);
 
   return (
     <PersistGate persistor={persistor} loading={<LoadingIndicator />}>
