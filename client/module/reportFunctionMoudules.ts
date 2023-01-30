@@ -25,7 +25,7 @@ export async function postHabitReport({
         },
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -56,7 +56,7 @@ export async function postAuthReport({
         },
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -87,7 +87,7 @@ export async function postReviewReport({
         },
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )

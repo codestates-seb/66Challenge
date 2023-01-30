@@ -8,7 +8,7 @@ export async function postAuth({ challengeId, body }) {
         body,
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
             'Content-Type': 'multipart/form-data',
           },
         },
@@ -28,7 +28,7 @@ export async function deleteAuth({ challengeId, authId }) {
         `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/${challengeId}/auths/${authId}`,
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -46,7 +46,7 @@ export async function patchAuths({ challengeId, authId, body }) {
         { authId, body },
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -63,7 +63,7 @@ export async function getUserSuccessChallenges(userId: number) {
         `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/users/${userId}/success?page=1&size=90000`,
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -80,7 +80,7 @@ export async function getUserChallenges(userId: number) {
         `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/users/${userId}/challenge?page=1&size=90000`,
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )

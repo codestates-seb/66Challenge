@@ -15,7 +15,7 @@ export async function postHabit({ data }) {
     const response = await axios
       .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits`, data, {
         headers: {
-          Authorization: getCookie('accessJwtToken'),
+          // Authorization: getCookie('accessJwtToken'),
           'Content-Type': 'multipart/form-data',
         },
       })
@@ -62,7 +62,7 @@ export async function deleteHabit({ habitId }: deleteHabitProps) {
     const response = await axios
       .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}`, {
         headers: {
-          Authorization: getCookie('accessJwtToken'),
+          // Authorization: getCookie('accessJwtToken'),
         },
       })
       .then((res) => console.log(res));
@@ -80,7 +80,7 @@ export async function postBookMark({ habitId, userId }: habitGeneralProps) {
         null,
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -97,7 +97,7 @@ export async function deleteBookMark({ habitId, userId }: habitGeneralProps) {
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/bookmarks?userId=${userId}`,
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -118,7 +118,7 @@ export async function postStartChallenge({
         null,
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
