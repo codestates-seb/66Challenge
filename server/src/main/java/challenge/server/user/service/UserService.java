@@ -160,7 +160,7 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
 
-        publisher.publishEvent(new UserRegistrationApplicationEvent(savedUser)); // todo 회원 가입 시 이메일 전송 관련
+//        publisher.publishEvent(new UserRegistrationApplicationEvent(savedUser)); // 회원 가입 시 이메일 전송 관련
         return savedUser;
     }
 
