@@ -20,7 +20,7 @@ const MadeHabit: FC = () => {
     type,
   );
   return (
-    <div className="h-screen w-full overflow-y-scroll scrollbar-hide absolute">
+    <div className="h-screen w-full overflow-y-scroll scrollbar-hide">
       <HabitWrapperVertical
         habitWrapperTitle="내가 만든 습관"
         habitWrapperData={madeHabits}

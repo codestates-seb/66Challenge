@@ -21,7 +21,7 @@ const SavedHabit: FC = () => {
   );
 
   return (
-    <div className="h-screen w-full overflow-y-scroll scrollbar-hide absolute">
+    <div className="h-screen w-full overflow-y-scroll scrollbar-hide">
       <HabitWrapperVertical
         habitWrapperTitle="내가 찜한 습관"
         habitWrapperData={savedHabits}

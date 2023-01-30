@@ -25,7 +25,8 @@ export const MyPageMenuList = ({ email, successArr }) => {
   const dispatch = useAppDispatch();
 
   const menuStyle =
-    'pl-5 cursor-pointer flex place-content-between h-10 text-lg items-center mb-1 w-[80%] bg-mainColor text-white hover:bg-subColor rounded-full';
+    'w-[90%] pl-5 cursor-pointer flex place-content-between h-10 text-lg items-center mb-1 w-[80%] bg-gray-500 text-white hover:bg-subColor rounded-full';
+  // 'w-[49%] pl-5 cursor-pointer flex place-content-between h-10 text-lg items-center mb-1 w-[80%] bg-mainColor text-white hover:bg-subColor rounded-full';
 
   const CertDropDown = ({ success }): JSX.Element => {
     return (
@@ -69,7 +70,7 @@ export const MyPageMenuList = ({ email, successArr }) => {
             className="flex place-content-between border solid border-black h-8 items-center mb-1 mx-2 rounded-xl 
                 justify-center"
           >
-            <span className="text-xl">성공 데이터 없음</span>{' '}
+            <span className="text-lg">성공 데이터 없음</span>{' '}
           </div>
         )}
       </div>
@@ -107,7 +108,8 @@ export const MyPageMenuList = ({ email, successArr }) => {
   };
 
   return (
-    <div className="flex flex-col w-full items-center">
+    // <div className="mt-6 flex w-full items-center flex-wrap justify-evenly">
+    <div className="mt-6 flex flex-col w-full items-center">
       {isCertOpen && (
         <Modal
           isOpen={isCertOpen}
