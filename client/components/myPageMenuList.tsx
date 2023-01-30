@@ -41,7 +41,7 @@ export const MyPageMenuList = ({ email, successArr }) => {
                 </span>
                 {el.subTitle ? (
                   <button
-                    className={`border-2 text-sm mr-4`}
+                    className={`border-[1px] border-slate-600 rounded-xl text-sm mr-4 px-1`}
                     onClick={(): void => {
                       getUserCertificate({
                         userId,
@@ -115,6 +115,7 @@ export const MyPageMenuList = ({ email, successArr }) => {
           buttonName="종료"
           onClick={() => {
             console.log(certId);
+            setIsCertOpen(!isCertOpen);
           }}
           children={<CertificationModal data={certInfo} />}
         />
