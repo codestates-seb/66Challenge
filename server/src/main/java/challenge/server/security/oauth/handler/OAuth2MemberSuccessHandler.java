@@ -3,6 +3,7 @@ package challenge.server.security.oauth.handler;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.oauth.dto.OAuth2CustomUser;
 import challenge.server.security.utils.CustomAuthorityUtils;
+import challenge.server.user.entity.User;
 import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,10 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         log.info("Token 생성 시작");
         String accessToken = delegateAccessToken(email, authorities);  // Access Token 생성
         String refreshToken = delegateRefreshToken(email);     // Refresh Token 생성
-        Long userId = userService.findByEmail(email).getUserId();
+        User user = userService.findByEmail(email);
+        Long userId = user.getUserId();
+
+        userService.verifyLoginUser(email, refreshToken);
 
         String uri = createURI(accessToken, refreshToken, userId).toString();   // Access Token과 Refresh Token을 포함한 URL을 생성
         getRedirectStrategy().sendRedirect(request, response, uri);   // sendRedirect() 메서드를 이용해 Frontend 애플리케이션 쪽으로 리다이렉트

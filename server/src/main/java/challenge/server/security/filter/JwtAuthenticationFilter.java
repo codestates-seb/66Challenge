@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -25,6 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+//@Component
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -63,23 +65,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         body.put("userId", user.getUserId()); // 로그인 후 userId를 응답 body에 전달
 
         new ObjectMapper().writeValue(response.getOutputStream(), body);
-    }
-
-    public String reissueRefreshToken(User user, HttpServletResponse response) throws ServletException, IOException {
-        String accessToken = delegateAccessToken(user);
-        String refreshToken = delegateRefreshToken(user);
-
-        response.setHeader("Authorization", "Bearer " + accessToken);
-        response.setHeader("Refresh", refreshToken);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpStatus.OK.value());
-
-        Map<String, Long> body = new HashMap<>();
-        body.put("userId", user.getUserId()); // 로그인 후 userId를 응답 body에 전달
-
-        new ObjectMapper().writeValue(response.getOutputStream(), body);
-
-        return refreshToken;
     }
 
     private String delegateAccessToken(User user) {
