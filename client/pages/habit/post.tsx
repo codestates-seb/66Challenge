@@ -148,7 +148,7 @@ const Post = () => {
       setVerify({ ...verify, categoryVerify: 'fail' });
     } else if (habitImage.length === 0) {
       setVerify({ ...verify, habitImageVerify: 'fail' });
-    } else if (bodyHTMLData.length < 50) {
+    } else if (bodyData.length < 50) {
       setVerify({ ...verify, bodyVerify: 'fail' });
     } else if (authStartTime < authEndTime === false) {
       setVerify({ ...verify, authTimeVerify: 'fail' });

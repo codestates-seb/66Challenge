@@ -95,6 +95,13 @@ const EditHabit = () => {
     }
   }, [failImage]);
 
+  const deleteImgHandle = (): void => {
+    setFailImagePreview('');
+    reset({
+      failImage: null,
+    });
+  };
+
   const [verify, setVerify] = useState({
     titleVerify: 'success',
     subtitleVerify: 'success',
@@ -108,7 +115,6 @@ const EditHabit = () => {
 
   const titleRegExp = /^[A-Za-z0-9가-힇\s]{5,30}$/;
   const subtitleRegExp = /^[A-Za-z0-9가-힇\s]{5,10}$/;
-  const bodyRegExp = /^[A-Za-z0-9가-힇\s`~!@#$%^&*()-_=+]{50,}$/;
 
   const blurHandle = (verifyBoolean: boolean, verifyKey: string): void => {
     if (verifyBoolean) {
@@ -149,7 +155,7 @@ const EditHabit = () => {
       setVerify({ ...verify, subtitleVerify: 'fail' });
     } else if (category === 'default') {
       setVerify({ ...verify, categoryVerify: 'fail' });
-    } else if (bodyRegExp.test(bodyData) === false) {
+    } else if (bodyData.length < 50 === false) {
       setVerify({ ...verify, bodyVerify: 'fail' });
     } else if (authStartTime < authEndTime === false) {
       setVerify({ ...verify, authTimeVerify: 'fail' });
@@ -362,7 +368,7 @@ const EditHabit = () => {
               bodyDataHandle(value, editor)
             }
             onBlur={(previousSelection, source, editor) => {
-              blurHandle(bodyRegExp.test(editor.getText()), 'bodyVerify');
+              blurHandle(editor.getText().length >= 50, 'bodyVerify');
             }}
           />
           {verify.bodyVerify === 'fail' ? (
@@ -442,7 +448,18 @@ const EditHabit = () => {
             <FileUploader
               imgFilePreview={failImagePreview}
               register={register('failImage')}
+              disabled={failImagePreview !== ''}
             />
+            {failImagePreview !== '' ? (
+              <div className=" flex justify-center w-[] items-center bg-mainColor rounded-full h-[40px] mb-5 mt-5">
+                <span
+                  className="text-base text-iconColor"
+                  onClick={deleteImgHandle}
+                >
+                  삭제하기
+                </span>
+              </div>
+            ) : null}
           </div>
           <span className="pt-2.5 text-sm text-center font-semibold">
             사진의 가로 ・ 세로의 비율은 1:1이 권장됩니다.
