@@ -55,14 +55,15 @@ export function useIntersection(
           }size=${size}`,
         )
         .then((res) => {
+          console.log(res);
           const newLastItem = res.data[res.data.length - 1];
-          let newLastItemId: number;
+          let newLastItemId: number | null;
           if (type === 'habit') {
-            newLastItemId = newLastItem.habitId;
+            newLastItemId = newLastItem?.habitId || null;
           } else if (type === 'auth') {
-            newLastItemId = newLastItem.authId;
+            newLastItemId = newLastItem?.authId || null;
           } else if (type === 'review') {
-            newLastItemId = newLastItem.reviewId;
+            newLastItemId = newLastItem?.reviewId || null;
           }
 
           setData((data) => data.concat(res.data));

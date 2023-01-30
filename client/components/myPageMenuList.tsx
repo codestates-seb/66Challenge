@@ -48,9 +48,9 @@ export const MyPageMenuList = ({ email, successArr }) => {
                         habitId: el.habitId,
                       }).then((res) => {
                         setCertInfo(res.data);
+                        setCertId(el.habitId);
+                        setIsCertOpen(!isCertOpen);
                       });
-                      setCertId(el.habitId);
-                      setIsCertOpen(!isCertOpen);
                     }}
                   >
                     발급
