@@ -48,7 +48,9 @@ const OauthSignUp: React.FC = () => {
     console.log({ userId, body: formData });
     console.log(formData.getAll('body'));
 
-    patchUserInfo({ userId, body: formData });
+    patchUserInfo({ userId, body: formData }).then(() => {
+      router.push('/');
+    });
   };
 
   return (
@@ -59,7 +61,7 @@ const OauthSignUp: React.FC = () => {
         onSubmit={handleSubmit(signUpHandle)}
       >
         <div className={labelDefaultClassName}>추가정보 입력</div>
-        <div className="border py-3 flex flex-col items-center mb-6 px-3 rounded-md w-3/4">
+        <div className="border h-[60px] text-base w-full rounded-md px-2 pt-[5px] focus:border-mainColor duration-500 items-center outline-0 flex justify-evenly mb-4">
           <div id="ageInputForm">
             <label htmlFor="ageInput" className={`${labelDefaultClassName}`}>
               나이 :
