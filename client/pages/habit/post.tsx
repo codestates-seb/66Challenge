@@ -345,7 +345,7 @@ const Post = () => {
               bodyDataHandle(value, editor)
             }
             onBlur={(previousSelection, source, editor) => {
-              blurHandle(editor.getText().length < 50, 'bodyVerify');
+              blurHandle(editor.getText().length >= 50, 'bodyVerify');
             }}
           />
           {verify.bodyVerify === 'fail' ? (
