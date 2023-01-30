@@ -7,7 +7,6 @@ interface onSilentRefreshType {
 }
 
 export const onSilentRefresh = () => {
-  console.log(getCookie('refreshJwtToken'));
   if (!getCookie('refreshJwtToken')) return;
   const data: onSilentRefreshType = {
     refreshToken: getCookie('refreshJwtToken'),
