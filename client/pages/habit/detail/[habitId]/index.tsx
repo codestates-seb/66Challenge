@@ -123,7 +123,7 @@ const HabitDetail: React.FC = () => {
           <div className="flex flex-col">
             <div
               className={`min-h-[150px] ${
-                habitData?.image?.failImgUrl ? succImgClassName : ''
+                habitData?.image?.failImgUrl ? '' : succImgClassName
               } flex items-center`}
             >
               <Image

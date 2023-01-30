@@ -451,7 +451,7 @@ const EditHabit = () => {
               disabled={failImagePreview !== ''}
             />
             {failImagePreview !== '' ? (
-              <div className=" flex justify-center w-[] items-center bg-mainColor rounded-full h-[40px] mb-5 mt-5">
+              <div className=" flex justify-center w-[50%] items-center bg-mainColor rounded-full h-[40px] mb-5 mt-5">
                 <span
                   className="text-base text-iconColor"
                   onClick={deleteImgHandle}
