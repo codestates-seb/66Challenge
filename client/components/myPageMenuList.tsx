@@ -115,6 +115,7 @@ export const MyPageMenuList = ({ email, successArr }) => {
           buttonName="종료"
           onClick={() => {
             console.log(certId);
+            setIsCertOpen(!isCertOpen);
           }}
           children={<CertificationModal data={certInfo} />}
         />

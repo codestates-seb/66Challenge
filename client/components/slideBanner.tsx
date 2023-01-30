@@ -81,7 +81,7 @@ export const SlideBanner: React.FC<SlideBannerProps> = ({
         })}
       </Flicking>
       {pagination && (
-        <div className="slidebanner-pagination absolute right-2.5 top-2.5 bg-black/50 text-white text-center tracking-wider text-xs min-w-[40pdx] p1y-0.5 pr-1 pl-1.5 rounded-xl flex justify-between ">
+        <div className="slidebanner-pagination absolute right-2.5 top-2.5 bg-black/50 text-white text-center tracking-wider text-xs min-w-[40pdx] p1y-0.5 pt-[2px] pr-1 pl-1.5 rounded-xl flex justify-between ">
           <span>{currendIdx + 1}</span>
           <span>/</span>
           <span>{bannerCont.length}</span>
