@@ -4,6 +4,8 @@ import challenge.server.user.entity.DaysOfFail;
 import challenge.server.user.entity.NumOfAuthByChallenge;
 import challenge.server.user.entity.User;
 import challenge.server.validator.NotSpace;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -158,7 +160,19 @@ public class UserDto {
         private int biggestProgressDays;
         private List<UserDto.ChallengeDetailsDb> activeChallenges;
         private Set<CategoryDb> activeCategories;
-        private UserDto.StatisticsResponse statisticsResponse;
+
+        // 통계 데이터 응답
+//        private UserDto.StatisticsResponse statisticsResponse;
+        List<NumOfAuthByChallenge> numOfAuthByChallengeList;
+
+        // 습관 참여 후 평균 며칠 후 포기하는지 = 챌린지 생성일(Challenge createdAt)로부터 챌린지 실패로 변환된 날(Challenge lastModifiedAt) 평균 값
+        List<DaysOfFail> daysOfFailList;
+        int averageDaysOfFail;
+
+        // 많이 참여한 습관의 카테고리 = 내가 주로 어떤 카테고리의 습관에 참여하는지
+//        @JsonIgnore
+        @JsonProperty
+        List<UserDto.CategoriesResponse> favoriteCategories;
 //        @QueryProjection
 //        public UserDetailsDb(Long userId, String email, String username, LocalDateTime earliestCreatedAt) {
 //            this.userId = userId;
@@ -308,7 +322,10 @@ public class UserDto {
     }
 
     public static class CategoriesResponse {
+        @JsonProperty
         Long count;
+
+        @JsonProperty
         Long categoryId;
     }
 }
