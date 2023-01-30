@@ -409,7 +409,7 @@ const Post = () => {
 
         <div className="habit-auth-image-input-wrapper flex flex-col mb-5 min-h-[245px]">
           <div className="text-base font-semibold mb-1">습관 인증 사진</div>
-          <div className="flex flex-col">
+          <div className="flex flex-col justify-center items-center">
             <div className="text-center text-green-600 py-2.5 text-sm font-bold">
               올바른 인증 사례(필수)
             </div>
@@ -426,7 +426,7 @@ const Post = () => {
               disabled={failImagePreview !== ''}
             />
             {failImagePreview !== '' ? (
-              <div className=" flex justify-center w-full items-center bg-mainColor rounded-full h-[40px] mb-5">
+              <div className=" flex justify-center w-[] items-center bg-mainColor rounded-full h-[40px] mb-5 mt-5">
                 <span
                   className="text-base text-iconColor"
                   onClick={deleteImgHandle}
