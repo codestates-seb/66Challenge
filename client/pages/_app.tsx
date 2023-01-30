@@ -3,11 +3,11 @@ import { wrapper, persistor } from '../ducks/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import type { ReactElement, ReactNode } from 'react';
 import type { NextPage } from 'next';
-import type { AppProps, AppContext } from 'next/app';
-// import App from 'next/app';
+import type { AppProps } from 'next/app';
 import Layout from '../components/layout/layout';
 import { LoadingIndicator } from '../components/loadingIndicator';
-// import cookies from 'next-cookies';
+import { useEffect } from 'react';
+import { onSilentRefresh } from '../module/jsonWebToken';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -19,6 +19,10 @@ type AppPropsWithLayout = AppProps & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
 
+  useEffect(() => {
+    onSilentRefresh();
+  }, []);
+
   return (
     <PersistGate persistor={persistor} loading={<LoadingIndicator />}>
       {Component.getLayout ? (
@@ -29,20 +33,5 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     </PersistGate>
   );
 }
-
-// MyApp.getInitialProps = async (appContext: AppContext) => {
-//   const appProps = await App.getInitialProps(appContext);
-
-//   const { ctx } = appContext;
-//   const allCookies = cookies(ctx);
-//   const accessTokenByCookie = allCookies['accessJwtToken'];
-//   console.log(accessTokenByCookie);
-//   if(accessTokenByCookie !== undefined) {
-//       const refreshTokenByCookie = (allCookies["refreshJwtToken"] || "");
-//       setToken(accessTokenByCookie, refreshTokenByCookie)
-//   }
-
-//   return { ...appProps };
-// };
 
 export default wrapper.withRedux(MyApp);
