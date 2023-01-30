@@ -46,7 +46,9 @@ const Home: React.FC = () => {
       page: '1',
       size: '10',
     }).then((data) => setHabitsInHome2(data));
+    return openScroll();
   }, []);
+
   const openScroll = useCallback(() => {
     if (document.body.style.overflow === 'hidden') {
       document.body.style.removeProperty('overflow');

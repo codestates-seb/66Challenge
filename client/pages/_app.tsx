@@ -6,6 +6,8 @@ import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import Layout from '../components/layout/layout';
 import { LoadingIndicator } from '../components/loadingIndicator';
+import { useEffect } from 'react';
+import { onSilentRefresh } from '../module/jsonWebToken';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -17,6 +19,10 @@ type AppPropsWithLayout = AppProps & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
 
+  useEffect(() => {
+    onSilentRefresh();
+  }, []);
+
   return (
     <PersistGate persistor={persistor} loading={<LoadingIndicator />}>
       {Component.getLayout ? (
@@ -27,4 +33,5 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     </PersistGate>
   );
 }
+
 export default wrapper.withRedux(MyApp);
