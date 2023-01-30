@@ -310,7 +310,7 @@ const SignUp: React.FC = () => {
         </div>
         <input
           type="submit"
-          value="Sign Up"
+          value="회원가입"
           className="border py-2.5 px-5 text-base font-semibold w-full rounded-md bg-mainColor text-iconColor duration-500 outline-0 mb-1 disabled:opacity-20"
           disabled={
             !Object.values(verify).every(

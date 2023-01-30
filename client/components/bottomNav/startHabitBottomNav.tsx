@@ -83,7 +83,7 @@ export function StartHabitBottomNav({
         }}
         disabled={challengeStatus !== 'NONE' || isStart === true}
       >
-        Start
+        시작하기
       </button>
       {isOpen && (
         <Modal
