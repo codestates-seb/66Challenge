@@ -93,7 +93,7 @@ const MyPage = () => {
 
   const Profile = () => {
     return (
-      <div className="flex flex-row items-center justify-center solid border-b-black border-b border-t-black border-t">
+      <div className="flex flex-row items-center justify-center solid border-y-2">
         {isProfileModalOpen ? (
           <Modal
             isOpen={isProfileModalOpen}
