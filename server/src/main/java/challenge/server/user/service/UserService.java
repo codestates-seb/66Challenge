@@ -462,8 +462,6 @@ public class UserService {
 //                .myCategories()
                 .build();
 
-        userDetailsDb.setStatisticsResponse(statisticsResponse);
-         */
         return userDetailsDb;
     }
 
