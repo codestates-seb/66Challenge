@@ -40,7 +40,7 @@ export const CertificationModal = ({ data }) => {
           </div>
         </div>
 
-        <div className="mb-10 text-[13px]">
+        <div className="mb-4 text-[13px]">
           <span className="text-footerMemberTextColor">{data.username}</span>{' '}
           님은
           <p>성공적으로 습관 체득에 성공하셨음을</p>
@@ -48,7 +48,11 @@ export const CertificationModal = ({ data }) => {
         </div>
 
         <div className="flex justify-center mb-2">
-          <img src="../image/66logoForModal.svg" alt="66ChagllengeLogo" />
+          <img
+            src="../image/logo/LogoVertical.svg"
+            alt="66ChagllengeLogo"
+            width={100}
+          />
         </div>
         <p>
           {year}년 {month}월 {date}일
