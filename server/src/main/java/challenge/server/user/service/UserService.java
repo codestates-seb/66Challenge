@@ -332,7 +332,6 @@ public class UserService {
         userDetailsDb.setBiggestProgressDays((int) DAYS.between(earliestCreatedAt, today));
 
         // [마이페이지 통계 정보] 리턴할 것 준비
-        UserDto.StatisticsResponse statisticsResponse = new UserDto.StatisticsResponse();
         List<NumOfAuthByChallenge> numOfAuthByChallengeList = new ArrayList<>();
         List<DaysOfFail> daysOfFailList = new ArrayList<>();
 
@@ -440,13 +439,21 @@ public class UserService {
         userDetailsDb.setActiveChallenges(activeChallenges);
         userDetailsDb.setActiveCategories(activeCategories);
 
-        userDetailsDb.setStatisticsResponse(UserDto.StatisticsResponse.builder()
+        userDetailsDb.setNumOfAuthByChallengeList(numOfAuthByChallengeList);
+        userDetailsDb.setDaysOfFailList(daysOfFailList);
+        userDetailsDb.setAverageDaysOfFail(averageDaysOfFail);
+        userDetailsDb.setFavoriteCategories(favoriteCategories);
+
+        /*
+        UserDto.StatisticsResponse statisticsResponse = UserDto.StatisticsResponse.builder()
                 .numOfAuthByChallengeList(numOfAuthByChallengeList)
                 .daysOfFailList(daysOfFailList)
                 .averageDaysOfFail(averageDaysOfFail)
                 .favoriteCategories(favoriteCategories)
-                .build());
+                .build();
 
+        userDetailsDb.setStatisticsResponse(statisticsResponse);
+         */
         return userDetailsDb;
     }
 
