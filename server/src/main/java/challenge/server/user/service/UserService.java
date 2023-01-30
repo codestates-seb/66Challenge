@@ -362,17 +362,6 @@ public class UserService {
                 activeCategories.add(categoryDb);
             }
 
-            // 마이페이지 통계3 = 많이 참여한 습관의 카테고리
-            String categoryType = ch.getHabit().getCategory().getType();
-            Map<String, Integer> categoriesByPopularity = new HashMap<>();
-
-            if (!categoriesByPopularity.containsKey(categoryType)) {
-                categoriesByPopularity.put(categoryType, 0);
-            }
-
-            Integer value = categoriesByPopularity.get(categoryType);
-            categoriesByPopularity.put(categoryType, value++);
-
             // 마이페이지 통계1
             // 현재 진행 중인 습관의 습관 번호를 가지고 Habit 테이블에 가서 습관의 제목을 가져옴
             Long habitId = ch.getHabit().getHabitId();
@@ -396,7 +385,7 @@ public class UserService {
 
         // 마이페이지 통계2
         int sum = 0;
-        int average = 0;
+        int averageDaysOfFail = 0;
         List<Challenge> challengeFails = challengeRepository.findAllByUserUserIdAndStatusOrderByChallengeIdAsc(findUser.getUserId(), FAIL);
 
         for (int i = 0; i < challengeFails.size(); i++) {
@@ -423,8 +412,11 @@ public class UserService {
         }
 
         if (!challengeFails.isEmpty()) {
-            average = sum / challengeFails.size();
+            averageDaysOfFail = sum / challengeFails.size();
         }
+
+        // 마이페이지 통계3 = 많이 참여한 습관의 카테고리
+        List<UserDto.CategoriesResponse> favoriteCategories = challengeRepository.findFavoriteCategories(userId);
 
         // 리턴할 [마이페이지 상단 기본 정보] 최종 정리
         userDetailsDb.setActiveChallenges(activeChallenges);
@@ -432,8 +424,9 @@ public class UserService {
 
         UserDto.StatisticsResponse.builder()
                 .numOfAuthByChallengeList(numOfAuthByChallengeList)
-//                .averageDaysofFail()
-//                .myCategories()
+                .daysOfFailList(daysOfFailList)
+                .averageDaysOfFail(averageDaysOfFail)
+                .favoriteCategories(favoriteCategories)
                 .build();
 
         return userDetailsDb;
