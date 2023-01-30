@@ -53,6 +53,7 @@ export const loginIdentitySlice = createSlice({
       state.userId = null;
       state.notificationToken = null;
       removeCookie('accessJwtToken');
+      removeCookie('refreshJwtToken');
     },
     oauthLogin: (state, action): void => {
       state.isLogin = true;
