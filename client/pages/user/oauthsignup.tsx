@@ -45,16 +45,10 @@ const OauthSignUp: React.FC = () => {
       }),
     );
 
-    // console.log({ userId, body: formData });
+    console.log({ userId, body: formData });
     console.log(formData.getAll('body'));
 
-    // patchUserInfo({
-    //   userId,
-    //   body: {
-    //     gender,
-    //     age,
-    //   },
-    // });
+    patchUserInfo({ userId, body: formData });
   };
 
   return (
@@ -143,7 +137,6 @@ const OauthSignUp: React.FC = () => {
           }
         />
       </form>
-      <button onClick={signUpHandle}>dddd</button>
     </div>
   );
 };

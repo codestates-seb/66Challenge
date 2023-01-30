@@ -75,7 +75,7 @@ const Header: FC = () => {
     }
 
     function headerHideDetect(): void {
-      if (pathArr.includes('oauth')) {
+      if (pathArr.includes('oauth') || pathArr.includes('oauthsignup')) {
         setHeaderHide(true);
       } else {
         setHeaderHide(false);
