@@ -245,19 +245,6 @@ public class UserService {
         User findUser = findVerifiedUser(userId);
         fileUploadService.delete(findUser.getProfileImageUrl());
 
-        List<String> categories = findUser.getChallenges().stream()
-                .map(challenge -> challenge.getHabit().getCategory().getType()).collect(Collectors.toList());
-
-        Map<String, Integer> map = new HashMap<>();
-        for (String category : categories) {
-            Integer count = map.get(category);
-            if (count == null) map.put(category, 0);
-            else map.put(category, count + 1);
-        }
-
-        String bestCategory = Collections.max(map.entrySet(), Map.Entry.comparingByValue()).getKey();
-
-
         findUser.setProfileImageUrl(null);
         userRepository.save(findUser);
     }
