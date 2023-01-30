@@ -5,7 +5,7 @@ import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.category.entity.Category;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.review.entity.Review;
-import challenge.server.security.user.entity.User;
+import challenge.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,4 +1,4 @@
-package challenge.server.security.user.service;
+package challenge.server.user.service;
 
 import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.challenge.entity.Challenge;
@@ -14,14 +14,14 @@ import challenge.server.security.filter.JwtVerificationFilter;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.security.utils.LoggedInUserInfoUtils;
-import challenge.server.security.user.dto.UserDto;
-import challenge.server.security.user.entity.LogoutList;
-import challenge.server.security.user.entity.EmailVerification;
-import challenge.server.security.user.entity.User;
-import challenge.server.security.user.mapper.UserMapperImpl;
-import challenge.server.security.user.repository.EmailVerificationRepository;
-import challenge.server.security.user.repository.LogoutListRepository;
-import challenge.server.security.user.repository.UserRepository;
+import challenge.server.user.dto.UserDto;
+import challenge.server.user.entity.LogoutList;
+import challenge.server.user.entity.EmailVerification;
+import challenge.server.user.entity.User;
+import challenge.server.user.mapper.UserMapperImpl;
+import challenge.server.user.repository.EmailVerificationRepository;
+import challenge.server.user.repository.LogoutListRepository;
+import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -38,8 +38,8 @@ import java.util.*;
 
 import static challenge.server.challenge.entity.Challenge.Status.CHALLENGE;
 import static challenge.server.challenge.entity.Challenge.Status.SUCCESS;
-import static challenge.server.security.user.entity.User.Status.ACTIVE;
-import static challenge.server.security.user.entity.User.Status.QUIT;
+import static challenge.server.user.entity.User.Status.ACTIVE;
+import static challenge.server.user.entity.User.Status.QUIT;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service

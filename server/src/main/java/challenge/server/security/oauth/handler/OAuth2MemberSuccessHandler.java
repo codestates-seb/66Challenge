@@ -3,7 +3,7 @@ package challenge.server.security.oauth.handler;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.oauth.dto.OAuth2CustomUser;
 import challenge.server.security.utils.CustomAuthorityUtils;
-import challenge.server.security.user.service.UserService;
+import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

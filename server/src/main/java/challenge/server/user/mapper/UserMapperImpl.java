@@ -1,10 +1,10 @@
-package challenge.server.security.user.mapper;
+package challenge.server.user.mapper;
 
 import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.habit.entity.Habit;
 import challenge.server.security.dto.SecurityDto;
-import challenge.server.security.user.dto.UserDto;
-import challenge.server.security.user.entity.User;
+import challenge.server.user.dto.UserDto;
+import challenge.server.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

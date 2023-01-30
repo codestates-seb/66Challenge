@@ -3,8 +3,8 @@ package challenge.server.habit.entity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
-import static challenge.server.security.user.entity.User.Gender.FEMALE;
-import static challenge.server.security.user.entity.User.Gender.MALE;
+import static challenge.server.user.entity.User.Gender.FEMALE;
+import static challenge.server.user.entity.User.Gender.MALE;
 
 @Getter
 @Builder

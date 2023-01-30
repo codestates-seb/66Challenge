@@ -1,7 +1,7 @@
 package challenge.server.report.entity;
 
 import challenge.server.audit.BaseTimeEntity;
-import challenge.server.security.user.entity.User;
+import challenge.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;

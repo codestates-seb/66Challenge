@@ -24,7 +24,7 @@ import challenge.server.review.dto.ReviewDto;
 import challenge.server.review.entity.Review;
 import challenge.server.review.mapper.ReviewMapper;
 import challenge.server.review.service.ReviewService;
-import challenge.server.security.user.service.UserService;
+import challenge.server.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

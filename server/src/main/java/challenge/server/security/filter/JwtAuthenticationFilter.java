@@ -1,9 +1,9 @@
 package challenge.server.security.filter;
 
 import challenge.server.security.jwt.JwtTokenizer;
-import challenge.server.security.user.dto.UserDto;
-import challenge.server.security.user.entity.User;
-import challenge.server.security.user.service.UserService;
+import challenge.server.user.dto.UserDto;
+import challenge.server.user.entity.User;
+import challenge.server.user.service.UserService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

@@ -1,11 +1,9 @@
-package challenge.server.security.user.dto;
+package challenge.server.user.dto;
 
-import challenge.server.habit.entity.Habit;
-import challenge.server.security.user.entity.User;
+import challenge.server.user.entity.User;
 import challenge.server.validator.NotSpace;
 import lombok.*;
 
-import javax.persistence.Embedded;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
