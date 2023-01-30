@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { useAppSelector } from '../../../ducks/store';
 import { useRouter } from 'next/router';
@@ -155,7 +155,7 @@ const MyPage = () => {
 
   const ActiveChallenges = () => {
     return (
-      <div className="border mx-1 pb-1 mt-2 mb-2 solid border-black rounded-xl">
+      <div className="border mx-1 pb-1 mt-2 mb-2 solid rounded-xl">
         <div className="mt-2 ml-4 mb-1 font-semibold w-max border-y border-gray-400 ">
           나의 습관 진행현황
         </div>
@@ -204,12 +204,24 @@ const MyPage = () => {
       </div>
     );
   };
+
+  const MyStatics = (): JSX.Element => {
+    return (
+      <div className="w-auto mx-1 border rounded-xl">
+        <div className="mt-2 ml-4 mb-1 font-semibold w-max border-y border-gray-400 ">
+          나의 습관 통계
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       {userInfo && (
-        <main className="flex flex-col items-stretch">
+        <main className="flex flex-col items-stretch min-h-screen">
           <Profile />
           <ActiveChallenges />
+          <MyStatics />
           <MyPageMenuList
             email={userInfo.email}
             successArr={userInfo.activeChallenges.filter(
