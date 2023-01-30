@@ -10,6 +10,8 @@ public interface UserRepository extends JpaRepository<User, Long>/*, UserCustomR
 
     Optional<User> findByUsername(String username);
 
+    Optional<User> findByRefreshToken(String refreshToken);
+
     // 5회 이상 신고 당한 회원 정지
     /* 신고 테이블에 특정 회원에 대한 신고 회수가 5회가 되는 시점에
     그 회원의 상태를 banned로 바꾸기

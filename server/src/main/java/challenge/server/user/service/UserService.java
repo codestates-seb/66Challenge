@@ -10,7 +10,7 @@ import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.repository.HabitRepository;
 import challenge.server.habit.service.HabitService;
-import challenge.server.helper.event.UserRegistrationApplicationEvent;
+import challenge.server.security.filter.JwtAuthenticationFilter;
 import challenge.server.security.filter.JwtVerificationFilter;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.utils.CustomAuthorityUtils;
@@ -31,10 +31,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static challenge.server.challenge.entity.Challenge.Status.*;
 import static challenge.server.user.entity.User.Status.ACTIVE;
@@ -63,6 +65,7 @@ public class UserService {
     private final JwtTokenizer jwtTokenizer;
     private final JwtVerificationFilter jwtVerificationFilter;
     private final LogoutListRepository logoutListRepository;
+//    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final String verificationCode = createVerificationCode(); // 회원 가입 시 이메일 인증 코드 생성
 
@@ -164,6 +167,7 @@ public class UserService {
         return savedUser;
     }
 
+    // 일반 로그인 시
     @Transactional
     public void verifyLoginUser(String email, String password, String refreshToken) {
         // 로그인 시도하는 이메일 회원이 있는지 확인
@@ -179,6 +183,19 @@ public class UserService {
 //            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_USER);
 //        }
         if (!password.equals(findUser.getPassword())) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_USER);
+        }
+
+        // 위 조건들을 모두 만족해서 로그인 대상 회원인 경우
+        findUser.saveRefreshToken(refreshToken);
+    }
+
+    // OAuth2 로그인 시
+    @Transactional
+    public void verifyLoginUser(String email, String refreshToken) {
+        User findUser = findLoginUserByEmail(email);
+
+        if (!findUser.getUserId().equals(ACTIVE)) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_USER);
         }
 
@@ -490,7 +507,7 @@ public class UserService {
     }
 
     // 인증서 발급
-    // todo 테스트 필요
+    // 테스트 필요
     public UserDto.SuccessHabitCertificate issueHabitCertificate(Long userId, Long habitId) {
         System.out.println("userId = " + userId + ", habitId = " + habitId);
         User findUser = findVerifiedUser(userId);
@@ -524,8 +541,8 @@ public class UserService {
 
     // 회원 탈퇴
     // todo 회원 탈퇴했다가(quit 상태) 다시 가입하고자 하는 사람은 어떻게 하나? 회원 가입 시 quit 상태인 사람들은 받아주나, 아니면 새로운 이메일 주소로 가입해야 하나?
-    // todo 2023.1.21(토) 9h30 문제 = 현재 로그인 시 회원의 상태(ACTIVE)를 확인하지는 않아서, 회원 탈퇴했어도(상태 QUIT) 로그인 가능..
-    // todo 회원 탈퇴 시 db상 비밀번호, 닉네임 정보 남겨놓나? 이메일 주소(로그인 ID 역할)는?
+    // 2023.1.21(토) 9h30 문제 = 현재 로그인 시 회원의 상태(ACTIVE)를 확인하지는 않아서, 회원 탈퇴했어도(상태 QUIT) 로그인 가능..
+    // 회원 탈퇴 시 db상 비밀번호, 닉네임 정보 남겨놓나? 이메일 주소(로그인 ID 역할)는?
     @Transactional
     public void quitUser(Long userId) {
         User findUser = findVerifiedUser(userId);
@@ -558,10 +575,9 @@ public class UserService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 
-    /*
+    @Transactional
     public void reissueToken(UserDto.TokenRequest requestBody, HttpServletResponse response) throws ServletException, IOException {
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        String accessToken = requestBody.getAccessToken();
         String refreshToken = requestBody.getRefreshToken();
 
         // refreshToken 검증
@@ -570,29 +586,18 @@ public class UserService {
         }
 
         // accessToken에서 user email 가져옴
-        Authentication authentication = jwtVerificationFilter.getAuthentication(accessToken, base64EncodedSecretKey);
-
-        // DB/Redis에서 user email을 기반으로 저장된 refreshToken 값을 가져옴
-        User findUser = findByEmail(authentication.getName());
-        String refreshTokenInDb = findUser.getRefreshToken();
-
-        // 로그아웃되어 DB/Redis에 refreshToken이 존재하지 않는 경우 처리
-        if (refreshTokenInDb == null) {
-            throw new BusinessLogicException(ExceptionCode.LOGOUT_USER);
-        }
-
-        if (!refreshTokenInDb.equals(refreshToken)) {
-            throw new BusinessLogicException(ExceptionCode.REFRESH_TOKEN_NOT_VALID);
-        }
+//        Authentication authentication = jwtVerificationFilter.getAuthentication(accessToken, base64EncodedSecretKey);
+        // 2023.1.30(월) 16h accessToken을 안 받기로 함 -> 로그인 시 users 테이블에 저장해둔 refreshToken으로 회원 검색
+        Optional<User> optionalUser = userRepository.findByRefreshToken(refreshToken);
+        User findUser = optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.REFRESH_TOKEN_NOT_VALID)); // 로그아웃되어 DB/Redis에 refreshToken이 존재하지 않는 경우 포함
 
         // 새로운 토큰 생성
-        String newRefreshToken = jwtAuthenticationFilter.reissueRefreshToken(findUser, response);
+        String newRefreshToken = jwtVerificationFilter.reissueRefreshToken(findUser, response);
 
         // DB/Redis에 새로운 refreshToken 업데이트
         findUser.setRefreshToken(newRefreshToken);
         userRepository.save(findUser); // dirty checking으로 별도 저장 안 해도 된다?
     }
-     */
 
     @Transactional
     public void logout(UserDto.LogoutRequest requestBody) {

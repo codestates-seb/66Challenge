@@ -282,11 +282,10 @@ public class UserDto {
     @Builder
     @NoArgsConstructor
     public static class TokenRequest {
-        @NotBlank(message = "accessToken을 입력해 주세요.")
-        String accessToken;
-
         @NotBlank(message = "refreshToken을 입력해 주세요.")
         String refreshToken;
+
+        Boolean isRefresh; // true(Refresh token도 Access token과 함께/같이 갱신) vs false(Access token만 갱신)
     }
 
     @Getter
