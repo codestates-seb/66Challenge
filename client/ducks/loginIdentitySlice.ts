@@ -21,7 +21,8 @@ const loginRequest = createAsyncThunk(
 
       const accessToken: string = response.headers.authorization;
       const refreshToken: string = response.headers.refresh;
-      setCookie('accessJwtToken', accessToken, { path: '/' });
+      // setCookie('accessJwtToken', accessToken, { path: '/' });
+      axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
       setCookie('refreshJwtToken', refreshToken, { path: '/' });
       const userId: number = response.data.userId;
       return userId;
@@ -52,7 +53,7 @@ export const loginIdentitySlice = createSlice({
       state.isLogin = false;
       state.userId = null;
       state.notificationToken = null;
-      removeCookie('accessJwtToken');
+      // removeCookie('accessJwtToken');
       removeCookie('refreshJwtToken');
     },
     oauthLogin: (state, action): void => {
