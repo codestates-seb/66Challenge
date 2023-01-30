@@ -1,5 +1,6 @@
 package challenge.server.user.service;
 
+import challenge.server.auth.repository.AuthRepository;
 import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.challenge.repository.ChallengeRepository;
@@ -15,9 +16,7 @@ import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.security.utils.LoggedInUserInfoUtils;
 import challenge.server.user.dto.UserDto;
-import challenge.server.user.entity.LogoutList;
-import challenge.server.user.entity.EmailVerification;
-import challenge.server.user.entity.User;
+import challenge.server.user.entity.*;
 import challenge.server.user.mapper.UserMapperImpl;
 import challenge.server.user.repository.EmailVerificationRepository;
 import challenge.server.user.repository.LogoutListRepository;
@@ -36,8 +35,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static challenge.server.challenge.entity.Challenge.Status.CHALLENGE;
-import static challenge.server.challenge.entity.Challenge.Status.SUCCESS;
+import static challenge.server.challenge.entity.Challenge.Status.*;
 import static challenge.server.user.entity.User.Status.ACTIVE;
 import static challenge.server.user.entity.User.Status.QUIT;
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -47,6 +45,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
+    private final AuthRepository authRepository;
     private final EmailVerificationRepository emailVerificationRepository;
     private final BookmarkRepository bookmarkRepository;
     private final HabitRepository habitRepository;
@@ -305,22 +304,6 @@ public class UserService {
         if (!challengesInProgress.isEmpty()) {
             earliestCreatedAt = challengesInProgress.get(0).getCreatedAt().toLocalDate();
         }
-        /*
-        LocalDateTime earliestCreatedAT = LocalDateTime.of(firstChCreatedAt.getYear(), firstChCreatedAt.getMonth(), firstChCreatedAt.getDayOfMonth(), firstChCreatedAt.getHour(), firstChCreatedAt.getMinute(), firstChCreatedAt.getSecond());
-        for (int i = 1; i < challengesInProgress.size(); i++) {
-            LocalDateTime thisDate = challengesInProgress.get(i).getCreatedAt();
-            if (thisDate.isBefore(earliestCreatedAT)) {
-                earliestCreatedAT = LocalDateTime.of(thisDate.getYear(), thisDate.getMonth(), thisDate.getDayOfMonth(), thisDate.getHour(), thisDate.getMinute(), thisDate.getSecond());
-            }
-        }
-
-        System.out.println(earliestCreatedAT); // 7h5 null -> setBiggestProgressDays 라인에서 null pointer exception 발생
-         */
-
-        // 날짜 비교 실험
-        LocalDateTime earliestCreatedAtExample = LocalDateTime.of(2023, 1, 15, 0, 1, 1);
-//        System.out.println(today.compareTo(earliestCreatedAt1.truncatedTo(ChronoUnit.DAYS)) + 1); // 오늘(1/19)-과거 비교 기대 값 = 5일 -> 7h 과거-오늘 비교로 실행 시 -1
-        System.out.println("날짜 비교 실험 결과 = 2023.1.15 ~ 오늘 날짜 수 = " + DAYS.between(earliestCreatedAtExample, today)); // 2023.1.23(월) 23h45 실행 시 8 찍힘 -> todo 우리 biz logic 상 +1 해줘야 하나?
 
         // [마이페이지 상단 기본 정보] 리턴할 것 준비
         userDetailsDb.setUserId(findUser.getUserId());
@@ -328,6 +311,11 @@ public class UserService {
         userDetailsDb.setUsername(findUser.getUsername());
         userDetailsDb.setProfileImageUrl(findUser.getProfileImageUrl());
         userDetailsDb.setBiggestProgressDays((int) DAYS.between(earliestCreatedAt, today));
+
+        // [마이페이지 통계 정보] 리턴할 것 준비
+        UserDto.StatisticsResponse statisticsResponse = new UserDto.StatisticsResponse();
+        List<NumOfAuthByChallenge> numOfAuthByChallengeList = new ArrayList<>();
+        List<DaysOfFail> daysOfFailList = new ArrayList<>();
 
         // 마이페이지 중간1 = '회원이 참여중, 참여완료한 습관목록을 서브타이틀로 표시'
         for (int i = 0; i < challenges.size(); i++) {
@@ -357,8 +345,8 @@ public class UserService {
             activeChallenges.add(challengeDetailsDb);
         }
 
-        // 마이페이지 중간2 = '진행중인 습관의 분석데이터를 선택하기위한 카테고리 선택자'
         for (int i = 0; i < challengesInProgress.size(); i++) {
+            // 마이페이지 중간2 = '진행중인 습관의 분석데이터를 선택하기위한 카테고리 선택자'
             Challenge ch = challengesInProgress.get(i);
             Long categoryId = ch.getHabit().getCategory().getCategoryId();
             Set<Long> categoryIds = new HashSet<>();
@@ -372,14 +360,80 @@ public class UserService {
 
                 activeCategories.add(categoryDb);
             }
+
+            // 마이페이지 통계3 = 많이 참여한 습관의 카테고리
+            String categoryType = ch.getHabit().getCategory().getType();
+            Map<String, Integer> categoriesByPopularity = new HashMap<>();
+
+            if (!categoriesByPopularity.containsKey(categoryType)) {
+                categoriesByPopularity.put(categoryType, 0);
+            }
+
+            Integer value = categoriesByPopularity.get(categoryType);
+            categoriesByPopularity.put(categoryType, value++);
+
+            // 마이페이지 통계1
+            // 현재 진행 중인 습관의 습관 번호를 가지고 Habit 테이블에 가서 습관의 제목을 가져옴
+            Long habitId = ch.getHabit().getHabitId();
+            String habitTitle = habitService.findVerifiedHabit(habitId).getTitle();
+
+            // 해당 습관/챌린지의 인증글 수
+            int numOfAuth = ch.getAuths().size();
+            int numOfUsedWildCard = ch.getWildcards().size();
+            LocalDateTime createdAt = ch.getCreatedAt();
+
+            NumOfAuthByChallenge numOfAuthByChallenge = NumOfAuthByChallenge.builder()
+                    .habitId(habitId)
+                    .habitTitle(habitTitle)
+                    .createdAt(createdAt)
+                    .numOfAuth(numOfAuth)
+                    .numOfUsedWildCard(numOfUsedWildCard)
+                    .build();
+
+            numOfAuthByChallengeList.add(numOfAuthByChallenge);
+        }
+
+        // 마이페이지 통계2
+        int sum = 0;
+        int average = 0;
+        List<Challenge> challengeFails = challengeRepository.findAllByUserUserIdAndStatusOrderByChallengeIdAsc(findUser.getUserId(), FAIL);
+
+        for (int i = 0; i < challengeFails.size(); i++) {
+            Challenge ch = challengeFails.get(i);
+            int days = (int) DAYS.between(ch.getCreatedAt(), ch.getLastAuthAt()) + 2; // (챌린지 시작한 날 ~ 마지막 인증일) + wild card 2일 감안
+            sum += days;
+
+            Long habitId = ch.getHabit().getHabitId();
+            String habitTitle = habitService.findVerifiedHabit(habitId).getTitle();
+
+            // 해당 습관/챌린지의 인증글 수
+            int numOfAuth = ch.getAuths().size();
+            int numOfUsedWildCard = ch.getWildcards().size();
+            LocalDateTime createdAt = ch.getCreatedAt();
+
+            DaysOfFail daysOfFail = DaysOfFail.builder()
+                    .habitId(habitId)
+                    .habitTitle(habitTitle)
+                    .createdAt(createdAt)
+                    .daysOfFail(days)
+                    .build();
+
+            daysOfFailList.add(daysOfFail);
+        }
+
+        if (!challengeFails.isEmpty()) {
+            average = sum / challengeFails.size();
         }
 
         // 리턴할 [마이페이지 상단 기본 정보] 최종 정리
         userDetailsDb.setActiveChallenges(activeChallenges);
         userDetailsDb.setActiveCategories(activeCategories);
 
-        // [마이페이지 통계 정보] 리턴할 것 준비
-//        userDetailsDb.setStatisticsResponse();
+        UserDto.StatisticsResponse.builder()
+                .numOfAuthByChallengeList(numOfAuthByChallengeList)
+//                .averageDaysofFail()
+//                .myCategories()
+                .build();
 
         return userDetailsDb;
     }

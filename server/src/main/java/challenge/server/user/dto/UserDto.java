@@ -1,5 +1,7 @@
 package challenge.server.user.dto;
 
+import challenge.server.user.entity.DaysOfFail;
+import challenge.server.user.entity.NumOfAuthByChallenge;
 import challenge.server.user.entity.User;
 import challenge.server.validator.NotSpace;
 import lombok.*;
@@ -282,14 +284,17 @@ public class UserDto {
         String refreshToken;
     }
 
+    @Getter
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class StatisticsResponse {
         // 내가 현재까지 올린 인증 글의 갯수 -> 습관별? 전체?
-        Map<UserDto.HabitResponse, Integer> numsOfAuthByHabit;
+        List<NumOfAuthByChallenge> numOfAuthByChallengeList;
 
         // 습관 참여 후 평균 며칠 후 포기하는지 = 챌린지 생성일(Challenge createdAt)로부터 챌린지 실패로 변환된 날(Challenge lastModifiedAt) 평균 값
-        Map<UserDto.HabitResponse, Integer> averageDaysofFail;
+        List<DaysOfFail> daysOfFailList;
+        int averageDaysOfFail;
 
         // 많이 참여한 습관의 카테고리 = 내가 주로 어떤 카테고리의 습관에 참여하는지
         List<String> myCategories;

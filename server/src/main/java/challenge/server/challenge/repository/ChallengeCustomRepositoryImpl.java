@@ -4,6 +4,7 @@ import challenge.server.auth.entity.Auth;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.habit.entity.QHabit;
 import challenge.server.review.entity.QReview;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
