@@ -52,6 +52,8 @@ const HabitDetail: React.FC = () => {
     });
   }, [router.isReady]);
 
+  const succImgClassName = 'w-[50%]';
+
   return (
     <div className="habit-detail-container">
       <div className="habit-detail-top">
@@ -96,10 +98,9 @@ const HabitDetail: React.FC = () => {
       </div>
       <div className="habit-detail-middle p-5 border-b border-borderColor">
         <div className="habit-detail-body">
-          <h3 className="text-lg font-semibold pb-5 [&>p]:pb-2.5 [&>p]:w-full [&>p]:whitespace-normal [&>p]:break-words">
-            상세내용
-          </h3>
+          <h3 className="text-lg font-semibold pb-5">상세내용</h3>
           <div
+            className="[&>*]:pb-2.5 [&>*]:w-full [&>*]:whitespace-normal [&>*]:break-words"
             dangerouslySetInnerHTML={{ __html: habitData?.detail?.bodyHTML }}
           />
         </div>
@@ -120,7 +121,11 @@ const HabitDetail: React.FC = () => {
         <p>인증 사진의 올바른 예와 잘못된 예는 아래와 같습니다.</p>
         <div className="pt-5 flex justify-center gap-5">
           <div className="flex flex-col">
-            <div className="min-h-[150px] flex items-center">
+            <div
+              className={`min-h-[150px] ${
+                habitData?.image?.failImgUrl ? succImgClassName : ''
+              } flex items-center`}
+            >
               <Image
                 src={
                   Object.keys(habitData).length
