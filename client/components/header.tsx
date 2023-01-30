@@ -22,6 +22,7 @@ const Header: FC = () => {
   const [isMyPage, setIsMyPage] = useState<boolean>(false);
   const [isHomeNeed, setIsHomeNeed] = useState<boolean>(false);
   const [pageTitle, setPageTitle] = useState<string | null>(null);
+  const [headerHide, setHeaderHide] = useState<boolean>(false);
 
   const titleList: object = {
     login: '로그인',
@@ -39,7 +40,7 @@ const Header: FC = () => {
   // path별 페이지제목
 
   useEffect(() => {
-    function titleDetect(pathArr): void {
+    function titleDetect(): void {
       for (let i = pathArr.length - 1; i >= 0; i--) {
         if (titleList[pathArr[i]]) {
           setPageTitle(titleList[pathArr[i]]);
@@ -49,7 +50,7 @@ const Header: FC = () => {
       setPageTitle(null);
     }
 
-    function homeDetect(pathArr): void {
+    function homeDetect(): void {
       if (pathArr.includes('detail')) {
         setIsHomeNeed(true);
       } else {
@@ -73,10 +74,19 @@ const Header: FC = () => {
       }
     }
 
-    titleDetect(pathArr);
-    homeDetect(pathArr);
+    function headerHideDetect(): void {
+      if (pathArr.includes('oauth')) {
+        setHeaderHide(true);
+      } else {
+        setHeaderHide(false);
+      }
+    }
+
+    titleDetect();
+    homeDetect();
     logoDetact();
     settingsDetect();
+    headerHideDetect();
   }, [pathArr]);
 
   const LeftSide: FC = () => {
@@ -154,7 +164,9 @@ const Header: FC = () => {
   };
 
   return (
-    <header className="z-[1] sticky top-0 bg-white">
+    <header
+      className={`z-[1] sticky top-0 bg-white ${headerHide ? 'hidden' : ''}`}
+    >
       <div className="z-40">
         <div>
           <link
