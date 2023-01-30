@@ -278,9 +278,7 @@ const SignUp: React.FC = () => {
       <div
         className={`${
           authState === 'none' ? 'flex' : 'hidden'
-
         } absolute w-3/4 bg-white border-2 border-subColor top-20 rounded-full justify-center h-10 items-center animate-dropDown`}
-
       >
         <span className="text-subColor font-semibold">
           이메일 인증을 하셔야 합니다!
