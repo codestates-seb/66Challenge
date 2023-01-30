@@ -11,9 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -53,10 +55,13 @@ public class UserController {
     // 회원 가입 시 이메일 인증 처리
     // todo 회원이 자신의 이메일에 온 링크를 클릭하면 이 요청이 될 줄 알았는데, 아닌 것 같음(코드 만료 시간이 지나도 내부 처리 없이 그냥 완료되었다고 텍스트가 뜸) vs Postman에서 요청해야 이 로직이 작동함
     @GetMapping("/email-verifications")
-    public ResponseEntity<String> verifyEmail(@RequestParam @Email String email,
-                                              @RequestParam String verificationCode) {
+    public ModelAndView verifyEmail(@RequestParam @Email String email,
+                                    @RequestParam String verificationCode) {
         userService.verifyEmail(email, verificationCode);
-        return new ResponseEntity<>("이메일 인증이 완료되었습니다! Challenge66 회원 가입 페이지로 돌아가 가입 절차를 계속 진행해 주세요.", HttpStatus.OK);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("hello");
+        return modelAndView;
     }
 
     @PostMapping

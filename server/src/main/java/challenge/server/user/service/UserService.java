@@ -35,6 +35,7 @@ import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static challenge.server.challenge.entity.Challenge.Status.CHALLENGE;
 import static challenge.server.challenge.entity.Challenge.Status.SUCCESS;
@@ -244,6 +245,19 @@ public class UserService {
     public void deleteProfileImage(Long userId) {
         User findUser = findVerifiedUser(userId);
         fileUploadService.delete(findUser.getProfileImageUrl());
+
+        List<String> categories = findUser.getChallenges().stream()
+                .map(challenge -> challenge.getHabit().getCategory().getType()).collect(Collectors.toList());
+
+        Map<String, Integer> map = new HashMap<>();
+        for (String category : categories) {
+            Integer count = map.get(category);
+            if (count == null) map.put(category, 0);
+            else map.put(category, count + 1);
+        }
+
+        String bestCategory = Collections.max(map.entrySet(), Map.Entry.comparingByValue()).getKey();
+
 
         findUser.setProfileImageUrl(null);
         userRepository.save(findUser);
