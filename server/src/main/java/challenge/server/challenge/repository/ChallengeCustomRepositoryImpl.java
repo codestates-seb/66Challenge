@@ -4,11 +4,14 @@ import challenge.server.auth.entity.Auth;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.habit.entity.QHabit;
 import challenge.server.review.entity.QReview;
+import challenge.server.user.dto.UserDto;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.criterion.Projection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -114,5 +117,18 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
             return null;
         }
         return challenge.challengeId.lt(lastChallengeId);
+    }
+
+    @Override
+    public List<UserDto.CategoriesResponse> findFavoriteCategories(Long userId) {
+        return jpaQueryFactory
+                .select(Projections.fields(UserDto.CategoriesResponse.class, challenge.challengeId.count(), challenge.habit.category.categoryId))
+                .from(challenge)
+                .where(challenge.user.userId.eq(userId))
+                .leftJoin(challenge.habit, habit)
+                .on(challenge.habit.habitId.eq(habit.habitId))
+                .groupBy(challenge.habit.category.categoryId)
+                .orderBy(challenge.challengeId.count().desc())
+                .fetch();
     }
 }

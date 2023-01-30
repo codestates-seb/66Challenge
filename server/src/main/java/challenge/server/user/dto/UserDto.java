@@ -30,14 +30,17 @@ public class UserDto {
         @NotBlank(message = "이메일은 공백이 아니어야 하며, 유효한 이메일 주소 형식이어야 합니다.")
         private String email;
 
-        @Pattern(regexp = "[A-Za-z0-9가-힇]{2,20}",
-                message = "닉네임은 공백이 아니어야 하며, 영문자/숫자/한글 2~20글자로 이루어집니다.")
+        @Pattern(regexp = "[A-Za-z0-9가-힇]{2,8}",
+                message = "닉네임은 공백이 아니어야 하며, 영문자/숫자/한글 2~8글자로 이루어집니다.")
         private String username;
 
         //@Password
         @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,12}$",
                 message = "비밀번호는 공백이 아니어야 하며, 영문자 1개, 숫자 1개, 특수문자 1개를 각각 반드시 포함한 8~12글자로 이루어집니다.")
         private String password;
+
+        private String age;
+        private String gender;
     }
 
     @Getter
@@ -297,11 +300,15 @@ public class UserDto {
         int averageDaysOfFail;
 
         // 많이 참여한 습관의 카테고리 = 내가 주로 어떤 카테고리의 습관에 참여하는지
-        List<String> myCategories;
+        List<UserDto.CategoriesResponse> favoriteCategories;
 
         // 아침/저녁형인지 = 챌린지별 인증 시간 기반으로 표시
 
         // 내 또래 사람들이 주로 참여하는 습관의 카테고리
     }
 
+    public static class CategoriesResponse {
+        Long count;
+        Long categoryId;
+    }
 }

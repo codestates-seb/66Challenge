@@ -2,6 +2,7 @@ package challenge.server.challenge.repository;
 
 import challenge.server.auth.entity.Auth;
 import challenge.server.challenge.entity.Challenge;
+import challenge.server.user.dto.UserDto;
 import com.querydsl.core.Tuple;
 
 import java.time.LocalDateTime;
@@ -18,4 +19,6 @@ public interface ChallengeCustomRepository {
     Integer findChallengers(Long habitId);
 
     List<Challenge> findAllNoOffset(Long lastChallengeId, int size);
+
+    List<UserDto.CategoriesResponse> findFavoriteCategories(Long userId);
 }
