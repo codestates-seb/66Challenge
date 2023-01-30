@@ -64,7 +64,7 @@ spring:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    key: ${key}
+    key: challenge_66_jasypt_key # ${key}
 mail:
   address:
     admin: ENC(JGBa0PpOXdYVZnt2VnvjmfjIiFzJzEsEMUU9EOaxGt0=)
@@ -85,8 +85,8 @@ mail:
         member:
           join: email-registration-user
 jwt:
-  access-token-expiration-minutes: 30
-  refresh-token-expiration-minutes: 600
+  access-token-expiration-minutes: 1440 # 60 * 24
+  refresh-token-expiration-minutes: 259200 # 60 * 24 * 30 * 6
   key: ENC(9d9nAF96s1rYf4Aaq9yt/FPLZ2f24RkPpmWouKdl6q/+6/NsYLqtRrNaMjc3PjXhk7Wpt/Wn86Dp4RMLUONneCGFbnacoFoF)
 cron:
   cron1: 0 0 0 * * *

@@ -2,6 +2,7 @@ package challenge.server.challenge.repository;
 
 import challenge.server.auth.entity.Auth;
 import challenge.server.challenge.entity.Challenge;
+import com.querydsl.core.Tuple;
 
 import java.time.LocalDateTime;
 import java.util.List;
