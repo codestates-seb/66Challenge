@@ -17,7 +17,7 @@ const OauthLogin = () => {
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
       setCookie('refreshJwtToken', refresh_token, { path: '/' });
       dispatch(oauthLogin(user_id));
-      router.push('/');
+      router.push('/user/oauthsignup');
     }
   }, [router.isReady]);
 
