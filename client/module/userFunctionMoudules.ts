@@ -70,7 +70,7 @@ export async function getUserInfo({ userId }: UserGeneralProps) {
     const response = await axios
       .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, {
         headers: {
-          Authorization: getCookie('accessJwtToken'),
+          // Authorization: getCookie('accessJwtToken'),
         },
       })
       .then((res) => res.data);
@@ -84,7 +84,7 @@ export async function deleteUser({ userId }: UserGeneralProps) {
     const response = await axios
       .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, {
         headers: {
-          Authorization: getCookie('accessJwtToken'),
+          // Authorization: getCookie('accessJwtToken'),
         },
       })
       .then((res) => console.log(res));
@@ -98,7 +98,7 @@ export async function patchUserInfo({ userId, body }) {
     const response = await axios
       .patch(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, body, {
         headers: {
-          Authorization: getCookie('accessJwtToken'),
+          // Authorization: getCookie('accessJwtToken'),
           'Content-Type': 'multipart/form-data',
         },
       })
@@ -119,7 +119,7 @@ export async function getUserCertificate({
       `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/${habitId}/certificates`,
       {
         headers: {
-          Authorization: getCookie('accessJwtToken'),
+          // Authorization: getCookie('accessJwtToken'),
         },
       },
     );
@@ -135,7 +135,7 @@ export async function getUserHabitsCategories({ userId }: UserGeneralProps) {
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/categories`,
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -152,7 +152,7 @@ export async function getUserHabitsHosts({ userId }: UserGeneralProps) {
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/hosts`,
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -169,7 +169,7 @@ export async function getPasswordCheck({ userId }: UserGeneralProps) {
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/passwords/check`,
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -191,7 +191,7 @@ export async function profileChange({
       },
       {
         headers: {
-          Authorization: getCookie('accessJwtToken'),
+          // Authorization: getCookie('accessJwtToken'),
           'Content-Type': 'multipart/form-data',
         },
       },
@@ -208,7 +208,7 @@ export async function profileDelete({ userId }) {
       `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/profiles`,
       {
         headers: {
-          Authorization: getCookie('accessJwtToken'),
+          // Authorization: getCookie('accessJwtToken'),
         },
       },
     );
