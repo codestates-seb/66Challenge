@@ -36,7 +36,7 @@ export async function postHabitReview({
         { body, score },
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -56,7 +56,7 @@ export async function deleteHabitReview({
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews/${reviewId}`,
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )
@@ -79,7 +79,7 @@ export async function patchHabitReview({
         { body, score, reviewId },
         {
           headers: {
-            Authorization: getCookie('accessJwtToken'),
+            // Authorization: getCookie('accessJwtToken'),
           },
         },
       )

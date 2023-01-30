@@ -10,42 +10,42 @@ export const CertificationModal = ({ data }) => {
   let date = today.getDate(); // 날짜
 
   return (
-    <div className="w-96 h-full flex-columns text-center justify-center border-black border rounded-2xl">
-      <div className="flex justify-end">
-        <IoClose
-          className="cursor-pointer p-2.5 mt-2.5"
-          size="50"
-          // onClick={closeModalHandler}
-        />
-      </div>
-
+    <div className="w-full h-full flex-columns text-center p-2.5 mt-2.5 justify-center border-black border rounded-2xl">
       <img
         src="../image/prizeborder.jpg"
-        className="bg-cover bg-no-repeat inline-block my-3 max-w-full -mt-2"
+        className="bg-cover bg-no-repeat inline-block my-3 max-w-full"
         alt="prizetemplit"
       />
 
-      <div className="absolute left-14 top-1/4 w-full">
-        <h2 className="text-center text-2xl mb-10">인증서</h2>
+      <div className="absolute left-2 top-12 w-full">
+        <h2 className="text-center text-xl mb-10">인증서</h2>
         <div className="flex justify-center">
-          <div className="mx-3 mb-16">
+          <div className="mx-3 mb-16 text-xs">
             <p>마스터한 습관</p>
-            <p className="text-footerMemberTextColor">여기습관이름 올려</p>
+            <p className="text-footerMemberTextColor text-xs">{data.title}</p>
           </div>
-          <div className="mx-3">
+          <div className="mx-3 text-xs">
             <p>
               시작일자:{' '}
-              <span className="text-footerMemberTextColor">해당날짜올려</span>
+              <span className="text-footerMemberTextColor">
+                {data.createdAt.substr(0, 4)}년 {data.createdAt.substr(5, 2)}월{' '}
+                {data.createdAt.substr(8, 2)}일
+              </span>
             </p>
             <p>
               성공일자:{' '}
-              <span className="text-footerMemberTextColor">해당날짜올려</span>
+              <span className="text-footerMemberTextColor">
+                {data.completedAt.substr(0, 4)}년{' '}
+                {data.completedAt.substr(5, 2)}월{' '}
+                {data.completedAt.substr(8, 2)}일
+              </span>
             </p>
           </div>
         </div>
-        <div className="mb-20 text-xl">
-          <span className="text-footerMemberTextColor">xxx</span> 님은
-          성공적으로 습관 체득에 성공하셨음을 66 Challenge에서 인증합니다.
+        <div className="mb-10 text-xs">
+          <span className="text-footerMemberTextColor">{data.username}</span>{' '}
+          님은 성공적으로 습관 체득에 성공하셨음을{' '}
+          <p>66 Challenge에서 인증합니다.</p>
         </div>
         <div className="flex justify-center mb-2">
           <img src="../image/66logoForModal.svg" alt="66ChagllengeLogo" />
