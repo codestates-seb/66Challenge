@@ -1,13 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import {
-  IoSearch,
-  IoSettings,
-  IoArrowBack,
-  IoShareSocialSharp,
-  IoHome,
-} from 'react-icons/io5';
+import { IoSearch, IoSettings, IoArrowBack, IoHome } from 'react-icons/io5';
 import { PushSubscribe } from './pushSubscribe';
 import Image from 'next/image';
 import logo from '../public/image/66logo.png';
