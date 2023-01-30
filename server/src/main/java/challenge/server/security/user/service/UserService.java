@@ -322,7 +322,7 @@ public class UserService {
 //        System.out.println(today.compareTo(earliestCreatedAt1.truncatedTo(ChronoUnit.DAYS)) + 1); // 오늘(1/19)-과거 비교 기대 값 = 5일 -> 7h 과거-오늘 비교로 실행 시 -1
         System.out.println("날짜 비교 실험 결과 = 2023.1.15 ~ 오늘 날짜 수 = " + DAYS.between(earliestCreatedAtExample, today)); // 2023.1.23(월) 23h45 실행 시 8 찍힘 -> todo 우리 biz logic 상 +1 해줘야 하나?
 
-        // 마이페이지 상단 기본 정보 리턴할 것 준비
+        // [마이페이지 상단 기본 정보] 리턴할 것 준비
         userDetailsDb.setUserId(findUser.getUserId());
         userDetailsDb.setEmail(findUser.getEmail());
         userDetailsDb.setUsername(findUser.getUsername());
@@ -374,9 +374,12 @@ public class UserService {
             }
         }
 
-        // 리턴할 자료 최종 정리
+        // 리턴할 [마이페이지 상단 기본 정보] 최종 정리
         userDetailsDb.setActiveChallenges(activeChallenges);
         userDetailsDb.setActiveCategories(activeCategories);
+
+        // [마이페이지 통계 정보] 리턴할 것 준비
+//        userDetailsDb.setStatisticsResponse();
 
         return userDetailsDb;
     }
