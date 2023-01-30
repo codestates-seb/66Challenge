@@ -64,6 +64,9 @@ module.exports = {
         speechBubble: 'speechBubble 1.8s ease-in-out Infinite',
         gage: 'gage 0.5s ease',
       },
+      backgroundImage: {
+        'certification': 'url("/image/prizeborder.jpg")',
+      },
     },
   },
   plugins: [
