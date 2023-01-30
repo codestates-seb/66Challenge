@@ -11,7 +11,6 @@ const OauthLogin = () => {
 
   useEffect(() => {
     if (router.isReady) {
-      console.log(router.query);
       const { access_token, refresh_token, user_id } = router.query;
       setCookie('accessJwtToken', access_token, { path: '/' });
       setCookie('refreshJwtToken', refresh_token, { path: '/' });
