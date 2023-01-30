@@ -418,12 +418,12 @@ public class UserService {
         userDetailsDb.setActiveChallenges(activeChallenges);
         userDetailsDb.setActiveCategories(activeCategories);
 
-        UserDto.StatisticsResponse.builder()
+        userDetailsDb.setStatisticsResponse(UserDto.StatisticsResponse.builder()
                 .numOfAuthByChallengeList(numOfAuthByChallengeList)
                 .daysOfFailList(daysOfFailList)
                 .averageDaysOfFail(averageDaysOfFail)
                 .favoriteCategories(favoriteCategories)
-                .build();
+                .build());
 
         return userDetailsDb;
     }
