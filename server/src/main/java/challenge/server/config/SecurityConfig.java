@@ -15,6 +15,7 @@ import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -55,7 +56,29 @@ public class SecurityConfig { // https 적용
                 .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll()) // todo 역할 기반 리소스별 접근 권한 부여 필요
+                .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers(HttpMethod.POST, "/*/login", "/", "/**").permitAll() // 역할 기반 리소스별 접근 권한 부여 필요
+                        .antMatchers(HttpMethod.POST, "/*/users").permitAll()
+                        .antMatchers(HttpMethod.GET, "/*/users/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/*/users").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/*/users").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/*/users").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/*/habits").permitAll()
+                        .antMatchers(HttpMethod.GET, "/*/habits/**").permitAll()
+                        .antMatchers(HttpMethod.POST, "/*/habits/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/*/habits/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/*/habits/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/*/bookmarks/**").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/*/bookmarks/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/*/bookmarks/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/*/bookmarks/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/*/challenges/**").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/*/challenges/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/*/challenges/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/*/challenges/**").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/*/logout/**").hasRole("USER")
+                        .anyRequest().permitAll()
+                )
 //                .authenticationManager(new CustomAuthenticationManager())
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, userService))
