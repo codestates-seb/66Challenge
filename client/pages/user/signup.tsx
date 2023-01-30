@@ -13,6 +13,8 @@ interface IformValue {
   username: string;
   password: string;
   passwordCheck: string;
+  gender: string;
+  age: string;
 }
 interface IstateValue {
   emailVerify: string;
@@ -20,6 +22,8 @@ interface IstateValue {
   passwordVerify: string;
   passwordCheckVerify: string;
   agreeVerify: string;
+  genderVerify: string;
+  ageVerify: string;
 }
 const SignUp: React.FC = () => {
   const router: NextRouter = useRouter();
@@ -30,6 +34,8 @@ const SignUp: React.FC = () => {
     passwordVerify: '',
     passwordCheckVerify: '',
     agreeVerify: 'fail',
+    genderVerify: '',
+    ageVerify: '',
   });
   const [authState, setAuthState] = useState('');
   const [emailInputDisable, setEmailInputDisable] = useState(false);
@@ -234,6 +240,60 @@ const SignUp: React.FC = () => {
             </span>
           ) : null}
         </div>
+        <div className={labelDefaultClassName}>추가정보 입력</div>
+        <div className="border py-3 flex flex-col items-center mb-6 px-3 rounded-md w-3/4">
+          <div id="ageInputForm">
+            <label htmlFor="ageInput" className={`${labelDefaultClassName}`}>
+              나이 :
+            </label>
+            <input
+              id="ageInput"
+              type="number"
+              className="border w-16 mx-2 text-center h-6 rounded-md"
+              min={1}
+              max={120}
+              placeholder="입력"
+              {...register('age')}
+              onBlur={(e) => {
+                if (
+                  Number(e.target.value) < 1 ||
+                  Number(e.target.value) > 120
+                ) {
+                  e.target.value = null;
+                  setVerify({ ...verify, ageVerify: 'fail' });
+                } else {
+                  setVerify({ ...verify, ageVerify: 'success' });
+                }
+              }}
+            />
+            <input
+              id="genderMale"
+              type="radio"
+              name="gender"
+              value="male"
+              onClick={(e) => {
+                setVerify({ ...verify, genderVerify: 'success' });
+              }}
+              className="mx-1 border"
+              {...register('gender')}
+            />
+            <label className="mx-1 mt-1">남성</label>
+
+            <input
+              id="genderFemale"
+              type="radio"
+              name="gender"
+              value="female"
+              onClick={(e) => {
+                setVerify({ ...verify, genderVerify: 'success' });
+              }}
+              className="mx-1"
+              {...register('gender')}
+            />
+            <label className="mx-1 mt-1">여성</label>
+          </div>
+        </div>
+
         <div className="flex items-center w-full mb-6">
           <input
             id="agreeCheck"
@@ -278,9 +338,7 @@ const SignUp: React.FC = () => {
       <div
         className={`${
           authState === 'none' ? 'flex' : 'hidden'
-
         } absolute w-3/4 bg-white border-2 border-subColor top-20 rounded-full justify-center h-10 items-center animate-dropDown`}
-
       >
         <span className="text-subColor font-semibold">
           이메일 인증을 하셔야 합니다!
