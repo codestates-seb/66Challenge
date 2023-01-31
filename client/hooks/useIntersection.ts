@@ -123,7 +123,7 @@ export function useIntersectionPage(
 
   useEffect(() => {
     if (isLoaded && !stop && router.isReady) {
-      axios.get(`${url}page=${page}&size=30`).then((res) => {
+      axios.get(`${url}page=${page}&size=10`).then((res) => {
         setData((data) => data.concat(res.data));
         setPage((page) => page + 1);
         setIsLoaded(false);

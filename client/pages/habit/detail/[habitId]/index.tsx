@@ -127,6 +127,7 @@ const HabitDetail: React.FC = () => {
               } flex items-center`}
             >
               <Image
+                className="w-full aspect-square"
                 src={
                   Object.keys(habitData).length
                     ? habitData.image.succImgUrl
@@ -135,24 +136,27 @@ const HabitDetail: React.FC = () => {
                 alt="correct auth image"
                 width={500}
                 height={500}
+                style={{ objectFit: 'cover' }}
               />
             </div>
             <div className="text-center text-green-600 pt-2.5 text-sm font-bold">
-              {'올바른 인증사진'}
+              {'올바른 인증사진 예시'}
             </div>
           </div>
           {habitData?.image?.failImgUrl && (
             <div className="flex flex-col">
               <div className="min-h-[150px] flex items-center">
                 <Image
+                  className="w-full aspect-square"
                   src={habitData.image.failImgUrl}
                   alt="incorrect auth image"
                   width={500}
                   height={500}
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
               <div className="text-center text-rose-600 pt-2.5 text-sm font-bold">
-                {'잘못된 인증사진'}
+                {'잘못된 인증사진 예시'}
               </div>
             </div>
           )}
