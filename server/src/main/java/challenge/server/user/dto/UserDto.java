@@ -273,7 +273,10 @@ public class UserDto {
     @Builder
     @NoArgsConstructor
     public static class LoginRequest {
+        @JsonProperty
         private String username;
+
+        @JsonProperty
         private String password;
     }
 

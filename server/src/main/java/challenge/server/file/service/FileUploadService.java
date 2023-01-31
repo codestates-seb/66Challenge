@@ -33,7 +33,7 @@ public class FileUploadService {
 
     public void verfiedExenstion(MultipartFile multipartFile) throws BusinessLogicException {
         String contentType = multipartFile.getContentType();
-        System.out.println("contentType = " + contentType); // multipart/form-data, image/png 등 포스트맨에서 설정한 게 나옴
+//        System.out.println("contentType = " + contentType); // multipart/form-data, image/png 등 포스트맨에서 설정한 게 나옴
 
         // 확장자가 jpeg, png인 파일들만 받아서 처리
         if (ObjectUtils.isEmpty(contentType) || (!contentType.contains("image/jpeg") && !contentType.contains("image/png")))

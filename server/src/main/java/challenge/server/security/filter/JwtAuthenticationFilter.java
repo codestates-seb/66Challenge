@@ -1,6 +1,7 @@
 package challenge.server.security.filter;
 
 import challenge.server.security.jwt.JwtTokenizer;
+import challenge.server.user.dto.LoginDto;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.service.UserService;
@@ -22,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,13 +39,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
-        UserDto.LoginRequest loginDto = objectMapper.readValue(request.getInputStream(), UserDto.LoginRequest.class);
-        log.info("# attemptAuthentication : loginDto.getEmail={}, login.getPassword={}",
-                loginDto.getUsername(), loginDto.getPassword());
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
+//        LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
+        UsernamePasswordAuthenticationToken authenticationToken1 = new UsernamePasswordAuthenticationToken(request.getParameter("username"),
+                request.getParameter("password"),
+                Collections.emptyList());
+        LoginDto loginDto = LoginDto.builder().username(((User) authenticationToken1.getPrincipal()).getEmail())
+                .password(((User) authenticationToken1.getPrincipal()).getPassword()).build(); // ((User) authenticationToken1.getPrincipal()
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+        log.info("# attemptAuthentication: loginDto.getEmail=, login.getPassword="/*,
+                loginDto.getUsername(), loginDto.getPassword()*/);
+        System.out.println(request.getParameter("username") + request.getParameter("password"));
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(request.getParameter("username"), request.getParameter("password"));
         return authenticationManager.authenticate(authenticationToken);
     }
 

@@ -122,7 +122,8 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
     @Override
     public List<UserDto.CategoriesResponse> findFavoriteCategories(Long userId) {
         return jpaQueryFactory
-                .select(Projections.fields(UserDto.CategoriesResponse.class, challenge.challengeId.count().as("count"), challenge.habit.category.categoryId))
+                .select(Projections.fields(UserDto.CategoriesResponse.class, challenge.challengeId.count().as("count"),
+                        challenge.habit.category.categoryId))
                 .from(challenge)
                 .where(challenge.user.userId.eq(userId))
                 .leftJoin(challenge.habit, habit)
