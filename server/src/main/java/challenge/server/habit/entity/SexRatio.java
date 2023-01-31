@@ -12,22 +12,31 @@ import static challenge.server.user.entity.User.Gender.MALE;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SexRatio {
     @ColumnDefault(value = "0")
-    int male;
+    int maleCount;
 
     @ColumnDefault(value = "0")
-    int female;
+    int femaleCount;
 
     public SexRatio makeStatistics(Habit habit) {
-        if (habit != null) {
-            int totalChallengeCount = habit.getChallenges().size();
-            double maleCount = habit.getChallenges().stream().
-                    filter(challenge -> challenge.getUser().getGender() == MALE).count();
-            double femaleCount = habit.getChallenges().stream().
-                    filter(challenge -> challenge.getUser().getGender() == FEMALE).count();
+        this.femaleCount = (int) habit.getChallenges().stream()
+                .filter(challenge -> challenge.getUser().getGender() == FEMALE).count();
+        this.maleCount = (int) habit.getChallenges().stream()
+                .filter(challenge -> challenge.getUser().getGender() == MALE).count();
 
-            this.male = (int) Math.round(maleCount / totalChallengeCount * 100);
-            this.female = (int) Math.round(femaleCount / totalChallengeCount * 100);
-        }
         return this;
     }
+
+//    public SexRatio makeStatistics(Habit habit) {
+//        if (habit != null) {
+//            int totalChallengeCount = habit.getChallenges().size();
+//            double maleCount = habit.getChallenges().stream().
+//                    filter(challenge -> challenge.getUser().getGender() == MALE).count();
+//            double femaleCount = habit.getChallenges().stream().
+//                    filter(challenge -> challenge.getUser().getGender() == FEMALE).count();
+//
+//            this.male = (int) Math.round(maleCount / totalChallengeCount * 100);
+//            this.female = (int) Math.round(femaleCount / totalChallengeCount * 100);
+//        }
+//        return this;
+//    }
 }
