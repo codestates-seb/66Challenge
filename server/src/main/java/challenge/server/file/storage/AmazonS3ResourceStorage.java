@@ -51,7 +51,7 @@ public class AmazonS3ResourceStorage {
         } finally {
             if (file.exists()) removeNewFile(file);   // 로컬에 있는 파일을 지워줍니다.
         }
-//        out.println(amazonS3Client.getObject(bucket, fullPath).toString());
+//        out.println(amazonS3Client.getObject(bucket, fullPath).toString());   // timeout에 원인 getObject 사용하면 close해야됩니다.
         return amazonS3Client.getUrl(bucket, fullPath).toString().replaceFirst("s", "");  // S3에 업로드된 파일 URL 반환
     }
 

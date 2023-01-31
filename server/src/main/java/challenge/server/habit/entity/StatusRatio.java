@@ -12,21 +12,31 @@ import static java.lang.Math.round;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StatusRatio {
-    int challenge;
-    int success;
-    int fail;
+    int challengeCount;
+    int successCount;
+    int failCount;
 
     public StatusRatio makeStatistics(Habit habit) {
-        if (habit != null) {
-            int totalChallengeCount = habit.getChallenges().size();
-            double challengeCount = (double) habit.getChallenges().stream().filter(c -> c.getStatus() == CHALLENGE).count();
-            double successCount = (double) habit.getChallenges().stream().filter(c -> c.getStatus() == SUCCESS).count();
-            double failCount = (double) habit.getChallenges().stream().filter(c -> c.getStatus() == FAIL).count();
+        this.challengeCount = (int) habit.getChallenges().stream()
+                .filter(challenge -> challenge.getStatus().equals(CHALLENGE)).count();
+        this.successCount = (int) habit.getChallenges().stream()
+                .filter(challenge -> challenge.getStatus().equals(SUCCESS)).count();
+        this.failCount = (int) habit.getChallenges().stream()
+                .filter(challenge -> challenge.getStatus().equals(FAIL)).count();
 
-            this.challenge = (int) round(challengeCount / totalChallengeCount * 100);
-            this.success = (int) round(successCount / totalChallengeCount * 100);
-            this.fail = (int) round(failCount / totalChallengeCount * 100);
-        }
         return this;
     }
+//    public StatusRatio makeStatistics(Habit habit) {
+//        if (habit != null) {
+//            int totalChallengeCount = habit.getChallenges().size();
+//            double challengeCount = (double) habit.getChallenges().stream().filter(c -> c.getStatus() == CHALLENGE).count();
+//            double successCount = (double) habit.getChallenges().stream().filter(c -> c.getStatus() == SUCCESS).count();
+//            double failCount = (double) habit.getChallenges().stream().filter(c -> c.getStatus() == FAIL).count();
+//
+//            this.challenge = (int) round(challengeCount / totalChallengeCount * 100);
+//            this.success = (int) round(successCount / totalChallengeCount * 100);
+//            this.fail = (int) round(failCount / totalChallengeCount * 100);
+//        }
+//        return this;
+//    }
 }
