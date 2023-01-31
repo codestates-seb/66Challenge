@@ -17,7 +17,7 @@ export default function webpush(req: NextApiRequest, res: NextApiResponse) {
     },
     token: token,
   };
-  admin
+  const a = admin
     .messaging()
     .send(message)
     .then((res) => console.log('success:', res))

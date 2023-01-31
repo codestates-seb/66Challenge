@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { useAppSelector } from '../../../ducks/store';
 import { useRouter } from 'next/router';
@@ -15,7 +15,6 @@ import {
 import logo from '../../../public/image/66logo.png';
 import { useForm } from 'react-hook-form';
 import { FileUploader } from '../../../components/fileUploader';
-import { KaKaoShare } from '../../../module/kakaoShare';
 
 interface ProfileEditType {
   userId: number;
