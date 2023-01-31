@@ -10,7 +10,7 @@ const NewList: React.FC = () => {
     process.env.NEXT_PUBLIC_SERVER_URL
   }/habits/sort/newest?${userId ? 'userId=' + userId + '&' : ''}`;
   const [lastId, setLastId] = useState<number>(null);
-  const size = 15;
+  const size = 10;
   const type = 'habit';
 
   const [setTarget] = useIntersection(
