@@ -18,7 +18,11 @@ export const onSilentRefresh = () => {
       onLoginSuccess(res.headers.authorization);
       if (res.headers.refresh) {
         removeCookie('refreshJwtToken');
-        setCookie('refreshJwtToken', res.headers.refresh, { path: '/' });
+        setCookie('refreshJwtToken', res.headers.refresh, {
+          path: '/',
+          httpOnly: true,
+          secure: true,
+        });
       }
     })
     .catch((error) => {
