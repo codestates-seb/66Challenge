@@ -40,25 +40,25 @@ export function MainBottomNav({ param }) {
   useEffect(() => {
     let menuArr = [
       {
-        name: '홈',
+        name: 'Home',
         icon: <AiOutlineHome />,
         dis: 'translate-x-0',
         link: '/',
       },
       {
-        name: '습관검색',
+        name: 'Search',
         icon: <AiOutlineSearch />,
         dis: 'translate-x-14',
         link: '/habit/search',
       },
       {
-        name: '인증하기',
+        name: 'Auth',
         icon: <AiOutlineCamera />,
         dis: 'translate-x-28',
         link: '/auth',
       },
       {
-        name: '습관등록',
+        name: 'Post',
         icon: <IoIosAddCircleOutline />,
         dis: 'translate-x-42',
         link: '/habit/post',
@@ -68,7 +68,7 @@ export function MainBottomNav({ param }) {
       setMenus([
         ...menuArr,
         {
-          name: '내 정보',
+          name: 'Mypage',
           icon: <AiOutlineUser />,
           dis: 'translate-x-56',
           link: '/user/mypage',
@@ -78,7 +78,7 @@ export function MainBottomNav({ param }) {
       setMenus([
         ...menuArr,
         {
-          name: '로그인',
+          name: 'Login',
           icon: <AiOutlineLogin />,
           dis: 'translate-x-56',
           link: '/user/login',

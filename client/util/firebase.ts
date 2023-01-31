@@ -9,6 +9,15 @@ export async function getToken() {
   if (permission !== 'granted') return;
 
   const messaging = firebase.messaging();
+  messaging.onMessage(function (payload) {
+    console.log('onMessage: ', payload);
+    const title = payload.notification.title;
+    const options = {
+      body: payload.notification.body,
+    };
+    const notification = new Notification(title, options);
+  });
+
   const token = await messaging.getToken({
     vapidKey: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_VAPID_KEY,
   });
