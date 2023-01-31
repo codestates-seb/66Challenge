@@ -175,13 +175,13 @@ const Login: React.FC = () => {
               onClick={signupButtonClick}
               type="button"
             >
-              Sign Up
+              회원가입
             </button>
             <button
               className="login-button w-[120px] text-base bg-[#222222] text-white py-2.5 px-5 border rounded"
               type="submit"
             >
-              Login
+              로그인
             </button>
           </div>
         </form>
