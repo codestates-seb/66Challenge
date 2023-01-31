@@ -290,12 +290,10 @@ public class UserService {
     // 회원 개인 정보 통합 조회(마이페이지)
     public UserDto.UserDetailsDb findUserDetails(Long userId) {
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없는 로직
-        /*
         Long loggedInUserId = verifyLoggedInUser(userId);
         // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
         User findUser = findUser(loggedInUserId);
-         */
-        User findUser = findVerifiedUser(userId);
+//        User findUser = findVerifiedUser(userId);
 
         // Querydsl 시도
 //        UserDto.UserDetailsDb userDetailsDb = userRepository.findUserDetails(userId);

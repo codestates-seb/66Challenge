@@ -23,10 +23,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -51,7 +53,7 @@ public class SecurityConfig { // https 적용
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(new UserAuthenticationEntryPoint())
+//                .authenticationEntryPoint(new UserAuthenticationEntryPoint())
                 .accessDeniedHandler(new UserAccessDeniedHandler())
                 .and()
                 .apply(new CustomFilterConfigurer())
@@ -80,6 +82,34 @@ public class SecurityConfig { // https 적용
 //                        .antMatchers(HttpMethod.POST, "/*/logout/**").hasRole("USER")
 //                        .anyRequest().permitAll()
 //                )
+//                .authorizeHttpRequests()
+//                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+//                .mvcMatchers("/login").permitAll()
+//                .mvcMatchers("/logout/**").authenticated()
+//                .mvcMatchers("/oauth2/**").permitAll()
+//                .mvcMatchers(GET, "/users/usernames/**").permitAll()
+//                .mvcMatchers(GET, "/**/users/emails/**").permitAll()
+//                .mvcMatchers(GET, "/users/email-verifications/**").permitAll()
+//                .mvcMatchers(POST, "/users/**").permitAll()
+//                .mvcMatchers(GET, "/users/**").hasRole("USER")
+//                .mvcMatchers(PATCH, "/users/**").authenticated()
+//                .mvcMatchers(DELETE, "/users/**").authenticated()
+//                .mvcMatchers("/challenges/**").authenticated()
+//                .mvcMatchers(POST, "/auths/**").authenticated()
+//                .mvcMatchers(PATCH, "/auths/**").authenticated()
+//                .mvcMatchers(DELETE, "/auths/**").authenticated()
+//                .mvcMatchers(GET, "/auths/**").permitAll()
+//                .mvcMatchers(POST, "/reviews/**").authenticated()
+//                .mvcMatchers(PATCH, "/reviews/**").authenticated()
+//                .mvcMatchers(DELETE, "/reviews/**").authenticated()
+//                .mvcMatchers("/reports/**").authenticated()
+//                .mvcMatchers(GET, "/reviews/**").permitAll()
+//                .mvcMatchers(POST, "/habits/**").authenticated()
+//                .mvcMatchers(PATCH, "/habits/**").authenticated()
+//                .mvcMatchers(DELETE, "/habits/**").authenticated()
+//                .mvcMatchers(GET, "/habits/**").permitAll()
+//                .anyRequest().permitAll()
+//                .and()
 //                .authenticationManager(new CustomAuthenticationManager())
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, userService))
