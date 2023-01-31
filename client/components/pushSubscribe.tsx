@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import { getToken } from '../util/firebase';
 import { useAppDispatch } from '../ducks/store';
 import { notificationToken } from '../ducks/loginIdentitySlice';
+import axios from 'axios';
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -22,7 +23,7 @@ export function PushSubscribe() {
   const onNotificationHandle = async () => {
     let token = await getToken();
     dispatch(notificationToken(token));
-    alert(token);
+    axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/webpush`, { token });
   };
   return (
     <div>
