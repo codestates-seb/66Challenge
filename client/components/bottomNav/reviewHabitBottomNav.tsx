@@ -26,7 +26,7 @@ export function ReviewHabitBottomNav({ habitId, userId }) {
           setIsOpen(true);
         }}
       >
-        write Review
+        성공후기 등록
       </button>
       {isOpen && (
         <Modal

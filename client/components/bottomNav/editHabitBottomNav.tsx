@@ -30,7 +30,7 @@ export function EditHabitBottomNav({
           className="bg-mainColor h-3/4 w-1/2 rounded-lg mr-2.5 text-iconColor text-base"
           onClick={editHabitHandle}
         >
-          Edit
+          습관수정
         </button>
       )}
 
