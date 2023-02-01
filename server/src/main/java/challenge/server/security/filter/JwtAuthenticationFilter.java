@@ -39,20 +39,33 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
+        // v1
 //        ObjectMapper objectMapper = new ObjectMapper();
 //        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
-//        LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
-        UsernamePasswordAuthenticationToken authenticationToken1 = new UsernamePasswordAuthenticationToken(request.getParameter("username"),
-                request.getParameter("password"),
-                Collections.emptyList());
-        LoginDto loginDto = LoginDto.builder().username(((User) authenticationToken1.getPrincipal()).getEmail())
-                .password(((User) authenticationToken1.getPrincipal()).getPassword()).build(); // ((User) authenticationToken1.getPrincipal()
+//        UserDto.LoginRequest loginDto = objectMapper.readValue(request.getInputStream(), UserDto.LoginRequest.class);
 
-        log.info("# attemptAuthentication: loginDto.getEmail=, login.getPassword="/*,
-                loginDto.getUsername(), loginDto.getPassword()*/);
-        System.out.println(request.getParameter("username") + request.getParameter("password"));
+        // 2023.2.1(수) 10h10 v2 = # attemptAuthentication : loginDto.getEmail=null, login.getPassword=null (controller에서는 createdUser.username = 세번째user 찍힘)
+//        LoginDto loginDto = LoginDto.builder()
+//                .username(request.getParameter("username"))
+//                .password(request.getParameter("password"))
+//                .build();
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(request.getParameter("username"), request.getParameter("password"));
+        // 10h35 v3 = https://velog.io/@chullll/Spring-Security-JWT-필터-적용-과정
+        ObjectMapper objectMapper = new ObjectMapper();
+//        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
+        LoginDto loginDto = null;
+
+        try {
+            loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class); // 여전히 여기서 정보를 못 읽긴 하다.. 그런데 login 할 때 제외하고는 여기를 거칠 필요가 없는데, 왜 자꾸 여기로 오는 것일까?
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        log.info("# attemptAuthentication : loginDto.getEmail={}, login.getPassword={}",
+                loginDto.getUsername(), loginDto.getPassword());
+//        System.out.println(request.getParameter("username") + request.getParameter("password"));
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         return authenticationManager.authenticate(authenticationToken);
     }
 

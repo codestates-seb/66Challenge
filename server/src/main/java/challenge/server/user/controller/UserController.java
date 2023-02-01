@@ -68,6 +68,7 @@ public class UserController {
     public ResponseEntity postUser(@Valid @RequestBody UserDto.Post requestBody) {
         User user = userMapper.userPostDtoToUser(requestBody);
         User createdUser = userService.createUser(user);
+        log.info("createdUser.username = " + createdUser.getUsername());
         return new ResponseEntity<>(userMapper.userToUserSimpleResponseDto(createdUser), HttpStatus.CREATED);
 
         // API 통신용
