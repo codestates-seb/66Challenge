@@ -112,7 +112,7 @@ const Header: FC = () => {
 
     const Back: FC = () => {
       return (
-        <div className="flex flex-row items-center h-full ml-2">
+        <div className="flex flex-row items-center h-full ml-2 cursor-pointer">
           <IoArrowBack className="h-6 w-6" onClick={() => router.back()} />
         </div>
       );
@@ -143,7 +143,7 @@ const Header: FC = () => {
         <div className="mr-3 flex">
           {isHomeNeed ? (
             <Link href={'/'}>
-              <IoHomeSharp className="h-6 w-6 mr-2" />
+              <IoHomeSharp className="h-6 w-6 mr-4" />
             </Link>
           ) : (
             ''
@@ -151,7 +151,7 @@ const Header: FC = () => {
           {isMyPage ? (
             <div className="flex">
               <PushSubscribe />
-              <IoSettings className="h-6 w-6 ml-2" />
+              <IoSettings size={30} className="ml-3 cursor-pointer" />
             </div>
           ) : (
             <Link href={'/habit/search'}>
@@ -171,7 +171,9 @@ const Header: FC = () => {
 
   return (
     <header
-      className={`z-[1] sticky top-0 bg-white ${headerHide ? 'hidden' : ''}`}
+      className={`z-[2] sticky top-0 bg-white ${headerHide ? 'hidden' : ''} ${
+        isMyPage && 'border-b-[1px] border-borderColor'
+      }`}
     >
       <div className="z-40">
         <div>

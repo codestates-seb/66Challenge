@@ -14,7 +14,7 @@ const Layout = ({ children }: LayoutProps) => {
       <div className="app-section w-full min-w-[360px] max-w-[460px] bg-white">
         <Header />
         <TopNav />
-        <main className="pb-[100px] z-[1 ]">{children}</main>
+        <main className="pb-[100px] z-[1]">{children}</main>
         <ScrollToTopButton />
         <BottomNav />
       </div>

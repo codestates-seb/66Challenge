@@ -41,25 +41,25 @@ export function MainBottomNav({ param }) {
     let menuArr = [
       {
         name: 'Home',
-        icon: <AiOutlineHome />,
+        icon: <AiOutlineHome size={27} />,
         dis: 'translate-x-0',
         link: '/',
       },
       {
         name: 'Search',
-        icon: <AiOutlineSearch />,
+        icon: <AiOutlineSearch size={27} />,
         dis: 'translate-x-14',
         link: '/habit/search',
       },
       {
         name: 'Auth',
-        icon: <AiOutlineCamera />,
+        icon: <AiOutlineCamera size={27} />,
         dis: 'translate-x-28',
         link: '/auth',
       },
       {
         name: 'Post',
-        icon: <IoIosAddCircleOutline />,
+        icon: <IoIosAddCircleOutline size={27} />,
         dis: 'translate-x-42',
         link: '/habit/post',
       },
@@ -69,7 +69,7 @@ export function MainBottomNav({ param }) {
         ...menuArr,
         {
           name: 'Mypage',
-          icon: <AiOutlineUser />,
+          icon: <AiOutlineUser size={27} />,
           dis: 'translate-x-56',
           link: '/user/mypage',
         },
@@ -99,7 +99,7 @@ export function MainBottomNav({ param }) {
     }
   };
   return (
-    <div className="flex bg-mainColor h-[50px] px-6 w-full   fixed bottom-0 min-w-[360px] max-w-[460px] justify-center">
+    <div className="flex bg-mainColor h-[60px] px-6 w-full   fixed bottom-0 min-w-[360px] max-w-[460px] justify-center">
       <ul className="flex relative items-center  justify-center">
         <span
           className={`bg-subColor duration-500 ${menus[active]?.dis} border-4 border-white h-14 w-14 absolute -top-7 -left-0 rounded-full `}
@@ -116,7 +116,7 @@ export function MainBottomNav({ param }) {
               >
                 <span
                   className={`flex justify-center text-xl text-iconColor  duration-500 z-50 ${
-                    i === active && '-mt-11 text-iconColor '
+                    i === active && '-mt-[50px] text-iconColor '
                   }`}
                 >
                   {menu.icon}
@@ -124,7 +124,7 @@ export function MainBottomNav({ param }) {
                 <span
                   className={` ${
                     active === i
-                      ? 'translate-y-4 duration-700 opacity-100 text-sm text-iconColor text-base'
+                      ? 'translate-y-4 duration-700 opacity-100 text-sm text-iconColor text-base pt-[9px]'
                       : 'opacity-0 translate-y-10 text-iconColor text-sm text-base'
                   }`}
                 >

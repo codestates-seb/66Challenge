@@ -11,10 +11,14 @@ import {
   profileChange,
   profileDelete,
 } from '../../../module/userFunctionMoudules';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-import logo from '../../../public/image/66logo.png';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { FileUploader } from '../../../components/fileUploader';
+import { UserInfoType } from '../../../module/moduleInterface';
 
 interface ProfileEditType {
   userId: number;
@@ -23,7 +27,7 @@ interface ProfileEditType {
 
 const MyPage = () => {
   const userId = useAppSelector((state) => state.loginIdentity.userId);
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const router = useRouter();
 
@@ -32,8 +36,19 @@ const MyPage = () => {
   const { profileImage } = watch();
   const [profileImagePreview, setProfileImagePreview] = useState('');
 
-  const [slide, setSlide] = useState(true);
+  const categoryList = [
+    '운동',
+    '식습관',
+    '학습',
+    '일상생활',
+    '자기관리',
+    '환경',
+    '취미',
+    '기타',
+  ];
 
+  //스크롤
+  const [slide, setSlide] = useState(true);
   const containerRef = useRef<HTMLUListElement>(null);
   const onWheel = (e: any) => {
     lockScroll();
@@ -60,12 +75,12 @@ const MyPage = () => {
   const lockScroll = useCallback(() => {
     document.body.style.overflow = 'hidden';
   }, []);
-
   const openScroll = useCallback(() => {
     if (document.body.style.overflow === 'hidden') {
       document.body.style.removeProperty('overflow');
     }
   }, []);
+  //스크롤
 
   useEffect(() => {
     if (profileImage && profileImage.length > 0) {
@@ -116,7 +131,7 @@ const MyPage = () => {
           register={register('profileImage')}
         />
         {profileImagePreview ? (
-          <div className="flex justify-center w-full items-center bg-mainColor rounded-full h-[40px]  mt-4">
+          <div className="flex justify-centeritems-center py-2 px-5 bg-mainColor rounded h-[40px] mt-5">
             <span
               className="text-base text-iconColor"
               onClick={() => {
@@ -136,12 +151,12 @@ const MyPage = () => {
 
   const Profile = () => {
     return (
-      <div className="flex flex-row items-center justify-center solid border-y-2">
+      <div className="flex flex-row items-center justify-center solid py-5 border-b-[10px] border-borderColor">
         {isProfileModalOpen ? (
           <Modal
             isOpen={isProfileModalOpen}
             setIsOpen={setIsProfileModalOpen}
-            buttonName="변경"
+            buttonName="변경하기"
             onClick={() => {
               if (profileImage) {
                 profileChange({ userId, profileImage: profileImage[0] }).then(
@@ -171,12 +186,18 @@ const MyPage = () => {
             <Image
               src={userInfo.profileImageUrl}
               alt="프로필 사진"
-              className="w-full h-full rounded-full"
+              className="w-full h-full rounded-full cursor-pointer"
               width={500}
               height={500}
             />
           ) : (
-            <Image src={logo} alt="66logo" className="w-10 h-10" />
+            <Image
+              src="/image/baseProfile.svg"
+              alt="base profile image"
+              className="w-full h-full rounded-full cursor-pointer"
+              width={700}
+              height={700}
+            />
           )}
         </div>
         <div className="flex flex-col items-center">
@@ -198,18 +219,31 @@ const MyPage = () => {
 
   const ActiveChallenges = () => {
     return (
-      <div className="border mx-1 pb-1 mt-2 mb-2 solid rounded-xl">
-        <div className="mt-2 ml-4 mb-1 font-semibold w-max border-y border-gray-400 ">
+      <div className="p-5">
+        <div className="pb-5 font-semibold w-max text-xl">
           나의 습관 진행현황
         </div>
         <ul
-          className=" mx-2 h-12 rounded-xl flex flex-nowrap overflow-x-auto scrollbar-hide"
+          className={`py-2.5 rounded-xl flex flex-nowrap overflow-x-auto scrollbar-hide border-[1px] border-borderColor ${
+            userInfo.activeChallenges.length ? '' : 'justify-center'
+          }`}
           ref={containerRef}
           onWheel={(e) => {
             e.stopPropagation();
             onWheel(e);
           }}
         >
+          {userInfo.activeChallenges.length ? null : (
+            <li className="flex flex-col items-center">
+              <div>도전중인 습관이 없어요</div>
+              <Link
+                href="/home/hotlist"
+                className="rounded-full w-max px-2 bg-subColor text-white my-2 animate-bounce"
+              >
+                요즘 인기있는 습관
+              </Link>
+            </li>
+          )}
           {userInfo.activeChallenges.map((e) => {
             const progress = Math.ceil((e.progressDays / 66) * 100);
             return (
@@ -217,7 +251,7 @@ const MyPage = () => {
                 onClick={() => {
                   handleHabitDetail(e.habitId);
                 }}
-                className="h-[36px] mx-2 rounded-xl my-1 w-36 shrink-0 border p-px border-mainColor flex items-center justify-center max-h-min bg-white relative overflow-hidden z-20"
+                className="h-[36px] mx-2 rounded-xl my-1 w-36 shrink-0 border p-px border-mainColor flex items-center justify-center max-h-min bg-white relative overflow-hidden cursor-pointer"
               >
                 <ProgressBar
                   className={`absolute h-[34px] ${
@@ -240,15 +274,21 @@ const MyPage = () => {
                       : progress <= 90
                       ? 'bg-green-700'
                       : 'bg-green-800'
-                  }  rounded-r-xl left-0 animate-gage z-10 anim`}
+                  }  rounded-r-xl left-0 animate-gage z-[1] anim`}
                   width={progress}
                 ></ProgressBar>
-                <div className="z-30">
-                  <span className="text-center ">
-                    {e.subTitle}
-                    <span className="text-xs">{` (${e.progressDays}/66)`}</span>
-                  </span>
-                </div>
+                <span
+                  className={`z-[1] pt-[4px] ${
+                    e.subTitle.length >= 5 ? 'text-xs' : ''
+                  }`}
+                >
+                  {e.subTitle}
+                  {e.subTitle.length < 10 ? (
+                    <span className="text-[8px]">{`(${e.progressDays}/66)`}</span>
+                  ) : (
+                    ''
+                  )}
+                </span>
               </li>
             );
           })}
@@ -257,12 +297,137 @@ const MyPage = () => {
     );
   };
 
-  const MyStatics = (): JSX.Element => {
+  const MyStatics = () => {
+    const _ = userInfo;
+    const chalTotal = [..._.activeChallenges, ..._.daysOfFailList];
+    const chalSuccess = _.activeChallenges.filter((e) => e.progressDays >= 66);
+    const chalIng = _.activeChallenges.filter((e) => e.progressDays < 66);
+    // const favCate = categoryList[_.favoriteCategories[0].categoryId];
+    const failLen = _.averageDaysOfFail;
+    const totalAuth = _.numOfAuthByChallengeList.reduce((sum, e) => {
+      sum += e.numOfAuth;
+      return sum;
+    }, 0);
+
+    const challengeTotalData = {
+      labels: ['도전중', '실패', '성공'],
+      datasets: [
+        {
+          label: '갯수',
+          data: [chalIng.length, failLen, chalSuccess.length],
+          backgroundColor: [
+            'rgba(255, 206, 86, 0.2)',
+
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255, 206, 86, 1)',
+
+            'rgba(255, 99, 132, 1)',
+            'rgba(75, 192, 192, 1)',
+          ],
+          borderWidth: 2,
+        },
+      ],
+    };
+
+    const categoryCount = new Array(8).fill(0);
+    _.activeCategories.forEach((e) => {
+      if (e.categoryId) {
+        categoryCount[e.categoryId - 1]++;
+      }
+    });
+
+    const categoryData = {
+      labels: categoryList,
+      datasets: [
+        {
+          label: '갯수',
+          data: [...categoryCount],
+          backgroundColor: [
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255, 206, 86, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(75, 192, 192, 1)',
+          ],
+          borderWidth: 2,
+        },
+      ],
+    };
+
+    const progressCount = new Array(3).fill(0);
+    _.activeChallenges.forEach((e) => {
+      if (e.progressDays <= 22) {
+        progressCount[0]++;
+        return;
+      }
+      if (e.progressDays <= 44) {
+        progressCount[1]++;
+        return;
+      }
+      if (e.progressDays < 66) {
+        progressCount[2]++;
+        return;
+      }
+    });
+
+    const progressData = {
+      labels: ['~22일', '~44일', '~66일'],
+      datasets: [
+        {
+          label: '갯수',
+          data: progressCount,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+          ],
+          borderWidth: 2,
+        },
+      ],
+    };
+
     return (
-      <div className="w-auto mx-1 border rounded-xl">
-        <div className="mt-2 ml-4 mb-1 font-semibold w-max border-y border-gray-400 ">
-          나의 습관 통계
-        </div>
+      <div className="w-auto p-5 border-b-[10px] border-borderColor">
+        <div className="pb-5 font-semibold w-max text-xl">나의 습관 통계</div>
+        {_.activeCategories.length ? (
+          <div className="statics-row-1 mb-2 flex flex-row w-[100%] my-2 items-center">
+            <span className="w-1/2 flex flex-col justify-center  items-center">
+              <label className="text-base text-mainColor font-semibold pb-2.5">
+                도전 현황
+              </label>
+              <Pie data={challengeTotalData} />
+            </span>
+            <span className="w-1/2 flex flex-col justify-center  items-center ">
+              <label className="text-base text-mainColor font-semibold pb-2.5">
+                진행도별 분류
+              </label>
+              <Pie data={progressData} />
+            </span>
+          </div>
+        ) : null}
+        {_.daysOfFailList.length ? (
+          <div className="pt-5 statics-row-2 flex flex-col items-center">
+            <label className="flex justify-center items-center max-h-min mb-1 px-3 rounded-lg">
+              <span className="text-[#7d7d7d] text-sm font-semibold">
+                도전 실패까지 걸린 평균기간
+              </span>
+              <span className="text-base h-min  rounded-md text-center px-2 font-semibold text-subColor">
+                {failLen}일
+              </span>
+            </label>
+          </div>
+        ) : null}
       </div>
     );
   };
@@ -284,6 +449,8 @@ const MyPage = () => {
             successArr={userInfo.activeChallenges.filter(
               (e) => e.progressDays >= 66,
             )}
+            bookmark={userInfo.numOfBookmarkHabit}
+            hosted={userInfo.numOfHostHabit}
           />
         </main>
       )}

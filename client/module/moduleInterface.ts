@@ -127,6 +127,53 @@ interface profileImageProps {
   profileImage: File | null;
 }
 
+interface activeCategories {
+  categoryId: number;
+  type: string;
+}
+
+interface activeChallenges {
+  challengeId: number;
+  progressDays: number;
+  habitId: number;
+  subTitle: string;
+}
+
+interface daysOfFailList {
+  habitId: number;
+  habitTitle: string;
+  createdAt: string;
+  daysOfFail: number;
+}
+
+interface favoriteCategories {
+  count: number;
+  categoryId: number;
+}
+
+interface numOfAuthByChallengeList {
+  habitId: numOfAuthByChallengeList;
+  habitTitle: string;
+  createdAt: string;
+  numOfAuth: number;
+  numOfUsedWildCard: number;
+}
+interface UserInfoType {
+  activeCategories: Array<activeCategories>;
+  activeChallenges: Array<activeChallenges>;
+  averageDaysOfFail: number;
+  biggestProgressDays: number;
+  daysOfFailList: Array<daysOfFailList>;
+  email: string;
+  favoriteCategories: Array<favoriteCategories>;
+  numOfAuthByChallengeList: Array<numOfAuthByChallengeList>;
+  profileImageUrl: string | null;
+  userId: number;
+  username: string;
+  numOfBookmarkHabit: number;
+  numOfHostHabit: number;
+}
+
 export type {
   SignUpProps,
   UserGeneralProps,
@@ -150,4 +197,5 @@ export type {
   getAuthProps,
   deleteAuthProps,
   profileImageProps,
+  UserInfoType,
 };

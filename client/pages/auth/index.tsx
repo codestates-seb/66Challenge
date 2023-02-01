@@ -22,6 +22,7 @@ interface IresponseDataValue {
   challengeId?: number;
   challenger?: null;
   habitTitle?: string | null;
+  habitSubTitle?: string | null;
   review?: null;
   score?: number;
   status?: string;
@@ -197,17 +198,17 @@ export default function Auth() {
                 <span
                   className={`${
                     active === el.challengeId ? 'bg-subColor' : 'bg-mainColor'
-                  } w-full h-full rounded-full text-iconColor flex duration-300  justify-center items-center text-base`}
+                  } w-full h-full rounded-full text-iconColor flex duration-300  justify-center items-center text-base flex-col`}
                   onClick={() => {
                     setActive(el.challengeId);
                     setVerify({ ...verify, chooseHabitVerify: 'success' });
                   }}
                 >
-                  {el.habitTitle === null
+                  {el.habitSubTitle === null
                     ? null
-                    : el.habitTitle.length > 10
-                    ? el.habitTitle.slice(0, 10) + '...'
-                    : el.habitTitle}
+                    : el.habitSubTitle.length > 7
+                    ? el.habitSubTitle.slice(0, 6) + '...'
+                    : el.habitSubTitle}
                 </span>
               </div>
             );

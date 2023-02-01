@@ -19,11 +19,7 @@ export async function getHabitAuths({ habitId, page, size }: getAuthProps) {
 export async function deleteHabitAuth({ authId }: deleteAuthProps) {
   try {
     const response = await axios
-      .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/auths/${authId}`, {
-        headers: {
-          // Authorization: getCookie('accessJwtToken'),
-        },
-      })
+      .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/auths/${authId}`)
       .then((res) => console.log(res));
     return response;
   } catch (e) {
