@@ -141,6 +141,12 @@ export default function SearchHabit() {
           autoComplete="off"
           placeholder="찾고자 하는 습관을 검색해주세요."
           value={search}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              onSubmitHandle();
+            }
+          }}
           onChange={(e) => onSearchHandle(e)}
           required
         />

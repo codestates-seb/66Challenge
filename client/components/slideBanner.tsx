@@ -57,7 +57,7 @@ export const SlideBanner: React.FC<SlideBannerProps> = ({
   return (
     <div className="slidebanner-container relative overflow-hidden">
       <Flicking
-        className={`[&>div]:flex ${maxHeight}`}
+        className={`[&>div]:flex ${maxHeight} min-w-[360px]`}
         plugins={plugins}
         circular={true}
         horizontal={true}
@@ -66,7 +66,7 @@ export const SlideBanner: React.FC<SlideBannerProps> = ({
         {bannerCont.map((el: BannerContType, idx: number) => {
           return (
             <div
-              className={`sildebanner-background w-screen max-w-[460px] flex-[0_0_auto] flex flex-col justify-center items-center relative`}
+              className={`sildebanner-background w-screen max-w-[460px] min-w-[360px] flex-[0_0_auto] flex flex-col justify-center items-center relative`}
               key={idx}
               onClick={(_) => bannerClickEvent(el.bannerLink)}
             >
