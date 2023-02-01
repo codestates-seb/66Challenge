@@ -5,6 +5,7 @@ import type {
   PatchUserInfoProps,
   getUserCertificateProps,
   profileImageProps,
+  UserInfoType,
 } from './moduleInterface';
 /*사용하는 방법 
 1. 쓰고자하는 함수를 찾는다
@@ -77,7 +78,7 @@ export async function getUserInfo({ userId }: UserGeneralProps) {
           // Authorization: getCookie('accessJwtToken'),
         },
       })
-      .then((res) => res.data);
+      .then((res): UserInfoType => res.data);
     return response;
   } catch (e) {
     console.error(e);
