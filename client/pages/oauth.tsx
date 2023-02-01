@@ -12,11 +12,10 @@ const OauthLogin = () => {
 
   useEffect(() => {
     if (router.isReady) {
-      const { access_token, refresh_token, user_id } = router.query;
-      // setCookie('accessJwtToken', access_token, { path: '/' });
+      const { access_token, refresh_token, user_id, username } = router.query;
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
       setCookie('refreshJwtToken', refresh_token, { path: '/' });
-      dispatch(oauthLogin(Number(user_id)));
+      dispatch(oauthLogin({ userId: Number(user_id), username }));
       router.push('/user/oauthsignup');
     }
   }, [router.isReady]);
@@ -27,9 +26,5 @@ const OauthLogin = () => {
     </div>
   );
 };
-
-// OauthLogin.getLayout = function getLayout(page: ReactElement) {
-//   return <>{page}</>;
-// };
 
 export default OauthLogin;

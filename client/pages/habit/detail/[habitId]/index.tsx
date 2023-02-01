@@ -5,6 +5,8 @@ import { DropDown } from '../../../../components/dropDown';
 import { AiFillStar } from 'react-icons/ai';
 import { useAppSelector } from '../../../../ducks/store';
 import { getHabitDetail } from '../../../../module/habitFunctionMoudules';
+import { BiRun } from 'react-icons/bi';
+import styled from 'styled-components';
 
 interface habitDetailOverview {
   habitId: number;
@@ -12,6 +14,7 @@ interface habitDetailOverview {
   title: string;
   body: string;
   thumbImgUrl: string;
+  challengeStatus?: string;
   score: number;
 }
 
@@ -20,11 +23,13 @@ interface habitDetailDetail {
   subTitle: string;
   bodyHTML: string;
   category: string;
+  categoryId?: number;
   authType: string | null;
   authStartTime: string;
   authEndTime: string;
   challengeStatus: string;
   isBooked: boolean;
+  day: number;
 }
 
 interface habitDetailImage {
@@ -40,10 +45,18 @@ interface habitDataType {
 
 export type { habitDataType };
 
+const ProgressBar = styled.div`
+  width: ${(props) => `${props.width}%`};
+`;
+
+const ProgressSticker = styled.div`
+  left: ${(props) => `${props.left}%`};
+`;
+
 const HabitDetail: React.FC = () => {
   const router = useRouter();
   const habitId = +router.query.habitId;
-  const { userId } = useAppSelector((state) => state.loginIdentity);
+  const { userId, username } = useAppSelector((state) => state.loginIdentity);
   const [habitData, setHabitData] = useState<habitDataType>({});
   useEffect(() => {
     if (!router.isReady) return;
@@ -52,7 +65,18 @@ const HabitDetail: React.FC = () => {
     });
   }, [router.isReady]);
 
-  const succImgClassName = 'w-[50%]';
+  // const progress = Math.ceil((habitData.detail.day / 66) * 100);
+  const progress = Math.ceil((1 / 66) * 100);
+  const succImgClassName = 'max-w-[50%]';
+
+  const searchButtonHandler = () => {
+    router.push({
+      pathname: '/habit/search',
+      query: {
+        categoryId: habitData.detail.categoryId,
+      },
+    });
+  };
 
   return (
     <div className="habit-detail-container">
@@ -96,6 +120,91 @@ const HabitDetail: React.FC = () => {
           </div>
         </div>
       </div>
+      {habitData?.detail?.challengeStatus !== 'NONE' && (
+        <div className="habit-challenge-message-container p-5 border-b border-borderColor">
+          <h3 className="text-lg font-semibold pb-5">
+            {username}님의 진행현황
+            {habitData?.detail?.challengeStatus !== 'FAIL' && '🔥'}
+          </h3>
+          {habitData?.detail?.challengeStatus === 'FAIL' && (
+            <div>
+              <div className="text-center pb-2.5 font-semibold">
+                <span className="text-subColor font-bold">
+                  {habitData.detail.day}
+                </span>
+                번째 날에 실패하셨던 도전이에요 🥲
+              </div>
+              <div className="text-center font-semibold">
+                다시 한 번 도전해보시는 건 어떨까요!?
+              </div>
+            </div>
+          )}
+          {habitData?.detail?.challengeStatus === 'SUCCESS' && (
+            <div>
+              <div className="text-center pb-2.5 font-semibold">
+                성공적으로 형성한 습관이에요! 👍
+              </div>
+              <div className="text-center pb-5 font-semibold">
+                유사한 다른 습관들도 형성해보시는건 어떨까요~?
+              </div>
+              <div className="flex justify-center">
+                <button
+                  className="py-2.5 px-5 bg-subColor rounded text-white h-[45px] leading-[28px]"
+                  onClick={searchButtonHandler}
+                >
+                  둘러보기
+                </button>
+              </div>
+            </div>
+          )}
+          {habitData?.detail?.challengeStatus === 'CHALLENGE' && (
+            <div className="habit-challenge-message-wrapper relative">
+              <ProgressSticker
+                className="absolute -top-[5px] -translate-x-1/2 z-[2]"
+                left={progress}
+              >
+                <BiRun size="30px" color="#222" />
+                <div className="flex justify-center">
+                  <div className="border-2 border-bordercolor h-[60px]"></div>
+                </div>
+              </ProgressSticker>
+              <div className="habit-challenge-message-bar pt-10 pb-5">
+                <div className="w-full h-[30px] border-2 border-borderColor rounded-full relative overflow-hidden flex justify-center items-center">
+                  <ProgressBar
+                    className={`${
+                      progress <= 10
+                        ? 'bg-red-700'
+                        : progress <= 20
+                        ? 'bg-red-500'
+                        : progress <= 30
+                        ? 'bg-orange-600'
+                        : progress <= 40
+                        ? 'bg-orange-400'
+                        : progress <= 50
+                        ? 'bg-yellow-500'
+                        : progress <= 60
+                        ? 'bg-yellow-400'
+                        : progress <= 70
+                        ? 'bg-green-500'
+                        : progress <= 80
+                        ? 'bg-green-600'
+                        : progress <= 90
+                        ? 'bg-green-700'
+                        : 'bg-green-800'
+                    } h-[26px] w-[100%] rounded-l-full ${
+                      progress < 100 ? 'rounded-r-none' : 'rounded-r-full'
+                    } animate-gage z-[1] anim absolute left-0`}
+                    width={progress}
+                  ></ProgressBar>
+                  <div className="w-full z-[3] text-center text-sm font-semibold pt-1 ">
+                    50% 진행중
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
       <div className="habit-detail-middle p-5 border-b border-borderColor">
         <div className="habit-detail-body">
           <h3 className="text-lg font-semibold pb-5">상세내용</h3>
@@ -120,11 +229,11 @@ const HabitDetail: React.FC = () => {
         </p>
         <p>인증 사진의 올바른 예와 잘못된 예는 아래와 같습니다.</p>
         <div className="pt-5 flex justify-center gap-5">
-          <div className="flex flex-col">
+          <div className="flex flex-col items-center flex-[1_1_50%]">
             <div
               className={`min-h-[150px] ${
                 habitData?.image?.failImgUrl ? '' : succImgClassName
-              } flex items-center`}
+              } flex items-center border-[1px] border-borderColor rounded`}
             >
               <Image
                 className="w-full aspect-square"
@@ -144,8 +253,8 @@ const HabitDetail: React.FC = () => {
             </div>
           </div>
           {habitData?.image?.failImgUrl && (
-            <div className="flex flex-col">
-              <div className="min-h-[150px] flex items-center">
+            <div className="flex flex-col items-center flex-[1_1_50%]">
+              <div className="min-h-[150px] flex items-center border-[1px] border-borderColor rounded">
                 <Image
                   className="w-full aspect-square"
                   src={habitData.image.failImgUrl}

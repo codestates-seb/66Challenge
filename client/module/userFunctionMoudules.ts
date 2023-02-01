@@ -1,20 +1,12 @@
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import type {
   SignUpProps,
   UserGeneralProps,
-  PatchUserInfoProps,
   getUserCertificateProps,
   profileImageProps,
   UserInfoType,
 } from './moduleInterface';
-/*사용하는 방법 
-1. 쓰고자하는 함수를 찾는다
-2. 사용하고자하는 페이지에서 import 해온다
-3. 데이터를 입맛에 맞게 넣는다.
-4. then 뒷부분 console.log 로 받아오는 데이터를 확인한다.
-5. 확인 후 리턴해야 할 값을 명확히 적는다.
-6. 끝 */
-import { getCookie } from './cookies';
+
 export async function postUserSignUp({
   email,
   username,
@@ -87,11 +79,7 @@ export async function getUserInfo({ userId }: UserGeneralProps) {
 export async function deleteUser({ userId }: UserGeneralProps) {
   try {
     const response = await axios
-      .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, {
-        headers: {
-          // Authorization: getCookie('accessJwtToken'),
-        },
-      })
+      .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`)
       .then((res) => console.log(res));
     return response;
   } catch (e) {
@@ -103,7 +91,6 @@ export async function patchUserInfo({ userId, body }) {
     const response = await axios
       .patch(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, body, {
         headers: {
-          // Authorization: getCookie('accessJwtToken'),
           'Content-Type': 'multipart/form-data',
         },
       })
@@ -138,11 +125,6 @@ export async function getUserHabitsCategories({ userId }: UserGeneralProps) {
     const response = await axios
       .get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/categories`,
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
       .then((res) => console.log(res));
     return response;
@@ -153,14 +135,7 @@ export async function getUserHabitsCategories({ userId }: UserGeneralProps) {
 export async function getUserHabitsHosts({ userId }: UserGeneralProps) {
   try {
     const response = await axios
-      .get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/hosts`,
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
-      )
+      .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/habits/hosts`)
       .then((res) => console.log(res));
     return response;
   } catch (e) {
@@ -172,11 +147,6 @@ export async function getPasswordCheck({ userId }: UserGeneralProps) {
     const response = await axios
       .get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/passwords/check`,
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
       .then((res) => console.log(res));
     return response;

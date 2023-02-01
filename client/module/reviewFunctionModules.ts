@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { getCookie } from './cookies';
 import type {
   getReviewsProps,
@@ -34,18 +34,16 @@ export async function postHabitReview({
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews?userId=${userId}`,
         { body, score },
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
-      .then((res) => console.log(res));
-    return response;
+      .then((res) => res);
+    return response.status;
   } catch (e) {
-    console.error(e);
+    if (e instanceof AxiosError) {
+      return e.response.status;
+    }
   }
 }
+
 export async function deleteHabitReview({
   habitId,
   reviewId,
@@ -54,11 +52,6 @@ export async function deleteHabitReview({
     const response = await axios
       .delete(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews/${reviewId}`,
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
       .then((res) => console.log(res));
     return response;
@@ -77,11 +70,6 @@ export async function patchHabitReview({
       .patch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews/${reviewId}`,
         { body, score, reviewId },
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
       .then((res) => console.log(res));
     return response;
