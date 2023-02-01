@@ -57,7 +57,6 @@ export default function webpush(req: NextApiRequest, res: NextApiResponse) {
     .subscribeToTopic(token, 'public')
     .then((res) => console.log('success:', res))
     .catch((e) => console.log('error:', e));
-
   const message = {
     notification: {
       title: '66 Challenge',
