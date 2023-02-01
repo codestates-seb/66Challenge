@@ -11,17 +11,18 @@ export function ReviewHabitBottomNav({ habitId, userId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState('');
   const [score, setScore] = useState(-1);
+  const [authState, setAuthState] = useState({ state: '', boolean: false });
   const router = useRouter();
 
   const scoreHandle = (score: number) => {
     setScore(score);
   };
   const max = new Array(5).fill(null);
-
   return (
     <div className="flex bg-white h-[3rem] px-6 w-full fixed bottom-0 min-w-[360px] max-w-[460px] justify-center items-center border-t">
       <button
-        className="bg-mainColor h-3/4 w-full rounded-lg  text-iconColor text-base"
+        className="bg-mainColor h-3/4 w-full rounded-lg  text-iconColor text-base disabled:opacity-50"
+        disabled={authState.boolean === true}
         onClick={() => {
           setIsOpen(true);
         }}
@@ -33,13 +34,21 @@ export function ReviewHabitBottomNav({ habitId, userId }) {
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           buttonName="후기작성 완료"
-          onClick={(): void => {
-            postHabitReview({
+          onClick={async () => {
+            const response = await postHabitReview({
               userId,
               habitId: Number(habitId),
               body: value,
               score: score + 1,
             });
+            if (response === 409) {
+              setAuthState({ state: 'none', boolean: true });
+              setTimeout(() => {
+                setAuthState({ state: '', boolean: true });
+              }, 1500);
+            }
+
+            setIsOpen(false);
             router.push(`/habit/detail/${habitId}/review`);
           }}
         >
@@ -83,6 +92,15 @@ export function ReviewHabitBottomNav({ habitId, userId }) {
           </form>
         </Modal>
       )}
+      <div
+        className={`${
+          authState.state === 'none' ? 'flex' : 'hidden'
+        } absolute w-3/4 bg-white border-2 border-subColor rounded-full -top-[700px] justify-center h-10 items-center animate-dropDown`}
+      >
+        <span className="text-subColor font-semibold">
+          이미 성공 후기를 등록하셨습니다!
+        </span>
+      </div>
     </div>
   );
 }
