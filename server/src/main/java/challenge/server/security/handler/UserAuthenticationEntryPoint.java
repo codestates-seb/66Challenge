@@ -1,6 +1,7 @@
 package challenge.server.security.handler;
 
 import challenge.server.security.utils.ErrorResponder;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -12,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 권한이 없는곳에 입장할때 UNAUTHORIZED 반환
+ */
 @Slf4j
 @Component
 public class UserAuthenticationEntryPoint implements AuthenticationEntryPoint {

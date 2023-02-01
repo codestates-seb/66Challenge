@@ -1,6 +1,7 @@
 package challenge.server.user.service;
 
 import challenge.server.auth.repository.AuthRepository;
+import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.challenge.repository.ChallengeRepository;
@@ -436,7 +437,7 @@ public class UserService {
         List<UserDto.CategoriesResponse> favoriteCategories = challengeRepository.findFavoriteCategories(userId);
 
         // 마이페이지 통계4 = 찜한 습관 개수
-        List<Habit> bookmarkHabits  = bookmarkRepository.findAllByUserUserId(userId);
+        List<Bookmark> bookmarkHabits  = bookmarkRepository.findAllByUserUserId(userId);
 
         // 마이페이지 통계5 = 내가 만든 습관 개수
         List<Habit> hostHabits = habitRepository.findByHostUserId(userId);
