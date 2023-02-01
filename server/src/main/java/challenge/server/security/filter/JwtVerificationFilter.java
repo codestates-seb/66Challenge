@@ -2,6 +2,7 @@ package challenge.server.security.filter;
 
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
+import challenge.server.security.jwt.JwtAuthenticationToken;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.user.entity.LogoutList;
@@ -15,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,17 +39,38 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final LogoutListService logoutListService;
+    private final AuthenticationManager authenticationManager;
 
+    public JwtVerificationFilter(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, LogoutListService logoutListService, AuthenticationManager authenticationManager) {
+        this.jwtTokenizer = jwtTokenizer;
+        this.authorityUtils = authorityUtils;
+        this.logoutListService = logoutListService;
+        this.authenticationManager = authenticationManager;
+    }
+
+//    public JwtVerificationFilter(AuthenticationManager authenticationManager) {
+//        this.authenticationManager = authenticationManager;
+//    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            String jwt = resolveToken(request);
+//            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+
+            String bearerToken = request.getHeader("Authorization");
+            String jwt = null;
+
+            if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+                Authentication authenticationToken = new JwtAuthenticationToken(bearerToken);
+                Authentication authenticatedToken = authenticationManager.authenticate(authenticationToken);
+                SecurityContextHolder.getContext().setAuthentication(authenticatedToken);
+                jwt = bearerToken.substring(7); // 0~6번째 글자 제외한 문자열
+            }
+
             String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
             if (StringUtils.hasText(jwt) && jwtTokenizer.validateToken(jwt, base64EncodedSecretKey)) {
@@ -107,10 +131,15 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    private String resolveToken(HttpServletRequest request) {
+    private String resolveToken(HttpServletRequest request, HttpSecurity builder) {
+        AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+
         String bearerToken = request.getHeader("Authorization");
 
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+            Authentication authenticationToken = new JwtAuthenticationToken(bearerToken);
+            Authentication authenticatedToken = authenticationManager.authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authenticatedToken);
             return bearerToken.substring(7); // 0~6번째 글자 제외한 문자열
         }
 
@@ -155,5 +184,4 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
         return refreshToken;
     }
-
 }
