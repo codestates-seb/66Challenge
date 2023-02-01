@@ -81,10 +81,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
 
-        userService.verifyLoginUser(user.getEmail(), user.getPassword(), refreshToken);
+        User findUser = userService.verifyLoginUser(user.getEmail(), user.getPassword(), refreshToken);
 
-        Map<String, Long> body = new HashMap<>();
-        body.put("userId", user.getUserId()); // 로그인 후 userId를 응답 body에 전달
+        Map<String, Object> body = new HashMap<>();
+        body.put("userId", findUser.getUserId()); // 로그인 후 userId를 응답 body에 전달
+        body.put("username", findUser.getUsername()); // 2023.2.1(수) 17h 추가
 
         new ObjectMapper().writeValue(response.getOutputStream(), body);
     }

@@ -169,7 +169,7 @@ public class UserService {
 
     // 일반 로그인 시
     @Transactional
-    public void verifyLoginUser(String email, String password, String refreshToken) {
+    public User verifyLoginUser(String email, String password, String refreshToken) {
         // 로그인 시도하는 이메일 회원이 있는지 확인
         User findUser = findLoginUserByEmail(email);
 
@@ -188,6 +188,8 @@ public class UserService {
 
         // 위 조건들을 모두 만족해서 로그인 대상 회원인 경우
         findUser.saveRefreshToken(refreshToken);
+
+        return findVerifiedUser(findUser.getUserId());
     }
 
     // OAuth2 로그인 시 -> 이 메서드 사용 안 하기로 함
@@ -290,10 +292,10 @@ public class UserService {
     // 회원 개인 정보 통합 조회(마이페이지)
     public UserDto.UserDetailsDb findUserDetails(Long userId) {
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없는 로직
-        Long loggedInUserId = verifyLoggedInUser(userId);
+//        Long loggedInUserId = verifyLoggedInUser(userId);
         // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
-        User findUser = findUser(loggedInUserId);
-//        User findUser = findVerifiedUser(userId);
+//        User findUser = findUser(loggedInUserId);
+        User findUser = findVerifiedUser(userId);
 
         // Querydsl 시도
 //        UserDto.UserDetailsDb userDetailsDb = userRepository.findUserDetails(userId);
@@ -433,6 +435,13 @@ public class UserService {
         // 마이페이지 통계3 = 많이 참여한 습관의 카테고리
         List<UserDto.CategoriesResponse> favoriteCategories = challengeRepository.findFavoriteCategories(userId);
 
+        // 마이페이지 통계4 = 찜한 습관 개수
+        List<Habit> bookmarkHabits  = bookmarkRepository.findAllByUserUserId(userId);
+
+        // 마이페이지 통계5 = 내가 만든 습관 개수
+        List<Habit> hostHabits = habitRepository.findByHostUserId(userId);
+
+
         // 리턴할 [마이페이지 상단 기본 정보] 최종 정리
         userDetailsDb.setActiveChallenges(activeChallenges);
         userDetailsDb.setActiveCategories(activeCategories);
@@ -441,6 +450,9 @@ public class UserService {
         userDetailsDb.setDaysOfFailList(daysOfFailList);
         userDetailsDb.setAverageDaysOfFail(averageDaysOfFail);
         userDetailsDb.setFavoriteCategories(favoriteCategories);
+
+        userDetailsDb.setNumOfBookmarkHabit(bookmarkHabits.size());
+        userDetailsDb.setNumOfHostHabit(hostHabits.size());
 
         /*
         UserDto.StatisticsResponse statisticsResponse = UserDto.StatisticsResponse.builder()
