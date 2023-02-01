@@ -28,10 +28,10 @@ public class Habit extends BaseTimeEntity {
     private String title;
     private String subTitle;
 
-    @Column(length = 60000)
+    @Lob
     private String body;
 
-    @Column(length = 60000)
+    @Lob
     private String bodyHtml;
     private LocalTime authStartTime;
     private LocalTime authEndTime;
