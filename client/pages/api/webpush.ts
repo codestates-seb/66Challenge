@@ -55,7 +55,8 @@ export default function webpush(req: NextApiRequest, res: NextApiResponse) {
       title: '66 Challenge',
       body: `${arr[arrIdx][1]} -${arr[arrIdx][0]}-`,
     },
-    token: token,
+    token:
+      'fYVtkIefvgd72_NlmSGNGf:APA91bHNMJhm9JAHu6r0rN-b5Er2tXel6zUFynsNh1LsL9zltz25kwyHscXbHimp5Ye7ZOkDJbhn-JP0pJIRs7beGs8hWtZe3F8nyfflFl1By0t7T0-ZXxt5mlXpVaaOMQDCquM7H8Jw',
   };
   const a = admin
     .messaging()
