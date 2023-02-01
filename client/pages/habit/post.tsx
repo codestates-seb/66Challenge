@@ -245,7 +245,7 @@ const Post = () => {
           />
           {verify.titleVerify === 'fail' ? (
             <span className="block text-subColor text-[13px] h-[13px] ">
-              습관명을 5~20자 이내로 입력해주세요.
+              습관명을 5~30자 이내로 입력해주세요.
             </span>
           ) : null}
         </div>

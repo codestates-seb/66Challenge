@@ -63,6 +63,9 @@ export const loginIdentitySlice = createSlice({
     notificationToken: (state, action: PayloadAction<string>): void => {
       state.notificationToken = action.payload;
     },
+    notificationTokenDelete: (state): void => {
+      state.notificationToken = null;
+    },
   },
   extraReducers: (builder): void => {
     builder.addCase(
@@ -74,6 +77,10 @@ export const loginIdentitySlice = createSlice({
     );
   },
 });
-export const { initLoginIdentity, oauthLogin, notificationToken } =
-  loginIdentitySlice.actions;
+export const {
+  initLoginIdentity,
+  oauthLogin,
+  notificationToken,
+  notificationTokenDelete,
+} = loginIdentitySlice.actions;
 export { loginRequest };
