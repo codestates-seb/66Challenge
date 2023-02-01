@@ -323,11 +323,23 @@ public class UserDto {
         // 내 또래 사람들이 주로 참여하는 습관의 카테고리
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class CategoriesResponse {
         @JsonProperty
         Long count;
 
         @JsonProperty
         Long categoryId;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MessageRequest {
+        String message;
     }
 }

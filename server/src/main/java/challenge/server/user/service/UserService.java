@@ -190,7 +190,7 @@ public class UserService {
         findUser.saveRefreshToken(refreshToken);
     }
 
-    // OAuth2 로그인 시
+    // OAuth2 로그인 시 -> 이 메서드 사용 안 하기로 함
     @Transactional
     public void verifyLoginUser(String email, String refreshToken) {
         User findUser = findLoginUserByEmail(email);
