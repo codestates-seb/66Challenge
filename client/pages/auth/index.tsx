@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { AiFillCamera } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
@@ -45,6 +45,42 @@ export default function Auth() {
   const [ingData, setIngData] = useState<IresponseDataValue[]>([]);
   const [authState, setAuthState] = useState('auth');
   const { authImage } = watch();
+
+  const [slide, setSlide] = useState(true);
+
+  const containerRef = useRef<HTMLUListElement>(null);
+  const onWheel = (e: any) => {
+    lockScroll();
+    const { deltaY } = e;
+    const el = containerRef.current;
+    if (!el) return;
+    if (deltaY > 0 && slide === true) {
+      setSlide(false);
+      el.scrollTo({
+        left: el.scrollLeft + deltaY * 2,
+        behavior: 'smooth',
+      });
+      setSlide(true);
+    }
+    if (deltaY < 0 && slide === true) {
+      setSlide(false);
+      el.scrollTo({
+        left: el.scrollLeft + deltaY * 2,
+        behavior: 'smooth',
+      });
+      setSlide(true);
+    }
+  };
+  const lockScroll = useCallback(() => {
+    document.body.style.overflow = 'hidden';
+  }, []);
+
+  const openScroll = useCallback(() => {
+    if (document.body.style.overflow === 'hidden') {
+      document.body.style.removeProperty('overflow');
+    }
+  }, []);
+
   const deleteImgHandle = (): void => {
     setImgFile('');
     reset({
@@ -122,7 +158,12 @@ export default function Auth() {
   }, []);
 
   return (
-    <div className="h-screen w-full px-10 flex flex-col pt-5 overvflow-y-scroll scrollbar-hide relative items-center">
+    <div
+      className="h-screen w-full px-10 flex flex-col pt-5 overvflow-y-scroll scrollbar-hide relative items-center"
+      onWheel={() => {
+        openScroll();
+      }}
+    >
       <div className="mb-4 w-full">
         <span className="font-bold text-base">내가 진행중인 습관</span>
       </div>
@@ -139,7 +180,14 @@ export default function Auth() {
             : null}
         </span>
       </div>
-      <div className="flex flex-col flex-wrap w-full  h-1/6 overflow-x-scroll scrollbar-hide p-2 border-y  border-mainColor  items-center">
+      <ul
+        className="flex flex-col flex-wrap w-full  h-1/6 overflow-x-scroll scrollbar-hide p-2 border-y  border-mainColor  items-center"
+        ref={containerRef}
+        onWheel={(e) => {
+          e.stopPropagation();
+          onWheel(e);
+        }}
+      >
         {ingData.length === 0 ? (
           <span>진행중인 습관이 없습니다.</span>
         ) : (
@@ -165,7 +213,7 @@ export default function Auth() {
             );
           })
         )}
-      </div>
+      </ul>
 
       <form
         className="file-uploader-container w-full"
