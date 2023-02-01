@@ -5,7 +5,7 @@ export const HabitWrapperVertical: React.FC<HabitWrapperProps> = ({
   habitWrapperData,
 }) => {
   return (
-    <div className="habit-wrapper-Vertical p-4">
+    <div className="habit-wrapper-Vertical p-5">
       <h3 className="habit-wrapper-title mb-5 text-xl font-semibold">
         {habitWrapperTitle}
       </h3>
