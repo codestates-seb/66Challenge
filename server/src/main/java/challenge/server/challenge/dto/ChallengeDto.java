@@ -16,6 +16,7 @@ public class ChallengeDto {
     public static class Response {
         private Long challengeId;
         private String habitTitle;
+        private String habitSubTitle;
         private String challenger;
         private String status;
         private int usedWildcard;

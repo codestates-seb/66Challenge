@@ -17,6 +17,7 @@ public interface ChallengeMapper {
     @Mapping(expression = "java(getAuthIds(challenge))", target = "authIds")
     @Mapping(expression = "java(countUsedWildcards(challenge))", target = "usedWildcard")
     @Mapping(source = "challenge.habit.title", target = "habitTitle")
+    @Mapping(source = "challenge.habit.subTitle", target = "habitSubTitle")
     @Mapping(source = "challenge.user.username", target = "challenger")
     ChallengeDto.Response toDto(Challenge challenge);
 
