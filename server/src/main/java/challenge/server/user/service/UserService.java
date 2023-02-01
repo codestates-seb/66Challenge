@@ -455,12 +455,11 @@ public class UserService {
         userDetailsDb.setNumOfBookmarkHabit(bookmarkHabits.size());
         userDetailsDb.setNumOfHostHabit(hostHabits.size());
 
-        /*
-        UserDto.StatisticsResponse statisticsResponse = UserDto.StatisticsResponse.builder()
-                .numOfAuthByChallengeList(numOfAuthByChallengeList)
+//        UserDto.StatisticsResponse statisticsResponse = UserDto.StatisticsResponse.builder()
+//                .numOfAuthByChallengeList(numOfAuthByChallengeList)
 //                .averageDaysofFail()
 //                .myCategories()
-                .build();
+//                .build();
 
         return userDetailsDb;
     }
