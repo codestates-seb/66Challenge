@@ -1,12 +1,16 @@
 package challenge.server.habit.mapper;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import challenge.server.category.service.CategoryService;
+import challenge.server.challenge.service.ChallengeService;
+import challenge.server.exception.BusinessLogicException;
 import challenge.server.habit.dto.HabitDto;
 import challenge.server.habit.entity.AgeRatio;
 import challenge.server.habit.entity.SexRatio;
@@ -16,13 +20,12 @@ import challenge.server.user.service.UserService;
 import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.bookmark.repository.BookmarkRepository;
 import challenge.server.challenge.entity.Challenge;
+
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.dto.HabitDto.*;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import static java.lang.Math.round;
 
 @Component
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class HabitMapperImpl {
     private final UserService userService;
     private final ChallengeRepository challengeRepository;
     private final BookmarkRepository bookmarkRepository;
-    private final ReviewRepository reviewRepository;
+    private final ChallengeService challengeService;
 
     public Habit habitPostDtoToHabit(Post post) {
         if (post == null) {
@@ -66,7 +69,6 @@ public class HabitMapperImpl {
                 .subTitle(patch.getSubTitle())
                 .body(patch.getBody())
                 .bodyHtml(patch.getBodyHTML())
-                .category(categoryService.findByType(patch.getCategory()))
                 .authStartTime(patch.getAuthStartTime() == null ? null : LocalTime.parse(patch.getAuthStartTime() + ":00"))
                 .authEndTime(patch.getAuthEndTime() == null ? null : LocalTime.parse(patch.getAuthEndTime() + ":00"))
                 .authType(patch.getAuthType())
@@ -116,23 +118,36 @@ public class HabitMapperImpl {
                 .score(habit.getAvgScore() == null ? 0 : habit.getAvgScore())
                 // bookmark 테이블에서 userId(로그인한 사용자)와 habitId로 조회
                 .isBooked(!bookmarkRepository.findByUserUserIdAndHabitHabitId(userId, habit.getHabitId()).isEmpty())
+                .challengeStatus(getChallengeStatus(userId,habit.getHabitId()))
+                .day(getChallengeDays(userId,habit.getHabitId()))
                 .build();
 
-        System.out.println(overview.getScore());
         return overview;
+    }
+
+    // challenge를 며칠동안 진행했는지 리턴
+    private int getChallengeDays(Long userId, Long habitId) {
+        Challenge challenge;
+        try {
+            challenge = challengeService.findByUserIdAndHabitId(userId, habitId);
+        } catch (BusinessLogicException e) {
+            return 0; // challenge가 없다면 시작하지 않았음, 0 리턴
+        }
+        return (int) ChronoUnit.DAYS.between(challenge.getCreatedAt(),LocalDateTime.now());
     }
 
     protected Detail habitToDetail(Habit habit, Long userId) {
         if (habit == null) return null;
         Detail detail = Detail.builder()
                 .hostUsername(habit.getHost().getUsername())
+                .hostUserImgUrl(habit.getHost().getProfileImageUrl())
                 .subTitle(habit.getSubTitle())
                 .category(habit.getCategory().getType())
+                .categoryId(habit.getCategory().getCategoryId())
                 .bodyHTML(habit.getBodyHtml())
                 .authType(habit.getAuthType())
                 .authStartTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthStartTime()).substring(0, 5))
                 .authEndTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthEndTime()).substring(0, 5))
-                // challenge 테이블에서 userId(로그인한 사용자)와 habitId로 챌린지 상태 조회.
                 .challengeStatus(getChallengeStatus(userId, habit.getHabitId()))
                 .challengers(habit.getChallengers() == null ? 0 : habit.getChallengers())
                 .build();
