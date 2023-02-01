@@ -20,6 +20,7 @@ interface habitDetailOverview {
 
 interface habitDetailDetail {
   hostUsername: string;
+  hostUserImgUrl: string;
   subTitle: string;
   bodyHTML: string;
   category: string;
@@ -65,8 +66,7 @@ const HabitDetail: React.FC = () => {
     });
   }, [router.isReady]);
 
-  // const progress = Math.ceil((habitData.detail.day / 66) * 100);
-  const progress = Math.ceil((1 / 66) * 100);
+  const progress = Math.ceil((habitData?.detail?.day / 66) * 100);
   const succImgClassName = 'max-w-[50%]';
 
   const searchButtonHandler = () => {
@@ -94,13 +94,19 @@ const HabitDetail: React.FC = () => {
           />
         </div>
         <div className="habit-detail-top-info p-5 border-b border-borderColor">
-          <div className="habit-detail-title-container flex justify-between items-center mb-2 pt-5">
+          <div className="habit-detail-subtitle pt-2.5">
+            <span className="px-2.5 py-1 bg-black text-white rounded-full text-sm font-semibold">
+              {habitData?.detail?.subTitle}
+            </span>
+          </div>
+          <div className="habit-detail-title-container flex justify-between items-center mb-5 pt-[15px]">
             <h2 className="habit-detail-title text-2xl font-bold">
               {habitData?.overview?.title}
             </h2>
             <DropDown
               dropDownType="habit"
               boolean={false}
+              habitId={habitData?.overview?.habitId}
               hostUserId={habitData?.overview?.hostUserId}
               habitData={{
                 title: habitData?.overview?.title,
@@ -109,7 +115,17 @@ const HabitDetail: React.FC = () => {
               }}
             />
           </div>
-          <div className="habit-detail-metainfo-container flex items-center gap-2.5">
+          <div className="habit-detail-metainfo-container flex items-center gap-2.5 h-[30px] leading-[35px]">
+            <div className="habit-detail-postuser-profile-image w-[30px]">
+              <Image
+                src={
+                  habitData?.detail?.hostUserImgUrl || '/image/baseProfile.svg'
+                }
+                alt="post user profile image"
+                width={500}
+                height={500}
+              />
+            </div>
             <div className="habit-detail-postuser">
               {habitData?.detail?.hostUsername}
             </div>
@@ -197,7 +213,7 @@ const HabitDetail: React.FC = () => {
                     width={progress}
                   ></ProgressBar>
                   <div className="w-full z-[3] text-center text-sm font-semibold pt-1 ">
-                    50% 진행중
+                    {progress}%
                   </div>
                 </div>
               </div>

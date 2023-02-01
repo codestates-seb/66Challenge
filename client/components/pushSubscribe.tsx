@@ -60,14 +60,16 @@ export function PushSubscribe() {
   };
 
   return (
-    <div className="flex w-full relative">
+    <div className="flex w-full relative items-center justify-between">
       <IoIosNotificationsOutline
-        className="h-6 w-6"
+        size={26}
         onClick={onNotificationHandle}
+        className="cursor-pointer"
       />
       <IoIosNotificationsOff
-        className="h-6 w-6"
+        size={26}
         onClick={onNotificationCancelHandle}
+        className="cursor-pointer"
       />
       <div
         className={`${

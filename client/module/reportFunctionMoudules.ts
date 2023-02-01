@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie } from './cookies';
+
 import type {
   postReportHabitProps,
   postReportAuthPorps,
@@ -14,17 +14,17 @@ export async function postHabitReport({
 }: postReportHabitProps) {
   try {
     const response = await axios
-      .post(`${process.env.NEXT_PUBLIC_SEVER_URL}/habits/${habitId}/reports`, {
+      .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reports`, {
         postId: habitId,
         postType: 'HABIT',
         reportType,
         reporterUserId: userId,
         reportedUserId: hostUserId,
       })
-      .then((res) => console.log(res));
+      .then((res) => res.data);
     return response;
   } catch (e) {
-    console.error(e);
+    return e.response.status;
   }
 }
 

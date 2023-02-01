@@ -26,7 +26,7 @@ export const MyPageMenuList = ({ email, successArr, bookmark, hosted }) => {
   const dispatch = useAppDispatch();
 
   const menuStyle =
-    'w-[90%] pl-5 cursor-pointer flex place-content-between h-10 text-lg items-center mb-1 bg-gray-600 text-white hover:bg-subColor rounded-full hover:animate-hover';
+    'w-full px-5 cursor-pointer flex place-content-between h-10 text-lg items-center mb-2 bg-white text-black hover:bg-[#f5f5f5] rounded-full hover:animate-hover';
 
   const CertDropDown = ({ success }): JSX.Element => {
     return (
@@ -82,9 +82,12 @@ export const MyPageMenuList = ({ email, successArr, bookmark, hosted }) => {
   const MenuItem = ({ path, title, children }: ItemProps): JSX.Element => {
     return (
       <Link className={menuStyle} href={path}>
-        <span>{title}</span>
-        <div className="pr-5 flex items-center justify-center">
-          {children}
+        <div className="flex gap-2.5">
+          <div className="pt-[2px]">{title}</div>
+          <div>{children}</div>
+        </div>
+
+        <div className="flex items-center justify-center">
           <SlArrowRight className="inline align-middle dark:bg-white" />
         </div>
       </Link>
@@ -101,7 +104,7 @@ export const MyPageMenuList = ({ email, successArr, bookmark, hosted }) => {
         }}
       >
         <span>{title}</span>
-        <div className="pr-5 ">
+        <div>
           <SlArrowRight className="inline align-middle dark:bg-white" />
         </div>
       </Link>
@@ -109,8 +112,7 @@ export const MyPageMenuList = ({ email, successArr, bookmark, hosted }) => {
   };
 
   return (
-    // <div className="mt-6 flex w-full items-center flex-wrap justify-evenly">
-    <div className="mt-6 flex flex-col w-full items-center">
+    <div className="p-5 flex flex-col w-full items-center">
       {isCertOpen && (
         <Modal
           isOpen={isCertOpen}
@@ -134,7 +136,7 @@ export const MyPageMenuList = ({ email, successArr, bookmark, hosted }) => {
         title="찜한 습관"
         path="/user/mypage/savedhabit"
         children={
-          <span className="w-10 h-7 text-sm pt-[3px]  mr-2 rounded-full flex justify-center items-center bg-red-500 border-2">
+          <span className="w-10 h-7 text-sm pt-[3px]  mr-2 rounded-full flex justify-center items-center bg-subColor text-white font-semibold">
             {bookmark}
           </span>
         }
@@ -143,7 +145,7 @@ export const MyPageMenuList = ({ email, successArr, bookmark, hosted }) => {
         title="내가 만든 습관"
         path="/user/mypage/madehabit"
         children={
-          <span className="w-10 h-7 text-sm pt-[3px]  mr-2 rounded-full flex justify-center items-center bg-red-500 border-2">
+          <span className="w-10 h-7 text-sm pt-[3px]  mr-2 rounded-full flex justify-center items-center bg-subColor text-white font-semibold">
             {hosted}
           </span>
         }
@@ -154,11 +156,13 @@ export const MyPageMenuList = ({ email, successArr, bookmark, hosted }) => {
           setIsCertActive(!isCertActive);
         }}
       >
-        <span>인증서 발급</span>
-        <div className="pr-5 flex items-center justify-center">
-          <span className="w-10 h-7 text-sm mr-2 pt-[3px] rounded-full flex justify-center items-center bg-red-500 border-2 ">
+        <div className="flex gap-2.5">
+          <div className="pt-[2px]">인증서 발급</div>
+          <div className="w-10 h-7 text-sm mr-2 pt-[3px] rounded-full flex justify-center items-center bg-subColor text-white font-semibold ">
             {successArr.length}
-          </span>
+          </div>
+        </div>
+        <div className=" flex items-center justify-center">
           <SlArrowRight className="inline align-middle dark:bg-white" />
         </div>
       </div>
@@ -170,7 +174,7 @@ export const MyPageMenuList = ({ email, successArr, bookmark, hosted }) => {
         }}
       >
         <span>친구 초대하기</span>
-        <div className="pr-5 ">
+        <div>
           <SlArrowRight className="inline align-middle dark:bg-white" />
         </div>
       </div>

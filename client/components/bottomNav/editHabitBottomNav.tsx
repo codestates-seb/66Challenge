@@ -24,7 +24,7 @@ export function EditHabitBottomNav({
     router.push(`/habit/edit/${habitId}`);
   };
   return (
-    <div className="flex bg-white h-[3rem] px-6 w-full fixed bottom-0 min-w[300px] justify-center items-center border-t min-w-[360px] max-w-[460px]">
+    <div className="flex bg-white h-[60px] px-6 w-full fixed bottom-0 min-w[300px] justify-center items-center border-t min-w-[360px] max-w-[460px]">
       {challengers !== 0 || isStart === true ? null : (
         <button
           className="bg-mainColor h-3/4 w-1/2 rounded-lg mr-2.5 text-iconColor text-base"
