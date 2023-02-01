@@ -52,11 +52,6 @@ export async function deleteHabitReview({
     const response = await axios
       .delete(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews/${reviewId}`,
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
       .then((res) => console.log(res));
     return response;
@@ -75,11 +70,6 @@ export async function patchHabitReview({
       .patch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews/${reviewId}`,
         { body, score, reviewId },
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
       .then((res) => console.log(res));
     return response;
