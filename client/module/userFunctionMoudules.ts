@@ -4,6 +4,7 @@ import type {
   UserGeneralProps,
   getUserCertificateProps,
   profileImageProps,
+  UserInfoType,
 } from './moduleInterface';
 
 export async function postUserSignUp({
@@ -64,8 +65,12 @@ export async function getUsernameOverlapVerify(
 export async function getUserInfo({ userId }: UserGeneralProps) {
   try {
     const response = await axios
-      .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`)
-      .then((res) => res.data);
+      .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, {
+        headers: {
+          // Authorization: getCookie('accessJwtToken'),
+        },
+      })
+      .then((res): UserInfoType => res.data);
     return response;
   } catch (e) {
     console.error(e);

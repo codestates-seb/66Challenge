@@ -57,15 +57,21 @@ module.exports = {
           '0%': { transform: 'translateX(-100%) ' },
           '100%': { transform: 'translateX(0) ' },
         },
+        hover: {
+          '0%': { transform: 'translateX(0) ' },
+          '50%': { transform: 'translateX(2.5%) ' },
+          '100%': { transform: 'translateX(0) ' },
+        },
       },
       animation: {
         bookMark: 'bookMark 1s ease-in-out ',
         dropDown: 'dropDown .2s ease',
         speechBubble: 'speechBubble 1.8s ease-in-out Infinite',
         gage: 'gage 0.5s ease',
+        hover: 'hover 1.5s ease-in-out Infinite',
       },
       backgroundImage: {
-        'certification': 'url("/image/prizeborder.jpg")',
+        certification: 'url("/image/prizeborder.jpg")',
       },
     },
   },
