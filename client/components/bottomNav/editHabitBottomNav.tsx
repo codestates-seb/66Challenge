@@ -21,7 +21,7 @@ export function EditHabitBottomNav({
     setIsOpen(true);
   };
   const editHabitHandle = (): void => {
-    //수정 페이지 이동해야함. 프롭스로 전달 예정 프롭스가 있을 경우 수정 페이지
+    router.push(`/habit/edit/${habitId}`);
   };
   return (
     <div className="flex bg-white h-[3rem] px-6 w-full fixed bottom-0 min-w[300px] justify-center items-center border-t min-w-[360px] max-w-[460px]">
@@ -30,7 +30,7 @@ export function EditHabitBottomNav({
           className="bg-mainColor h-3/4 w-1/2 rounded-lg mr-2.5 text-iconColor text-base"
           onClick={editHabitHandle}
         >
-          습관수정
+          습관 수정
         </button>
       )}
 
@@ -39,7 +39,7 @@ export function EditHabitBottomNav({
         onClick={startHabitHandle}
         disabled={challengeStatus !== 'NONE' || isStart === true}
       >
-        Start
+        습관 시작하기
       </button>
       {isOpen && (
         <Modal
