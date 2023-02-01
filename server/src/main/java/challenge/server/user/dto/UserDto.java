@@ -180,6 +180,10 @@ public class UserDto {
 //            this.username = username;
 //            this.earliestCreatedAt = earliestCreatedAt;
 //        }
+
+        // 2023.2.1(수) 16h50 추가
+        int numOfBookmarkHabit;
+        int numOfHostHabit;
     }
 
     @Getter
