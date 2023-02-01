@@ -41,7 +41,14 @@ public class AmazonS3ResourceStorage {
 
         try {
             multipartFile.transferTo(file);     // MultipartFile을 File 객체의 형태로 변환해줍니다.
-//            createThumbnail(fullPath, file);
+
+            BufferedImage oimage = ImageIO.read(file);  // original image
+            int height = oimage.getHeight();
+            int width = oimage.getWidth();
+
+            if (width > 1000 && height > 1000) {    // image 크기가 1000*1000이 넘으면 리사이징
+                createThumbnail(fullPath, file, oimage);
+            }
 
             amazonS3Client.putObject(new PutObjectRequest(bucket, fullPath, file)   // 파일이 복사되어 임시파일과 같이 로컬에 저장이 됩니다.
                     .withCannedAcl(CannedAccessControlList.PublicRead));    // 누구나 파일에 접근이 가능합니다.
@@ -55,30 +62,28 @@ public class AmazonS3ResourceStorage {
         return amazonS3Client.getUrl(bucket, fullPath).toString().replaceFirst("s", "");  // S3에 업로드된 파일 URL 반환
     }
 
-//    private void createThumbnail(String fullPath, File file) {
-//        double ratio = 2;   // 이미지 축소 비율
-//
-//        int idx = fullPath.lastIndexOf(".");
-//        String ext = fullPath.substring(idx + 1);// 파일 확장자
-//
-//        try {
-//            BufferedImage oimage = ImageIO.read(file);  // original image
-//
-//            int tWidth = (int) (oimage.getWidth() / ratio);
-//            int tHeight = (int) (oimage.getHeight() / ratio);
-//
-//            BufferedImage thumbnail = new BufferedImage(tWidth, tHeight, BufferedImage.TYPE_3BYTE_BGR); // 썸네일
-//
-//            Graphics2D graphic = thumbnail.createGraphics();
-//            Image image = oimage.getScaledInstance(tWidth, tHeight, Image.SCALE_SMOOTH);
-//            graphic.drawImage(image, 0, 0, tWidth, tHeight, null);
-//            graphic.dispose();      // 리소스를 모두 해제
-//
-//            ImageIO.write(thumbnail, ext, file);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void createThumbnail(String fullPath, File file, BufferedImage oimage) {
+        double ratio = 2;   // 이미지 축소 비율
+
+        int idx = fullPath.lastIndexOf(".");
+        String ext = fullPath.substring(idx + 1);// 파일 확장자
+
+        try {
+            int tWidth = (int) (oimage.getWidth() / ratio);
+            int tHeight = (int) (oimage.getHeight() / ratio);
+
+            BufferedImage thumbnail = new BufferedImage(tWidth, tHeight, BufferedImage.TYPE_3BYTE_BGR); // 썸네일
+
+            Graphics2D graphic = thumbnail.createGraphics();
+            Image image = oimage.getScaledInstance(tWidth, tHeight, Image.SCALE_SMOOTH);
+            graphic.drawImage(image, 0, 0, tWidth, tHeight, null);
+            graphic.dispose();      // 리소스를 모두 해제
+
+            ImageIO.write(thumbnail, ext, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void removeNewFile(File targetFile) {
         if (targetFile.delete()) log.info("The file has been deleted.");
