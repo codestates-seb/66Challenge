@@ -50,19 +50,31 @@ const arr = [
 export default function webpush(req: NextApiRequest, res: NextApiResponse) {
   const token: string = req.body.token;
   const arrIdx = Math.floor(Math.random() * arr.length);
+  //지금은 토픽별로 메시지를 보내는 것 이지만 1000개까지 가능 등록하는 순간 데이터 베이스는 필요가 없을 것 같음? 구독 취소까지 가능하다.
+  //여러기기를 보낼거면 500개까지 배열로 만들어서 sendMulticast 방식을 이용해서 반복으로 돌려서 보내면 되지 않을까?
+  admin
+    .messaging()
+    .subscribeToTopic(token, 'public')
+    .then((res) => console.log('success:', res))
+    .catch((e) => console.log('error:', e));
+
   const message = {
     notification: {
       title: '66 Challenge',
       body: `${arr[arrIdx][1]} -${arr[arrIdx][0]}-`,
     },
-    token:
-      'fYVtkIefvgd72_NlmSGNGf:APA91bHNMJhm9JAHu6r0rN-b5Er2tXel6zUFynsNh1LsL9zltz25kwyHscXbHimp5Ye7ZOkDJbhn-JP0pJIRs7beGs8hWtZe3F8nyfflFl1By0t7T0-ZXxt5mlXpVaaOMQDCquM7H8Jw',
+    webpush: {
+      fcm_options: {
+        link: 'https://66challenge.shop',
+      },
+    },
+    topic: 'public',
   };
-  const a = admin
+  admin
     .messaging()
     .send(message)
     .then((res) => console.log('success:', res))
-    .catch((e) => console.log('erroe:', e));
+    .catch((e) => console.log('error:', e));
 
   res.status(200);
 }
