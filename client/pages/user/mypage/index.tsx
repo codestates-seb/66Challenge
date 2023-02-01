@@ -15,7 +15,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-import logo from '../../../public/image/66logo.png';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { FileUploader } from '../../../components/fileUploader';
 import { UserInfoType } from '../../../module/moduleInterface';
@@ -194,7 +194,9 @@ const MyPage = () => {
             <Image
               src="/image/baseProfile.svg"
               alt="base profile image"
-              className="w-10 h-10"
+              className="w-full h-full rounded-full cursor-pointer"
+              width={700}
+              height={700}
             />
           )}
         </div>
@@ -222,13 +224,26 @@ const MyPage = () => {
           나의 습관 진행현황
         </div>
         <ul
-          className="py-2.5 rounded-xl flex flex-nowrap overflow-x-auto scrollbar-hide border-[1px] border-borderColor"
+          className={`py-2.5 rounded-xl flex flex-nowrap overflow-x-auto scrollbar-hide border-[1px] border-borderColor ${
+            userInfo.activeChallenges.length ? '' : 'justify-center'
+          }`}
           ref={containerRef}
           onWheel={(e) => {
             e.stopPropagation();
             onWheel(e);
           }}
         >
+          {userInfo.activeChallenges.length ? null : (
+            <li className="flex flex-col items-center">
+              <div>도전중인 습관이 없어요</div>
+              <Link
+                href="/home/hotlist"
+                className="rounded-full w-max px-2 bg-subColor text-white my-2 animate-bounce"
+              >
+                요즘 인기있는 습관
+              </Link>
+            </li>
+          )}
           {userInfo.activeChallenges.map((e) => {
             const progress = Math.ceil((e.progressDays / 66) * 100);
             return (
@@ -287,7 +302,7 @@ const MyPage = () => {
     const chalTotal = [..._.activeChallenges, ..._.daysOfFailList];
     const chalSuccess = _.activeChallenges.filter((e) => e.progressDays >= 66);
     const chalIng = _.activeChallenges.filter((e) => e.progressDays < 66);
-    const favCate = categoryList[_.favoriteCategories[0].categoryId];
+    // const favCate = categoryList[_.favoriteCategories[0].categoryId];
     const failLen = _.averageDaysOfFail;
     const totalAuth = _.numOfAuthByChallengeList.reduce((sum, e) => {
       sum += e.numOfAuth;
@@ -319,7 +334,9 @@ const MyPage = () => {
 
     const categoryCount = new Array(8).fill(0);
     _.activeCategories.forEach((e) => {
-      categoryCount[e.categoryId - 1]++;
+      if (e.categoryId) {
+        categoryCount[e.categoryId - 1]++;
+      }
     });
 
     const categoryData = {
@@ -383,30 +400,34 @@ const MyPage = () => {
     return (
       <div className="w-auto p-5 border-b-[10px] border-borderColor">
         <div className="pb-5 font-semibold w-max text-xl">나의 습관 통계</div>
-        <div className="statics-row-1 mb-2 flex flex-row w-[100%] my-2 items-center">
-          <span className="w-1/2 flex flex-col justify-center  items-center">
-            <label className="text-base text-mainColor font-semibold pb-2.5">
-              도전 현황
-            </label>
-            <Pie data={challengeTotalData} />
-          </span>
-          <span className="w-1/2 flex flex-col justify-center  items-center ">
-            <label className="text-base text-mainColor font-semibold pb-2.5">
-              진행도별 분류
-            </label>
-            <Pie data={progressData} />
-          </span>
-        </div>
-        <div className="pt-5 statics-row-2 flex flex-col items-center">
-          <label className="flex justify-center items-center max-h-min mb-1 px-3 rounded-lg">
-            <span className="text-[#7d7d7d] text-sm font-semibold">
-              도전 실패까지 걸린 평균기간
+        {_.activeCategories.length ? (
+          <div className="statics-row-1 mb-2 flex flex-row w-[100%] my-2 items-center">
+            <span className="w-1/2 flex flex-col justify-center  items-center">
+              <label className="text-base text-mainColor font-semibold pb-2.5">
+                도전 현황
+              </label>
+              <Pie data={challengeTotalData} />
             </span>
-            <span className="text-base h-min  rounded-md text-center px-2 font-semibold text-subColor">
-              {failLen}일
+            <span className="w-1/2 flex flex-col justify-center  items-center ">
+              <label className="text-base text-mainColor font-semibold pb-2.5">
+                진행도별 분류
+              </label>
+              <Pie data={progressData} />
             </span>
-          </label>
-        </div>
+          </div>
+        ) : null}
+        {_.daysOfFailList.length ? (
+          <div className="pt-5 statics-row-2 flex flex-col items-center">
+            <label className="flex justify-center items-center max-h-min mb-1 px-3 rounded-lg">
+              <span className="text-[#7d7d7d] text-sm font-semibold">
+                도전 실패까지 걸린 평균기간
+              </span>
+              <span className="text-base h-min  rounded-md text-center px-2 font-semibold text-subColor">
+                {failLen}일
+              </span>
+            </label>
+          </div>
+        ) : null}
       </div>
     );
   };
