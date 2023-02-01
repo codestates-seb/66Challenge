@@ -9,9 +9,7 @@ import challenge.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +43,12 @@ public class Challenge extends BaseTimeEntity {
     private List<Auth> auths = new ArrayList<>();
 
     public void changeStatus(Challenge.Status status) {
+        if (status.equals(Status.CHALLENGE)) {
+            LocalDateTime localDateTime = LocalDateTime.now().withNano(0);
+            this.setCreatedAt(localDateTime);
+            this.setLastModifiedAt(localDateTime);
+            this.lastAuthAt = null;
+        }
         this.status = status;
     }
 
