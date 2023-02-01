@@ -21,7 +21,7 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 export function PushSubscribe() {
-  const [authState, setAuthState] = useState('');
+  const [authState, setAuthState] = useState({ state: '', type: '' });
   const dispatch = useAppDispatch();
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
@@ -29,6 +29,10 @@ export function PushSubscribe() {
     firebase.app();
   }
   const onNotificationHandle = async () => {
+    setAuthState({ state: 'none', type: 'post' });
+    setTimeout(() => {
+      setAuthState({ state: '', type: 'post' });
+    }, 1500);
     const token = await getToken();
     dispatch(notificationToken(token));
     axios
@@ -41,8 +45,11 @@ export function PushSubscribe() {
     // });
   };
   const onNotificationCancelHandle = async () => {
+    setAuthState({ state: 'none', type: 'cancel' });
+    setTimeout(() => {
+      setAuthState({ state: '', type: 'cancel' });
+    }, 1500);
     const token = await getToken();
-
     dispatch(notificationTokenDelete());
     axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/webpushcancel`, {
       token,
@@ -51,8 +58,9 @@ export function PushSubscribe() {
     //   message: token,
     // });
   };
+
   return (
-    <div className="flex">
+    <div className="flex w-full relative">
       <IoIosNotificationsOutline
         className="h-6 w-6"
         onClick={onNotificationHandle}
@@ -63,11 +71,11 @@ export function PushSubscribe() {
       />
       <div
         className={`${
-          authState === 'none' ? 'flex' : 'hidden'
-        } absolute w-3/4 bg-white border-2 border-subColor top-20 rounded-full justify-center h-10 items-center animate-dropDown`}
+          authState.state === 'none' ? 'flex' : 'hidden'
+        } absolute bg-white border-2 border-subColor rounded-full w-10 justify-center items-center animate-dropDown -bottom-10 aspect-square left-1`}
       >
         <span className="text-subColor font-semibold">
-          이메일 인증을 하셔야 합니다!
+          {authState.type === 'post' ? '등록' : '취소'}
         </span>
       </div>
     </div>
