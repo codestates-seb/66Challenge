@@ -52,7 +52,7 @@ const HabitDetail: React.FC = () => {
     });
   }, [router.isReady]);
 
-  const succImgClassName = 'w-[50%]';
+  const succImgClassName = 'max-w-[50%]';
 
   return (
     <div className="habit-detail-container">
@@ -120,11 +120,11 @@ const HabitDetail: React.FC = () => {
         </p>
         <p>인증 사진의 올바른 예와 잘못된 예는 아래와 같습니다.</p>
         <div className="pt-5 flex justify-center gap-5">
-          <div className="flex flex-col">
+          <div className="flex flex-col items-center">
             <div
               className={`min-h-[150px] ${
                 habitData?.image?.failImgUrl ? '' : succImgClassName
-              } flex items-center`}
+              } flex items-center border-[1px] border-borderColor rounded flex-[1_1_50%]`}
             >
               <Image
                 className="w-full aspect-square"
@@ -144,8 +144,8 @@ const HabitDetail: React.FC = () => {
             </div>
           </div>
           {habitData?.image?.failImgUrl && (
-            <div className="flex flex-col">
-              <div className="min-h-[150px] flex items-center">
+            <div className="flex flex-col items-center">
+              <div className="min-h-[150px] flex items-center border-[1px] border-borderColor rounded flex-[1_1_50%]">
                 <Image
                   className="w-full aspect-square"
                   src={habitData.image.failImgUrl}
