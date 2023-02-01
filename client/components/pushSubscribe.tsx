@@ -4,6 +4,7 @@ import { getToken } from '../util/firebase';
 import { useAppDispatch } from '../ducks/store';
 import { notificationToken } from '../ducks/loginIdentitySlice';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -15,15 +16,19 @@ const firebaseConfig = {
 };
 export function PushSubscribe() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   } else {
     firebase.app();
   }
   const onNotificationHandle = async () => {
-    let token = await getToken();
+    const token = await getToken();
     dispatch(notificationToken(token));
     axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/webpush`, { token });
+    // axios.post('https://0280-222-110-121-44.jp.ngrok.io/message', {
+    //   message: token,
+    // });
   };
   return (
     <div>
