@@ -51,8 +51,10 @@ public class HabitDto {
         private String title;
         private String body;
         private String thumbImgUrl;
-        private double score;
+        private Double score;
         private Boolean isBooked;
+        private String challengeStatus;
+        private Integer day;
     }
 
     @Getter
@@ -61,7 +63,9 @@ public class HabitDto {
     @AllArgsConstructor
     public static class Detail {
         private String hostUsername;
+        private String hostUserImgUrl;
         private String subTitle;
+        private Long categoryId;
         private String category;
         private String bodyHTML;
         private String authType;
