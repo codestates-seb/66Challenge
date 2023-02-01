@@ -29,7 +29,7 @@ export function PushSubscribe() {
     firebase.app();
   }
   const onNotificationHandle = async () => {
-    setAuthState({ state: 'post', type: 'post' });
+    setAuthState({ state: 'none', type: 'post' });
     setTimeout(() => {
       setAuthState({ state: '', type: 'post' });
     }, 1500);
