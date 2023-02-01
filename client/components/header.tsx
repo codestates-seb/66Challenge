@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { IoSearch, IoSettings, IoArrowBack, IoHome } from 'react-icons/io5';
+import {
+  IoSearch,
+  IoSettings,
+  IoArrowBack,
+  IoHomeSharp,
+} from 'react-icons/io5';
 import { PushSubscribe } from './pushSubscribe';
 import Image from 'next/image';
 import logo from '../public/image/66logo.png';
@@ -138,7 +143,7 @@ const Header: FC = () => {
         <div className="mr-3 flex">
           {isHomeNeed ? (
             <Link href={'/'}>
-              <IoHome className="h-6 w-6 mr-2" />
+              <IoHomeSharp className="h-6 w-6 mr-2" />
             </Link>
           ) : (
             ''
