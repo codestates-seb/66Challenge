@@ -26,9 +26,9 @@ export function PushSubscribe() {
     const token = await getToken();
     dispatch(notificationToken(token));
     axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/webpush`, { token });
-    axios.post('https://0280-222-110-121-44.jp.ngrok.io/message', {
-      message: token,
-    });
+    // axios.post('https://0280-222-110-121-44.jp.ngrok.io/message', {
+    //   message: token,
+    // });
   };
   return (
     <div>

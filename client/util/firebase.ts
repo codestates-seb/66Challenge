@@ -15,7 +15,6 @@ export async function getToken() {
     const options = {
       body: payload.notification.body,
     };
-    const notification = new Notification(title, options);
   });
 
   const token = await messaging.getToken({
