@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useAppSelector } from '../../../ducks/store';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
@@ -32,6 +32,41 @@ const MyPage = () => {
   const { profileImage } = watch();
   const [profileImagePreview, setProfileImagePreview] = useState('');
 
+  const [slide, setSlide] = useState(true);
+
+  const containerRef = useRef<HTMLUListElement>(null);
+  const onWheel = (e: any) => {
+    lockScroll();
+    const { deltaY } = e;
+    const el = containerRef.current;
+    if (!el) return;
+    if (deltaY > 0 && slide === true) {
+      setSlide(false);
+      el.scrollTo({
+        left: el.scrollLeft + deltaY * 2,
+        behavior: 'smooth',
+      });
+      setSlide(true);
+    }
+    if (deltaY < 0 && slide === true) {
+      setSlide(false);
+      el.scrollTo({
+        left: el.scrollLeft + deltaY * 2,
+        behavior: 'smooth',
+      });
+      setSlide(true);
+    }
+  };
+  const lockScroll = useCallback(() => {
+    document.body.style.overflow = 'hidden';
+  }, []);
+
+  const openScroll = useCallback(() => {
+    if (document.body.style.overflow === 'hidden') {
+      document.body.style.removeProperty('overflow');
+    }
+  }, []);
+
   useEffect(() => {
     if (profileImage && profileImage.length > 0) {
       const file = profileImage[0];
@@ -43,6 +78,15 @@ const MyPage = () => {
     getUserInfo({ userId }).then((data) => {
       console.log(data);
       if (data) {
+        data.activeChallenges.sort((a, b) => {
+          if (a.progressDays > b.progressDays) {
+            return 1;
+          }
+          if (a.progressDays < b.progressDays) {
+            return -1;
+          }
+          return 0;
+        });
         setUserInfo(data);
         setProfileImagePreview(data.profileImageUrl);
       } else {
@@ -158,11 +202,18 @@ const MyPage = () => {
         <div className="mt-2 ml-4 mb-1 font-semibold w-max border-y border-gray-400 ">
           나의 습관 진행현황
         </div>
-        <div className=" mx-2 h-12 rounded-xl flex flex-nowrap overflow-x-auto">
+        <ul
+          className=" mx-2 h-12 rounded-xl flex flex-nowrap overflow-x-auto scrollbar-hide"
+          ref={containerRef}
+          onWheel={(e) => {
+            e.stopPropagation();
+            onWheel(e);
+          }}
+        >
           {userInfo.activeChallenges.map((e) => {
             const progress = Math.ceil((e.progressDays / 66) * 100);
             return (
-              <button
+              <li
                 onClick={() => {
                   handleHabitDetail(e.habitId);
                 }}
@@ -198,10 +249,10 @@ const MyPage = () => {
                     <span className="text-xs">{` (${e.progressDays}/66)`}</span>
                   </span>
                 </div>
-              </button>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
     );
   };
@@ -219,7 +270,12 @@ const MyPage = () => {
   return (
     <>
       {userInfo && (
-        <main className="flex flex-col items-stretch min-h-screen">
+        <main
+          className="flex flex-col items-stretch min-h-screen"
+          onWheel={() => {
+            openScroll();
+          }}
+        >
           <Profile />
           <ActiveChallenges />
           <MyStatics />
