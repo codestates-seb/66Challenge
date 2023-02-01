@@ -55,11 +55,11 @@ public class SecurityConfig { // https 적용
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .csrf().disable()
-                .cors(withDefaults())
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .formLogin().disable()
-                .httpBasic().disable()
+                .cors(withDefaults()) // cors().configurationSource(corsConfigurationSource()) = // 아래의 corsCofiguartionSource 소환 APP간의 출처가 다른경우 http통신을 통한 리소스 접근이 제한됨
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+                .formLogin().disable() //기본으로 제공하는 form 로그인 인증 기능 = 비활성화
+                .httpBasic().disable() //팝업창 뜨는 방식으로 뜨는 로그인 인증 기능 = 비활성화
                 .exceptionHandling()
                 .authenticationEntryPoint(new UserAuthenticationEntryPoint()) //Oauth2에서는 인증에서 실패했을때 처리하는 로직
                 .accessDeniedHandler(new UserAccessDeniedHandler()) //인가 에러 핸들링
@@ -70,7 +70,6 @@ public class SecurityConfig { // https 적용
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 // v2
 //                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 //                        .antMatchers("/*/login").permitAll()
 //                        .antMatchers("/*/logout/**").authenticated()
 //                        .antMatchers("/*/oauth2/**").permitAll()
@@ -135,6 +134,12 @@ public class SecurityConfig { // https 적용
         return http.build();
     }
 
+    /**
+     * 삭제와 생성을 할수있도록 spring bean 등록해야함.
+     * bean설정을 따로 해줘야한다. 안하면 service단에서 빈을 자동생성 못함.
+     *
+     * CORS 관련 설정
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -142,6 +147,8 @@ public class SecurityConfig { // https 적용
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("Refresh", "Authorization"));
+
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

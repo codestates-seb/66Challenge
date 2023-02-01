@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/*
+ * 로그인 실패시 거치는 헨들러
+ * 실패한 사유를 메시지에 태워보냄
+ */
 @Slf4j
 public class UserAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
@@ -20,6 +24,7 @@ public class UserAuthenticationFailureHandler implements AuthenticationFailureHa
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         log.error("# Authentication failed: {}", exception.getMessage());
         sendErrorResponse(response);
+        response.setHeader("message", exception.getMessage());
     }
 
     private void sendErrorResponse(HttpServletResponse response) throws IOException {
