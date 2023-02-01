@@ -13,9 +13,10 @@ import { useAppSelector } from '../ducks/store';
 interface ItemProps {
   title: string;
   path: string;
+  children?: JSX.Element;
 }
 
-export const MyPageMenuList = ({ email, successArr }) => {
+export const MyPageMenuList = ({ email, successArr, bookmark, hosted }) => {
   const [isCertActive, setIsCertActive] = useState(false);
   const [isCertOpen, setIsCertOpen] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
@@ -25,8 +26,7 @@ export const MyPageMenuList = ({ email, successArr }) => {
   const dispatch = useAppDispatch();
 
   const menuStyle =
-    'w-[90%] pl-5 cursor-pointer flex place-content-between h-10 text-lg items-center mb-1 w-[80%] bg-gray-500 text-white hover:bg-subColor rounded-full';
-  // 'w-[49%] pl-5 cursor-pointer flex place-content-between h-10 text-lg items-center mb-1 w-[80%] bg-mainColor text-white hover:bg-subColor rounded-full';
+    'w-[90%] pl-5 cursor-pointer flex place-content-between h-10 text-lg items-center mb-1 bg-gray-600 text-white hover:bg-subColor rounded-full hover:animate-hover';
 
   const CertDropDown = ({ success }): JSX.Element => {
     return (
@@ -79,11 +79,12 @@ export const MyPageMenuList = ({ email, successArr }) => {
 
   const handleCertOpen = (id: number): void => {};
 
-  const MenuItem = ({ path, title }: ItemProps): JSX.Element => {
+  const MenuItem = ({ path, title, children }: ItemProps): JSX.Element => {
     return (
       <Link className={menuStyle} href={path}>
         <span>{title}</span>
-        <div className="pr-5 ">
+        <div className="pr-5 flex items-center justify-center">
+          {children}
           <SlArrowRight className="inline align-middle dark:bg-white" />
         </div>
       </Link>
@@ -129,8 +130,24 @@ export const MyPageMenuList = ({ email, successArr }) => {
           children={<KaKaoShare />}
         />
       )}
-      <MenuItem title="찜한 습관" path="/user/mypage/savedhabit" />
-      <MenuItem title="내가 만든 습관" path="/user/mypage/madehabit" />
+      <MenuItem
+        title="찜한 습관"
+        path="/user/mypage/savedhabit"
+        children={
+          <span className="w-10 h-7 text-sm pt-[3px]  mr-2 rounded-full flex justify-center items-center bg-red-500 border-2">
+            {bookmark}
+          </span>
+        }
+      />
+      <MenuItem
+        title="내가 만든 습관"
+        path="/user/mypage/madehabit"
+        children={
+          <span className="w-10 h-7 text-sm pt-[3px]  mr-2 rounded-full flex justify-center items-center bg-red-500 border-2">
+            {hosted}
+          </span>
+        }
+      />
       <div
         className={menuStyle}
         onClick={() => {
@@ -138,7 +155,10 @@ export const MyPageMenuList = ({ email, successArr }) => {
         }}
       >
         <span>인증서 발급</span>
-        <div className="pr-5 ">
+        <div className="pr-5 flex items-center justify-center">
+          <span className="w-10 h-7 text-sm mr-2 pt-[3px] rounded-full flex justify-center items-center bg-red-500 border-2 ">
+            {successArr.length}
+          </span>
           <SlArrowRight className="inline align-middle dark:bg-white" />
         </div>
       </div>
@@ -154,8 +174,6 @@ export const MyPageMenuList = ({ email, successArr }) => {
           <SlArrowRight className="inline align-middle dark:bg-white" />
         </div>
       </div>
-      {/* TODO : 고객센터 추가 */}
-      <MenuItem title="고객 센터" path="/user/mypage" />
       <MenuItem title="회원 정보 수정" path="/user/mypage/edit" />
       <LogOut title="로그아웃" path="/" />
       <MenuItem
