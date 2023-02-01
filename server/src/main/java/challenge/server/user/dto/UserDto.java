@@ -259,8 +259,8 @@ public class UserDto {
         private Long challengeId;
         private String username;
         private String title;
-        private LocalDateTime createdAt;
-        private LocalDateTime completedAt;
+        private String createdAt;
+        private String completedAt;
     }
 
     @Getter
@@ -346,4 +346,30 @@ public class UserDto {
     public static class MessageRequest {
         String message;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class NumOfAuthByChallenge {
+        Long habitId;
+        String habitTitle;
+        String createdAt;
+        int numOfAuth;
+        int numOfUsedWildCard;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DaysOfFail {
+        Long habitId;
+        String habitTitle;
+        String createdAt;
+        int daysOfFail;
+    }
+
+
+
 }
