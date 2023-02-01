@@ -332,8 +332,8 @@ public class UserService {
         userDetailsDb.setBiggestProgressDays((int) DAYS.between(earliestCreatedAt, today));
 
         // [마이페이지 통계 정보] 리턴할 것 준비
-        List<NumOfAuthByChallenge> numOfAuthByChallengeList = new ArrayList<>();
-        List<DaysOfFail> daysOfFailList = new ArrayList<>();
+        List<UserDto.NumOfAuthByChallenge> numOfAuthByChallengeList = new ArrayList<>();
+        List<UserDto.DaysOfFail> daysOfFailList = new ArrayList<>();
 
         // 마이페이지 중간1 = '회원이 참여중, 참여완료한 습관목록을 서브타이틀로 표시'
         for (int i = 0; i < challenges.size(); i++) {
@@ -389,10 +389,10 @@ public class UserService {
             int numOfUsedWildCard = ch.getWildcards().size();
             LocalDateTime createdAt = ch.getCreatedAt();
 
-            NumOfAuthByChallenge numOfAuthByChallenge = NumOfAuthByChallenge.builder()
+            UserDto.NumOfAuthByChallenge numOfAuthByChallenge = UserDto.NumOfAuthByChallenge.builder()
                     .habitId(habitId)
                     .habitTitle(habitTitle)
-                    .createdAt(createdAt)
+                    .createdAt(createdAt.toString())
                     .numOfAuth(numOfAuth)
                     .numOfUsedWildCard(numOfUsedWildCard)
                     .build();
@@ -418,10 +418,10 @@ public class UserService {
             int numOfUsedWildCard = ch.getWildcards().size();
             LocalDateTime createdAt = ch.getCreatedAt();
 
-            DaysOfFail daysOfFail = DaysOfFail.builder()
+            UserDto.DaysOfFail daysOfFail = UserDto.DaysOfFail.builder()
                     .habitId(habitId)
                     .habitTitle(habitTitle)
-                    .createdAt(createdAt)
+                    .createdAt(createdAt.toString())
                     .daysOfFail(days)
                     .build();
 
@@ -544,8 +544,8 @@ public class UserService {
                 .challengeId(findChallenge.getChallengeId())
                 .username(findUser.getUsername())
                 .title(findHabit.getTitle())
-                .createdAt(findChallenge.getCreatedAt())
-                .completedAt(findChallenge.getCreatedAt().plusDays(66L))
+                .createdAt(findChallenge.getCreatedAt().toString())
+                .completedAt(findChallenge.getCreatedAt().plusDays(66L).toString())
                 .build();
 
         return successHabitCertificate;
@@ -591,6 +591,7 @@ public class UserService {
     public void reissueToken(UserDto.TokenRequest requestBody, HttpServletResponse response) throws ServletException, IOException {
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
         String refreshToken = requestBody.getRefreshToken();
+        Boolean isRefresh = requestBody.getIsRefresh(); // true(Refresh token도 Access token과 함께/같이 갱신) vs false(Access token만 갱신)
 
         // refreshToken 검증
         if (!jwtTokenizer.validateToken(refreshToken, base64EncodedSecretKey)) {
@@ -604,7 +605,14 @@ public class UserService {
         User findUser = optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.REFRESH_TOKEN_NOT_VALID)); // 로그아웃되어 DB/Redis에 refreshToken이 존재하지 않는 경우 포함
 
         // 새로운 토큰 생성
-        String newRefreshToken = jwtVerificationFilter.reissueRefreshToken(findUser, response);
+        String newAccessToken = jwtVerificationFilter.reissueAccessToken(findUser, response);
+
+        String newRefreshToken = null;
+        if (isRefresh) { // refresh token도 갱신해야 하는 경우
+            newRefreshToken = jwtVerificationFilter.reissueRefreshToken(findUser, response);
+        } else {
+            newRefreshToken = refreshToken;
+        }
 
         // DB/Redis에 새로운 refreshToken 업데이트
         findUser.setRefreshToken(newRefreshToken);

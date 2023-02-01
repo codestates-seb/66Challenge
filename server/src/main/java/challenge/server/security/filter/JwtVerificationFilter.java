@@ -142,10 +142,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     }
 
     public String reissueRefreshToken(challenge.server.user.entity.User user, HttpServletResponse response) throws ServletException, IOException {
-        String accessToken = delegateAccessToken(user);
         String refreshToken = delegateRefreshToken(user);
 
-        response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -157,5 +155,15 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 //        new ObjectMapper().writeValue(response.getOutputStream(), body);
 
         return refreshToken;
+    }
+
+    public String reissueAccessToken(challenge.server.user.entity.User user, HttpServletResponse response) {
+        String accessToken = delegateAccessToken(user);
+        response.setHeader("Authorization", "Bearer " + accessToken);
+
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpStatus.OK.value());
+
+        return accessToken;
     }
 }
