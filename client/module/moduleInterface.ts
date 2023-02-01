@@ -12,6 +12,8 @@ interface SignUpProps {
   email: string;
   username: string;
   password: string;
+  age: string;
+  gender: string;
 }
 
 interface UserGeneralProps {

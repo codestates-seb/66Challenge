@@ -104,6 +104,8 @@ const SignUp: React.FC = () => {
         email,
         password,
         username,
+        age: '44',
+        gender: 'male',
       });
       if (response === 201) {
         router.push('/user/login');
@@ -253,7 +255,7 @@ const SignUp: React.FC = () => {
               min={1}
               max={120}
               placeholder="입력"
-              {...register('age')}
+              {...register('age', {})}
               onBlur={(e) => {
                 if (
                   Number(e.target.value) < 1 ||
@@ -288,7 +290,7 @@ const SignUp: React.FC = () => {
                 setVerify({ ...verify, genderVerify: 'success' });
               }}
               className="mx-1"
-              {...register('gender')}
+              {...register('gender', {})}
             />
             <label className="mx-1 mt-1">여성</label>
           </div>

@@ -18,6 +18,8 @@ export async function postUserSignUp({
   email,
   username,
   password,
+  age,
+  gender,
 }: SignUpProps) {
   try {
     const response = await axios
@@ -25,6 +27,8 @@ export async function postUserSignUp({
         email,
         username,
         password,
+        age,
+        gender,
       })
       .then((res) => res.status);
     return response;

@@ -163,7 +163,9 @@ const MyPage = () => {
             const progress = Math.ceil((e.progressDays / 66) * 100);
             return (
               <button
-                onClick={() => handleHabitDetail(e.challengeId)}
+                onClick={() => {
+                  handleHabitDetail(e.habitId);
+                }}
                 className="h-[36px] mx-2 rounded-xl my-1 w-36 shrink-0 border p-px border-mainColor flex items-center justify-center max-h-min bg-white relative overflow-hidden z-20"
               >
                 <ProgressBar

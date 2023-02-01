@@ -39,8 +39,13 @@ const Header: FC = () => {
     function titleDetect(): void {
       for (let i = pathArr.length - 1; i >= 0; i--) {
         if (titleList[pathArr[i]]) {
-          setPageTitle(titleList[pathArr[i]]);
-          return;
+          if (pathArr[i] === 'edit' && pathArr[i - 1] === 'mypage') {
+            setPageTitle('회원정보 수정');
+            return;
+          } else {
+            setPageTitle(titleList[pathArr[i]]);
+            return;
+          }
         }
       }
       setPageTitle(null);
