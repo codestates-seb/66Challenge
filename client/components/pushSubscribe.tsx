@@ -31,7 +31,11 @@ export function PushSubscribe() {
   const onNotificationHandle = async () => {
     const token = await getToken();
     dispatch(notificationToken(token));
-    axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/webpush`, { token });
+    axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/webpush`, { token })
+      .then(() => {
+        console.log('send');
+      });
     // axios.post('https://0280-222-110-121-44.jp.ngrok.io/message', {
     //   message: token,
     // });
@@ -47,6 +51,7 @@ export function PushSubscribe() {
     //   message: token,
     // });
   };
+
   return (
     <div className="flex">
       <IoIosNotificationsOutline
