@@ -14,21 +14,13 @@ export async function postHabitReport({
 }: postReportHabitProps) {
   try {
     const response = await axios
-      .post(
-        `${process.env.NEXT_PUBLIC_SEVER_URL}/habits/${habitId}/reports`,
-        {
-          postId: habitId,
-          postType: 'HABIT',
-          reportType,
-          reporterUserId: userId,
-          reportedUserId: hostUserId,
-        },
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
-      )
+      .post(`${process.env.NEXT_PUBLIC_SEVER_URL}/habits/${habitId}/reports`, {
+        postId: habitId,
+        postType: 'HABIT',
+        reportType,
+        reporterUserId: userId,
+        reportedUserId: hostUserId,
+      })
       .then((res) => console.log(res));
     return response;
   } catch (e) {
@@ -53,11 +45,6 @@ export async function postAuthReport({
           reportType,
           reporterUserId: userId,
           reportedUserId: authorUserId,
-        },
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
         },
       )
       .then((res) => console.log(res));
@@ -84,11 +71,6 @@ export async function postReviewReport({
           reportType,
           reporterUserId: userId,
           reportedUserId: reviewerUserId,
-        },
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
         },
       )
       .then((res) => console.log(res));

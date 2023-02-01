@@ -7,15 +7,12 @@ import type {
   getHabitsInHomeProps,
   patchHabitDetailProps,
 } from './moduleInterface';
-import { getCookie } from './cookies';
-import { GrRestroomWomen } from 'react-icons/gr';
 
 export async function postHabit({ data }) {
   try {
     const response = await axios
       .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits`, data, {
         headers: {
-          // Authorization: getCookie('accessJwtToken'),
           'Content-Type': 'multipart/form-data',
         },
       })
@@ -60,11 +57,7 @@ export async function patchHabitDetail({
 export async function deleteHabit({ habitId }: deleteHabitProps) {
   try {
     const response = await axios
-      .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}`, {
-        headers: {
-          // Authorization: getCookie('accessJwtToken'),
-        },
-      })
+      .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}`)
       .then((res) => console.log(res));
     return response;
   } catch (e) {
@@ -78,11 +71,6 @@ export async function postBookMark({ habitId, userId }: habitGeneralProps) {
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/bookmarks?userId=${userId}`,
         null,
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
       .then((res) => res.data);
     return response;
@@ -95,11 +83,6 @@ export async function deleteBookMark({ habitId, userId }: habitGeneralProps) {
     const response = await axios
       .delete(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/bookmarks?userId=${userId}`,
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
       .then((res) => res.data);
     return response;
@@ -116,11 +99,6 @@ export async function postStartChallenge({
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/challenges?userId=${userId}`,
         null,
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
       .then((res) => res.status);
     return response;

@@ -34,11 +34,6 @@ export async function postHabitReview({
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews?userId=${userId}`,
         { body, score },
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
       .then((res) => console.log(res));
     return response;
@@ -54,11 +49,6 @@ export async function deleteHabitReview({
     const response = await axios
       .delete(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews/${reviewId}`,
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
       .then((res) => console.log(res));
     return response;
@@ -77,11 +67,6 @@ export async function patchHabitReview({
       .patch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews/${reviewId}`,
         { body, score, reviewId },
-        {
-          headers: {
-            // Authorization: getCookie('accessJwtToken'),
-          },
-        },
       )
       .then((res) => console.log(res));
     return response;
