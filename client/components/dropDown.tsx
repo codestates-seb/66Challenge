@@ -69,13 +69,14 @@ export function DropDown({
       return;
     }
     if (dropDownType === 'review') {
-      postReviewReport({
+      const res = postReviewReport({
         habitId,
         reviewId,
         reportType,
         userId,
         reviewerUserId,
       });
+      console.log(res);
     } else if (dropDownType === 'auth') {
       postAuthReport({ habitId, authId, reportType, userId, authorUserId });
     } else if (dropDownType === 'habit') {
@@ -111,7 +112,7 @@ export function DropDown({
   };
 
   return (
-    <div className="flex flex-col w-[100px] items-end relative">
+    <div className="flex flex-col w-[100px] items-end relative cursor-pointer">
       <MdExpandMore
         className={arrowDirection.className}
         onClick={arrowDirectionHandle}

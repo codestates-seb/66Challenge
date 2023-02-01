@@ -59,7 +59,7 @@ export const HabitElement: React.FC<HabitElementProps> = ({
   };
   return (
     <div
-      className={`habit-element-wrapper flex flex-col`}
+      className={`habit-element-wrapper flex flex-col cursor-pointer`}
       onClick={goDetailPageHandle}
     >
       <div className="habit-element-image mb-2.5 relative">

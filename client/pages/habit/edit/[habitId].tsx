@@ -161,8 +161,8 @@ const EditHabit = () => {
       setVerify({ ...verify, authTimeVerify: 'fail' });
     } else {
       const formData = new FormData();
-      const changedData = { authType: 'photo' };
-      console.log(changedData);
+      const changedData = {};
+
       if (title !== baseData.overview.title) {
         changedData['title'] = title;
       }
@@ -201,12 +201,12 @@ const EditHabit = () => {
         formData.append('failImg', failImage[0]);
       }
 
-      const response = await patchHabitDetail({
+      await patchHabitDetail({
         habitId,
         userId,
         data: formData,
       });
-      // router.push(`/habit/detail/${response?.overview?.habitId}`);
+      router.push(`/habit/detail/${baseData?.overview?.habitId}`);
       reset();
     }
   };
@@ -434,7 +434,7 @@ const EditHabit = () => {
 
         <div className="habit-auth-image-input-wrapper flex flex-col mb-5 min-h-[245px]">
           <div className="text-base font-semibold mb-1">습관 인증 사진</div>
-          <div className="flex flex-col">
+          <div className="flex flex-col justify-center items-center">
             <div className="text-center text-green-600 py-2.5 text-sm font-bold">
               올바른 인증 사례(필수)
             </div>
