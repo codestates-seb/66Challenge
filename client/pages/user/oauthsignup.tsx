@@ -5,7 +5,7 @@ import { patchUserInfo } from '../../module/userFunctionMoudules';
 import { useAppSelector } from '../../ducks/store';
 import { getUserInfo } from '../../module/userFunctionMoudules';
 import { patchOauth } from '../../module/userFunctionMoudules';
-import { formToJSON, toFormData } from 'axios';
+
 
 interface IformValue {
   gender: string;
