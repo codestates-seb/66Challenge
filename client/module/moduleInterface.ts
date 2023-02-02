@@ -37,7 +37,7 @@ interface deleteHabitProps {
 }
 
 interface habitGeneralProps extends deleteHabitProps {
-  userId: number;
+  userId?: number;
 }
 
 interface postHabitProps {
