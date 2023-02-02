@@ -7,6 +7,7 @@ import { getUserInfo } from '../../module/userFunctionMoudules';
 import { patchOauth } from '../../module/userFunctionMoudules';
 
 
+
 interface IformValue {
   gender: string;
   age: string;
@@ -29,7 +30,7 @@ const OauthSignUp: React.FC = () => {
   useEffect(() => {
     getUserInfo({ userId }).then((res) => {
       console.log(res.gender);
-      if (!res.gender === null) {
+      if (res.gender === 'MALE' || res.gender === 'FEMALE') {
         console.log('a');
         router.push('/');
       }
