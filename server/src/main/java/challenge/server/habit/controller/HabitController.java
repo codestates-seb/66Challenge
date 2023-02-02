@@ -85,8 +85,8 @@ public class HabitController {
 
         Habit habit = habitMapper.habitPatchDtoToHabit(habitPatchDto);
         if (thumbImg != null) habit.setThumbImgUrl(fileUploadService.save(thumbImg));
-        if (succImg != null) habit.setThumbImgUrl(fileUploadService.save(succImg));
-        if (failImg != null) habit.setThumbImgUrl(fileUploadService.save(failImg));
+        if (succImg != null) habit.setSuccImgUrl(fileUploadService.save(succImg));
+        if (failImg != null) habit.setFailImgUrl(fileUploadService.save(failImg));
 
         habit.setHabitId(habitId);
         Habit updateHabit = habitService.updateHabit(habit);
