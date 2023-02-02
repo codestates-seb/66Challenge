@@ -79,7 +79,7 @@ export function MainBottomNav({ param }) {
         ...menuArr,
         {
           name: 'Login',
-          icon: <AiOutlineLogin />,
+          icon: <AiOutlineLogin size={27} />,
           dis: 'translate-x-56',
           link: '/user/login',
         },
@@ -99,7 +99,7 @@ export function MainBottomNav({ param }) {
     }
   };
   return (
-    <div className="flex bg-mainColor h-[60px] px-6 w-full   fixed bottom-0 min-w-[360px] max-w-[460px] justify-center">
+    <div className="flex bg-mainColor h-[60px] px-6 w-full   fixed bottom-0 min-w-[360px] max-w-[460px] justify-center z-50">
       <ul className="flex relative items-center  justify-center">
         <span
           className={`bg-subColor duration-500 ${menus[active]?.dis} border-4 border-white h-14 w-14 absolute -top-7 -left-0 rounded-full `}

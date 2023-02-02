@@ -71,9 +71,11 @@ export async function patchHabitReview({
         `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/reviews/${reviewId}`,
         { body, score, reviewId },
       )
-      .then((res) => console.log(res));
+      .then((res) => res.status);
     return response;
   } catch (e) {
-    console.error(e);
+    if (e instanceof AxiosError) {
+      return e.response.status;
+    }
   }
 }

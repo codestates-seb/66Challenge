@@ -21,7 +21,7 @@ export function ReviewHabitBottomNav({ habitId, userId }) {
   return (
     <div className="flex bg-white h-[60px] px-6 w-full fixed bottom-0 min-w-[360px] max-w-[460px] justify-center items-center border-t">
       <button
-        className="bg-mainColor h-3/4 w-full rounded-lg  text-iconColor text-base disabled:opacity-50"
+        className="bg-mainColor h-3/4 w-full rounded-lg  text-iconColor text-base disabled:bg-footerColor"
         disabled={authState.boolean === true}
         onClick={() => {
           setIsOpen(true);
@@ -84,7 +84,7 @@ export function ReviewHabitBottomNav({ habitId, userId }) {
               </label>
               <textarea
                 id="reviewInput"
-                className="w-full h-40 border border-mainColor rounded-lg focus:outline-subColor "
+                className="w-full h-40 border border-mainColor rounded-lg focus:outline-subColor p-1 "
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
               />
@@ -95,7 +95,7 @@ export function ReviewHabitBottomNav({ habitId, userId }) {
       <div
         className={`${
           authState.state === 'none' ? 'flex' : 'hidden'
-        } absolute w-3/4 bg-white border-2 border-subColor rounded-full -top-[700px] justify-center h-10 items-center animate-dropDown`}
+        } absolute w-3/4 bg-white border-2 border-subColor rounded-full -top-[500px] justify-center h-10 items-center animate-dropDown z-[3]`}
       >
         <span className="text-subColor font-semibold">
           이미 성공 후기를 등록하셨습니다!

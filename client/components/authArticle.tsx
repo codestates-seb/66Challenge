@@ -53,6 +53,8 @@ export function AuthArticle({
             authId={authId}
             authorUserId={authorUserId}
             habitId={habitId}
+            authImageUrl={authImageUrl}
+            body={body}
           />
         </div>
         <div className="w-full border-solid  mb-2">

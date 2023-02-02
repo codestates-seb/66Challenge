@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { getCookie } from './cookies';
+import axios, { AxiosError } from 'axios';
 import { getAuthProps } from './moduleInterface';
 import { deleteAuthProps } from './moduleInterface';
 
@@ -24,5 +23,25 @@ export async function deleteHabitAuth({ authId }: deleteAuthProps) {
     return response;
   } catch (e) {
     console.error(e);
+  }
+}
+export async function patchHabitAuth({ habitId, authId, body }) {
+  try {
+    const response = await axios
+      .patch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/auths/${authId}`,
+        body,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      )
+      .then((res) => res.data);
+    return response;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      return e.response.status;
+    }
   }
 }
