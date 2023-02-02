@@ -2,6 +2,7 @@ package challenge.server.config;
 
 import challenge.server.security.handler.UserAccessDeniedHandler;
 import challenge.server.security.handler.UserAuthenticationEntryPoint;
+import challenge.server.security.jwt.JwtTokenProvider;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.oauth.handler.OAuth2MemberSuccessHandler;
 import challenge.server.security.oauth.service.CustomOAuth2UserService;
@@ -11,20 +12,27 @@ import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig { // https 적용
     private final JwtTokenizer jwtTokenizer;
+    private final JwtTokenProvider jwtTokenProvider;
     private final CustomAuthorityUtils authorityUtils;
 
     private final CustomOAuth2UserService customOAuth2UserService;
@@ -88,7 +96,7 @@ public class SecurityConfig { // https 적용
 //                .mvcMatchers(GET, "/**/users/emails/**").permitAll()
 //                .mvcMatchers(GET, "/users/email-verifications/**").permitAll()
 //                .mvcMatchers(POST, "/users/**").permitAll()
-//                .mvcMatchers(GET, "/users/**").authenticated()
+//                .mvcMatchers(GET, "/users/**").hasAnyRole("USER")
 //                .mvcMatchers(PATCH, "/users/**").authenticated()
 //                .mvcMatchers(DELETE, "/users/**").authenticated()
 //                .mvcMatchers("/challenges/**").authenticated()
@@ -106,7 +114,10 @@ public class SecurityConfig { // https 적용
 //                .mvcMatchers(DELETE, "/habits/**").authenticated()
 //                .mvcMatchers(GET, "/habits/**").permitAll()
 //                .anyRequest().permitAll()
+//                .and()
 //                .authenticationManager(new CustomAuthenticationManager()) // 필요 없는 듯
+                .apply(new JwtSecurityConfig(jwtTokenProvider))
+                .and()
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, userService))
                         .userInfoEndpoint() // oauth2 로그인 성공 후 가져올 때의 설정들

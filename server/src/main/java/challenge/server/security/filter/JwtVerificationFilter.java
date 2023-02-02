@@ -27,63 +27,63 @@ import java.util.Map;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class JwtVerificationFilter extends OncePerRequestFilter {
-    private final JwtTokenizer jwtTokenizer;
-    private final CustomAuthorityUtils authorityUtils;
-    private final LogoutListService logoutListService;
-
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try {
-            String jwt = resolveToken(request);
-            String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-
-            if (StringUtils.hasText(jwt) && jwtTokenizer.validateToken(jwt, base64EncodedSecretKey)) {
-                LogoutList item = logoutListService.findByAccessToken(jwt);
-                if (item == null) {
-                    Map<String, Object> claims = verifyJws(request);
-                    setAuthenticationToContext(claims);
-                }
-            }
-        } catch (SignatureException se) {
-            request.setAttribute("exception", se);
-        } catch (ExpiredJwtException ee) {
-            request.setAttribute("exception", ee);
-        } catch (Exception e) {
-            request.setAttribute("exception", e);
-        }
-
-        filterChain.doFilter(request, response);
-    }
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String authorization = request.getHeader("Authorization");
-        return authorization == null || !authorization.startsWith("Bearer");
-    }
-
-    private Map<String, Object> verifyJws(HttpServletRequest request) {
-        String jws = request.getHeader("Authorization").replace("Bearer ", "");
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
-        return claims;
-    }
-
-    private void setAuthenticationToContext(Map<String, Object> claims) {
-        String username = (String) claims.get("username");
-        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List) claims.get("roles"));
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-            return bearerToken.substring(7); // 0~6번째 글자 제외한 문자열
-        }
-
-        return null;
-    }
+public class JwtVerificationFilter /*extends OncePerRequestFilter*/ {
+//    private final JwtTokenizer jwtTokenizer;
+//    private final CustomAuthorityUtils authorityUtils;
+//    private final LogoutListService logoutListService;
+//
+//
+//    @Override
+//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+//        try {
+//            String jwt = resolveToken(request);
+//            String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+//
+//            if (StringUtils.hasText(jwt) && jwtTokenizer.validateToken(jwt, base64EncodedSecretKey)) {
+//                LogoutList item = logoutListService.findByAccessToken(jwt);
+//                if (item == null) {
+//                    Map<String, Object> claims = verifyJws(request);
+//                    setAuthenticationToContext(claims);
+//                }
+//            }
+//        } catch (SignatureException se) {
+//            request.setAttribute("exception", se);
+//        } catch (ExpiredJwtException ee) {
+//            request.setAttribute("exception", ee);
+//        } catch (Exception e) {
+//            request.setAttribute("exception", e);
+//        }
+//
+//        filterChain.doFilter(request, response);
+//    }
+//
+//    @Override
+//    protected boolean shouldNotFilter(HttpServletRequest request) {
+//        String authorization = request.getHeader("Authorization");
+//        return authorization == null || !authorization.startsWith("Bearer");
+//    }
+//
+//    private Map<String, Object> verifyJws(HttpServletRequest request) {
+//        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+//        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+//        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
+//        return claims;
+//    }
+//
+//    private void setAuthenticationToContext(Map<String, Object> claims) {
+//        String username = (String) claims.get("username");
+//        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List) claims.get("roles"));
+//        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//    }
+//
+//    private String resolveToken(HttpServletRequest request) {
+//        String bearerToken = request.getHeader("Authorization");
+//
+//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+//            return bearerToken.substring(7); // 0~6번째 글자 제외한 문자열
+//        }
+//
+//        return null;
+//    }
 }

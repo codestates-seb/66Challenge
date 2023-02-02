@@ -4,6 +4,7 @@ import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
 import challenge.server.security.dto.SecurityDto;
 import challenge.server.security.jwt.JwtTokenizer;
+import challenge.server.security.utils.SecurityUtils;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.LogoutList;
 import challenge.server.user.entity.User;
@@ -207,4 +208,8 @@ public class SecurityService {
         UserDetails principal = new org.springframework.security.core.userdetails.User(claims.getBody().getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
+
+//    public UserDto.SimpleResponse getUserAuthorities() {
+//        return UserDto.SimpleResponse.from(SecurityUtils.getCurrentUsername().flatMap(userRepository::findByEmail).orElse(null));
+//    }
 }

@@ -11,13 +11,13 @@ import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.repository.HabitRepository;
 import challenge.server.habit.service.HabitService;
+import challenge.server.security.filter.JwtAuthenticationFilter;
 import challenge.server.security.filter.JwtVerificationFilter;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.security.utils.LoggedInUserInfoUtils;
 import challenge.server.user.dto.UserDto;
-import challenge.server.user.entity.EmailVerification;
-import challenge.server.user.entity.User;
+import challenge.server.user.entity.*;
 import challenge.server.user.mapper.UserMapperImpl;
 import challenge.server.user.repository.EmailVerificationRepository;
 import challenge.server.user.repository.LogoutListRepository;
@@ -25,12 +25,16 @@ import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -289,10 +293,10 @@ public class UserService {
     // 회원 개인 정보 통합 조회(마이페이지)
     public UserDto.UserDetailsDb findUserDetails(Long userId) {
         // '현재 로그인한 회원 == 요청 보낸 회원'인지 확인 = 필요 없는 로직
-//        Long loggedInUserId = verifyLoggedInUser(userId);
+        Long loggedInUserId = verifyLoggedInUser(userId);
         // 해당 회원의 기본 정보를 DB에서 받아옴 = select 쿼리1
-//        User findUser = findUser(loggedInUserId);
-        User findUser = findVerifiedUser(userId);
+        User findUser = findUser(loggedInUserId);
+//        User findUser = findVerifiedUser(userId);
 
         // Querydsl 시도
 //        UserDto.UserDetailsDb userDetailsDb = userRepository.findUserDetails(userId);

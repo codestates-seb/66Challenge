@@ -17,6 +17,6 @@
 //@Entity
 //public class UserRole extends BaseTimeEntity {
 //    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long userRoleId;
+//    @Column(name = "user_role_name")
+//    private String userRoleName;
 //}
