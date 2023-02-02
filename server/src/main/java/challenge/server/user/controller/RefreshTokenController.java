@@ -1,7 +1,7 @@
 package challenge.server.user.controller;
 
+import challenge.server.security.service.SecurityService;
 import challenge.server.user.dto.UserDto;
-import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,11 +23,11 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class RefreshTokenController {
-    private final UserService userService;
+    private final SecurityService securityService;
 
     @PostMapping
     public ResponseEntity reissueToken(@Valid @RequestBody UserDto.TokenRequest requestBody, HttpServletResponse response) throws ServletException, IOException {
-        userService.reissueToken(requestBody, response);
+        securityService.reissueToken(requestBody, response);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

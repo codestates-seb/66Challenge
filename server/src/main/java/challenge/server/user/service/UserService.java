@@ -11,13 +11,13 @@ import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.repository.HabitRepository;
 import challenge.server.habit.service.HabitService;
-import challenge.server.security.filter.JwtAuthenticationFilter;
 import challenge.server.security.filter.JwtVerificationFilter;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.security.utils.LoggedInUserInfoUtils;
 import challenge.server.user.dto.UserDto;
-import challenge.server.user.entity.*;
+import challenge.server.user.entity.EmailVerification;
+import challenge.server.user.entity.User;
 import challenge.server.user.mapper.UserMapperImpl;
 import challenge.server.user.repository.EmailVerificationRepository;
 import challenge.server.user.repository.LogoutListRepository;
@@ -25,16 +25,12 @@ import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -584,77 +580,6 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-    }
-
-    @Transactional
-    public void reissueToken(UserDto.TokenRequest requestBody, HttpServletResponse response) throws ServletException, IOException {
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        String refreshToken = requestBody.getRefreshToken();
-        Boolean isRefresh = requestBody.getIsRefresh(); // true(Refresh token도 Access token과 함께/같이 갱신) vs false(Access token만 갱신)
-
-        // refreshToken 검증
-        if (!jwtTokenizer.validateToken(refreshToken, base64EncodedSecretKey)) {
-            throw new BusinessLogicException(ExceptionCode.REFRESH_TOKEN_NOT_VALID);
-        }
-
-        // accessToken에서 user email 가져옴
-//        Authentication authentication = jwtVerificationFilter.getAuthentication(accessToken, base64EncodedSecretKey);
-        // 2023.1.30(월) 16h accessToken을 안 받기로 함 -> 로그인 시 users 테이블에 저장해둔 refreshToken으로 회원 검색
-        Optional<User> optionalUser = userRepository.findByRefreshToken(refreshToken);
-        User findUser = optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.REFRESH_TOKEN_NOT_VALID)); // 로그아웃되어 DB/Redis에 refreshToken이 존재하지 않는 경우 포함
-
-        // 새로운 토큰 생성
-        String newAccessToken = jwtVerificationFilter.reissueAccessToken(findUser, response);
-
-        String newRefreshToken = null;
-        if (isRefresh) { // refresh token도 갱신해야 하는 경우
-            newRefreshToken = jwtVerificationFilter.reissueRefreshToken(findUser, response);
-        } else {
-            newRefreshToken = refreshToken;
-        }
-
-        // DB/Redis에 새로운 refreshToken 업데이트
-        findUser.setRefreshToken(newRefreshToken);
-        userRepository.save(findUser); // dirty checking으로 별도 저장 안 해도 된다?
-    }
-
-    @Transactional
-    public void logout(UserDto.LogoutRequest requestBody) {
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        String accessToken = requestBody.getAccessToken().substring(7);
-        String refreshToken = requestBody.getRefreshToken();
-
-        // accessToken 검증
-        if (!jwtTokenizer.validateToken(accessToken, base64EncodedSecretKey)) {
-            throw new BusinessLogicException(ExceptionCode.ACCESS_TOKEN_NOT_VALID);
-        }
-
-        // accessToken에서 user email 가져옴
-        Authentication authentication = jwtVerificationFilter.getAuthentication(accessToken, base64EncodedSecretKey);
-
-        // DB/Redis에서 user email을 기반으로 저장된 refreshToken 값을 가져옴
-        User findUser = findByEmail(authentication.getName());
-        String refreshTokenInDb = findUser.getRefreshToken();
-
-        // DB/Redis에 refreshToken이 존재하는 경우 삭제
-        if (refreshTokenInDb != null) {
-            findUser.setRefreshToken(null);
-        }
-
-        // 해당 accessToken 유효시간 가지고 와서 blackList로 저장하기
-        Long expiration = jwtTokenizer.getExpirationFromToken(accessToken, base64EncodedSecretKey);
-
-        LogoutList logoutList = LogoutList.builder()
-                .accessToken(accessToken)
-                .expiration(expiration).
-                build();
-
-        logoutListRepository.save(logoutList);
-    }
-
-    public User findUserByUsername(String username) {
-        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 }
