@@ -68,7 +68,8 @@ const HabitDetail: React.FC = () => {
     });
   }, [router.isReady]);
 
-  const progressValue = Math.ceil((habitData?.overview?.day / 66) * 100);
+  // const progressValue = Math.ceil((habitData?.overview?.day / 66) * 100);
+  const progressValue = 60;
   const progress = progressValue > 100 ? 100 : progressValue;
   const succImgClassName = 'max-w-[50%]';
 
@@ -182,7 +183,7 @@ const HabitDetail: React.FC = () => {
           {habitData?.detail?.challengeStatus === 'CHALLENGE' && (
             <div className="habit-challenge-message-wrapper relative">
               <ProgressSticker
-                className="absolute -top-[5px] -translate-x-1/2 z-[2]"
+                className="absolute -top-[5px] -translate-x-1/2"
                 left={progress}
               >
                 <BiRun size="30px" color="#222" />
@@ -215,10 +216,10 @@ const HabitDetail: React.FC = () => {
                         : 'bg-green-800'
                     } h-[26px] w-[100%] rounded-l-full ${
                       progress < 100 ? 'rounded-r-none' : 'rounded-r-full'
-                    } animate-gage z-[1] anim absolute left-0`}
+                    } animate-gage anim absolute left-0`}
                     width={progress}
                   ></ProgressBar>
-                  <div className="w-full z-[3] text-center text-sm font-semibold pt-1 ">
+                  <div className="w-full text-center text-sm font-semibold pt-1 z-[1]">
                     {progress}%
                   </div>
                 </div>
