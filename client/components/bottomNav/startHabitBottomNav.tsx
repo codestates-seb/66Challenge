@@ -56,6 +56,7 @@ export function StartHabitBottomNav({
       setIsOpen(true);
     }
   };
+  console.log(challengeStatus);
   useEffect(() => {
     if (isBooked === true) {
       setIsBookMark({ boolean: true, animate: defaultClassName });
@@ -81,9 +82,15 @@ export function StartHabitBottomNav({
         onClick={() => {
           startHabitHandle();
         }}
-        disabled={challengeStatus !== 'NONE' || isStart === true}
+        disabled={
+          challengeStatus == 'CHALLENGE' ||
+          isStart === true ||
+          challengeStatus !== 'FAIL'
+        }
       >
-        {challengeStatus !== 'NONE' || isStart === true
+        {challengeStatus === 'CHALLENGE' ||
+        isStart === true ||
+        challengeStatus !== 'FAIL'
           ? '진행 중인 습관'
           : '습관 시작하기'}
       </button>
