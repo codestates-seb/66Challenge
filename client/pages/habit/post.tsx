@@ -88,6 +88,7 @@ const Post = () => {
   useEffect(() => {
     if (failImage && failImage.length > 0) {
       const file = failImage[0];
+      setVerify({ ...verify, failImageVerify: 'success' });
       setFailImagePreview(URL.createObjectURL(file));
     }
   }, [failImage]);
@@ -107,11 +108,14 @@ const Post = () => {
     bodyVerify: '',
     authTimeVerify: 'success',
     successImageVerify: '',
+    failImageVerify: '',
     agreeVerify: 'fail',
   });
 
-  const titleRegExp = /^[A-Za-z0-9가-힇\s]{5,30}$/;
-  const subtitleRegExp = /^[A-Za-z0-9가-힇\s]{5,10}$/;
+  const titleRegExp =
+    /^[A-Za-z0-9가-힇\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]{5,30}$/;
+  const subtitleRegExp =
+    /^[A-Za-z0-9가-힇\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]{5,10}$/;
 
   const blurHandle = (verifyBoolean: boolean, verifyKey: string): void => {
     if (verifyBoolean) {
@@ -154,6 +158,8 @@ const Post = () => {
       setVerify({ ...verify, authTimeVerify: 'fail' });
     } else if (successImage.length === 0) {
       setVerify({ ...verify, successImageVerify: 'fail' });
+    } else if (failImage.length === 0) {
+      setVerify({ ...verify, failImageVerify: 'fail' });
     } else {
       const formData = new FormData();
       formData.append(
@@ -411,21 +417,21 @@ const Post = () => {
           <div className="text-base font-semibold mb-1">습관 인증 사진</div>
           <div className="flex flex-col justify-center items-center">
             <div className="text-center text-green-600 py-2.5 text-sm font-bold">
-              올바른 인증 사례(필수)
+              올바른 인증 사례
             </div>
             <FileUploader
               imgFilePreview={successImagePreview}
               register={register('successImage')}
             />
             <div className="text-center text-rose-600 pt-5 pb-2.5 text-sm font-bold">
-              잘못된 인증 사례(선택)
+              잘못된 인증 사례
             </div>
             <FileUploader
               imgFilePreview={failImagePreview}
               register={register('failImage')}
-              disabled={failImagePreview !== ''}
+              // disabled={failImagePreview !== ''}
             />
-            {failImagePreview !== '' ? (
+            {/* {failImagePreview !== '' ? (
               <div className=" flex justify-center w-[50%] items-center bg-mainColor rounded-full h-[40px] mb-5 mt-5">
                 <span
                   className="text-base text-iconColor"
@@ -434,7 +440,7 @@ const Post = () => {
                   삭제하기
                 </span>
               </div>
-            ) : null}
+            ) : null} */}
           </div>
           <span className="pt-2.5 text-sm text-center font-semibold">
             사진의 가로 ・ 세로의 비율은 1:1이 권장됩니다.
