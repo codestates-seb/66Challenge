@@ -83,7 +83,9 @@ export function StartHabitBottomNav({
         }}
         disabled={challengeStatus !== 'NONE' || isStart === true}
       >
-        시작하기
+        {challengeStatus !== 'NONE' || isStart === true
+          ? '진행 중인 습관'
+          : '습관 시작하기'}
       </button>
       {isOpen && (
         <Modal

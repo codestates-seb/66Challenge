@@ -26,8 +26,10 @@ const EditHabit = ({ habitId, data }) => {
   const router = useRouter();
   const [baseData, setBaseData] = useState<habitDataType>(data);
 
-  const [bodyData, setBodyData] = useState<string>('');
-  const [bodyHTMLData, setBodyHTMLData] = useState<string>('');
+  const [bodyData, setBodyData] = useState<string>(data.overview.body);
+  const [bodyHTMLData, setBodyHTMLData] = useState<string>(
+    data.detail.bodyHTML,
+  );
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, false] }],
@@ -92,6 +94,7 @@ const EditHabit = ({ habitId, data }) => {
 
   useEffect(() => {
     if (failImage && failImage.length > 0) {
+      setVerify({ ...verify, failImageVerify: 'success' });
       const file = failImage[0];
       setFailImagePreview(URL.createObjectURL(file));
     }
@@ -112,11 +115,14 @@ const EditHabit = ({ habitId, data }) => {
     bodyVerify: 'success',
     authTimeVerify: 'success',
     successImageVerify: 'success',
+    failImageVerify: 'success',
     agreeVerify: 'fail',
   });
 
-  const titleRegExp = /^[A-Za-z0-9가-힇\s]{5,30}$/;
-  const subtitleRegExp = /^[A-Za-z0-9가-힇\s]{5,10}$/;
+  const titleRegExp =
+    /^[A-Za-z0-9가-힇\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]{5,30}$/;
+  const subtitleRegExp =
+    /^[A-Za-z0-9가-힇\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]{5,10}$/;
 
   const blurHandle = (verifyBoolean: boolean, verifyKey: string): void => {
     if (verifyBoolean) {
@@ -151,13 +157,15 @@ const EditHabit = ({ habitId, data }) => {
       authStartTime = baseData.detail.authStartTime;
     }
 
+    console.log('click:', bodyData);
+
     if (titleRegExp.test(title) === false) {
       setVerify({ ...verify, titleVerify: 'fail' });
     } else if (subtitleRegExp.test(subtitle) === false) {
       setVerify({ ...verify, subtitleVerify: 'fail' });
     } else if (category === 'default') {
       setVerify({ ...verify, categoryVerify: 'fail' });
-    } else if (bodyData.length < 50 === false) {
+    } else if (bodyData.length < 50) {
       setVerify({ ...verify, bodyVerify: 'fail' });
     } else if (authStartTime < authEndTime === false) {
       setVerify({ ...verify, authTimeVerify: 'fail' });
@@ -199,7 +207,10 @@ const EditHabit = ({ habitId, data }) => {
       if (successImagePreview !== baseData.image.succImgUrl) {
         formData.append('succImg', successImage[0]);
       }
-      if (failImagePreview !== baseData.image.failImgUrl) {
+      if (
+        failImagePreview !== baseData.image.failImgUrl &&
+        failImagePreview !== null
+      ) {
         formData.append('failImg', failImage[0]);
       }
 
@@ -438,21 +449,21 @@ const EditHabit = ({ habitId, data }) => {
           <div className="text-base font-semibold mb-1">습관 인증 사진</div>
           <div className="flex flex-col justify-center items-center">
             <div className="text-center text-green-600 py-2.5 text-sm font-bold">
-              올바른 인증 사례(필수)
+              올바른 인증 사례
             </div>
             <FileUploader
               imgFilePreview={successImagePreview}
               register={register('successImage')}
             />
             <div className="text-center text-rose-600 pt-5 pb-2.5 text-sm font-bold">
-              잘못된 인증 사례(선택)
+              잘못된 인증 사례
             </div>
             <FileUploader
               imgFilePreview={failImagePreview}
               register={register('failImage')}
-              disabled={failImagePreview !== ''}
+              // disabled={failImagePreview !== ''}
             />
-            {failImagePreview !== '' ? (
+            {/* {failImagePreview !== '' ? (
               <div className=" flex justify-center w-[50%] items-center bg-mainColor rounded-full h-[40px] mb-5 mt-5">
                 <span
                   className="text-base text-iconColor"
@@ -461,7 +472,7 @@ const EditHabit = ({ habitId, data }) => {
                   삭제하기
                 </span>
               </div>
-            ) : null}
+            ) : null} */}
           </div>
           <span className="pt-2.5 text-sm text-center font-semibold">
             사진의 가로 ・ 세로의 비율은 1:1이 권장됩니다.
