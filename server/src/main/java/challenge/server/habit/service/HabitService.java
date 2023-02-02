@@ -8,7 +8,11 @@ import challenge.server.habit.entity.AgeRatio;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.entity.SexRatio;
 import challenge.server.habit.entity.StatusRatio;
+import challenge.server.habit.mapper.HabitMapperImpl;
 import challenge.server.habit.repository.HabitRepository;
+import challenge.server.user.entity.User;
+import challenge.server.user.repository.UserRepository;
+import challenge.server.user.service.UserService;
 import challenge.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -25,18 +29,26 @@ public class HabitService {
     private final CustomBeanUtils<Habit> beanUtils;
     private final HabitRepository habitRepository;
     private final FileUploadService fileUploadService;
+    private final HabitMapperImpl habitMapper;
+    private final UserRepository userRepository;
 
     @Transactional
-    public Habit createHabit(Habit habit) {
+    public Habit createHabit(Habit habit, Long hostId) {
+        User user = userRepository.findById(hostId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+
+        habit.setHost(user);
+
         return habitRepository.save(habit);
     }
 
     @Transactional
-    public Habit updateHabit(Habit habit) {
+    public HabitDto.ResponseDetail updateHabit(Habit habit, Long userId) {
         Habit findHabit = findVerifiedHabit(habit.getHabitId());
         Habit updatingHabit = beanUtils.copyNonNullProperties(habit, findHabit);
+        Habit saveHabit = habitRepository.save(updatingHabit);
 
-        return habitRepository.save(updatingHabit);
+        return habitMapper.habitToHabitResponseDetailDto(saveHabit, userId);
     }
 
     @Transactional

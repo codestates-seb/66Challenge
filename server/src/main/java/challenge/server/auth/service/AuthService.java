@@ -30,7 +30,7 @@ public class AuthService {
     private final AuthMapper authMapper;
 
     @Transactional
-    public Auth createAuth(Auth auth, Challenge challenge) {
+    public AuthDto.Response createAuth(Auth auth, Challenge challenge) {
         auth.setChallenge(challenge);
         challenge.updatePostedAt(LocalDateTime.now());
 
@@ -39,16 +39,21 @@ public class AuthService {
         if (challenge.successCheck()) {
             challenge.changeStatus(SUCCESS);
         }
+        Auth saveAuth = authRepository.save(auth);
+        AuthDto.Response response = authMapper.toDto(saveAuth);
 
-        return authRepository.save(auth);
+        return response;
     }
 
     @Transactional
-    public Auth updateAuth(Auth auth) {
+    public AuthDto.Response updateAuth(Auth auth) {
         Auth findAuth = findVerifiedAuth(auth.getAuthId());
         fileUploadService.delete(findAuth.getAuthImageUrl());
+        Auth changeAuth = beanUtils.copyNonNullProperties(auth, findAuth);
+        Auth updateAuth = authRepository.save(changeAuth);
 
-        return beanUtils.copyNonNullProperties(auth, findAuth);
+
+        return authMapper.toDto(updateAuth);
     }
 
     public Auth findAuth(Long authId) {

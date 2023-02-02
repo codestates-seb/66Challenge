@@ -70,7 +70,7 @@ public class HabitController {
         habit.setSuccImgUrl(fileUploadService.save(succImg));
         if(failImg!=null) habit.setFailImgUrl(fileUploadService.save(failImg));
 
-        Habit createHabit = habitService.createHabit(habit);
+        Habit createHabit = habitService.createHabit(habit, habitPostDto.getHostUserId());
 
         return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(createHabit, habitPostDto.getHostUserId()), HttpStatus.CREATED);
     }
@@ -87,10 +87,9 @@ public class HabitController {
         if (thumbImg != null) habit.setThumbImgUrl(fileUploadService.save(thumbImg));
         if (succImg != null) habit.setSuccImgUrl(fileUploadService.save(succImg));
         if (failImg != null) habit.setFailImgUrl(fileUploadService.save(failImg));
-
         habit.setHabitId(habitId);
-        Habit updateHabit = habitService.updateHabit(habit);
-        return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(updateHabit, userId), HttpStatus.OK);
+
+        return new ResponseEntity(habitService.updateHabit(habit, userId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{habit-id}")
@@ -108,6 +107,7 @@ public class HabitController {
         List<Habit> habits;
         if (keyword == null) habits = habitService.findAll(lastId, size);
         else habits = habitService.findAllByKeyword(lastId, keyword, size);
+
         return new ResponseEntity(habitMapper.habitsToHabitResponseDtos(habits, userId), HttpStatus.OK);
     }
 
@@ -181,8 +181,7 @@ public class HabitController {
                                                 @RequestParam @Positive Long userId,
                                                 @RequestParam String status) {
 
-        Challenge changeChallnge = challengeService.changeStatus(userId, habitId, status);
-        return new ResponseEntity<>(challengeMapper.toDto(changeChallnge), HttpStatus.OK);
+        return new ResponseEntity<>(challengeService.changeStatus(userId, habitId, status), HttpStatus.OK);
     }
 
     // 습관 조회 - 통계 탭 - 통계 DTO
@@ -220,10 +219,8 @@ public class HabitController {
                                       @RequestBody @Valid ReviewDto.Patch reviewPatchDto) {
         Review review = reviewMapper.toEntity(reviewPatchDto);
         review.setReviewId(reviewId);
-        Review updateReview = reviewService.updateReview(review);
-        habitService.calcAvgScore(updateReview.getHabit().getHabitId());
 
-        return new ResponseEntity(reviewMapper.toDto(updateReview), HttpStatus.OK);
+        return new ResponseEntity(reviewService.updateReview(review), HttpStatus.OK);
     }
 
     // 습관 조회 - 후기 탭 - 후기 삭제
@@ -260,9 +257,8 @@ public class HabitController {
                                      @RequestPart("data") @Valid AuthDto.Patch patchDto) {
         Auth auth = Auth.builder().authId(authId).body(patchDto.getBody()).build();
         if (multipartFile != null) auth.changeImageUrl(fileUploadService.save(multipartFile));
-        Auth updateAuth = authService.updateAuth(auth);
 
-        return new ResponseEntity<>(authMapper.toDto(updateAuth), HttpStatus.OK);
+        return new ResponseEntity<>(authService.updateAuth(auth), HttpStatus.OK);
     }
 
     @DeleteMapping("/{habit-id}/auths/{auth-id}")
