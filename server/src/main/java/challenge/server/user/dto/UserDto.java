@@ -155,6 +155,8 @@ public class UserDto {
         private Long userId;
         private String email;
         private String username;
+        private Integer age;
+        private String gender;
         private String profileImageUrl;
         //        private LocalDateTime earliestCreatedAt;
         private int biggestProgressDays;

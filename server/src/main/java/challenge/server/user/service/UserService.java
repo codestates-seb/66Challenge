@@ -329,6 +329,8 @@ public class UserService {
         userDetailsDb.setUserId(findUser.getUserId());
         userDetailsDb.setEmail(findUser.getEmail());
         userDetailsDb.setUsername(findUser.getUsername());
+        userDetailsDb.setAge(findUser.getAge());
+        userDetailsDb.setGender(findUser.getGender().toString());
         userDetailsDb.setProfileImageUrl(findUser.getProfileImageUrl());
         userDetailsDb.setBiggestProgressDays((int) DAYS.between(earliestCreatedAt, today));
 
