@@ -55,7 +55,7 @@ export const SlideBanner: React.FC<SlideBannerProps> = ({
   };
 
   return (
-    <div className="slidebanner-container relative overflow-hidden">
+    <div className="slidebanner-container relative overflow-hidden cursor-pointer">
       <Flicking
         className={`[&>div]:flex ${maxHeight} min-w-[360px]`}
         plugins={plugins}

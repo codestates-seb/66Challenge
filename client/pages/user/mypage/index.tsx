@@ -469,6 +469,7 @@ const MyPage = () => {
         ).length,
       });
     }
+    newD[0].실패 -= _.daysOfFailList.filter((e) => e.daysOfFail <= 0).length;
     newD[11].name = '결과';
     newD[11].성공 = chalSuccess.length;
     newD[11].실패 = -_.daysOfFailList.length;
@@ -562,7 +563,11 @@ const MyPage = () => {
               <label className="text-base text-mainColor font-semibold mb-2">
                 현재 진행중인 카테고리
               </label>
-              <ResponsiveContainer width="70%" height={270} className="text-sm">
+              <ResponsiveContainer
+                width="100%"
+                height={270}
+                className="text-sm"
+              >
                 <RadarChart outerRadius={110} data={cateData}>
                   <PolarGrid />
                   <PolarAngleAxis dataKey="subject" />
