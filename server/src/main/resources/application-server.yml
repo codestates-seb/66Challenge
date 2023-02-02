@@ -46,17 +46,17 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
         format_sql: true  # SQL pretty print
     defer-datasource-initialization: true
 #    open-in-view: false
-  sql:
-    init:
-      data-locations: classpath*:db/h2/data.sql
-      mode: always
+#  sql:
+#    init:
+#      data-locations: classpath*:db/h2/data.sql
+#      mode: always
   servlet:
     multipart:
       maxFileSize: 10MB # 파일 하나의 최대 크기
