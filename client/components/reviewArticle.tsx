@@ -65,6 +65,8 @@ export const ReviewArticle = ({
               reviewId={reviewId}
               reviewerUserId={reviewerUserId}
               habitId={habitId}
+              score={score}
+              body={body}
             />
           </div>
           <div className=" w-full box-border flex flex-wrap">

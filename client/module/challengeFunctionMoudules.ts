@@ -32,19 +32,7 @@ export async function deleteAuth({ challengeId, authId }) {
     console.error(e);
   }
 }
-export async function patchAuths({ challengeId, authId, body }) {
-  try {
-    const response = await axios
-      .patch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/${challengeId}/auths/${authId}`,
-        { authId, body },
-      )
-      .then((res) => console.log(res));
-    return response;
-  } catch (e) {
-    console.error(e);
-  }
-}
+
 export async function getUserSuccessChallenges(userId: number) {
   try {
     const response = await axios
