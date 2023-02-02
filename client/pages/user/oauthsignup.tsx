@@ -33,6 +33,7 @@ const OauthSignUp: React.FC = () => {
         console.log('a');
         router.push('/');
       }
+      console.log('b');
     });
   }, []);
   const inputContainerDefaultClassName: string =
