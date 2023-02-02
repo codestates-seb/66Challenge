@@ -3,13 +3,15 @@ package challenge.server.habit.service;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
 import challenge.server.file.service.FileUploadService;
+import challenge.server.habit.dto.HabitDto;
+import challenge.server.habit.entity.AgeRatio;
 import challenge.server.habit.entity.Habit;
+import challenge.server.habit.entity.SexRatio;
+import challenge.server.habit.entity.StatusRatio;
 import challenge.server.habit.repository.HabitRepository;
 import challenge.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,11 +77,6 @@ public class HabitService {
         return habitRepository.findAllByNewest(lastHabitId, size);
     }
 
-    // 특정 사용자(작성자)가 만든 습관 조회
-    public List<Habit> findAllByUser(Long lastHabitId, Long userId, int size) {
-        return habitRepository.findByHostUserId(lastHabitId, userId, size);
-    }
-
     @Transactional
     public void deleteHabit(Long habitId) {
         Habit habit = findVerifiedHabit(habitId);
@@ -87,6 +84,19 @@ public class HabitService {
         fileUploadService.delete(habit.getSuccImgUrl());
         fileUploadService.delete(habit.getFailImgUrl());
         habitRepository.delete(habit);
+    }
+
+    @Transactional
+    public HabitDto.ResponseStatistics makeHabitStatistics(Habit habit) {
+        if (habit == null) return null;
+        AgeRatio ageRatio = AgeRatio.builder().build();
+        SexRatio sexRatio = SexRatio.builder().build();
+        StatusRatio statusRatio = StatusRatio.builder().build();
+        return HabitDto.ResponseStatistics.builder()
+                .ageRatio(ageRatio.makeStatistics(habit))
+                .statusRatio(statusRatio.makeStatistics(habit))
+                .sexRatio(sexRatio.makeStatistics(habit))
+                .build();
     }
 
     public Habit findVerifiedHabit(Long habitId) {
