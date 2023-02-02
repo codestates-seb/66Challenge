@@ -19,7 +19,7 @@ module.exports = {
       },
 
       backgroundColor: {
-        footerColor: '#F5F5F5',
+        footerColor: '#e5e5e5',
         checkButton: '#f89500',
         signUpButton: 'black',
         footerMemberTextColor: '#0d9488',
