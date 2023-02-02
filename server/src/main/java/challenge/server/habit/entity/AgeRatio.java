@@ -29,8 +29,6 @@ public class AgeRatio {
 
         public AgeRatio makeStatistics(Habit habit) {
         if (habit != null) {
-            int totalChallengeCount = habit.getChallenges().size();
-
             int count = 0;
             for (Challenge c3 : habit.getChallenges()) {
                 int a2 = c3.getUser().getAge();

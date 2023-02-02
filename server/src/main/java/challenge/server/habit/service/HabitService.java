@@ -87,7 +87,9 @@ public class HabitService {
     }
 
     @Transactional
-    public HabitDto.ResponseStatistics makeHabitStatistics(Habit habit) {
+    public HabitDto.ResponseStatistics makeHabitStatistics(Long habitId) {
+        Habit habit = findHabit(habitId);
+
         if (habit == null) return null;
         AgeRatio ageRatio = AgeRatio.builder().build();
         SexRatio sexRatio = SexRatio.builder().build();
