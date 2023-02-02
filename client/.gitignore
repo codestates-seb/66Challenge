@@ -43,3 +43,5 @@ next-env.d.ts
 /public/sw.js.map
 
 /firebase-admin.json
+
+/pushtest.tsx
