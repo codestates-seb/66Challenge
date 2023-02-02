@@ -1,6 +1,7 @@
 package challenge.server.challenge.repository;
 
 import challenge.server.auth.entity.Auth;
+import challenge.server.challenge.dto.ChallengeDto;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.habit.entity.QHabit;
 import challenge.server.review.entity.QReview;
@@ -69,6 +70,26 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
                 .limit(size)
                 .fetch();
     }
+
+//    @Override
+//    public List<ChallengeDto.Response> findAllByUserUserIdAndStatus(Long lastChaallengeId, Long userId, Challenge.Status status, int size) {
+//        return jpaQueryFactory
+//                .select(
+//                        challenge.challengeId,
+//                        challenge.habit.title,
+//                        challenge.habit.subTitle,
+//                        challenge.habit.challengers,
+//                        challenge.status,
+//                        challenge.wildcards.size())
+//                .from(challenge)
+//                .where(
+//                        challenge.user.userId.eq(userId),
+//                        challenge.status.eq(status),
+//                        ltChallengeId(lastChaallengeId)
+//                ).orderBy(challenge.challengeId.desc())
+//                .limit(size)
+//                .fetch();
+//    }
 
     @Override
     public List<Auth> findAuthsByChallengeId(Long challengeId) {

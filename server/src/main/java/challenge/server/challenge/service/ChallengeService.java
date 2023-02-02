@@ -1,7 +1,9 @@
 package challenge.server.challenge.service;
 
 import challenge.server.auth.entity.Auth;
+import challenge.server.challenge.dto.ChallengeDto;
 import challenge.server.challenge.entity.Challenge;
+import challenge.server.challenge.mapper.ChallengeMapper;
 import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
@@ -35,6 +37,7 @@ public class ChallengeService {
     private static final DateTimeFormatter formatter
             = DateTimeFormatter.ofPattern("mm:ss:SSS");
     private final WildcardService wildcardService;
+    private final ChallengeMapper mapper;
 
     @Transactional
     public Challenge createChallenge(Long userId, Long habitId, Challenge challenge) {
@@ -78,9 +81,11 @@ public class ChallengeService {
     }
 
     // 특정 회원의 특정 상태의 모든 챌린지 조회
-    public List<Challenge> findAllByUserAndStatus(Long lastChallengeId, Long userId, Challenge.Status status, int size) {
+    public List<ChallengeDto.Response> findAllByUserAndStatus(Long lastChallengeId, Long userId, Challenge.Status status, int size) {
         // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
-        return challengeRepository.findAllByUserUserIdAndStatus(lastChallengeId, userId, status, size);
+        List<Challenge> challenges = challengeRepository.findAllByUserUserIdAndStatus(lastChallengeId, userId, status, size);
+        List<ChallengeDto.Response> responses = mapper.toDtos(challenges);
+        return responses;
     }
 
     public List<Challenge> findAll(Long lastChallengeId, int size) {
