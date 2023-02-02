@@ -100,8 +100,7 @@ public class ChallengeController {
     public ResponseEntity createAuth(@PathVariable("chaellenge-id") @Positive Long challengeId,
                                      @RequestPart("file") MultipartFile multipartFile,
                                      @RequestPart("data") @Valid AuthDto.Post postDto) {
-        Challenge challenge = challengeService.findChallenge(challengeId);
-        challenge.todayAuthCheck(LocalDateTime.now());
+        Challenge challenge = challengeService.todayAuthCheck(challengeId);
         Auth auth = authMapper.toEntity(postDto);
         String authImageUrl = fileUploadService.save(multipartFile);
         auth.changeImageUrl(authImageUrl);
