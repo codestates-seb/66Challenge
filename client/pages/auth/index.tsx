@@ -217,7 +217,7 @@ export default function Auth({
     <div
       className={`${
         authImageUrl === undefined ? null : 'absolute -top-20'
-      } w-full flex flex-col pt-5 overvflow-y-scroll scrollbar-hide relative items-center -mb-[100px]`}
+      } w-full flex flex-col pt-5 overvflow-y-scroll scrollbar-hide relative items-center -mb-[100px] min-h-screen`}
       onWheel={() => {
         openScroll();
       }}

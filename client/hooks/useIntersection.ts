@@ -128,7 +128,7 @@ export function useIntersectionPage(
         setPage((page) => page + 1);
         setIsLoaded(false);
 
-        if (res.data.length < 30) {
+        if (res.data.length < 10) {
           setStop(true);
         }
       });

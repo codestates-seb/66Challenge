@@ -151,13 +151,15 @@ const EditHabit = ({ habitId, data }) => {
       authStartTime = baseData.detail.authStartTime;
     }
 
+    console.log(bodyData);
+
     if (titleRegExp.test(title) === false) {
       setVerify({ ...verify, titleVerify: 'fail' });
     } else if (subtitleRegExp.test(subtitle) === false) {
       setVerify({ ...verify, subtitleVerify: 'fail' });
     } else if (category === 'default') {
       setVerify({ ...verify, categoryVerify: 'fail' });
-    } else if (bodyData.length < 50 === false) {
+    } else if (bodyData.length < 50) {
       setVerify({ ...verify, bodyVerify: 'fail' });
     } else if (authStartTime < authEndTime === false) {
       setVerify({ ...verify, authTimeVerify: 'fail' });
@@ -199,7 +201,10 @@ const EditHabit = ({ habitId, data }) => {
       if (successImagePreview !== baseData.image.succImgUrl) {
         formData.append('succImg', successImage[0]);
       }
-      if (failImagePreview !== baseData.image.failImgUrl) {
+      if (
+        failImagePreview !== baseData.image.failImgUrl &&
+        failImagePreview !== null
+      ) {
         formData.append('failImg', failImage[0]);
       }
 

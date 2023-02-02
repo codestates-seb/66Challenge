@@ -11,11 +11,13 @@ import {
   deleteHabitReview,
   patchHabitReview,
 } from '../module/reviewFunctionModules';
+import { deleteHabit } from '../module/habitFunctionMoudules';
 import { deleteHabitAuth } from '../module/authFunctionMoudules';
 import { reportData } from '../data/reportData';
 import { useAppSelector } from '../ducks/store';
 import { KaKaoShare } from '../module/kakaoShare';
 import Auth from '../pages/auth';
+import { useRouter } from 'next/router';
 interface IarrowValue {
   className: string;
   boolean: boolean;
@@ -33,6 +35,7 @@ interface propsValue {
     title: string;
     imageUrl: string | null;
     habitId: number;
+    allChallengers: number;
   };
   score?: number;
   body?: string;
@@ -68,6 +71,7 @@ export function DropDown({
     }
   };
   const { userId } = useAppSelector((state) => state.loginIdentity);
+  const router = useRouter();
   const [reportType, setReportType] = useState<string>('');
   const [agreeCheck, isAgreeCheck] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
@@ -128,6 +132,14 @@ export function DropDown({
       //인증 삭제 비동기 함수 호출
       deleteHabitAuth({ authId });
       window.location.reload();
+    } else if (dropDownType === 'habit') {
+      //습관 삭제 비동기 함수 호출
+      if (habitData.allChallengers > 0) {
+        alert('챌린지 참여자가 있으므로 삭제할 수 없습니다.');
+      } else {
+        deleteHabit({ habitId });
+        router.push(`/`);
+      }
     }
     setIsDeleteOpen(false);
   };
@@ -150,7 +162,7 @@ export function DropDown({
         <div className="flex flex-col w-full absolute top-[18px] right-0 ">
           {dropDownType === 'habit' ? (
             <span
-              className="text-sm border border-[#e5e5e5]  bg-white text-center py-[5px]"
+              className="text-sm border border-[#e5e5e5] border-b-[0] bg-white text-center py-[5px]"
               onClick={(_) => setIsShareOpen(true)}
             >
               공유하기
@@ -166,7 +178,17 @@ export function DropDown({
             <>
               <span
                 className="text-sm border-x border-b border-[#e5e5e5]  bg-white  text-center py-[5px]"
-                onClick={(_) => setIsUpdateOpen(true)}
+                onClick={(_) => {
+                  if (dropDownType === 'habit') {
+                    if (habitData.allChallengers > 0) {
+                      alert('챌린지 참여자가 있으므로 수정할 수 없습니다.');
+                    } else {
+                      router.push(`/habit/edit/${habitId}`);
+                    }
+                  } else {
+                    setIsUpdateOpen(true);
+                  }
+                }}
               >
                 수정하기
               </span>
@@ -285,7 +307,7 @@ export function DropDown({
           <div className="text-xl font-semibold w-full text-center pb-5">
             {dropDownType === 'review' ? '후기 삭제' : '인증글 삭제'}
           </div>
-          <div>
+          <div className="flex">
             <input
               className="w-5 h-5 mr-3 accent-subColor"
               type="checkbox"
@@ -296,8 +318,13 @@ export function DropDown({
               className="block text-mainColor text-base font-semibold"
               htmlFor="agreecheck"
             >
-              삭제된 {dropDownType === 'review' ? '후기는' : '인증글은'} 복구할
-              수 없습니다. 정말 삭제하시겠습니까?
+              삭제된{' '}
+              {dropDownType === 'review'
+                ? '후기는'
+                : dropDownType === 'auth'
+                ? '인증글은'
+                : '습관 게시물은'}{' '}
+              복구할 수 없습니다. 정말 삭제하시겠습니까?
             </label>
           </div>
         </Modal>
