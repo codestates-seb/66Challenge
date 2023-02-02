@@ -10,7 +10,7 @@ export const slideData: Array<slideDataType> = [
   },
   {
     bgImgUrl: '/image/slideImg/homeMain/slideImg2.svg',
-    bannerLink: '',
+    bannerLink: '/user/mypage/tomobile',
   },
   {
     bgImgUrl: '/image/slideImg/homeMain/slideImg3.svg',
