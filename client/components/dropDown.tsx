@@ -105,8 +105,8 @@ export function DropDown({
     if (dropDownType === 'review') {
       const response = await patchHabitReview({
         habitId,
-        score,
-        body,
+        score: patchScore + 1,
+        body: value,
         reviewId,
       });
       window.location.reload();
@@ -122,9 +122,11 @@ export function DropDown({
     if (dropDownType === 'review') {
       //리뷰 삭제 비동기 함수 호출
       deleteHabitReview({ habitId, reviewId });
+      window.location.reload();
     } else if (dropDownType === 'auth') {
       //인증 삭제 비동기 함수 호출
       deleteHabitAuth({ authId });
+      window.location.reload();
     }
     setIsDeleteOpen(false);
   };
