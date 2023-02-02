@@ -189,7 +189,7 @@ public class HabitController {
     @GetMapping("/{habit-id}/statistics")
     public ResponseEntity getHabitStatistics(@PathVariable("habit-id") @Positive Long habitId) {
         Habit habit = habitService.findHabit(habitId);
-        return new ResponseEntity(habitMapper.makeHabitStatistics(habit), HttpStatus.OK);
+        return new ResponseEntity(habitService.makeHabitStatistics(habit), HttpStatus.OK);
     }
 
     // 습관 조회 - 후기 탭 - Review 리스트 DTO
