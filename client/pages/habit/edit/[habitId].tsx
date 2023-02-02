@@ -201,7 +201,10 @@ const EditHabit = ({ habitId, data }) => {
       if (successImagePreview !== baseData.image.succImgUrl) {
         formData.append('succImg', successImage[0]);
       }
-      if (failImagePreview !== baseData.image.failImgUrl) {
+      if (
+        failImagePreview !== baseData.image.failImgUrl &&
+        failImagePreview !== null
+      ) {
         formData.append('failImg', failImage[0]);
       }
 
