@@ -12,6 +12,7 @@ public class SecurityDto {
     @NoArgsConstructor
     public static class ResponseToken {
         private Long userId;
+        private String username;
         private String accessToken;
         private String refreshToken;
     }

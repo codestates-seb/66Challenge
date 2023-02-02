@@ -3,6 +3,7 @@ package challenge.server.user.controller;
 import challenge.server.bookmark.service.BookmarkService;
 import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.entity.Habit;
+import challenge.server.security.service.SecurityService;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.mapper.UserMapperImpl;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +34,7 @@ public class UserController {
     private final UserMapperImpl userMapper;
     private final BookmarkService bookmarkService;
     private final FileUploadService fileUploadService;
+    private final SecurityService securityService;
 
     @GetMapping("/emails/check")
     public ResponseEntity<Boolean> checkEmailDuplicate(@RequestParam @Email String email) {
@@ -215,7 +216,7 @@ public class UserController {
 
     @PostMapping("/{user-id}/logout")
     public ResponseEntity logout(@Validated @RequestBody UserDto.LogoutRequest requestBody) {
-        userService.logout(requestBody);
+        securityService.logout(requestBody);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
