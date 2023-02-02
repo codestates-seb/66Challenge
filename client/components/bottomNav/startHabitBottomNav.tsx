@@ -77,7 +77,7 @@ export function StartHabitBottomNav({
         )}
       </div>
       <button
-        className="bg-mainColor h-4/5 w-5/6 rounded-lg  text-iconColor text-base disabled:opacity-50"
+        className="bg-mainColor h-4/5 w-5/6 rounded-lg  text-iconColor text-base disabled:bg-footerColor"
         onClick={() => {
           startHabitHandle();
         }}
