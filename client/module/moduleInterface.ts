@@ -172,6 +172,8 @@ interface UserInfoType {
   username: string;
   numOfBookmarkHabit: number;
   numOfHostHabit: number;
+  age?: number | null;
+  gender?: string | null;
 }
 
 export type {

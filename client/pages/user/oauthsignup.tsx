@@ -1,8 +1,9 @@
 import { useForm } from 'react-hook-form';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NextRouter, useRouter } from 'next/router';
 import { patchUserInfo } from '../../module/userFunctionMoudules';
 import { useAppSelector } from '../../ducks/store';
+import { getUserInfo } from '../../module/userFunctionMoudules';
 
 interface IformValue {
   gender: string;
@@ -23,6 +24,13 @@ const OauthSignUp: React.FC = () => {
   });
   const userId = useAppSelector((state) => state.loginIdentity.userId);
 
+  useEffect(() => {
+    getUserInfo({ userId }).then((res) => {
+      if (!res.age === null) {
+        router.push('/');
+      }
+    });
+  }, []);
   const inputContainerDefaultClassName: string =
     'flex flex-col w-full h-[80px] mb-5';
   const labelDefaultClassName: string = 'text-base font-semibold mb-1';
