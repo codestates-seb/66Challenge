@@ -32,11 +32,11 @@ public class SecurityController {
     @PostMapping("/login")
     public void postLogin(@Valid @RequestBody SecurityDto.LoginRequestDto requestBody,
                                                HttpServletResponse response) throws IOException {
-        System.out.println("securityController에서 " + requestBody.getUsername()); // greenkey20@naver.com
+//        System.out.println("securityController에서 " + requestBody.getUsername()); // greenkey20@naver.com
         User user = userMapper.loginRequestDtoToUser(requestBody);
-        System.out.println("securityController에서 " + user.getEmail());
+//        System.out.println("securityController에서 " + user.getEmail());
         SecurityDto.ResponseToken responseToken = securityService.loginUser(user);
-        System.out.println("securityController로 넘어온 access token = " + responseToken.getAccessToken());
+//        System.out.println("securityController로 넘어온 access token = " + responseToken.getAccessToken());
 
         response.setHeader("Authorization", "Bearer " + responseToken.getAccessToken());
         response.setHeader("Refresh", responseToken.getRefreshToken());

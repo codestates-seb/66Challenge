@@ -47,7 +47,7 @@ public class SecurityService {
 
     @Transactional
     public SecurityDto.ResponseToken loginUser(User user) {
-        System.out.println("sercurityService에서 " + user.getEmail()); // sercurityService에서 greenkey20@naver.com
+//        System.out.println("sercurityService에서 " + user.getEmail()); // sercurityService에서 greenkey20@naver.com
         User findUser = userService.findByEmail(user.getEmail()); // 2023.1.27(금) 19h40 null pointer exception 발생 -> 2023.2.2(목) 9h15 해결
 
         // quit이나 banned 상태인 회원은 로그인 불가능 = active 상태인 회원만 로그인 가능
