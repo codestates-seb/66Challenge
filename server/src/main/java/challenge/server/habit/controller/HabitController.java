@@ -249,8 +249,9 @@ public class HabitController {
     public ResponseEntity getAuthsByHabit(@PathVariable("habit-id") @Positive Long habitId,
                                           @RequestParam(required = false) @Positive Long lastId,
                                           @RequestParam @Positive int size) {
-        List<Auth> auths = authService.findAllByHabit(lastId, habitId, size);
-        return new ResponseEntity(authMapper.toDtos(auths), HttpStatus.OK);
+        List<AuthDto.Response> responses = authService.findAllByHabit(lastId, habitId, size);
+
+        return new ResponseEntity(responses, HttpStatus.OK);
     }
 
     @PatchMapping("/{habit-id}/auths/{auth-id}")
