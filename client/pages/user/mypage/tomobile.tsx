@@ -3,6 +3,7 @@ import { LoadingIndicator } from '../../../components/loadingIndicator';
 import { useRouter } from 'next/router';
 
 export default function ToMobile() {
+    const router = useRouter();
   const shareKakaoHandle = () => {
     if (window.Kakao) {
       console.log('a');
@@ -45,7 +46,8 @@ export default function ToMobile() {
     document.body.appendChild(script);
     setTimeout(() => {
       shareKakaoHandle();
-    }, 1500);
+      router.push('/');
+    }, 500);
   }, []);
   return (
     <div className="h-screen flex items-center -mb-[100px]">
