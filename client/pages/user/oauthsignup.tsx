@@ -7,6 +7,7 @@ import { getUserInfo } from '../../module/userFunctionMoudules';
 import { patchOauth } from '../../module/userFunctionMoudules';
 
 
+
 interface IformValue {
   gender: string;
   age: string;
