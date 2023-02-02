@@ -29,6 +29,7 @@ const OauthSignUp: React.FC = () => {
   useEffect(() => {
     getUserInfo({ userId }).then((res) => {
       if (!res.gender === null) {
+        console.log('a');
         router.push('/');
       }
     });
