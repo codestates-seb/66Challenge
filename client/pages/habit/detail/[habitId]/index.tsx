@@ -31,6 +31,8 @@ interface habitDetailDetail {
   authEndTime: string;
   challengeStatus: string;
   isBooked: boolean;
+  challengers: number;
+  allChallengers: number;
 }
 
 interface habitDetailImage {
@@ -66,7 +68,8 @@ const HabitDetail: React.FC = () => {
     });
   }, [router.isReady]);
 
-  const progress = Math.ceil((habitData?.overview?.day / 66) * 100);
+  const progressValue = Math.ceil((habitData?.overview?.day / 66) * 100);
+  const progress = progressValue > 100 ? 100 : progressValue;
   const succImgClassName = 'max-w-[50%]';
 
   const searchButtonHandler = () => {
@@ -105,13 +108,16 @@ const HabitDetail: React.FC = () => {
             </h2>
             <DropDown
               dropDownType="habit"
-              boolean={false}
+              boolean={
+                userId === habitData?.overview?.hostUserId ? true : false
+              }
               habitId={habitData?.overview?.habitId}
               hostUserId={habitData?.overview?.hostUserId}
               habitData={{
                 title: habitData?.overview?.title,
                 imageUrl: habitData?.overview?.thumbImgUrl,
                 habitId: habitData?.overview?.habitId,
+                allChallengers: habitData?.detail?.allChallengers,
               }}
             />
           </div>
