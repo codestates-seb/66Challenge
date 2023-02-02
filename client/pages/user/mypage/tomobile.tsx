@@ -44,10 +44,10 @@ export default function ToMobile() {
     script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
     script.async = true;
     document.body.appendChild(script);
-    setTimeout(() => {
+    script.onload = () => {
       shareKakaoHandle();
       router.push('/');
-    }, 500);
+    };
   }, []);
   return (
     <div className="h-screen flex items-center -mb-[100px]">
