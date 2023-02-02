@@ -38,8 +38,6 @@
      <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=flat&logo=Visual Studio Code&logoColor=white"/>
     </br>
     </br>
-    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=dev-jambin&layout=compact"><br><br>
-    <img src="https://github-readme-stats.vercel.app/api?username=dev-jambin&show_icons=true">
 
 
 ## Contributors
