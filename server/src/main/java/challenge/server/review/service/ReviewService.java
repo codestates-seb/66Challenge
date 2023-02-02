@@ -2,7 +2,10 @@ package challenge.server.review.service;
 
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
+import challenge.server.habit.service.HabitService;
+import challenge.server.review.dto.ReviewDto;
 import challenge.server.review.entity.Review;
+import challenge.server.review.mapper.ReviewMapper;
 import challenge.server.review.repository.ReviewRepository;
 import challenge.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,8 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final CustomBeanUtils<Review> beanUtils;
+    private final HabitService habitService;
+    private final ReviewMapper mapper;
 
     public Review createReview(Review review) {
         verfiyExistReview(review.getHabit().getHabitId(), review.getUser().getUserId());
@@ -26,16 +31,18 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-    public Review updateReview(Review review) {
+    public ReviewDto.Response updateReview(Review review) {
         Review findReview = findVerifiedReview(review.getReviewId());
         beanUtils.copyNonNullProperties(review, findReview);
+        reviewRepository.save(findReview);
+        habitService.calcAvgScore(findReview.getHabit().getHabitId());
 
 //        Optional.ofNullable(review.getBody())
 //                .ifPresent(body -> findReview.setBody(body));
 //        Optional.ofNullable(review.getScore())
 //                .ifPresent(score -> findReview.setScore(score));
 
-        return findReview;
+        return mapper.toDto(findReview);
     }
 
     public Review findReview(Long reviewId) {

@@ -1,5 +1,4 @@
 package challenge.server.habit.entity;
-
 import challenge.server.challenge.entity.Challenge;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;

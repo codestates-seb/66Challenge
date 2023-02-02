@@ -34,9 +34,7 @@ public class ChallengeController {
 
     private final ChallengeService challengeService;
     private final AuthService authService;
-    private final WildcardService wildcardService;
     private final FileUploadService fileUploadService;
-    private final ChallengeMapper mapper;
     private final AuthMapper authMapper;
 
 //    @GetMapping("/{challenge-id}")
@@ -104,9 +102,8 @@ public class ChallengeController {
         Auth auth = authMapper.toEntity(postDto);
         String authImageUrl = fileUploadService.save(multipartFile);
         auth.changeImageUrl(authImageUrl);
-        Auth createAuth = authService.createAuth(auth, challenge);
 
-        return new ResponseEntity<>(authMapper.toDto(createAuth), HttpStatus.CREATED);
+        return new ResponseEntity<>(authService.createAuth(auth, challenge), HttpStatus.CREATED);
     }
 
 //    @GetMapping("/{challenge-id}/auths/{auth-id}")

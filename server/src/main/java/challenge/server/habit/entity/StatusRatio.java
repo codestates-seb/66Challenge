@@ -16,6 +16,7 @@ public class StatusRatio {
     int success;
     int fail;
 
+
 //    public StatusRatio makeStatistics(Habit habit) {
 //        this.challengeCount = (int) habit.getChallenges().stream()
 //                .filter(challenge -> challenge.getStatus().equals(CHALLENGE)).count();

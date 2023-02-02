@@ -27,7 +27,6 @@ import org.springframework.stereotype.Component;
 public class HabitMapperImpl {
 
     private final CategoryService categoryService;
-    private final UserService userService;
     private final ChallengeRepository challengeRepository;
     private final BookmarkRepository bookmarkRepository;
     private final ChallengeService challengeService;
@@ -44,7 +43,7 @@ public class HabitMapperImpl {
                 .bodyHtml(post.getBodyHTML())
 
                 .category(categoryService.findByType(post.getCategory()))
-                .host(userService.findUser(post.getHostUserId()))
+//                .host(userService.findUser(post.getHostUserId()))
 
                 // parse DateTimeFormatter.ISO_LOCAL_TIME 형태 - hh:mm:ss
                 .authStartTime(LocalTime.parse(post.getAuthStartTime() + ":00"))
