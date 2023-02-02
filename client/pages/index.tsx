@@ -8,7 +8,6 @@ import { useAppSelector } from '../ducks/store';
 import { Footer } from '../components/footer';
 import { useState, useEffect, useCallback } from 'react';
 import { getHabitsInHome } from '../module/habitFunctionMoudules';
-import Pushtest from '../pushtest';
 interface habitsType {
   body: string;
   habitId: number;
@@ -61,7 +60,6 @@ const Home: React.FC = () => {
         openScroll();
       }}
     >
-      <Pushtest />
       <SlideBanner bannerCont={slideData} t={2000} pagination={true} />
       <div className="main-category px-[20px]">
         <ul className="main-category-list grid grid-cols-4 my-[20px]">
