@@ -115,7 +115,6 @@ const MyPage = () => {
 
   useEffect(() => {
     getUserInfo({ userId }).then((data) => {
-      console.log(data);
       if (data) {
         data.activeChallenges.sort((a, b) => {
           if (a.progressDays > b.progressDays) {
@@ -461,39 +460,18 @@ const MyPage = () => {
     ];
 
     let newD = [];
-    console.log(newD);
-    // newD.map((e, i, newD) => {
-    //   console.log(e, i);
-    //   e.name = `${(i + 1) * 6}일`;
-    //   e.진행중 = chalIng.filter((el) => el.progressDays > i * 6).length;
-    //   e.실패 = -_.daysOfFailList.filter(
-    //     (el) => el.daysOfFail <= (i + 1) * 6 && e.progressDays > i * 6,
-    //   ).length;
-    // });
     for (let i = 0; i < 12; i++) {
       newD.push({
         name: `${(i + 1) * 6}일`,
-        진행중:
-          chalIng.filter((el) => el.progressDays > i * 6).length +
-          _.daysOfFailList.filter((el) => el.daysOfFail > i * 6).length -
-          _.daysOfFailList.filter(
-            (el) => el.daysOfFail <= (i + 1) * 6 && el.daysOfFail > i * 6,
-          ).length,
-
+        도전: chalIng.filter((el) => el.progressDays > i * 6).length,
         실패: -_.daysOfFailList.filter(
           (el) => el.daysOfFail <= (i + 1) * 6 && el.daysOfFail > i * 6,
         ).length,
       });
     }
-    newD.unshift({
-      name: '시작',
-      진행중: chalIng.length + _.daysOfFailList.length,
-    });
-    newD[1].실패 -= _.daysOfFailList.filter((e) => e.daysOfFail <= 0).length;
-    newD[12].name = '결과';
-    newD[12].성공 = chalSuccess.length;
-    newD[12].실패 = -_.daysOfFailList.length;
-    console.log(newD);
+    newD[11].name = '결과';
+    newD[11].성공 = chalSuccess.length;
+    newD[11].실패 = -_.daysOfFailList.length;
 
     return (
       <div className="w-auto p-5 border-b-[10px] border-borderColor">
@@ -639,7 +617,7 @@ const MyPage = () => {
                   <YAxis />
                   <Legend align="right" iconType="circle" />
                   <ReferenceLine y={0} stroke="#000" />
-                  <Bar dataKey="진행중" fill="#F89500" stackId="stack" />
+                  <Bar dataKey="도전" fill="#F89500" stackId="stack" />
                   <Bar dataKey="성공" fill="#4BC02A" stackId="stack" />
                   <Bar dataKey="실패" fill="#FF6384" stackId="stack" />
                 </BarChart>

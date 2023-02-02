@@ -158,10 +158,10 @@ export const MyPageMenuList = ({ email, successArr, bookmark, hosted }) => {
           },
           buttons: [
             {
-              title: '습관 구경하기!',
+              title: '친구의 습관 구경하기!',
               link: {
-                mobileWebUrl: 'https://66challenge.shop',
-                webUrl: 'https://66challenge.shop',
+                mobileWebUrl: `https://66challenge.shop/habit/detail/${certId}`,
+                webUrl: `https://66challenge.shop/habit/detail/${certId}`,
               },
             },
           ],
