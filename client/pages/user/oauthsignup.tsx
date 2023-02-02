@@ -5,7 +5,7 @@ import { patchUserInfo } from '../../module/userFunctionMoudules';
 import { useAppSelector } from '../../ducks/store';
 import { getUserInfo } from '../../module/userFunctionMoudules';
 import { patchOauth } from '../../module/userFunctionMoudules';
-import { formToJSON, toFormData } from 'axios';
+
 
 interface IformValue {
   gender: string;
@@ -28,9 +28,12 @@ const OauthSignUp: React.FC = () => {
 
   useEffect(() => {
     getUserInfo({ userId }).then((res) => {
+      console.log(res.gender);
       if (!res.gender === null) {
+        console.log('a');
         router.push('/');
       }
+      console.log('b');
     });
   }, []);
   const inputContainerDefaultClassName: string =
