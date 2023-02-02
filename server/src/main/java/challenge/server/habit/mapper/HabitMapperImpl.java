@@ -149,7 +149,8 @@ public class HabitMapperImpl {
                 .authStartTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthStartTime()).substring(0, 5))
                 .authEndTime(DateTimeFormatter.ISO_LOCAL_TIME.format(habit.getAuthEndTime()).substring(0, 5))
                 .challengeStatus(getChallengeStatus(userId, habit.getHabitId()))
-                .challengers(habit.getChallengers() == null ? 0 : habit.getChallengers())
+                .challengers(challengeRepository.findChallengers(habit.getHabitId()))
+                .allChallengers(challengeRepository.findAllChallengers(habit.getHabitId()))
                 .build();
         return detail;
     }

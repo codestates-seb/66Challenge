@@ -73,6 +73,7 @@ public class HabitDto {
         private String authEndTime;
         private String challengeStatus;
         private Integer challengers;
+        private Integer allChallengers;
     }
 
     @Getter

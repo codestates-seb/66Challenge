@@ -16,7 +16,10 @@ public interface ChallengeCustomRepository {
     List<Challenge> findAllByUserUserIdAndStatus(Long lastChaallengeId, Long userId, Challenge.Status status, int size);
     List<Auth> findAuthsByChallengeId(Long challengeId);
     List<Challenge> findAllByNotAuthToday(Challenge.Status status, LocalDateTime startDatetime, LocalDateTime endDatetime);
+
+    // 특정 습관의 챌린저들,
     Integer findChallengers(Long habitId);
+    Integer findAllChallengers(Long habitId);
 
     List<Challenge> findAllNoOffset(Long lastChallengeId, int size);
 

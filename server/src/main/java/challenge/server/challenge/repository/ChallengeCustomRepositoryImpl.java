@@ -103,6 +103,15 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
     }
 
     @Override
+    public Integer findAllChallengers(Long habitId) {
+        return Math.toIntExact(jpaQueryFactory
+                .select(challenge.challengeId.count())
+                .from(challenge)
+                .where(challenge.habit.habitId.eq(habitId))
+                .fetchOne());
+    }
+
+    @Override
     public List<Challenge> findAllNoOffset(Long lastChallengeId, int size) {
         return jpaQueryFactory
                 .selectFrom(challenge)
