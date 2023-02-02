@@ -28,7 +28,7 @@ import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig { // https 적용
     private final JwtTokenizer jwtTokenizer;
