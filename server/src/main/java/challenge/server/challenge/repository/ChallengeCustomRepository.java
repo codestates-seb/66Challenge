@@ -1,6 +1,7 @@
 package challenge.server.challenge.repository;
 
 import challenge.server.auth.entity.Auth;
+import challenge.server.challenge.dto.ChallengeDto;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.user.dto.UserDto;
 import com.querydsl.core.Tuple;

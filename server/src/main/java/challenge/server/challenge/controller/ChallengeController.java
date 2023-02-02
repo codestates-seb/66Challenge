@@ -50,18 +50,18 @@ public class ChallengeController {
     public ResponseEntity findAllByChallenge(@PathVariable("user-id") @Positive Long userId,
                                              @RequestParam(required = false) @Positive Long lastId,
                                              @RequestParam @Positive int size) {
-        List<Challenge> challenges = challengeService.findAllByUserAndStatus(lastId, userId, CHALLENGE, size);
+        List<ChallengeDto.Response> responses = challengeService.findAllByUserAndStatus(lastId, userId, CHALLENGE, size);
 
-        return new ResponseEntity<>(mapper.toDtos(challenges), HttpStatus.OK);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
     @GetMapping("/users/{user-id}/success")
     public ResponseEntity findAllBySuccess(@PathVariable("user-id") @Positive Long userId,
                                            @RequestParam(required = false) @Positive Long lastId,
                                            @RequestParam @Positive int size) {
-        List<Challenge> challenges = challengeService.findAllByUserAndStatus(lastId, userId, SUCCESS, size);
+        List<ChallengeDto.Response> responses = challengeService.findAllByUserAndStatus(lastId, userId, SUCCESS, size);
 
-        return new ResponseEntity<>(mapper.toDtos(challenges), HttpStatus.OK);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
 //    @GetMapping
