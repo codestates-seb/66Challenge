@@ -8,6 +8,7 @@ import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
 import challenge.server.habit.entity.Habit;
+import challenge.server.habit.repository.HabitRepository;
 import challenge.server.habit.service.HabitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ import static challenge.server.challenge.entity.Challenge.Status.*;
 @Transactional(readOnly = true)
 public class ChallengeService {
 
-    private final HabitService habitService;
+    private final HabitRepository habitRepository;
     private final ChallengeRepository challengeRepository;
     private static final DateTimeFormatter formatter
             = DateTimeFormatter.ofPattern("mm:ss:SSS");
@@ -43,19 +44,25 @@ public class ChallengeService {
     public Challenge createChallenge(Long userId, Long habitId, Challenge challenge) {
         verifyExistsChallenge(userId, habitId);
         Challenge saveChallenge = challengeRepository.save(challenge);
+        Habit findHabit = habitRepository.findById(habitId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.HABIT_NOT_FOUND));
 
-        habitService.updateChallengers(habitId, challengeRepository.findChallengers(habitId));
+        findHabit.changeChallengers(challengeRepository.findChallengers(habitId));
         return saveChallenge;
     }
 
     @Transactional
-    public Challenge changeStatus(Long userId, Long habitId, String status) {
+    public ChallengeDto.Response changeStatus(Long userId, Long habitId, String status) {
         Challenge findChallenge = findByUserIdAndHabitId(userId, habitId);
         findChallenge.changeStatus(Challenge.Status.valueOf(status));
         Challenge saveChallenge = challengeRepository.save(findChallenge);
 
-        habitService.updateChallengers(habitId, challengeRepository.findChallengers(habitId));
-        return saveChallenge;
+        Habit findHabit = habitRepository.findById(habitId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.HABIT_NOT_FOUND));
+
+        findHabit.changeChallengers(challengeRepository.findChallengers(habitId));
+
+        return mapper.toDto(saveChallenge);
     }
 
     public Challenge findChallenge(Long challengeId) {
