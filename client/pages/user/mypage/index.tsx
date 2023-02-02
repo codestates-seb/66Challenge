@@ -469,6 +469,7 @@ const MyPage = () => {
         ).length,
       });
     }
+    newD[0].실패 -= _.daysOfFailList.filter((e) => e.daysOfFail <= 0).length;
     newD[11].name = '결과';
     newD[11].성공 = chalSuccess.length;
     newD[11].실패 = -_.daysOfFailList.length;
