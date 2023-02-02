@@ -45,9 +45,7 @@ export const onSilentRefresh = () => {
               });
             }
           })
-          .catch((error) => {
-            console.error(error);
-          });
+          .catch((error) => {});
       } else {
         console.error(error);
       }
