@@ -45,6 +45,7 @@ public class User extends BaseTimeEntity {
 
     // 회원 가입 시 이메일 인증 관련
     private String refreshToken;
+    private String fcmToken;
     private Boolean isEmailVerified;
 
     // JWT 구현 시 추가
