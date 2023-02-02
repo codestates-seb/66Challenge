@@ -11,14 +11,20 @@ import { getHabitDetail } from '../../../module/habitFunctionMoudules';
 import type { HabitFormValues } from '../post';
 import type { habitDataType } from '../detail/[habitId]';
 import { habitCategoryData } from '../../../data/categoryData';
+import type { GetServerSideProps } from 'next';
 
-const EditHabit = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { habitId } = context.params;
+  const data = await getHabitDetail({ habitId: +habitId });
+  return { props: { habitId: +habitId, data } };
+};
+
+const EditHabit = ({ habitId, data }) => {
   const { userId } = useAppSelector((state) => state.loginIdentity);
   const { register, handleSubmit, getValues, setFocus, watch, reset } =
     useForm<HabitFormValues>();
   const router = useRouter();
-  const habitId = +router.query.habitId;
-  const [baseData, setBaseData] = useState<habitDataType>({});
+  const [baseData, setBaseData] = useState<habitDataType>(data);
 
   const [bodyData, setBodyData] = useState<string>('');
   const [bodyHTMLData, setBodyHTMLData] = useState<string>('');
@@ -58,19 +64,15 @@ const EditHabit = () => {
   };
 
   const { habitImage, successImage, failImage } = watch();
-  const [habitImagePreview, setHabitImagePreview] = useState('');
-  const [successImagePreview, setSuccessImagePreview] = useState('');
-  const [failImagePreview, setFailImagePreview] = useState('');
-
-  useEffect(() => {
-    if (!router.isReady) return;
-    getHabitDetail({ userId, habitId }).then((data) => {
-      setBaseData(data);
-      setHabitImagePreview(data.overview.thumbImgUrl);
-      setSuccessImagePreview(data.image.succImgUrl);
-      setFailImagePreview(data.image.failImgUrl);
-    });
-  }, [router.isReady]);
+  const [habitImagePreview, setHabitImagePreview] = useState(
+    data.overview.thumbImgUrl,
+  );
+  const [successImagePreview, setSuccessImagePreview] = useState(
+    data.image.succImgUrl,
+  );
+  const [failImagePreview, setFailImagePreview] = useState(
+    data.image.failImgUrl,
+  );
 
   useEffect(() => {
     if (habitImage && habitImage.length > 0) {
@@ -206,7 +208,7 @@ const EditHabit = () => {
         userId,
         data: formData,
       });
-      router.push(`/habit/detail/${baseData?.overview?.habitId}`);
+      router.push(`/habit/detail/${baseData.overview.habitId}`);
       reset();
     }
   };
@@ -258,7 +260,7 @@ const EditHabit = () => {
             id="title"
             className={`h-[35px] ${inputDefaultClassName}`}
             placeholder="습관명을 5~20자 이내로 입력해주세요."
-            defaultValue={baseData?.overview?.title}
+            defaultValue={baseData.overview.title}
             onKeyDown={(e) => {
               InputElKeyEvent(e, 'subtitle');
             }}
@@ -284,7 +286,7 @@ const EditHabit = () => {
             id="subtitle"
             className={`h-[35px] ${inputDefaultClassName}`}
             placeholder="부제를 5~10자 이내로 입력해주세요."
-            defaultValue={baseData?.detail?.subTitle}
+            defaultValue={baseData.detail.subTitle}
             onKeyDown={(e) => {
               InputElKeyEvent(e, 'category');
             }}
@@ -311,7 +313,7 @@ const EditHabit = () => {
           <select
             id="category"
             className={`h-[35px] ${inputDefaultClassName} bg-white`}
-            defaultValue={baseData?.detail?.category}
+            defaultValue={baseData.detail.category}
             {...register('category', {
               onBlur: () => {
                 blurHandle(
@@ -361,7 +363,7 @@ const EditHabit = () => {
             className="[&>div.ql-container]:h-[400px] rounded-md [&>div.ql-toolbar]:rounded-t-md [&>div.ql-container]:rounded-b-md [&>div.ql-container]:text-base"
             placeholder="습관에 대한 소개글을 최소 50자 이상 작성해주세요."
             theme="snow"
-            defaultValue={baseData?.detail?.bodyHTML}
+            defaultValue={baseData.detail.bodyHTML}
             modules={modules}
             formats={formats}
             onChange={(value, delta, source, editor) =>
@@ -387,7 +389,7 @@ const EditHabit = () => {
               id="authTime"
               type="time"
               className={`h-[70px] text-base w-full rounded-tl-md text-center bg-slate-50 rounded-bl-md px-2 pt-[30px] border border-r-0 focus:border-mainColor focus:border-r outline-0 mb-1`}
-              defaultValue={baseData?.detail?.authStartTime}
+              defaultValue={baseData.detail.authStartTime}
               onKeyDown={(e) => {
                 InputElKeyEvent(e, 'authEndTime');
               }}
@@ -404,7 +406,7 @@ const EditHabit = () => {
             <input
               type="time"
               className={`h-[70px] text-base w-full rounded-tr-md text-center bg-slate-50 rounded-br-md px-2 pt-[30px] border focus:border-mainColor outline-0 mb-1`}
-              defaultValue={baseData?.detail?.authEndTime}
+              defaultValue={baseData.detail.authEndTime}
               onKeyDown={(e) => {
                 InputElKeyEvent(e);
               }}
