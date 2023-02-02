@@ -1,38 +1,48 @@
 package challenge.server.config;
 
-import challenge.server.security.handler.UserAccessDeniedHandler;
-import challenge.server.security.handler.UserAuthenticationEntryPoint;
-import challenge.server.security.jwt.JwtTokenProvider;
-import challenge.server.security.jwt.JwtTokenizer;
+import challenge.server.security.jwt.JwtAuthenticationToken;
 import challenge.server.security.oauth.handler.OAuth2MemberSuccessHandler;
 import challenge.server.security.oauth.service.CustomOAuth2UserService;
+import challenge.server.security.filter.JwtAuthenticationFilter;
+import challenge.server.security.filter.JwtVerificationFilter;
+import challenge.server.security.handler.UserAccessDeniedHandler;
+import challenge.server.security.handler.UserAuthenticationEntryPoint;
+import challenge.server.security.handler.UserAuthenticationFailureHandler;
+import challenge.server.security.handler.UserAuthenticationSuccessHandler;
+import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.utils.CustomAuthorityUtils;
 import challenge.server.user.service.LogoutListService;
 import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.ldap.LdapBindAuthenticationManagerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-//@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig { // https 적용
     private final JwtTokenizer jwtTokenizer;
-    private final JwtTokenProvider jwtTokenProvider;
     private final CustomAuthorityUtils authorityUtils;
 
     private final CustomOAuth2UserService customOAuth2UserService;
@@ -54,8 +64,8 @@ public class SecurityConfig { // https 적용
                 .authenticationEntryPoint(new UserAuthenticationEntryPoint()) //Oauth2에서는 인증에서 실패했을때 처리하는 로직
                 .accessDeniedHandler(new UserAccessDeniedHandler()) //인가 에러 핸들링
                 .and()
-//                .apply(new CustomFilterConfigurer())
-//                .and()
+                .apply(new CustomFilterConfigurer())
+                .and()
                 // v1
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 // v2
@@ -96,7 +106,7 @@ public class SecurityConfig { // https 적용
 //                .mvcMatchers(GET, "/**/users/emails/**").permitAll()
 //                .mvcMatchers(GET, "/users/email-verifications/**").permitAll()
 //                .mvcMatchers(POST, "/users/**").permitAll()
-//                .mvcMatchers(GET, "/users/**").hasAnyRole("USER")
+//                .mvcMatchers(GET, "/users/**").authenticated()
 //                .mvcMatchers(PATCH, "/users/**").authenticated()
 //                .mvcMatchers(DELETE, "/users/**").authenticated()
 //                .mvcMatchers("/challenges/**").authenticated()
@@ -114,10 +124,7 @@ public class SecurityConfig { // https 적용
 //                .mvcMatchers(DELETE, "/habits/**").authenticated()
 //                .mvcMatchers(GET, "/habits/**").permitAll()
 //                .anyRequest().permitAll()
-//                .and()
 //                .authenticationManager(new CustomAuthenticationManager()) // 필요 없는 듯
-                .apply(new JwtSecurityConfig(jwtTokenProvider))
-                .and()
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, userService))
                         .userInfoEndpoint() // oauth2 로그인 성공 후 가져올 때의 설정들
@@ -130,7 +137,7 @@ public class SecurityConfig { // https 적용
     /**
      * 삭제와 생성을 할수있도록 spring bean 등록해야함.
      * bean설정을 따로 해줘야한다. 안하면 service단에서 빈을 자동생성 못함.
-     * <p>
+     *
      * CORS 관련 설정
      */
     @Bean
@@ -148,24 +155,24 @@ public class SecurityConfig { // https 적용
         return source;
     }
 
-//    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
-//        @Override
-//        public void configure(HttpSecurity builder) throws Exception {
-//            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
-////            builder.addFilter(new CustomFilter(authenticationManager));
-//
-//            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, userService);
-//            jwtAuthenticationFilter.setFilterProcessesUrl("/login");
-//            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
-//            jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
-//
-//            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, logoutListService);
-//
-//            builder
-//                    .addFilter(jwtAuthenticationFilter)
-//                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
-//        }
-//    }
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
+        @Override
+        public void configure(HttpSecurity builder) throws Exception {
+            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+//            builder.addFilter(new CustomFilter(authenticationManager));
+
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, userService);
+            jwtAuthenticationFilter.setFilterProcessesUrl("/login");
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
+
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, logoutListService);
+
+            builder
+                    .addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+        }
+    }
 
 //    @Bean
 //    public AuthenticationManager authenticationManagerBean() throws Exception {
