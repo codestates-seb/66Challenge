@@ -103,7 +103,7 @@ const Home: React.FC = () => {
       </div>
       <div>
         <HabitWrapperHorizontal
-          habitWrapperTitle="20대 여성이라면 필수!"
+          habitWrapperTitle="나의 또래가 많이하는 습관"
           habitWrapperData={habitsInHome2}
         />
       </div>
