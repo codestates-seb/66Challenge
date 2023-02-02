@@ -1,18 +1,16 @@
 package challenge.server.auth.service;
 
+import challenge.server.auth.dto.AuthDto;
 import challenge.server.auth.entity.Auth;
+import challenge.server.auth.mapper.AuthMapper;
 import challenge.server.auth.repository.AuthRepository;
 import challenge.server.challenge.entity.Challenge;
-import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.challenge.service.ChallengeService;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
 import challenge.server.file.service.FileUploadService;
-import challenge.server.review.entity.Review;
 import challenge.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +27,7 @@ public class AuthService {
     private final ChallengeService challengeService;
     private final CustomBeanUtils<Auth> beanUtils;
     private final FileUploadService fileUploadService;
+    private final AuthMapper authMapper;
 
     @Transactional
     public Auth createAuth(Auth auth, Challenge challenge) {
@@ -60,8 +59,9 @@ public class AuthService {
         return authRepository.findAllByChallengeChallengeId(lastAuthId, challengeId, size);
     }
 
-    public List<Auth> findAllByHabit(Long lastAuthId, Long habitId, int size) {
-        return authRepository.findAllByChallengeHabitHabitId(lastAuthId, habitId, size);
+    public List<AuthDto.Response> findAllByHabit(Long lastAuthId, Long habitId, int size) {
+        List<Auth> auths = authRepository.findAllByChallengeHabitHabitId(lastAuthId, habitId, size);
+        return authMapper.toDtos(auths);
     }
 
     @Transactional
