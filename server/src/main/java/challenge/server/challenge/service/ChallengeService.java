@@ -10,6 +10,8 @@ import challenge.server.exception.ExceptionCode;
 import challenge.server.habit.entity.Habit;
 import challenge.server.habit.repository.HabitRepository;
 import challenge.server.habit.service.HabitService;
+import challenge.server.user.entity.User;
+import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +41,7 @@ public class ChallengeService {
             = DateTimeFormatter.ofPattern("mm:ss:SSS");
     private final WildcardService wildcardService;
     private final ChallengeMapper mapper;
+    private final UserRepository userRepository;
 
     @Transactional
     public Challenge createChallenge(Long userId, Long habitId, Challenge challenge) {

@@ -9,6 +9,9 @@ import challenge.server.challenge.service.ChallengeService;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
 import challenge.server.file.service.FileUploadService;
+import challenge.server.habit.entity.Habit;
+import challenge.server.user.entity.User;
+import challenge.server.user.service.UserService;
 import challenge.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,9 +31,11 @@ public class AuthService {
     private final CustomBeanUtils<Auth> beanUtils;
     private final FileUploadService fileUploadService;
     private final AuthMapper authMapper;
+    private final UserService userService;
 
     @Transactional
-    public AuthDto.Response createAuth(Auth auth, Challenge challenge) {
+    public AuthDto.Response createAuth(Auth auth, Long challengeId) {
+        Challenge challenge = challengeService.findVerifiedChallenge(challengeId);
         auth.setChallenge(challenge);
         challenge.updatePostedAt(LocalDateTime.now());
 
@@ -40,7 +45,9 @@ public class AuthService {
             challenge.changeStatus(SUCCESS);
         }
         Auth saveAuth = authRepository.save(auth);
-        AuthDto.Response response = authMapper.toDto(saveAuth);
+        Auth findAuth = authRepository.findById(saveAuth.getAuthId()).get();
+
+        AuthDto.Response response = authMapper.toDto(findAuth);
 
         return response;
     }
@@ -51,7 +58,6 @@ public class AuthService {
         fileUploadService.delete(findAuth.getAuthImageUrl());
         Auth changeAuth = beanUtils.copyNonNullProperties(auth, findAuth);
         Auth updateAuth = authRepository.save(changeAuth);
-
 
         return authMapper.toDto(updateAuth);
     }
