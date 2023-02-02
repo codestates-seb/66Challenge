@@ -96,7 +96,7 @@ public class JwtTokenizer {
                     .parseClaimsJws(authorization)
                     .getBody(); // 값을 넣어서 되돌려받는다(payload 값만)
 
-            return (String) body.get("sub"); // todo "sub"이 뭐지? -> 이메일 반환
+            return (String) body.get("username"); // todo "sub"이 뭐지? -> 이메일 반환
         } catch (Exception e) {
             throw e;
         }

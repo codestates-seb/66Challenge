@@ -30,6 +30,11 @@ public class ReviewService {
         Review findReview = findVerifiedReview(review.getReviewId());
         beanUtils.copyNonNullProperties(review, findReview);
 
+//        Optional.ofNullable(review.getBody())
+//                .ifPresent(body -> findReview.setBody(body));
+//        Optional.ofNullable(review.getScore())
+//                .ifPresent(score -> findReview.setScore(score));
+
         return findReview;
     }
 
