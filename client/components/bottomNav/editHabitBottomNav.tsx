@@ -23,6 +23,7 @@ export function EditHabitBottomNav({
   const editHabitHandle = (): void => {
     router.push(`/habit/edit/${habitId}`);
   };
+
   return (
     <div className="flex bg-white h-[60px] px-6 w-full fixed bottom-0 min-w[300px] justify-center items-center border-t min-w-[360px] max-w-[460px] z-[2]">
       {challengers !== 0 || isStart === true ? null : (
@@ -37,9 +38,15 @@ export function EditHabitBottomNav({
       <button
         className="bg-mainColor h-3/4 w-full rounded-lg ml-2.5 text-iconColor text-base disabled:opacity-50"
         onClick={startHabitHandle}
-        disabled={challengeStatus !== 'NONE' || isStart === true}
+        disabled={
+          challengeStatus == 'CHALLENGE' ||
+          isStart === true ||
+          challengeStatus !== 'FAIL'
+        }
       >
-        {challengeStatus !== 'NONE' || isStart === true
+        {challengeStatus === 'CHALLENGE' ||
+        isStart === true ||
+        challengeStatus !== 'FAIL'
           ? '진행 중인 습관'
           : '습관 시작하기'}
       </button>
