@@ -62,7 +62,7 @@ export function StartHabitBottomNav({
     }
   }, [isBooked]);
   return (
-    <div className="flex bg-white h-[3rem] w-full  min-w-[360px] max-w-[460px] fixed bottom-0 border-t pr-2  items-center">
+    <div className="flex bg-white h-[60px] w-full  min-w-[360px] max-w-[460px] fixed bottom-0 border-t pr-2  items-center">
       <div className="w-[15%] h-full flex items-center justify-center">
         {isBookMark.boolean === false ? (
           <AiOutlineHeart
@@ -77,7 +77,7 @@ export function StartHabitBottomNav({
         )}
       </div>
       <button
-        className="bg-mainColor h-4/5 w-5/6 rounded-lg  text-iconColor text-base disabled:opacity-50"
+        className="bg-mainColor h-4/5 w-5/6 rounded-lg  text-iconColor text-base disabled:bg-footerColor"
         onClick={() => {
           startHabitHandle();
         }}

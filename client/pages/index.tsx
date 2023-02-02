@@ -8,7 +8,6 @@ import { useAppSelector } from '../ducks/store';
 import { Footer } from '../components/footer';
 import { useState, useEffect, useCallback } from 'react';
 import { getHabitsInHome } from '../module/habitFunctionMoudules';
-
 interface habitsType {
   body: string;
   habitId: number;

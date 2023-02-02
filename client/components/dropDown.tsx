@@ -1,3 +1,4 @@
+import { AiOutlineStar, AiFillStar } from 'react-icons/ai';
 import { useState } from 'react';
 import { MdExpandMore } from 'react-icons/md';
 import { Modal } from './modal';
@@ -6,11 +7,15 @@ import {
   postAuthReport,
   postReviewReport,
 } from '../module/reportFunctionMoudules';
-import { deleteHabitReview } from '../module/reviewFunctionModules';
+import {
+  deleteHabitReview,
+  patchHabitReview,
+} from '../module/reviewFunctionModules';
 import { deleteHabitAuth } from '../module/authFunctionMoudules';
 import { reportData } from '../data/reportData';
 import { useAppSelector } from '../ducks/store';
 import { KaKaoShare } from '../module/kakaoShare';
+import Auth from '../pages/auth';
 interface IarrowValue {
   className: string;
   boolean: boolean;
@@ -29,6 +34,9 @@ interface propsValue {
     imageUrl: string | null;
     habitId: number;
   };
+  score?: number;
+  body?: string;
+  authImageUrl?: string;
 }
 export function DropDown({
   dropDownType,
@@ -40,11 +48,16 @@ export function DropDown({
   reviewId,
   reviewerUserId,
   habitData,
+  score,
+  body,
+  authImageUrl,
 }: propsValue) {
   const [arrowDirection, setArrowDirection] = useState<IarrowValue>({
     className: '',
     boolean: false,
   });
+  const [value, setValue] = useState(body);
+  const [patchScore, setPatchScore] = useState(score - 1);
   const upArrow: string = 'rotate-180 duration-500';
   const downArrow: string = 'rotate-0';
   const arrowDirectionHandle = (): void => {
@@ -54,7 +67,6 @@ export function DropDown({
       setArrowDirection({ className: downArrow, boolean: false });
     }
   };
-
   const { userId } = useAppSelector((state) => state.loginIdentity);
   const [reportType, setReportType] = useState<string>('');
   const [agreeCheck, isAgreeCheck] = useState(false);
@@ -63,19 +75,24 @@ export function DropDown({
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [isShareOpen, setIsShareOpen] = useState<boolean>(false);
   //props로 넘겨받는거에서 인증글이냐,리뷰냐 판단하여 비동기 함수 조건부 호출
+  const scoreHandle = (score: number) => {
+    setPatchScore(score);
+  };
+  const max = new Array(5).fill(null);
   const declarationHandle = () => {
     if (reportType.length === 0) {
       alert('신고 사유를 선택해주세요.');
       return;
     }
     if (dropDownType === 'review') {
-      postReviewReport({
+      const res = postReviewReport({
         habitId,
         reviewId,
         reportType,
         userId,
         reviewerUserId,
       });
+      console.log(res);
     } else if (dropDownType === 'auth') {
       postAuthReport({ habitId, authId, reportType, userId, authorUserId });
     } else if (dropDownType === 'habit') {
@@ -85,7 +102,18 @@ export function DropDown({
   };
 
   // TODO 수정 관련 모달 부분 구현 필요
-  const updateHandle = () => {};
+  const updateHandle = async () => {
+    if (dropDownType === 'review') {
+      const response = await patchHabitReview({
+        habitId,
+        score: patchScore + 1,
+        body: value,
+        reviewId,
+      });
+      window.location.reload();
+    } else if (dropDownType === 'auth') {
+    }
+  };
 
   const deleteHandle = () => {
     if (!agreeCheck) {
@@ -95,9 +123,11 @@ export function DropDown({
     if (dropDownType === 'review') {
       //리뷰 삭제 비동기 함수 호출
       deleteHabitReview({ habitId, reviewId });
+      window.location.reload();
     } else if (dropDownType === 'auth') {
       //인증 삭제 비동기 함수 호출
       deleteHabitAuth({ authId });
+      window.location.reload();
     }
     setIsDeleteOpen(false);
   };
@@ -111,7 +141,7 @@ export function DropDown({
   };
 
   return (
-    <div className="flex flex-col w-[100px] items-end relative">
+    <div className="flex flex-col w-[100px] items-end relative cursor-pointer">
       <MdExpandMore
         className={arrowDirection.className}
         onClick={arrowDirectionHandle}
@@ -191,19 +221,58 @@ export function DropDown({
         <Modal
           isOpen={isUpdateOpen}
           setIsOpen={setIsUpdateOpen}
-          buttonName="수정하기"
+          buttonName={dropDownType === 'review' ? '수정하기' : undefined}
           onClick={updateHandle}
         >
-          <div className="text-xl font-semibold w-full text-center pb-5">
-            {dropDownType === 'review' ? '후기 수정' : '인증글 수정'}
-          </div>
-          <div>
-            <label
-              className="block text-mainColor text-base font-semibold"
-              htmlFor="agreecheck"
-            ></label>
-            <input className="" />
-          </div>
+          {dropDownType === 'review' ? (
+            <form className="flex flex-col">
+              <div className="flex items-center mb-4">
+                <span className="text-base font-semibold mr-2">
+                  습관 만족도
+                </span>
+                {max.map((_, idx) => {
+                  if (idx > patchScore) {
+                    return (
+                      <AiOutlineStar
+                        key={idx}
+                        onClick={() => scoreHandle(idx)}
+                        className="text-[20px] mr-1 "
+                      />
+                    );
+                  } else if (idx <= score) {
+                    return (
+                      <AiFillStar
+                        key={idx}
+                        onClick={() => scoreHandle(idx)}
+                        className="text-subColor text-[20px] mr-1 animate-bookMark"
+                      />
+                    );
+                  }
+                })}
+              </div>
+              <div>
+                <label
+                  htmlFor="reviewInput"
+                  className="block text-base font-semibold mb-2"
+                >
+                  성공 후기
+                </label>
+                <textarea
+                  id="reviewInput"
+                  className="w-full h-40 border border-mainColor rounded-lg focus:outline-subColor p-1 "
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+              </div>
+            </form>
+          ) : dropDownType === 'auth' ? (
+            <Auth
+              authImageUrl={authImageUrl}
+              authId={authId}
+              body={body}
+              habitId={habitId}
+            />
+          ) : null}
         </Modal>
       )}
       {isDeleteOpen && (

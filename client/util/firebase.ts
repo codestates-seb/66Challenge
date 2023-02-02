@@ -14,6 +14,7 @@ export async function getToken() {
     const title = payload.notification.title;
     const options = {
       body: payload.notification.body,
+      icon: '/image/logo.svg',
     };
     const notification = new Notification(title, options);
   });

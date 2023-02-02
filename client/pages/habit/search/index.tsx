@@ -65,9 +65,9 @@ export default function SearchHabit() {
     { categoryId: 2, name: '식습관' },
     { categoryId: 3, name: '학습' },
     { categoryId: 4, name: '일상생활' },
-    { categoryId: 5, name: '자기관리' },
-    { categoryId: 6, name: '환경' },
-    { categoryId: 7, name: '취미' },
+    { categoryId: 5, name: '취미' },
+    { categoryId: 6, name: '자기관리' },
+    { categoryId: 7, name: '환경' },
     { categoryId: 8, name: '기타' },
   ];
   const onSearchHandle = useCallback((e) => {
@@ -141,6 +141,12 @@ export default function SearchHabit() {
           autoComplete="off"
           placeholder="찾고자 하는 습관을 검색해주세요."
           value={search}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              onSubmitHandle();
+            }
+          }}
           onChange={(e) => onSearchHandle(e)}
           required
         />

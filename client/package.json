@@ -43,6 +43,7 @@
     "react-kakao-login": "^2.1.1",
     "react-quill": "^2.0.0",
     "react-redux": "^8.0.5",
+    "recharts": "^2.3.2",
     "redux-persist": "^6.0.0",
     "styled-components": "^5.3.6",
     "tailwind-scrollbar-hide": "^1.1.7",
