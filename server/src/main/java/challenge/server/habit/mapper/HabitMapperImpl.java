@@ -11,11 +11,6 @@ import java.util.Optional;
 import challenge.server.category.service.CategoryService;
 import challenge.server.challenge.service.ChallengeService;
 import challenge.server.exception.BusinessLogicException;
-import challenge.server.habit.dto.HabitDto;
-import challenge.server.habit.entity.AgeRatio;
-import challenge.server.habit.entity.SexRatio;
-import challenge.server.habit.entity.StatusRatio;
-import challenge.server.review.repository.ReviewRepository;
 import challenge.server.user.service.UserService;
 import challenge.server.challenge.repository.ChallengeRepository;
 import challenge.server.bookmark.repository.BookmarkRepository;
@@ -171,15 +166,15 @@ public class HabitMapperImpl {
         return image;
     }
 
-    public HabitDto.ResponseStatistics makeHabitStatistics(Habit habit) {
-        if (habit == null) return null;
-        AgeRatio ageRatio = AgeRatio.builder().build();
-        SexRatio sexRatio = SexRatio.builder().build();
-        StatusRatio statusRatio = StatusRatio.builder().build();
-        return ResponseStatistics.builder()
-                .ageRatio(ageRatio.makeStatistics(habit))
-                .statusRatio(statusRatio.makeStatistics(habit))
-                .sexRatio(sexRatio.makeStatistics(habit))
-                .build();
-    }
+//    public HabitDto.ResponseStatistics makeHabitStatistics(Habit habit) {
+//        if (habit == null) return null;
+//        AgeRatio ageRatio = AgeRatio.builder().build();
+//        SexRatio sexRatio = SexRatio.builder().build();
+//        StatusRatio statusRatio = StatusRatio.builder().build();
+//        return ResponseStatistics.builder()
+//                .ageRatio(ageRatio.makeStatistics(habit))
+//                .statusRatio(statusRatio.makeStatistics(habit))
+//                .sexRatio(sexRatio.makeStatistics(habit))
+//                .build();
+//    }
 }

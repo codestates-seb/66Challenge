@@ -80,6 +80,13 @@ public class ChallengeService {
         return challengeRepository.findAllByStatus(lastChallengeId, status, size);
     }
 
+    public Challenge todayAuthCheck(Long challengeId) {
+        Challenge challenge = findChallenge(challengeId);
+        challenge.todayAuthCheck(LocalDateTime.now());
+
+        return challenge;
+    }
+
     // 특정 회원의 특정 상태의 모든 챌린지 조회
     public List<ChallengeDto.Response> findAllByUserAndStatus(Long lastChallengeId, Long userId, Challenge.Status status, int size) {
         // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
