@@ -98,12 +98,12 @@ public class ChallengeController {
     public ResponseEntity createAuth(@PathVariable("chaellenge-id") @Positive Long challengeId,
                                      @RequestPart("file") MultipartFile multipartFile,
                                      @RequestPart("data") @Valid AuthDto.Post postDto) {
-        Challenge challenge = challengeService.todayAuthCheck(challengeId);
+        challengeService.todayAuthCheck(challengeId);
         Auth auth = authMapper.toEntity(postDto);
         String authImageUrl = fileUploadService.save(multipartFile);
         auth.changeImageUrl(authImageUrl);
 
-        return new ResponseEntity<>(authService.createAuth(auth, challenge), HttpStatus.CREATED);
+        return new ResponseEntity<>(authService.createAuth(auth, challengeId), HttpStatus.CREATED);
     }
 
 //    @GetMapping("/{challenge-id}/auths/{auth-id}")
