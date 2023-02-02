@@ -47,6 +47,10 @@ const Header: FC = () => {
           if (pathArr[i] === 'edit' && pathArr[i - 1] === 'mypage') {
             setPageTitle('회원정보 수정');
             return;
+          }
+          if (pathArr[i] === 'auth' && pathArr[i - 2] === 'detail') {
+            setPageTitle('습관 인증글');
+            return;
           } else {
             setPageTitle(titleList[pathArr[i]]);
             return;
