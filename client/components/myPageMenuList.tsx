@@ -1,6 +1,6 @@
 import React from 'react';
 import { SlArrowRight } from 'react-icons/sl';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Modal } from './modal';
 import { CertificationModal } from './certificationModal';
@@ -16,12 +16,20 @@ interface ItemProps {
   children?: JSX.Element;
 }
 
+interface CertType {
+  challengeId: number;
+  username: string;
+  title: string;
+  createdAt: string;
+  completedAt: string;
+}
+
 export const MyPageMenuList = ({ email, successArr, bookmark, hosted }) => {
   const [isCertActive, setIsCertActive] = useState(false);
   const [isCertOpen, setIsCertOpen] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [certId, setCertId] = useState(null);
-  const [certInfo, setCertInfo] = useState(null);
+  const [certInfo, setCertInfo] = useState<CertType>(null);
   const userId = useAppSelector((state) => state.loginIdentity.userId);
   const dispatch = useAppDispatch();
 
@@ -110,19 +118,85 @@ export const MyPageMenuList = ({ email, successArr, bookmark, hosted }) => {
       </Link>
     );
   };
+  function KaKaoCertShare({ certInfo: CertType }) {
+    const [shareButton, setShareButton] = useState(false);
+    useEffect(() => {
+      const script = document.createElement('script');
+      script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+      script.async = true;
+      document.body.appendChild(script);
 
+      // 스크립트가 로드 된 후 쉐어버튼 렌더링
+      script.onload = () => {
+        setShareButton(true);
+      };
+
+      return () => {
+        document.body.removeChild(script);
+      };
+    }, []);
+    const shareKakaoHandle = () => {
+      if (window.Kakao) {
+        // 카카오 스크립트가 로드된 경우 init
+        const kakao = window.Kakao;
+        if (!kakao.isInitialized()) {
+          kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
+        }
+        kakao.Link.sendDefault({
+          objectType: 'feed',
+          content: {
+            title: '66 Challenge',
+            description: certInfo.title,
+            // imageUrl 이 없으면 동작 안하기 때문에 default 이미지를 준비해 두기
+            imageUrl:
+              'http://k.kakaocdn.net/dn/HhadR/btrW9mzvrxT/9OvV6JMFtdzi62etK2BP10/kakaolink40_original.png',
+
+            link: {
+              mobileWebUrl: 'https://66challenge.shop',
+              webUrl: 'https://66challenge.shop',
+            },
+          },
+          buttons: [
+            {
+              title: '습관 구경하기!',
+              link: {
+                mobileWebUrl: 'https://66challenge.shop',
+                webUrl: 'https://66challenge.shop',
+              },
+            },
+          ],
+        });
+      }
+    };
+    return (
+      <>
+        {shareButton && (
+          <div className="w-full flex justify-center items-center flex-col">
+            <span className="text-base font-semibold mt-3 mb-2">
+              친구와 습관 공유하기
+            </span>
+            <img
+              src="/image/logo/kakao.svg"
+              onClick={shareKakaoHandle}
+              alt="kakao"
+            />
+          </div>
+        )}
+      </>
+    );
+  }
   return (
     <div className="p-5 flex flex-col w-full items-center">
       {isCertOpen && (
         <Modal
           isOpen={isCertOpen}
           setIsOpen={setIsCertOpen}
-          buttonName="종료"
-          onClick={() => {
-            console.log(certId);
-            setIsCertOpen(!isCertOpen);
-          }}
-          children={<CertificationModal data={certInfo} />}
+          children={
+            <>
+              <CertificationModal data={certInfo} />
+              <KaKaoCertShare certInfo={certInfo} />
+            </>
+          }
         />
       )}
       {isInviteOpen && (

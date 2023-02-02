@@ -342,13 +342,11 @@ const MyPage = () => {
           data: [chalIng.length, _.daysOfFailList.length, chalSuccess.length],
           backgroundColor: [
             'rgba(255, 206, 86, 0.2)',
-
             'rgba(255, 99, 132, 0.2)',
             'rgba(75, 192, 192, 0.2)',
           ],
           borderColor: [
             'rgba(255, 206, 86, 1)',
-
             'rgba(255, 99, 132, 1)',
             'rgba(75, 192, 192, 1)',
           ],
@@ -400,7 +398,6 @@ const MyPage = () => {
           data: progressCount,
           backgroundColor: [
             'rgba(141, 209, 225, 0.2)',
-
             'rgba(131, 166, 237, 0.2)',
             'rgba(136, 132, 216, 0.2)',
             'rgba(130, 202, 157, 0.2)',
@@ -409,7 +406,6 @@ const MyPage = () => {
           ],
           borderColor: [
             'rgba(141, 209, 225, 1)',
-
             'rgba(131, 166, 237, 1)',
             'rgba(136, 132, 216, 1)',
             'rgba(130, 202, 157, 1)',
@@ -558,24 +554,18 @@ const MyPage = () => {
             </div>
           )}
           {_.activeCategories.length ? (
-            <div className="statics-row-1 mb-2 flex flex-row w-[100%] my-2 items-center">
-              <span className="w-1/2 flex flex-col justify-center  items-center">
+            <div className="statics-row-1 mb-2 flex flex-row w-[100%] my-2 items-center justify-center">
+              <span className="w-3/4 flex flex-col justify-center items-center">
                 <label className="text-base text-mainColor font-semibold pb-2.5">
                   도전 현황
                 </label>
                 <Pie data={challengeTotalData} />
               </span>
-              <span className="w-1/2 flex flex-col justify-center  items-center ">
-                <label className="text-base text-mainColor font-semibold pb-2.5">
-                  진행도별 습관 분류
-                </label>
-                <Pie data={progressData} />
-              </span>
             </div>
           ) : null}
           {_.activeCategories.length ? (
-            <div className="statics-row-1 mb-2 flex flex-row w-[100%] my-2 items-center">
-              <span className="w-1/2 flex justify-center  items-center">
+            <div className="statics-row-2 flex flex-row w-[100%] my-2 mt-2 items-center">
+              <span className="w-full flex justify-center  items-center">
                 <label className={graytext}>성공 :</label>
                 <span
                   className={
@@ -592,7 +582,7 @@ const MyPage = () => {
                 >
                   {_.daysOfFailList.length}
                 </span>
-                <label className={graytext}>도전 :</label>
+                <label className={graytext}>도전중 :</label>
                 <span
                   className={
                     'text-base h-min  rounded-md text-center px-2 font-semibold text-[#FFCC66]'
@@ -601,7 +591,21 @@ const MyPage = () => {
                   {chalIng.length}
                 </span>
               </span>
-              <span className="w-1/2 flex justify-center  items-center ">
+            </div>
+          ) : null}
+          {_.activeCategories.length ? (
+            <div className="statics-row-3 mb-2 flex flex-row w-[100%] my-2 items-center justify-center">
+              <span className="w-[85%] flex flex-col justify-center  items-center ">
+                <label className="text-base text-mainColor font-semibold pb-2.5">
+                  진행도별 습관 분류
+                </label>
+                <Pie data={progressData} />
+              </span>
+            </div>
+          ) : null}
+          {_.activeCategories.length ? (
+            <div className="statics-row-4 mb-2 flex flex-row w-[100%] my-2 items-center">
+              <span className="w-full flex justify-center mt-2 items-center ">
                 <label className={graytext}>평균 도전 진행도 :</label>
                 <span className={subtext}>
                   {Math.ceil(
@@ -615,7 +619,7 @@ const MyPage = () => {
           ) : null}
 
           {_.activeCategories.length ? (
-            <div className="pt-5 statics-row-2 flex flex-col items-center">
+            <div className=" statics-row-2 flex flex-col items-center">
               <label className="text-base text-mainColor font-semibold mb-2">
                 현재 진행중인 카테고리
               </label>
@@ -667,11 +671,12 @@ const MyPage = () => {
                   stackOffset="sign"
                   margin={{
                     right: 10,
+                    left: -25,
                   }}
                 >
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Legend />
+                  <Legend align="right" iconType="circle" />
                   <ReferenceLine y={0} stroke="#000" />
                   <Bar dataKey="진행중" fill="#F89500" stackId="stack" />
                   <Bar dataKey="성공" fill="#4BC02A" stackId="stack" />
