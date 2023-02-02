@@ -16,6 +16,7 @@ interface habitDetailOverview {
   thumbImgUrl: string;
   challengeStatus?: string;
   score: number;
+  day: number;
 }
 
 interface habitDetailDetail {
@@ -30,7 +31,6 @@ interface habitDetailDetail {
   authEndTime: string;
   challengeStatus: string;
   isBooked: boolean;
-  day: number;
 }
 
 interface habitDetailImage {
@@ -66,7 +66,7 @@ const HabitDetail: React.FC = () => {
     });
   }, [router.isReady]);
 
-  const progress = Math.ceil((habitData?.detail?.day / 66) * 100);
+  const progress = Math.ceil((habitData?.overview?.day / 66) * 100);
   const succImgClassName = 'max-w-[50%]';
 
   const searchButtonHandler = () => {
@@ -146,7 +146,7 @@ const HabitDetail: React.FC = () => {
             <div>
               <div className="text-center pb-2.5 font-semibold">
                 <span className="text-subColor font-bold">
-                  {habitData.detail.day}
+                  {habitData.overview?.day}
                 </span>
                 번째 날에 실패하셨던 도전이에요 🥲
               </div>

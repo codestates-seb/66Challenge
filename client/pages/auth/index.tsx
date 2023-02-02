@@ -160,13 +160,13 @@ export default function Auth() {
 
   return (
     <div
-      className="h-screen w-full px-10 flex flex-col pt-5 overvflow-y-scroll scrollbar-hide relative items-center"
+      className="h-screen w-full flex flex-col pt-5 overvflow-y-scroll scrollbar-hide relative items-center -mb-[100px]"
       onWheel={() => {
         openScroll();
       }}
     >
-      <div className="mb-4 w-full">
-        <span className="font-bold text-base">내가 진행중인 습관</span>
+      <div className="w-full px-5 pb-4">
+        <span className="font-bold text-xl">인증할 습관 선택</span>
       </div>
       <div
         className={`${
@@ -182,7 +182,7 @@ export default function Auth() {
         </span>
       </div>
       <ul
-        className="flex flex-col flex-wrap w-full  h-1/6 overflow-x-scroll scrollbar-hide p-2 border-y  border-mainColor  items-center"
+        className="flex flex-nowrap w-full overflow-x-scroll scrollbar-hide pl-5 gap-2.5 items-center"
         ref={containerRef}
         onWheel={(e) => {
           e.stopPropagation();
@@ -194,44 +194,41 @@ export default function Auth() {
         ) : (
           ingData.map((el) => {
             return (
-              <div className=" w-[120px] h-1/2 p-2" key={el.challengeId}>
-                <span
-                  className={`${
-                    active === el.challengeId ? 'bg-subColor' : 'bg-mainColor'
-                  } w-full h-full rounded-full text-iconColor flex duration-300  justify-center items-center text-base flex-col`}
-                  onClick={() => {
-                    setActive(el.challengeId);
-                    setVerify({ ...verify, chooseHabitVerify: 'success' });
-                  }}
-                >
-                  {el.habitSubTitle === null
-                    ? null
-                    : el.habitSubTitle.length > 7
-                    ? el.habitSubTitle.slice(0, 6) + '...'
-                    : el.habitSubTitle}
-                </span>
-              </div>
+              <li
+                className={`${
+                  active === el.challengeId ? 'bg-subColor' : 'bg-mainColor'
+                } flex-[0_0_auto] rounded-full h-[32px] leading-[28px] py-1 px-2.5 text-iconColor duration-300  justify-center items-center text-sm font-semibold last:mr-5`}
+                key={el.challengeId}
+                onClick={() => {
+                  setActive(el.challengeId);
+                  setVerify({ ...verify, chooseHabitVerify: 'success' });
+                }}
+              >
+                {el.habitSubTitle}
+              </li>
             );
           })
         )}
       </ul>
 
       <form
-        className="file-uploader-container w-full"
+        className="file-uploader-container w-full p-5"
         onSubmit={handleSubmit(postAuthHandle)}
       >
+        <span className=" block font-bold text-xl pt-5">인증 사진 등록</span>
         <label
-          className="file-uploader-label flex justify-center items-center w-full mx-auto h-[202px] my-[20px] border border-mainColor rounded"
+          className="file-uploader-label flex justify-center items-center w-[202px] mx-auto h-[202px] my-5 mt-4 border border-mainColor rounded-[12px] overflow-hidden"
           htmlFor="uploader-input"
         >
           {imgFile !== '' ? (
-            <div className="file-uploader-preview w-[300px] h-[200px]">
+            <div className="file-uploader-preview w-[200px] h-[200px]">
               <Image
                 className="object-contain w-full h-full"
                 src={imgFile}
                 alt="uploaded image"
                 width={500}
                 height={500}
+                style={{ objectFit: 'cover' }}
               />
             </div>
           ) : (
@@ -250,9 +247,9 @@ export default function Auth() {
           {...register('authImage')}
         />
         {imgFile !== '' ? (
-          <div className=" flex justify-center w-full items-center bg-mainColor rounded-full h-[40px] mb-5">
+          <div className=" flex justify-center w-full items-center  mb-5">
             <span
-              className="text-base text-iconColor"
+              className="text-base text-iconColor w-[200px] bg-mainColor rounded-full h-[40px] flex justify-center items-center"
               onClick={deleteImgHandle}
             >
               삭제하기
@@ -260,13 +257,15 @@ export default function Auth() {
           </div>
         ) : null}
 
-        <span className=" block font-bold text-base mb-3">기록하기</span>
+        <span className=" block font-bold text-xl mb-4 pt-5">
+          간단한 메모 기록
+        </span>
         <textarea
           className={`w-full h-[35px] resize-none border overflow-auto border-mainColor rounded-md focus:outline-subColor ${
             verify.memoVerify === '' || verify.memoVerify === 'success'
               ? 'mb-3'
               : null
-          } p-1`}
+          } p-1 text-sm leading-[25px]`}
           placeholder="2~20자 이내로 기록을 작성해주세요."
           {...register('memo', {
             onBlur: () => {
@@ -275,11 +274,11 @@ export default function Auth() {
           })}
         />
         {verify.memoVerify === 'fail' ? (
-          <span className="mb-1 text-base text-subColor">
-            2~20자 이내로 기록을 작성해주세요.
+          <span className="mb-1 pl-1 text-sm text-subColor">
+            2~20자 이내로 간단한 메모를 작성해주세요!
           </span>
         ) : null}
-        <div className="flex items-center w-full mb-6">
+        <div className="flex items-center w-full mb-6 pt-5">
           <input
             id="agreeCheck"
             type="checkbox"
@@ -290,7 +289,7 @@ export default function Auth() {
             htmlFor="agreeCheck"
             className="block text-mainColor text-base font-semibold "
           >
-            인증 사진이 업로드 되는 것을 동의합니다.
+            인증 사진이 업로드 되는 것에 동의합니다.
           </label>
         </div>
         <input

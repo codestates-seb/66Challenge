@@ -79,7 +79,7 @@ export function MainBottomNav({ param }) {
         ...menuArr,
         {
           name: 'Login',
-          icon: <AiOutlineLogin />,
+          icon: <AiOutlineLogin size={27} />,
           dis: 'translate-x-56',
           link: '/user/login',
         },

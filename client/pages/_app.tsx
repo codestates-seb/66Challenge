@@ -8,6 +8,9 @@ import Layout from '../components/layout/layout';
 import { LoadingIndicator } from '../components/loadingIndicator';
 import { useEffect } from 'react';
 import { onSilentRefresh } from '../module/jsonWebToken';
+import { getCookie } from '../module/cookies';
+import { useAppDispatch } from '../ducks/store';
+import { initLoginIdentity } from '../ducks/loginIdentitySlice';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -18,9 +21,14 @@ type AppPropsWithLayout = AppProps & {
 };
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    onSilentRefresh();
+    if (getCookie('refreshJwtToken')) {
+      onSilentRefresh();
+    } else {
+      dispatch(initLoginIdentity());
+    }
   }, []);
 
   return (
