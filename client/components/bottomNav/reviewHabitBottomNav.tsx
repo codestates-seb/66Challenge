@@ -21,7 +21,7 @@ export function ReviewHabitBottomNav({ habitId, userId }) {
   return (
     <div className="flex bg-white h-[60px] px-6 w-full fixed bottom-0 min-w-[360px] max-w-[460px] justify-center items-center border-t">
       <button
-        className="bg-mainColor h-3/4 w-full rounded-lg  text-iconColor text-base disabled:opacity-50"
+        className="bg-mainColor h-3/4 w-full rounded-lg  text-iconColor text-base disabled:bg-footerColor"
         disabled={authState.boolean === true}
         onClick={() => {
           setIsOpen(true);

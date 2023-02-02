@@ -3,8 +3,16 @@ import { AuthArticle } from '../../../../components/authArticle';
 import { useState } from 'react';
 import { useIntersection } from '../../../../hooks/useIntersection';
 import type { authArticleProps } from '../../../../components/authArticle';
-
-export default function HabitDetailAuth() {
+interface IpropsValue {
+  authImageUrl: string;
+  authId: number;
+  body: string;
+}
+export default function HabitDetailAuth({
+  authImageUrl,
+  authId,
+  body,
+}: IpropsValue) {
   const router = useRouter();
   const habitId = router.query.habitId;
   const url: string = `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/auths/?`;

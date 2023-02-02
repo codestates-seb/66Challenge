@@ -67,7 +67,7 @@ export const Modal = ({
         >
           <div className="modal-veiw-close-button h-5 flex justify-end items-center">
             <IoClose
-              className="cursor-pointer p-2.5 -mr-2.5 -mt-2.5"
+              className="cursor-pointer p-2.5 -mr-2.5 -mt-2.5 z-[3]"
               size="36"
               onClick={closeModalHandler}
             />

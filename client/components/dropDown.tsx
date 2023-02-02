@@ -36,6 +36,7 @@ interface propsValue {
   };
   score?: number;
   body?: string;
+  authImageUrl?: string;
 }
 export function DropDown({
   dropDownType,
@@ -49,6 +50,7 @@ export function DropDown({
   habitData,
   score,
   body,
+  authImageUrl,
 }: propsValue) {
   const [arrowDirection, setArrowDirection] = useState<IarrowValue>({
     className: '',
@@ -65,7 +67,6 @@ export function DropDown({
       setArrowDirection({ className: downArrow, boolean: false });
     }
   };
-  console.log(reviewId);
   const { userId } = useAppSelector((state) => state.loginIdentity);
   const [reportType, setReportType] = useState<string>('');
   const [agreeCheck, isAgreeCheck] = useState(false);
@@ -220,47 +221,58 @@ export function DropDown({
         <Modal
           isOpen={isUpdateOpen}
           setIsOpen={setIsUpdateOpen}
-          buttonName="수정하기"
+          buttonName={dropDownType === 'review' ? '수정하기' : undefined}
           onClick={updateHandle}
         >
-          <form className="flex flex-col">
-            <div className="flex items-center mb-4">
-              <span className="text-base font-semibold mr-2">습관 만족도</span>
-              {max.map((_, idx) => {
-                if (idx > patchScore) {
-                  return (
-                    <AiOutlineStar
-                      key={idx}
-                      onClick={() => scoreHandle(idx)}
-                      className="text-[20px] mr-1 "
-                    />
-                  );
-                } else if (idx <= score) {
-                  return (
-                    <AiFillStar
-                      key={idx}
-                      onClick={() => scoreHandle(idx)}
-                      className="text-subColor text-[20px] mr-1 animate-bookMark"
-                    />
-                  );
-                }
-              })}
-            </div>
-            <div>
-              <label
-                htmlFor="reviewInput"
-                className="block text-base font-semibold mb-2"
-              >
-                성공 후기
-              </label>
-              <textarea
-                id="reviewInput"
-                className="w-full h-40 border border-mainColor rounded-lg focus:outline-subColor p-1 "
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-              />
-            </div>
-          </form>
+          {dropDownType === 'review' ? (
+            <form className="flex flex-col">
+              <div className="flex items-center mb-4">
+                <span className="text-base font-semibold mr-2">
+                  습관 만족도
+                </span>
+                {max.map((_, idx) => {
+                  if (idx > patchScore) {
+                    return (
+                      <AiOutlineStar
+                        key={idx}
+                        onClick={() => scoreHandle(idx)}
+                        className="text-[20px] mr-1 "
+                      />
+                    );
+                  } else if (idx <= score) {
+                    return (
+                      <AiFillStar
+                        key={idx}
+                        onClick={() => scoreHandle(idx)}
+                        className="text-subColor text-[20px] mr-1 animate-bookMark"
+                      />
+                    );
+                  }
+                })}
+              </div>
+              <div>
+                <label
+                  htmlFor="reviewInput"
+                  className="block text-base font-semibold mb-2"
+                >
+                  성공 후기
+                </label>
+                <textarea
+                  id="reviewInput"
+                  className="w-full h-40 border border-mainColor rounded-lg focus:outline-subColor p-1 "
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+              </div>
+            </form>
+          ) : dropDownType === 'auth' ? (
+            <Auth
+              authImageUrl={authImageUrl}
+              authId={authId}
+              body={body}
+              habitId={habitId}
+            />
+          ) : null}
         </Modal>
       )}
       {isDeleteOpen && (
