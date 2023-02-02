@@ -4,6 +4,9 @@ import { NextRouter, useRouter } from 'next/router';
 import { patchUserInfo } from '../../module/userFunctionMoudules';
 import { useAppSelector } from '../../ducks/store';
 import { getUserInfo } from '../../module/userFunctionMoudules';
+import { patchOauth } from '../../module/userFunctionMoudules';
+
+
 
 interface IformValue {
   gender: string;
@@ -26,7 +29,7 @@ const OauthSignUp: React.FC = () => {
 
   useEffect(() => {
     getUserInfo({ userId }).then((res) => {
-      if (!res.age === null) {
+      if (res.gender === 'MALE' || res.gender === 'FEMALE') {
         router.push('/');
       }
     });
@@ -47,16 +50,12 @@ const OauthSignUp: React.FC = () => {
     const { gender, age } = data;
     const formData = new FormData();
     formData.append(
-      'body',
-      new Blob([JSON.stringify({ gender, age })], {
+      'data',
+      new Blob([JSON.stringify({ age, gender })], {
         type: 'application/json',
       }),
     );
-
-    console.log({ userId, body: formData });
-    console.log(formData.getAll('body'));
-
-    patchUserInfo({ userId, body: formData }).then(() => {
+    patchOauth({ userId, data: formData }).then((res) => {
       router.push('/');
     });
   };

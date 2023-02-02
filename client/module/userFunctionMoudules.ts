@@ -102,6 +102,24 @@ export async function patchUserInfo({ userId, body }) {
     }
   }
 }
+
+export async function patchOauth({ userId, data }) {
+  try {
+    const response = await axios
+      .patch(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => res.status);
+    return response;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      return e.response.status;
+    }
+  }
+}
+
 export async function getUserCertificate({
   userId,
   habitId,
