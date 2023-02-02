@@ -115,7 +115,6 @@ const MyPage = () => {
 
   useEffect(() => {
     getUserInfo({ userId }).then((data) => {
-      console.log(data);
       if (data) {
         data.activeChallenges.sort((a, b) => {
           if (a.progressDays > b.progressDays) {
@@ -460,79 +459,19 @@ const MyPage = () => {
       },
     ];
 
-    const data = [
-      {
-        name: '6일',
-        성공: chalSuccess.length,
-        진행중: chalIng.length,
-        실패: -_.daysOfFailList.filter((e) => e.daysOfFail <= 6).length,
-      },
-      {
-        name: '12일',
-        성공: chalSuccess.length,
-        진행중: chalIng.filter((e) => e.progressDays > 7).length,
-        실패: -_.daysOfFailList.filter((e) => e.daysOfFail <= 12).length,
-      },
-      {
-        name: '18일',
-        성공: chalSuccess.length,
-        진행중: chalIng.filter((e) => e.progressDays > 13).length,
-        실패: -_.daysOfFailList.filter((e) => e.daysOfFail <= 18).length,
-      },
-      {
-        name: '24일',
-        성공: chalSuccess.length,
-        진행중: chalIng.filter((e) => e.progressDays > 19).length,
-        실패: -_.daysOfFailList.filter((e) => e.daysOfFail <= 24).length,
-      },
-      {
-        name: '30일',
-        성공: chalSuccess.length,
-        진행중: chalIng.filter((e) => e.progressDays > 25).length,
-        실패: -_.daysOfFailList.filter((e) => e.daysOfFail <= 30).length,
-      },
-      {
-        name: '36일',
-        성공: chalSuccess.length,
-        진행중: chalIng.filter((e) => e.progressDays > 31).length,
-        실패: -_.daysOfFailList.filter((e) => e.daysOfFail <= 36).length,
-      },
-      {
-        name: '42일',
-        성공: chalSuccess.length,
-        진행중: chalIng.filter((e) => e.progressDays > 37).length,
-        실패: -_.daysOfFailList.filter((e) => e.daysOfFail <= 42).length,
-      },
-      {
-        name: '48일',
-        성공: chalSuccess.length,
-        진행중: chalIng.filter((e) => e.progressDays > 43).length,
-        실패: -_.daysOfFailList.filter((e) => e.daysOfFail <= 48).length,
-      },
-      {
-        name: '54일',
-        성공: chalSuccess.length,
-        진행중: chalIng.filter((e) => e.progressDays > 49).length,
-        실패: -_.daysOfFailList.filter((e) => e.daysOfFail <= 54).length,
-      },
-      {
-        name: '60일',
-        성공: chalSuccess.length,
-        진행중: chalIng.filter((e) => e.progressDays > 55).length,
-        실패: -_.daysOfFailList.filter((e) => e.daysOfFail <= 60).length,
-      },
-      {
-        name: '66일',
-        성공: chalSuccess.length,
-        진행중: chalIng.filter((e) => e.progressDays > 61).length,
-        실패: -_.daysOfFailList.length,
-      },
-      {
-        name: '결과',
-        성공: chalSuccess.length,
-        실패: -_.daysOfFailList.length,
-      },
-    ];
+    let newD = [];
+    for (let i = 0; i < 12; i++) {
+      newD.push({
+        name: `${(i + 1) * 6}일`,
+        도전: chalIng.filter((el) => el.progressDays > i * 6).length,
+        실패: -_.daysOfFailList.filter(
+          (el) => el.daysOfFail <= (i + 1) * 6 && el.daysOfFail > i * 6,
+        ).length,
+      });
+    }
+    newD[11].name = '결과';
+    newD[11].성공 = chalSuccess.length;
+    newD[11].실패 = -_.daysOfFailList.length;
 
     return (
       <div className="w-auto p-5 border-b-[10px] border-borderColor">
@@ -661,13 +600,13 @@ const MyPage = () => {
           {_.activeChallenges.length ? (
             <div className="pt-5 statics-row-3 flex flex-col items-center">
               <label className="text-base text-mainColor font-semibold mb-2">
-                도전 통계 그래프
+                도전 경과 그래프
               </label>
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart
                   width={500}
                   height={400}
-                  data={data}
+                  data={newD}
                   stackOffset="sign"
                   margin={{
                     right: 10,
@@ -678,7 +617,7 @@ const MyPage = () => {
                   <YAxis />
                   <Legend align="right" iconType="circle" />
                   <ReferenceLine y={0} stroke="#000" />
-                  <Bar dataKey="진행중" fill="#F89500" stackId="stack" />
+                  <Bar dataKey="도전" fill="#F89500" stackId="stack" />
                   <Bar dataKey="성공" fill="#4BC02A" stackId="stack" />
                   <Bar dataKey="실패" fill="#FF6384" stackId="stack" />
                 </BarChart>
