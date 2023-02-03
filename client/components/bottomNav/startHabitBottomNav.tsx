@@ -56,7 +56,7 @@ export function StartHabitBottomNav({
       setIsOpen(true);
     }
   };
-  console.log(challengeStatus);
+
   useEffect(() => {
     if (isBooked === true) {
       setIsBookMark({ boolean: true, animate: defaultClassName });

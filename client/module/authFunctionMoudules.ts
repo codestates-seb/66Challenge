@@ -15,10 +15,13 @@ export async function getHabitAuths({ habitId, page, size }: getAuthProps) {
   }
 }
 
-export async function deleteHabitAuth({ authId }: deleteAuthProps) {
+export async function deleteHabitAuth({ habitId, authId }) {
+  console.log(habitId, authId);
   try {
     const response = await axios
-      .delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/auths/${authId}`)
+      .delete(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/habits/${habitId}/auths/${authId}`,
+      )
       .then((res) => console.log(res));
     return response;
   } catch (e) {
