@@ -6,8 +6,6 @@ import { useAppSelector } from '../../ducks/store';
 import { getUserInfo } from '../../module/userFunctionMoudules';
 import { patchOauth } from '../../module/userFunctionMoudules';
 
-
-
 interface IformValue {
   gender: string;
   age: string;
@@ -93,6 +91,9 @@ const OauthSignUp: React.FC = () => {
                 }
               }}
             />
+          </div>
+          <div id="genderInputForm">
+            <label className={`${labelDefaultClassName}`}>성별</label>
             <input
               id="genderMale"
               type="radio"
@@ -104,7 +105,9 @@ const OauthSignUp: React.FC = () => {
               className="mx-1 border"
               {...register('gender')}
             />
-            <label className="mx-1 mt-1">남성</label>
+            <label htmlFor="genderMale" className="mx-1 mt-1">
+              남성
+            </label>
 
             <input
               id="genderFemale"
@@ -117,7 +120,9 @@ const OauthSignUp: React.FC = () => {
               className="mx-1"
               {...register('gender')}
             />
-            <label className="mx-1 mt-1">여성</label>
+            <label htmlFor="genderFemale" className="mx-1 mt-1">
+              여성
+            </label>
           </div>
         </div>
 
