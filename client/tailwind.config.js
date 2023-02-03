@@ -72,6 +72,7 @@ module.exports = {
       },
       backgroundImage: {
         certification: 'url("/image/prizeborder.jpg")',
+        mainBackground: 'url("/image/bg.png")',
       },
     },
   },
