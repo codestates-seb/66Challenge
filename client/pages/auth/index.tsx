@@ -141,6 +141,7 @@ export default function Auth({
       } else if (response === 500) {
         confirm('준비 중 입니다.');
       } else {
+        setAuthState('');
         router.push(`habit/detail/${response.habitId}/auth`);
       }
     } else {
@@ -180,6 +181,7 @@ export default function Auth({
       } else if (response === 500) {
         confirm('준비 중 입니다.');
       } else {
+        setAuthState('');
         window.location.reload();
       }
     } else {

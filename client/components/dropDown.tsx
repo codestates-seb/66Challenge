@@ -130,7 +130,7 @@ export function DropDown({
       window.location.reload();
     } else if (dropDownType === 'auth') {
       //인증 삭제 비동기 함수 호출
-      deleteHabitAuth({ authId });
+      deleteHabitAuth({ habitId, authId });
       window.location.reload();
     } else if (dropDownType === 'habit') {
       //습관 삭제 비동기 함수 호출

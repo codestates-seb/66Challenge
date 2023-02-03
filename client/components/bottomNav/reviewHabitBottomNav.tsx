@@ -42,14 +42,15 @@ export function ReviewHabitBottomNav({ habitId, userId }) {
               score: score + 1,
             });
             if (response === 409) {
+              setIsOpen(false);
               setAuthState({ state: 'none', boolean: true });
               setTimeout(() => {
                 setAuthState({ state: '', boolean: true });
               }, 1500);
+            } else {
+              setIsOpen(false);
+              router.push(`/habit/detail/${habitId}/review`);
             }
-
-            setIsOpen(false);
-            router.push(`/habit/detail/${habitId}/review`);
           }}
         >
           <form className="flex flex-col">
