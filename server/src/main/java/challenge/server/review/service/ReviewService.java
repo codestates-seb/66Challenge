@@ -12,12 +12,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
@@ -53,8 +55,9 @@ public class ReviewService {
         return reviewRepository.findAllNoOffset(lastReviewId, size);
     }
 
-    public List<Review> findAllByHabit(Long lastReviewId, Long habitId, int size) {
-        return reviewRepository.findAllByHabitHabitId(lastReviewId, habitId, size);
+    public List<ReviewDto.Response> findAllByHabit(Long lastReviewId, Long habitId, int size) {
+        List<Review> reviews = reviewRepository.findAllByHabitHabitId(lastReviewId, habitId, size);
+        return mapper.toDtos(reviews);
     }
 
     public void deleteReview(Long reviewId) {

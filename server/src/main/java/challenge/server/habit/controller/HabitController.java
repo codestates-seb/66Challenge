@@ -195,8 +195,8 @@ public class HabitController {
     public ResponseEntity getReviewsByHabit(@PathVariable("habit-id") @Positive Long habitId,
                                             @RequestParam(required = false) @Positive Long lastId,
                                             @RequestParam @Positive int size) {
-        List<Review> reviews = reviewService.findAllByHabit(lastId, habitId, size);
-        return new ResponseEntity(reviewMapper.toDtos(reviews), HttpStatus.OK);
+
+        return new ResponseEntity(reviewService.findAllByHabit(lastId, habitId, size), HttpStatus.OK);
     }
 
     // 습관 조회 - 후기 탭 - 후기 등록 - Review DTO
