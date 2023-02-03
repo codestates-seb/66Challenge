@@ -82,15 +82,9 @@ export function StartHabitBottomNav({
         onClick={() => {
           startHabitHandle();
         }}
-        disabled={
-          challengeStatus == 'CHALLENGE' ||
-          isStart === true ||
-          challengeStatus !== 'FAIL'
-        }
+        disabled={challengeStatus === 'CHALLENGE' || isStart === true}
       >
-        {challengeStatus === 'CHALLENGE' ||
-        isStart === true ||
-        challengeStatus !== 'FAIL'
+        {challengeStatus === 'CHALLENGE' || isStart === true
           ? '진행 중인 습관'
           : '습관 시작하기'}
       </button>

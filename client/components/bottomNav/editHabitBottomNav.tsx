@@ -38,15 +38,9 @@ export function EditHabitBottomNav({
       <button
         className="bg-mainColor h-3/4 w-full rounded-lg ml-2.5 text-iconColor text-base disabled:opacity-50"
         onClick={startHabitHandle}
-        disabled={
-          challengeStatus == 'CHALLENGE' ||
-          isStart === true ||
-          challengeStatus !== 'FAIL'
-        }
+        disabled={challengeStatus === 'CHALLENGE' || isStart === true}
       >
-        {challengeStatus === 'CHALLENGE' ||
-        isStart === true ||
-        challengeStatus !== 'FAIL'
+        {challengeStatus === 'CHALLENGE' || isStart === true
           ? '진행 중인 습관'
           : '습관 시작하기'}
       </button>
