@@ -3,10 +3,9 @@ import { LoadingIndicator } from '../../../components/loadingIndicator';
 import { useRouter } from 'next/router';
 
 export default function ToMobile() {
-    const router = useRouter();
+  const router = useRouter();
   const shareKakaoHandle = () => {
     if (window.Kakao) {
-      console.log('a');
       // 카카오 스크립트가 로드된 경우 init
       const kakao = window.Kakao;
       if (!kakao.isInitialized()) {
