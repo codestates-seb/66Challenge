@@ -10,12 +10,16 @@ type LayoutProps = {
   children: React.ReactNode;
 };
 
-const DesktopDiv = styled.div``;
+const DesktopDiv = styled.div`
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
+`;
 
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="desktop-section bg-slate-100 flex justify-center relative">
-      <div className="fixed insert-0 bg-mainBackground bg-no-repeat h-full w-full" />
+      <DesktopDiv className="fixed insert-0 bg-mainBackground bg-no-repeat h-full w-full" />
       <div className="app-section w-full min-h-screen min-w-[360px] max-w-[460px] bg-white z-[1]">
         <Header />
         <TopNav />

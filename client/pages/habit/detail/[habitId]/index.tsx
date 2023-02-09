@@ -68,8 +68,7 @@ const HabitDetail: React.FC = () => {
     });
   }, [router.isReady]);
 
-  // const progressValue = Math.ceil((habitData?.overview?.day / 66) * 100);
-  const progressValue = 60;
+  const progressValue = Math.ceil((habitData?.overview?.day / 66) * 100);
   const progress = progressValue > 100 ? 100 : progressValue;
   const succImgClassName = 'max-w-[50%]';
 
@@ -118,7 +117,7 @@ const HabitDetail: React.FC = () => {
                 title: habitData?.overview?.title,
                 imageUrl: habitData?.overview?.thumbImgUrl,
                 habitId: habitData?.overview?.habitId,
-                allChallengers: habitData?.detail?.allChallengers,
+                challengers: habitData?.detail?.challengers,
               }}
             />
           </div>

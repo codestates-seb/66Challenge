@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { loginRequest } from '../../ducks/loginIdentitySlice';
 import { useAppDispatch } from '../../ducks/store';
+import { Alert } from '../../components/alert';
+import { BiBlock } from 'react-icons/bi';
 
 type FormValues = {
   email: string;
@@ -47,7 +49,11 @@ const Login: React.FC = () => {
         const response: number | IresponseData = data.payload;
         console.log(response);
         if (response.status === 401 || response.status === 403) {
-          alert('이메일이나 비밀번호를 확인해주세요');
+          setAlertStatus({
+            isOpen: true,
+            message: '이메일 혹은 비밀번호를 확인해주세요.',
+            icon: <BiBlock />,
+          });
         } else {
           router.push('/');
           reset();
@@ -55,10 +61,18 @@ const Login: React.FC = () => {
       });
     } else if (!emailVerify || !emailRegExp.test(username)) {
       setEmailVerify(false);
-      alert('이메일이 양식에 맞지 않습니다.');
+      setAlertStatus({
+        isOpen: true,
+        message: '이메일이 양식에 맞지 않습니다.',
+        icon: <BiBlock />,
+      });
       setFocus('email');
     } else {
-      alert('이메일과 비밀번호를 정확하게 입력해주세요.');
+      setAlertStatus({
+        isOpen: true,
+        message: '이메일과 비밀번호를 정확하게 입력해주세요.',
+        icon: <BiBlock />,
+      });
       setFocus('password');
     }
   };
@@ -78,8 +92,15 @@ const Login: React.FC = () => {
   const speechBubleAfter: string =
     'after:absolute after:bottom-[-12px] after:border-[5px] after:border-transparent after:left-2/4 after:border-t-[7px] after:border-t-mainColor after:translate-y-[-100%] after:border-b-0 after:translate-x-[-50%]';
 
+  const [alertStatus, setAlertStatus] = useState({
+    isOpen: false,
+    message: '',
+    icon: <></>,
+  });
+
   return (
     <div className="login-container w-[300px] mx-auto flex flex-col justify-center items-center -mb-[100px] -mt-[56px] h-[100vh]">
+      <Alert alertStatus={alertStatus} setAlertStatus={setAlertStatus} />
       <div className="logo flex justify-center w-full mb-[40px]">
         <img src="/image/logo/LogoVertical.svg" />
       </div>
