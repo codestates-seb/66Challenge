@@ -35,7 +35,7 @@ interface propsValue {
     title: string;
     imageUrl: string | null;
     habitId: number;
-    allChallengers: number;
+    challengers: number;
   };
   score?: number;
   body?: string;
@@ -134,7 +134,7 @@ export function DropDown({
       window.location.reload();
     } else if (dropDownType === 'habit') {
       //습관 삭제 비동기 함수 호출
-      if (habitData.allChallengers > 0) {
+      if (habitData.challengers > 0) {
         alert('챌린지 참여자가 있으므로 삭제할 수 없습니다.');
       } else {
         deleteHabit({ habitId });
@@ -180,7 +180,7 @@ export function DropDown({
                 className="text-sm border-x border-b border-[#e5e5e5]  bg-white  text-center py-[5px]"
                 onClick={(_) => {
                   if (dropDownType === 'habit') {
-                    if (habitData.allChallengers > 0) {
+                    if (habitData.challengers > 0) {
                       alert('챌린지 참여자가 있으므로 수정할 수 없습니다.');
                     } else {
                       router.push(`/habit/edit/${habitId}`);
