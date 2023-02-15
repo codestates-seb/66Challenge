@@ -7,6 +7,7 @@ build/
 **/src/main/resources/application-local.yml
 **/src/test
 **/src/main/resources/application-oauth.yml
+**/src/main/resources/challenge-375405-firebase-adminsdk-ymetp-3cc2c2692f.json
 
 # Created by https://www.toptal.com/developers/gitignore/api/java,macos,windows,react
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,macos,windows,react

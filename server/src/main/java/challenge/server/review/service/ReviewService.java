@@ -2,6 +2,7 @@ package challenge.server.review.service;
 
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
+import challenge.server.firebase.FCMService;
 import challenge.server.habit.service.HabitService;
 import challenge.server.review.dto.ReviewDto;
 import challenge.server.review.entity.Review;
@@ -26,9 +27,12 @@ public class ReviewService {
     private final CustomBeanUtils<Review> beanUtils;
     private final HabitService habitService;
     private final ReviewMapper mapper;
+    private final FCMService fcmService;
 
     public Review createReview(Review review) {
         verfiyExistReview(review.getHabit().getHabitId(), review.getUser().getUserId());
+        fcmService.sendReviewNotice(review.getHabit().getHost(),
+                review.getBody());   // 리뷰가 달린 습관의 작성자에게 알림 전송
 
         return reviewRepository.save(review);
     }

@@ -98,6 +98,7 @@ jwt:
   key: ENC(9d9nAF96s1rYf4Aaq9yt/FPLZ2f24RkPpmWouKdl6q/+6/NsYLqtRrNaMjc3PjXhk7Wpt/Wn86Dp4RMLUONneCGFbnacoFoF)
 cron:
   cron1: 0 0 0 * * *
+  cron2: 0 0 9 * * *
 cloud:
   aws:
     s3:
@@ -114,5 +115,7 @@ logging:
         SQL: debug
     challenge:
       server: trace
+fcm:
+  certification: ${GOOGLE_APPLICATION_CREDENTIALS}
 #  file:
 #    name: ~/codestates/log/challenge66.log

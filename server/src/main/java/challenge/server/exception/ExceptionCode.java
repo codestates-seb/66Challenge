@@ -28,7 +28,8 @@ public enum ExceptionCode {
     EMAIL_VERIFICATION_FAILED(404, "Email verification failed"),
     REFRESH_TOKEN_NOT_VALID(400, "Refresh token not valid"),
     LOGOUT_USER(403, "Logout user"),
-    ACCESS_TOKEN_NOT_VALID(400, "Access token not valid");
+    ACCESS_TOKEN_NOT_VALID(400, "Access token not valid"),
+    INTERNAL_SERVER_ERROR(500, "Internal server error");
 
     @Getter
     private int status;
