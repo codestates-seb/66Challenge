@@ -641,11 +641,15 @@ public class UserService {
         // DB/Redis에서 user email을 기반으로 저장된 refreshToken 값을 가져옴
         User findUser = findByEmail(authentication.getName());
         String refreshTokenInDb = findUser.getRefreshToken();
+        String fcmTokenInDb = findUser.getFcmToken();
 
         // DB/Redis에 refreshToken이 존재하는 경우 삭제
         if (refreshTokenInDb != null) {
-            findUser.setRefreshToken(null);
+            findUser.deleteFcmToken();
         }
+
+        // DB/Redis에 fcmToken이 존재하는 경우 삭제
+        if (fcmTokenInDb != null) findUser.setFcmToken(null);
 
         // 해당 accessToken 유효시간 가지고 와서 blackList로 저장하기
         Long expiration = jwtTokenizer.getExpirationFromToken(accessToken, base64EncodedSecretKey);
@@ -656,5 +660,21 @@ public class UserService {
                 build();
 
         logoutListRepository.save(logoutList);
+    }
+
+    // 알림 받는 것에 동의한 User의 정보만 받아옴
+    public List<User> findAllByFcmTokenNotNull() {
+        return userRepository.findAllByFcmTokenNotNull();
+    }
+
+    @Transactional
+    public void acceptFcm(Long userId) {
+        User findUser = findUser(userId);
+        findUser.acceptFcm(true);
+    }
+
+    public void reissueFcmToken(Long userId, String fcmToken) {
+        User findUser = findUser(userId);
+        findUser.reissueFcmToken(fcmToken);
     }
 }

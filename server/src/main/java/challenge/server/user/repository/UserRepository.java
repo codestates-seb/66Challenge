@@ -3,6 +3,7 @@ package challenge.server.user.repository;
 import challenge.server.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long>/*, UserCustomRepository*/ {
@@ -11,6 +12,8 @@ public interface UserRepository extends JpaRepository<User, Long>/*, UserCustomR
     Optional<User> findByUsername(String username);
 
     Optional<User> findByRefreshToken(String refreshToken);
+
+    List<User> findAllByFcmTokenNotNull();
 
     // 5회 이상 신고 당한 회원 정지
     /* 신고 테이블에 특정 회원에 대한 신고 회수가 5회가 되는 시점에

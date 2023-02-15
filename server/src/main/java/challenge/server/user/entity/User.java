@@ -45,8 +45,13 @@ public class User extends BaseTimeEntity {
 
     // 회원 가입 시 이메일 인증 관련
     private String refreshToken;
-//    private String fcmToken;
     private Boolean isEmailVerified;
+
+    // FCM 관련
+    private String fcmToken;
+
+    @ColumnDefault(value = "false")
+    private Boolean acceptFcm;
 
     // JWT 구현 시 추가
     @ElementCollection(fetch = FetchType.EAGER)
@@ -87,6 +92,21 @@ public class User extends BaseTimeEntity {
 
     public void succeedEmailVerification() {
         this.isEmailVerified = true;
+    }
+
+    // 푸쉬 알림 동의
+    public void acceptFcm(boolean b) {
+        this.acceptFcm = b;
+    }
+
+    // FcmToken 발급(로그인 / 앱을 실행했을 때 로그인 되어있을 경우)
+    public void reissueFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+
+    // 로그아웃 시 유저의 FcmToken 삭제
+    public void deleteFcmToken() {
+        this.fcmToken = null;
     }
 
     public enum Status {
