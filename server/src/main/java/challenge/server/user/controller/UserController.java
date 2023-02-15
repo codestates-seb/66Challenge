@@ -226,7 +226,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping("/{user-id}/fcmToken")
+    @PatchMapping("/{user-id}/fcmtoken")
     public ResponseEntity reissueFcmToken(@PathVariable("user-id") @Positive Long userId,
                                           @RequestParam String fcmToken) {
         userService.reissueFcmToken(userId, fcmToken);
