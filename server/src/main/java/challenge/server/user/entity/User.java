@@ -94,11 +94,6 @@ public class User extends BaseTimeEntity {
         this.isEmailVerified = true;
     }
 
-    // 푸쉬 알림 동의
-    public void acceptFcm(boolean b) {
-        this.acceptFcm = b;
-    }
-
     // FcmToken 발급(로그인 / 앱을 실행했을 때 로그인 되어있을 경우)
     public void reissueFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;

@@ -219,13 +219,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping("/{user-id}/fcm")
-    public ResponseEntity acceptFcm(@PathVariable("user-id") @Positive Long userId) {
-        userService.acceptFcm(userId);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @PatchMapping("/{user-id}/fcmtoken")
     public ResponseEntity reissueFcmToken(@PathVariable("user-id") @Positive Long userId,
                                           @RequestParam String fcmToken) {
