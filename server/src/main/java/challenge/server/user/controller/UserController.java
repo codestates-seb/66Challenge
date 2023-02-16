@@ -226,4 +226,11 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PatchMapping("/{user-id}/fcmtoken/delete")
+    public ResponseEntity deleteFcmToken(@PathVariable("user-id") @Positive Long userId) {
+        userService.deleteFcmToken(userId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
