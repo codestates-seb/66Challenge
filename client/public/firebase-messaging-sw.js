@@ -17,14 +17,14 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
-const messaging = firebase.messaging();
 
-// messaging.onBackgroundMessage((payload) => {
-//   // Customize notification here
-//   const notificationTitle = payload.notification.title;
-//   const notificationOptions = {
-//     body: payload.notification.body,
-//     icon: '/image/logo.svg',
-//   };
-//   self.registration.showNotification(notificationTitle, notificationOptions);
-// });
+messaging.onBackgroundMessage((payload) => {
+  // Customize notification here
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: '/image/logo.svg',
+  };
+  console.log(payload);
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
