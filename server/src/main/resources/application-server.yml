@@ -116,6 +116,6 @@ logging:
     challenge:
       server: trace
 fcm:
-  certification: ${GOOGLE_APPLICATION_CREDENTIALS}
+  certification: /root/fcm/service-account-file.json
 #  file:
 #    name: ~/codestates/log/challenge66.log
