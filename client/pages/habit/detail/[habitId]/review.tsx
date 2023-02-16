@@ -22,7 +22,11 @@ export default function HabitDetailReview() {
   );
 
   return (
-    <div className="habit-detail-review-container px-5 pt-5 min-h-screen flex items-center justify-center">
+    <div
+      className={`habit-detail-review-container px-5 pt-5 min-h-screen flex  ${
+        reviewData.length !== 0 ? 'null' : 'items-center'
+      } justify-center`}
+    >
       <div>
         {reviewData.length !== 0 ? (
           reviewData.map((el) => {
