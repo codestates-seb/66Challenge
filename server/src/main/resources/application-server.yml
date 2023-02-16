@@ -116,6 +116,6 @@ logging:
     challenge:
       server: trace
 fcm:
-  certification: /root/fcm/service-account-file.json
+  certification: file:/root/fcm/service-account-file.json
 #  file:
 #    name: ~/codestates/log/challenge66.log
