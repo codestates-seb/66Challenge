@@ -62,6 +62,7 @@ const Home: React.FC = () => {
     >
       <SlideBanner bannerCont={slideData} t={2000} pagination={true} />
       <div className="main-category px-[20px]">
+        <Pushtest />
         <ul className="main-category-list grid grid-cols-4 my-[20px]">
           {categoryData.map((el, idx) => {
             return (

@@ -4,13 +4,14 @@ import {
 } from 'react-icons/io';
 import firebase from 'firebase';
 import { getToken } from '../util/firebase';
-import { useAppDispatch } from '../ducks/store';
+import { useAppDispatch, useAppSelector } from '../ducks/store';
 import {
   notificationToken,
   notificationTokenDelete,
 } from '../ducks/loginIdentitySlice';
 import axios from 'axios';
 import { useState } from 'react';
+
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -23,6 +24,7 @@ const firebaseConfig = {
 export function PushSubscribe() {
   const [authState, setAuthState] = useState({ state: '', type: '' });
   const dispatch = useAppDispatch();
+  const { userId } = useAppSelector((state) => state.loginIdentity);
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   } else {
@@ -36,27 +38,22 @@ export function PushSubscribe() {
     const token = await getToken();
     dispatch(notificationToken(token));
     axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/webpush`, { token })
+      .patch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/fcmtoken?fcmToken=${token}`,
+      )
       .then(() => {
         console.log('send');
       });
-    // axios.post('https://0280-222-110-121-44.jp.ngrok.io/message', {
-    //   message: token,
-    // });
   };
   const onNotificationCancelHandle = async () => {
     setAuthState({ state: 'none', type: 'cancel' });
     setTimeout(() => {
       setAuthState({ state: '', type: 'cancel' });
     }, 1500);
-    const token = await getToken();
     dispatch(notificationTokenDelete());
-    axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/webpushcancel`, {
-      token,
-    });
-    // axios.post('https://0280-222-110-121-44.jp.ngrok.io/message', {
-    //   message: token,
-    // });
+    axios.patch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${userId}/fcmtoken/delete`,
+    );
   };
 
   return (
