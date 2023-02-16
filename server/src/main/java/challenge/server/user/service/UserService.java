@@ -672,4 +672,10 @@ public class UserService {
         User findUser = findUser(userId);
         findUser.reissueFcmToken(fcmToken);
     }
+
+    @Transactional
+    public void deleteFcmToken(Long userId) {
+        User findUser = findUser(userId);
+        findUser.deleteFcmToken();
+    }
 }

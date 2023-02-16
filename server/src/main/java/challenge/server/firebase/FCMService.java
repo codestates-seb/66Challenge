@@ -25,7 +25,7 @@ public class FCMService {
     private final NoticeService noticeService;
 
     @Async  // 비동기로 동작하도록 설정
-    public void sendNotification(User user, String title, String body) {
+    public void sendNotification(User user, String title, String body, String route) {
         if (user.getFcmToken() == null) return;
         Notification notification = Notification.builder()
                 .setTitle(title)
@@ -36,7 +36,7 @@ public class FCMService {
                 .setNotification(notification)
                 .setToken(user.getFcmToken())
                 .putData("time", LocalDateTime.now().toString())
-//                .putData("route", route)
+                .putData("route", route)
                 .build();
 
         try {
@@ -46,7 +46,7 @@ public class FCMService {
             Notice notice = Notice.builder()
                     .user(user)
                     .content(body)
-//                    .route(route)
+                    .route(route)
                     .state(1)
                     .title(title)
                     .build();
@@ -70,14 +70,16 @@ public class FCMService {
         for (User user : users) {
             sendNotification(user,
                     "motivation title",
-                    "motivatkon body");
+                    "motivatkon body",
+                    "https://66challenge.shop");
         }
     }
 
     @Async
-    public void sendReviewNotice(User user, String body) {
+    public void sendReviewNotice(User user, String body, Long habitId) {
         sendNotification(user,
                 "review title",
-                body);
+                body,
+                "https://66challenge.shop/habit/detail/" + habitId + "/review");
     }
 }
