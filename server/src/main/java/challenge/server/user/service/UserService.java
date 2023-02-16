@@ -668,11 +668,6 @@ public class UserService {
     }
 
     @Transactional
-    public void acceptFcm(Long userId) {
-        User findUser = findUser(userId);
-        findUser.acceptFcm(true);
-    }
-
     public void reissueFcmToken(Long userId, String fcmToken) {
         User findUser = findUser(userId);
         findUser.reissueFcmToken(fcmToken);
