@@ -25,18 +25,21 @@ public class FCMService {
     private final NoticeService noticeService;
 
     @Async  // 비동기로 동작하도록 설정
-    public void sendNotification(User user, String title, String body, String route) {
+    public void sendNotification(User user, String title, String body, String link) {
         if (user.getFcmToken() == null) return;
         Notification notification = Notification.builder()
                 .setTitle(title)
                 .setBody(body)
+                .setImage("https://s3.ap-northeast-2.amazonaws.com/challenge66.file.bucket/images/ed8e8ea1-0b1c-4cda-aba7-bb408fb7837f.png")
                 .build();
 
         Message message = Message.builder()
                 .setNotification(notification)
                 .setToken(user.getFcmToken())
+                .putData("title", title)
+                .putData("body", body)
+                .putData("link", link)
                 .putData("time", LocalDateTime.now().toString())
-                .putData("route", route)
                 .build();
 
         try {
@@ -46,7 +49,7 @@ public class FCMService {
             Notice notice = Notice.builder()
                     .user(user)
                     .content(body)
-                    .route(route)
+                    .link(link)
                     .state(1)
                     .title(title)
                     .build();
