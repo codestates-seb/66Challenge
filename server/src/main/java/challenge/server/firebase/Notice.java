@@ -21,6 +21,6 @@ public class Notice {
     private User user;
     private String title;
     private String content;
-    private String route;
+    private String link;
     private int state;
 }
