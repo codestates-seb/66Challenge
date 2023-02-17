@@ -8,6 +8,7 @@ import { useAppSelector } from '../ducks/store';
 import { Footer } from '../components/footer';
 import { useState, useEffect, useCallback } from 'react';
 import { getHabitsInHome } from '../module/habitFunctionMoudules';
+import { withHead } from '../components/layout/withHead';
 interface habitsType {
   body: string;
   habitId: number;
@@ -112,4 +113,10 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default withHead(
+  Home,
+  '66일 좋은 습관 만들기',
+  '66일 동안 습관 만들기! 좋은 습관 만들고싶어? 66일이면 충분해. 66일동안 너 자신을 증명해봐. 야, 너두 할 수 있어',
+  '',
+  '/image/logo.svg',
+);

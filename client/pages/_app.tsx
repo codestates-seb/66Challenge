@@ -42,10 +42,4 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   );
 }
 
-export default withHead(
-  wrapper.withRedux(MyApp),
-  '66일 좋은 습관 만들기',
-  '66일 동안 습관 만들기! 좋은 습관 만들고싶어? 66일이면 충분해. 66일동안 너 자신을 증명해봐. 야, 너두 할 수 있어',
-  '',
-  '/image/logo.svg',
-);
+export default wrapper.withRedux(MyApp);
