@@ -8,6 +8,7 @@ import {
   postUserEmailAuth,
 } from '../../module/userFunctionMoudules';
 import { Modal } from '../../components/modal';
+import { withHead } from '../../components/layout/withHead';
 interface IformValue {
   email: string;
   username: string;
@@ -349,4 +350,10 @@ const SignUp: React.FC = () => {
     </div>
   );
 };
-export default SignUp;
+export default withHead(
+  SignUp,
+  '66일 좋은 습관 만들기',
+  '66일 동안 습관 만들기! 좋은 습관 만들고싶어? 66일이면 충분해. 회원가입 가기!',
+  'user/signup',
+  '/image/logo.svg',
+);

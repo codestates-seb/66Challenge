@@ -11,7 +11,7 @@ import { onSilentRefresh } from '../module/jsonWebToken';
 import { getCookie } from '../module/cookies';
 import { useAppDispatch } from '../ducks/store';
 import { initLoginIdentity } from '../ducks/loginIdentitySlice';
-
+import { withHead } from '../components/layout/withHead';
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -42,4 +42,10 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   );
 }
 
-export default wrapper.withRedux(MyApp);
+export default withHead(
+  wrapper.withRedux(MyApp),
+  '66일 좋은 습관 만들기',
+  '66일 동안 습관 만들기! 좋은 습관 만들고싶어? 66일이면 충분해. 66일동안 너 자신을 증명해봐. 야, 너두 할 수 있어',
+  '',
+  '/image/logo.svg',
+);

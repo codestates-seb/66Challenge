@@ -26,5 +26,5 @@ messaging.onBackgroundMessage((payload) => {
     icon: '/image/logo.svg',
   };
   console.log(payload);
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  // self.registration.showNotification(notificationTitle, notificationOptions);
 });

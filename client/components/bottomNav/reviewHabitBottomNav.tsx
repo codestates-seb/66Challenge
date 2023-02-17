@@ -13,7 +13,6 @@ export function ReviewHabitBottomNav({ habitId, userId }) {
   const [score, setScore] = useState(-1);
   const [authState, setAuthState] = useState({ state: '', boolean: false });
   const router = useRouter();
-
   const scoreHandle = (score: number) => {
     setScore(score);
   };
@@ -49,7 +48,11 @@ export function ReviewHabitBottomNav({ habitId, userId }) {
               }, 1500);
             } else {
               setIsOpen(false);
-              router.push(`/habit/detail/${habitId}/review`);
+              if (router.asPath.includes('review')) {
+                window.location.reload();
+              } else {
+                router.push(`/habit/detail/${habitId}/review`);
+              }
             }
           }}
         >

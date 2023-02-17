@@ -5,6 +5,7 @@ import { useIntersection } from '../../../hooks/useIntersection';
 import { MdExpandMore } from 'react-icons/md';
 import { useRouter } from 'next/router';
 import { useAppSelector } from '../../../ducks/store';
+import { withHead } from '../../../components/layout/withHead';
 interface IarrowValue {
   className: string;
   boolean: boolean;
@@ -22,7 +23,7 @@ interface IhabitValue {
   thumbImgUrl: null | string;
   title: string;
 }
-export default function SearchHabit() {
+function SearchHabit() {
   const router = useRouter();
 
   const [arrowDirection, setArrowDirection] = useState<IarrowValue>({
@@ -203,3 +204,10 @@ export default function SearchHabit() {
     </div>
   );
 }
+export default withHead(
+  SearchHabit,
+  '66일 좋은 습관 만들기',
+  '66일 동안 습관 만들기! 좋은 습관 만들고싶어? 66일이면 충분해. 습관 구경하러 가기!',
+  'habit/search',
+  '/image/logo.svg',
+);

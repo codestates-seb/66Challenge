@@ -6,7 +6,7 @@ import { loginRequest } from '../../ducks/loginIdentitySlice';
 import { useAppDispatch } from '../../ducks/store';
 import { Alert } from '../../components/alert';
 import { BiBlock } from 'react-icons/bi';
-
+import { withHead } from '../../components/layout/withHead';
 type FormValues = {
   email: string;
   password: string;
@@ -211,4 +211,10 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default withHead(
+  Login,
+  '66일 좋은 습관 만들기',
+  '66일 동안 습관 만들기! 좋은 습관 만들고싶어? 66일이면 충분해. 로그인 하러 가기!',
+  'user/login',
+  '/image/logo.svg',
+);
