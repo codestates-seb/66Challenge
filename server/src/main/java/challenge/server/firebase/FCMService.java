@@ -72,16 +72,16 @@ public class FCMService {
 
         for (User user : users) {
             sendNotification(user,
-                    "motivation title",
-                    "motivatkon body",
+                    "66Challenge를 시작해볼까요?",
+                    "더 나은 나를 만드는 66일, 지금 시작해보세요!",
                     "https://66challenge.shop");
         }
     }
 
     @Async
-    public void sendReviewNotice(User user, String body, Long habitId) {
+    public void sendReviewNotice(User user, String body, Long habitId, String username) {
         sendNotification(user,
-                "review title",
+                username + "님이 후기를 등록했어요!",
                 body,
                 "https://66challenge.shop/habit/detail/" + habitId + "/review");
     }
