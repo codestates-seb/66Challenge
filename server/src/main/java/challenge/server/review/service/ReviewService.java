@@ -32,7 +32,7 @@ public class ReviewService {
     public Review createReview(Review review) {
         verfiyExistReview(review.getHabit().getHabitId(), review.getUser().getUserId());
         fcmService.sendReviewNotice(review.getHabit().getHost(),
-                review.getBody(), review.getHabit().getHabitId());   // 리뷰가 달린 습관의 작성자에게 알림 전송
+                review.getBody(), review.getHabit().getHabitId(), review.getUser().getUsername());   // 리뷰가 달린 습관의 작성자에게 알림 전송
 
         return reviewRepository.save(review);
     }
