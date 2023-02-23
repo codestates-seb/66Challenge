@@ -372,6 +372,4 @@ public class UserDto {
         int daysOfFail;
     }
 
-
-
 }
