@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static challenge.server.user.entity.User.Gender.FEMALE;
 import static challenge.server.user.entity.User.Gender.MALE;
@@ -176,5 +177,11 @@ public class UserMapperImpl {
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .build();
+    }
+
+    public List<UserDto.SimpleResponse> usersToSimpleResponses(List<User> users) {
+        return users.stream().map(
+                user -> userToUserSimpleResponseDto(user)
+        ).collect(Collectors.toList());
     }
 }

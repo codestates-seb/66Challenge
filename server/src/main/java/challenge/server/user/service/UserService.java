@@ -21,6 +21,7 @@ import challenge.server.user.entity.*;
 import challenge.server.user.mapper.UserMapperImpl;
 import challenge.server.user.repository.EmailVerificationRepository;
 import challenge.server.user.repository.LogoutListRepository;
+import challenge.server.user.repository.QUserRepository;
 import challenge.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +50,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-    private final AuthRepository authRepository;
+    private final QUserRepository qUserRepository;
     private final EmailVerificationRepository emailVerificationRepository;
     private final BookmarkRepository bookmarkRepository;
     private final HabitRepository habitRepository;
@@ -678,4 +679,23 @@ public class UserService {
         User findUser = findUser(userId);
         findUser.deleteFcmToken();
     }
+
+    // 채팅
+    // 5. 회원 검색
+    public List<UserDto.SimpleResponse> findUsersByKeyword(Long lastUserId, int size, String keyword) {
+        return userMapper.usersToSimpleResponses(qUserRepository.findUsersByKeyword(lastUserId,size,keyword));
+    }
+
+    public UserDto.SimpleResponse userToDto(User user) {
+        return userMapper.userToUserSimpleResponseDto(user);
+    }
+
+    // mapper를 바로 호출하거나, 메서드를 호출. 필요한가? mapper를 여러 메서드 내에서 호출하는 것 보다는 깔끔하긴 함.
+    public List<UserDto.SimpleResponse> usersToDtos(List<User> users) {
+        return userMapper.usersToSimpleResponses(users);
+    }
+
+    public List<UserDto.SimpleResponse> usersToRoomDtos(List<User> users) {
+        return userMapper.usersToSimpleResponses(users);
+    } // TODO 위 메서드 리팩토링
 }
