@@ -3,6 +3,8 @@ package challenge.server.user.entity;
 import challenge.server.audit.BaseTimeEntity;
 import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.challenge.entity.Challenge;
+import challenge.server.chat.chatMessage.ChatMessage;
+import challenge.server.chat.userchatroom.UserChatRoom;
 import challenge.server.habit.entity.Habit;
 import challenge.server.report.entity.Report;
 import lombok.*;
@@ -75,6 +77,12 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Challenge> challenges = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserChatRoom> userChatRooms = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatMessage> chatMessages = new ArrayList<>();
 
     public User update(String name, String profileImageUrl) {
         this.username = name;
