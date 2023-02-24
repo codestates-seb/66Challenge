@@ -12,9 +12,10 @@ import java.util.stream.Collectors;
 public class ChatRoomMapper {
 
     // request DTO -> ChatRoom entity / title 만 매핑하면 됨.
-    public ChatRoom dtoToChatRoom(ChatRoomDto.Request dto){
+    public ChatRoom dtoToChatRoom(Long habitId, String title){
         return ChatRoom.builder()
-                .title(dto.getTitle())
+                .title(title + "오픈채팅방")
+                .habitId(habitId)
                 .build();
     }
 

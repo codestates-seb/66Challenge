@@ -233,4 +233,12 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    // 채팅 - 사용자 검색
+    @GetMapping("/search")
+    public ResponseEntity searchUsers(@RequestParam(value = "lastUserId", required = false)Long lastUserId,
+                                      @RequestParam("size") int size,
+                                      @RequestParam("keyword") String keyword) {
+        return new ResponseEntity(userService.findUsersByKeyword(lastUserId, size, keyword),HttpStatus.OK);
+    }
 }

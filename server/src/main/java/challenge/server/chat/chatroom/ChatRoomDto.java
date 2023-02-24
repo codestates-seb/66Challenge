@@ -25,6 +25,7 @@ public class ChatRoomDto {
     @Builder // 채팅방 상세 보기
     public static class ResponseDetail {
         private Long chatRoomId;
+        private Long habitId;
         private String title;
         private List<UserDto.SimpleResponse> participants;
 //      private List<ChatMessageDto> chats; -> chatResponse 으로 요청 분할
@@ -35,6 +36,7 @@ public class ChatRoomDto {
     @Builder // 채팅방 목록 보기
     public static class ResponseSimple {
         private Long chatRoomId;
+        private Long habitId;
         private String title;
         private List<UserDto.SimpleResponse> participants;
         private String lastChat;

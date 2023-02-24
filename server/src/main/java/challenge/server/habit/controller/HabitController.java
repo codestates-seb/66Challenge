@@ -2,7 +2,6 @@ package challenge.server.habit.controller;
 
 import challenge.server.auth.dto.AuthDto;
 import challenge.server.auth.entity.Auth;
-import challenge.server.auth.mapper.AuthMapper;
 import challenge.server.auth.service.AuthService;
 import challenge.server.bookmark.entity.Bookmark;
 import challenge.server.bookmark.mapper.BookmarkMapper;
@@ -11,6 +10,7 @@ import challenge.server.challenge.dto.ChallengeDto;
 import challenge.server.challenge.entity.Challenge;
 import challenge.server.challenge.mapper.ChallengeMapper;
 import challenge.server.challenge.service.ChallengeService;
+import challenge.server.chat.chatroom.ChatRoomService;
 import challenge.server.file.service.FileUploadService;
 import challenge.server.habit.dto.HabitDto;
 import challenge.server.habit.entity.Habit;
@@ -50,13 +50,13 @@ public class HabitController {
     private final ReportService reportService;
     private final ReportMapperImpl reportMapper;
     private final AuthService authService;
-    private final AuthMapper authMapper;
     private final ReviewService reviewService;
     private final ReviewMapper reviewMapper;
     private final FileUploadService fileUploadService;
     private final UserService userService;
     private final ChallengeService challengeService;
     private final ChallengeMapper challengeMapper;
+    private final ChatRoomService chatRoomService;
 
     @PostMapping
     public ResponseEntity postHabit(@RequestPart("thumbImg") MultipartFile thumbImg,
@@ -71,6 +71,7 @@ public class HabitController {
         if(failImg!=null) habit.setFailImgUrl(fileUploadService.save(failImg));
 
         Habit createHabit = habitService.createHabit(habit, habitPostDto.getHostUserId());
+        chatRoomService.createChatRoom(createHabit.getHabitId(), createHabit.getTitle());
 
         return new ResponseEntity(habitMapper.habitToHabitResponseDetailDto(createHabit, habitPostDto.getHostUserId()), HttpStatus.CREATED);
     }

@@ -3,20 +3,13 @@ package challenge.server.challenge.repository;
 import challenge.server.auth.entity.Auth;
 import challenge.server.challenge.dto.ChallengeDto;
 import challenge.server.challenge.entity.Challenge;
-import challenge.server.habit.entity.QHabit;
-import challenge.server.review.entity.QReview;
+
+import challenge.server.habit.entity.Habit;
 import challenge.server.user.dto.UserDto;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.criterion.Projection;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -26,7 +19,6 @@ import static challenge.server.auth.entity.QAuth.auth;
 import static challenge.server.challenge.entity.Challenge.Status.CHALLENGE;
 import static challenge.server.challenge.entity.QChallenge.challenge;
 import static challenge.server.habit.entity.QHabit.habit;
-import static challenge.server.review.entity.QReview.review;
 
 @Repository
 @RequiredArgsConstructor
@@ -139,6 +131,15 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository 
                 .where(ltChallengeId(lastChallengeId))
                 .orderBy(challenge.challengeId.desc())
                 .limit(size)
+                .fetch();
+    }
+
+    // 내가 참여 중인 습관 목록
+    public List<Habit> findHabitsByUserId(Long userId) {
+        return jpaQueryFactory
+                .select(challenge.habit)
+                .from(challenge)
+                .where(challenge.user.userId.eq(userId))
                 .fetch();
     }
 
