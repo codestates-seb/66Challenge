@@ -1,4 +1,6 @@
 package challenge.server.chat.chatroom;
 
-public interface ChatRoomRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 }

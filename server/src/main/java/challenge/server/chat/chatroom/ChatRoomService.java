@@ -25,20 +25,10 @@ public class ChatRoomService {
 
     // 1. 채팅방 생성 - mapper 변환, repo(ChatRoom, UserChatRoom) 저장
     @Transactional
-    public ChatRoomDto.ResponseDetail createChatRoom(ChatRoomDto.Request chatRoomDto) {
-        // 1. ChatRoom Entity 변환 & Repo 저장
-        ChatRoom chatRoom = chatRoomRepository.save(mapper.dtoToChatRoom(chatRoomDto)); // (1) chatRoom에 userChatRooms, ChatMessages 없음
-
-        // 2. UserChatRoom repo 저장 - List<Long> participants 순회 & User, ChatRoom 엔티티 저장.
-        userChatRoomService.saveUserChatRooms(chatRoomDto, chatRoom);
-
-        ChatRoomDto.ResponseDetail savedChatRoom = mapper.chatRoomToDtoDetail(chatRoom);
-
-        List<User> users = userChatRoomService.findUsersByChatRoomId(chatRoom.getChatRoomId());
-        savedChatRoom.setParticipants(userService.usersToDtos(users));
-        // (2) 아직 userChatRoom들이 commit되지 않아서 chatRoom에 userChatRoom들이 없는 상태이지 않을까? 근데 chatroom에서 userChatroom으로 접근 안해서 괜찮을듯?
-
-        return savedChatRoom;
+    public ChatRoomDto.ResponseDetail createChatRoom(Long habitId, String title) {
+        // ChatRoom Entity 변환 & Repo 저장
+        ChatRoom chatRoom = chatRoomRepository.save(mapper.dtoToChatRoom(habitId, title));
+        return mapper.chatRoomToDtoDetail(chatRoom);
     }
 
     // 2. chatRoomId로 채팅방 조회

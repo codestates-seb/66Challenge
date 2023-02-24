@@ -29,7 +29,8 @@ public enum ExceptionCode {
     REFRESH_TOKEN_NOT_VALID(400, "Refresh token not valid"),
     LOGOUT_USER(403, "Logout user"),
     ACCESS_TOKEN_NOT_VALID(400, "Access token not valid"),
-    INTERNAL_SERVER_ERROR(500, "Internal server error");
+    INTERNAL_SERVER_ERROR(500, "Internal server error"),
+    CHATROOM_NOT_FOUND(404,"Chatroom not found");
 
     @Getter
     private int status;
