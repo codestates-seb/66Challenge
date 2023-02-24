@@ -53,15 +53,17 @@ public class SecurityConfig { // https 적용
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .httpBasic().disable() //팝업창 뜨는 방식으로 뜨는 로그인 인증 기능 = 비활성화
                 .headers().frameOptions().sameOrigin()
+                .and()
+                .cors()
                 .and()
                 .csrf().disable()
 //                .cors().configurationSource(corsConfigurationSource())
 //                .and() // 아래의 corsCofiguartionSource 소환 APP간의 출처가 다른경우 http통신을 통한 리소스 접근이 제한됨
+                .formLogin().disable() //기본으로 제공하는 form 로그인 인증 기능 = 비활성화
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .formLogin().disable() //기본으로 제공하는 form 로그인 인증 기능 = 비활성화
-                .httpBasic().disable() //팝업창 뜨는 방식으로 뜨는 로그인 인증 기능 = 비활성화
                 .exceptionHandling()
                 .authenticationEntryPoint(new UserAuthenticationEntryPoint()) //Oauth2에서는 인증에서 실패했을때 처리하는 로직
                 .accessDeniedHandler(new UserAccessDeniedHandler()) //인가 에러 핸들링
@@ -147,11 +149,10 @@ public class SecurityConfig { // https 적용
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:3000","https://66challenge.shop"
                 ,"http://66challenge.shop","https://66challenge-server.store","http://66challenge-server.store"));
-        configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(Arrays.asList("Refresh", "Authorization"));
-        configuration.addAllowedHeader("*");
+        configuration.setExposedHeaders(Arrays.asList("Refresh", "Authorization","Access-Control-Allow-Origin"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
-
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
