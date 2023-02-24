@@ -56,8 +56,8 @@ public class SecurityConfig { // https 적용
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .csrf().disable()
-                .cors().configurationSource(corsConfigurationSource())
-                .and() // 아래의 corsCofiguartionSource 소환 APP간의 출처가 다른경우 http통신을 통한 리소스 접근이 제한됨
+//                .cors().configurationSource(corsConfigurationSource())
+//                .and() // 아래의 corsCofiguartionSource 소환 APP간의 출처가 다른경우 http통신을 통한 리소스 접근이 제한됨
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable() //기본으로 제공하는 form 로그인 인증 기능 = 비활성화
