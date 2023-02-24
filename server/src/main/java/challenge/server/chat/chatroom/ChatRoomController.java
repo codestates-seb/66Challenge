@@ -9,7 +9,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/chatrooms")
+@RequestMapping
 public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
@@ -26,7 +26,7 @@ public class ChatRoomController {
 //    }
 
     // 2. 채팅방 상세 조회 - 채팅방 정보만 리턴, 채팅목록 정보는 따로 요청
-    @GetMapping("/{room-id}")
+    @GetMapping("chatrooms/{room-id}")
     public ResponseEntity getChatRoom(@PathVariable("room-id") Long roomId) {
         // 1. roomId 넘기기
         // 2. 서비스에서 roomId 로 repo 에서 찾기
@@ -35,21 +35,8 @@ public class ChatRoomController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    // 3. 채팅방 초대
-    @GetMapping("/invite/{room-id}")
-    public ResponseEntity inviteRoom(@PathVariable("room-id") Long roomId,
-                                     @RequestBody List<Long> invited) {
-        // 1. invited, roomId 넘기기
-        // 2. 각 서비스 사용해서 userChatRoom 엔티티 생성
-        // 3. userChatRoom 테이블에 save 하기
-        // 4. ChatService 에서 type ENTER 메시지 변경하기
-        // 5. ~님 초대하였습니다 MessageController에서 발행하기
-
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
     // 4. 채팅방 나가기
-    @GetMapping("/leave/{room-id}")
+    @GetMapping("chatrooms/leave/{room-id}")
     public ResponseEntity leaveRoom(@PathVariable("room-id") Long roomId) {
 
         // 1. roomId, userId(로그인 한 유저) 넘기기
@@ -63,7 +50,7 @@ public class ChatRoomController {
     }
 
     // 5. 채팅방 검색
-    @GetMapping("/search")
+    @GetMapping("chatrooms/search")
     public ResponseEntity searchRooms(@RequestParam("keyword") String keyword) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -71,11 +58,11 @@ public class ChatRoomController {
     // 채팅방 초대 -> room.changeUser
     // 채팅방 나가기 -> room.changeUser
 
-    // 6. POST 테스트
-    @PostMapping("/test")
-    public ResponseEntity test(@RequestBody ChatRoomDto.Request dto) {
-        System.out.println(dto.getTitle()); // null
-        System.out.println(dto.getParticipants()); // null
-        return new ResponseEntity<>(dto,HttpStatus.CREATED);
+    // 6. 채팅방 입장
+    @PostMapping("/habits/{habit-id}/chat/enter") // 엔드포인트 논의
+    public ResponseEntity enterChatRoom(@PathVariable("habit-id") Long habitId,
+                                        @RequestParam("userId") Long userId) {
+        // userId와 habitId로 userChatRoom 저장 및 ChatRoomDto 리턴
+        return new ResponseEntity(chatRoomService.enterChatRoom(userId, habitId), HttpStatus.CREATED);
     }
 }
