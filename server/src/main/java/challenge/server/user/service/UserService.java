@@ -686,16 +686,11 @@ public class UserService {
         return userMapper.usersToSimpleResponses(qUserRepository.findUsersByKeyword(lastUserId,size,keyword));
     }
 
-    public UserDto.SimpleResponse userToDto(User user) {
-        return userMapper.userToUserSimpleResponseDto(user);
+    public UserDto.ChatUser userToChatUser(User user) {
+        return userMapper.userToChatUser(user);
     }
 
-    // mapper를 바로 호출하거나, 메서드를 호출. 필요한가? mapper를 여러 메서드 내에서 호출하는 것 보다는 깔끔하긴 함.
-    public List<UserDto.SimpleResponse> usersToDtos(List<User> users) {
-        return userMapper.usersToSimpleResponses(users);
+    public List<UserDto.ChatUser> usersToChatUsers(List<User> users) {
+        return userMapper.usersToChatUsers(users);
     }
-
-    public List<UserDto.SimpleResponse> usersToRoomDtos(List<User> users) {
-        return userMapper.usersToSimpleResponses(users);
-    } // TODO 위 메서드 리팩토링
 }

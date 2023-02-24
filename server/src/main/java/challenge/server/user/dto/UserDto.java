@@ -372,4 +372,15 @@ public class UserDto {
         int daysOfFail;
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ChatUser {
+        private Long userId;
+        private String email;
+        private String username;
+        private String profileImageUrl;
+    }
+
 }
