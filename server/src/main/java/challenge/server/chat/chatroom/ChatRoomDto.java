@@ -27,7 +27,7 @@ public class ChatRoomDto {
         private Long chatRoomId;
         private Long habitId;
         private String title;
-        private List<UserDto.SimpleResponse> participants;
+        private List<UserDto.ChatUser> participants;
 //      private List<ChatMessageDto> chats; -> chatResponse 으로 요청 분할
     }
 
@@ -38,7 +38,7 @@ public class ChatRoomDto {
         private Long chatRoomId;
         private Long habitId;
         private String title;
-        private List<UserDto.SimpleResponse> participants;
+        private List<UserDto.ChatUser> participants;
         private String lastChat;
         private LocalDateTime lastChatAt;
     }

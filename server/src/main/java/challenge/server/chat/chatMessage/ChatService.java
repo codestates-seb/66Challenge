@@ -70,7 +70,7 @@ public class ChatService {
 
         // 각 ChatRoomDto.Simple에 participants를 userChatRoomService를 통해 List<User>를 받아 DTO로 변환해 set한다.
         response.stream().forEach(
-                chatRoomDtoSimple -> chatRoomDtoSimple.setParticipants(userService.usersToRoomDtos(
+                chatRoomDtoSimple -> chatRoomDtoSimple.setParticipants(userService.usersToChatUsers(
                         userChatRoomService.findUsersByChatRoomId(chatRoomDtoSimple.getChatRoomId())
                 ))
         );
@@ -89,7 +89,7 @@ public class ChatService {
         // 채팅방 목록을 기준으로 마지막 채팅들을 select -> ChatRoomDto들로 변환 -> 각 Dto의 chatRoomId로 participants 구하여 set
         List<ChatRoomDto.ResponseSimple> response = chatRoomService.chatMessagesToDtoSimples(findLastChatsByUserId(chatRooms));
         response.stream().forEach(
-                chatRoomDtoSimple -> chatRoomDtoSimple.setParticipants(userService.usersToRoomDtos(
+                chatRoomDtoSimple -> chatRoomDtoSimple.setParticipants(userService.usersToChatUsers(
                         userChatRoomService.findUsersByChatRoomId(chatRoomDtoSimple.getChatRoomId())
                 ))
         );

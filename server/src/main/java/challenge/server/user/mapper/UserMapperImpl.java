@@ -184,4 +184,19 @@ public class UserMapperImpl {
                 user -> userToUserSimpleResponseDto(user)
         ).collect(Collectors.toList());
     }
+
+    public UserDto.ChatUser userToChatUser(User user) {
+        return UserDto.ChatUser.builder()
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .profileImageUrl(user.getProfileImageUrl())
+                .build();
+    }
+
+    public List<UserDto.ChatUser> usersToChatUsers(List<User> users) {
+        return users.stream().map(
+                user -> userToChatUser(user)
+        ).collect(Collectors.toList());
+    }
 }

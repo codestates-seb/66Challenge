@@ -1,9 +1,12 @@
 package challenge.server.chat.chatroom;
 
 import challenge.server.chat.chatMessage.ChatMessage;
+import challenge.server.chat.userchatroom.QUserChatRoomRepository;
+import challenge.server.chat.userchatroom.UserChatRoom;
 import challenge.server.chat.userchatroom.UserChatRoomService;
 import challenge.server.exception.BusinessLogicException;
 import challenge.server.exception.ExceptionCode;
+import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +23,8 @@ public class ChatRoomService {
     private final UserService userService;
     private final UserChatRoomService userChatRoomService;
     private final ChatRoomRepository chatRoomRepository;
+    private final QUserChatRoomRepository qUserChatRoomRepository;
     private final ChatRoomMapper mapper;
-
 
     // 1. 채팅방 생성 - mapper 변환, repo(ChatRoom, UserChatRoom) 저장
     @Transactional
@@ -33,14 +36,7 @@ public class ChatRoomService {
 
     // 2. chatRoomId로 채팅방 조회
     public ChatRoomDto.ResponseDetail findChatRoom(Long chatRoomId) {
-        // 1. chatRoomId로 ChatRoom 리턴
-        ChatRoomDto.ResponseDetail findChatRoom = mapper.chatRoomToDtoDetail(findByChatRoomId(chatRoomId));
-        // 2. chatRoomId로 Users 리스트 리턴
-        List<User> users = userChatRoomService.findUsersByChatRoomId(chatRoomId);
-        // 3. ResponseDetail에 UserDto 저장
-        findChatRoom.setParticipants(userService.usersToDtos(users));
-
-        return findChatRoom;
+        return returnChatRoomResponse(findByChatRoomId(chatRoomId));
     }
 
     public ChatRoom findByChatRoomId(Long chatRoomId) {
@@ -52,8 +48,38 @@ public class ChatRoomService {
     public List<ChatRoomDto.ResponseSimple> chatMessagesToDtoSimples(List<ChatMessage> chatMessages) {
         return mapper.chatMessagesToDtoSimples(chatMessages);
     }
-    // 채팅방 생성 -> repo.save
-    // 채팅방 초대 -> room.changeUser
-    // 채팅방 나가기 -> room.changeUser
 
+    // 4. habitId로 채팅방 조회
+    public ChatRoom findByHabitId(Long habitId) {
+        return chatRoomRepository.findByHabitId(habitId).orElseThrow(
+                ()-> new BusinessLogicException(ExceptionCode.CHATROOM_NOT_FOUND)
+        );
+    }
+
+    // 5. 특정 유저가 특정 채팅방에 참여
+    @Transactional
+    public ChatRoomDto.ResponseDetail enterChatRoom(Long userId, Long habitId) {
+
+        ChatRoom chatRoom = findByHabitId(habitId);
+
+        UserChatRoom userChatRoom = UserChatRoom.builder()
+                .user(userService.findUser(userId))
+                .chatRoom(chatRoom)
+                .build();
+        qUserChatRoomRepository.save(userChatRoom);
+
+        return returnChatRoomResponse(chatRoom);
+    }
+
+    // ChatRoomResponseDto로 전환하는 메서드
+    public ChatRoomDto.ResponseDetail returnChatRoomResponse(ChatRoom chatRoom) {
+        // 1. chatRoom -> ChatRoomDTO 리턴
+        ChatRoomDto.ResponseDetail chatRoomDto = mapper.chatRoomToDtoDetail(chatRoom);
+        // 2. chatRoomId로 Users 리스트 리턴
+        List<User> users = userChatRoomService.findUsersByChatRoomId(chatRoom.getChatRoomId());
+        // 3. ResponseDetail에 UserDto 저장
+        chatRoomDto.setParticipants(userService.usersToChatUsers(users));
+
+        return chatRoomDto;
+    }
 }
