@@ -71,6 +71,27 @@ public class ChatRoomService {
         return returnChatRoomResponse(chatRoom);
     }
 
+    // 6. 특정 유저가 채팅방에서 나감
+    @Transactional
+    public void leaveChatRoom(Long chatRoomId, Long userId) {
+        // 1. UserChatRoom Repository에서 행 제거
+        userChatRoomService.delete(chatRoomId, userId);
+        // deleteIfNoUsers(chatRoomId);
+        // 2. 전체 채팅방 목록(마지막 채팅) 리턴 -> Controller
+    }
+
+    @Transactional
+    public void deleteIfNoUsers(Long chatRoomId) {
+        if(userChatRoomService.findUsersByChatRoomId(chatRoomId).size()==0) {
+            deleteChatRoom(chatRoomId);
+        }
+    }
+
+    // 채팅방 삭제 메서드
+    public void deleteChatRoom(Long chatRoomId) {
+        chatRoomRepository.delete(findByChatRoomId(chatRoomId));
+    }
+
     // ChatRoomResponseDto로 전환하는 메서드
     public ChatRoomDto.ResponseDetail returnChatRoomResponse(ChatRoom chatRoom) {
         // 1. chatRoom -> ChatRoomDTO 리턴

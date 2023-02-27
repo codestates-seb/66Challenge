@@ -42,4 +42,21 @@ public class QUserChatRoomRepository {
                 .fetch();
     }
 
+    // 특정 채팅방 + 특정 유저로 조회
+    public UserChatRoom findByChatRoomIdAndUserId(Long chatRoomId, Long userId) {
+        return jpaQueryFactory
+                .selectFrom(userChatRoom)
+                .where(userChatRoom.chatRoom.chatRoomId.eq(chatRoomId),
+                        userChatRoom.user.userId.eq(userId))
+                .fetchOne();
+    }
+
+    // 특정 채팅방 + 특정 유저로 삭제
+    public Long delete(UserChatRoom userChatRoom) {
+        return jpaQueryFactory
+                .delete(QUserChatRoom.userChatRoom)
+                .where(QUserChatRoom.userChatRoom.eq(userChatRoom))
+                .execute();
+    }
+
 }
