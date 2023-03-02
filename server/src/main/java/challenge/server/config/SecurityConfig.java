@@ -1,6 +1,5 @@
 package challenge.server.config;
 
-import challenge.server.security.jwt.JwtAuthenticationToken;
 import challenge.server.security.oauth.handler.OAuth2MemberSuccessHandler;
 import challenge.server.security.oauth.service.CustomOAuth2UserService;
 import challenge.server.security.filter.JwtAuthenticationFilter;
@@ -16,29 +15,17 @@ import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.config.ldap.LdapBindAuthenticationManagerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.springframework.http.HttpMethod.*;
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @RequiredArgsConstructor
@@ -52,26 +39,27 @@ public class SecurityConfig { // https 적용
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http
-                .httpBasic().disable() //팝업창 뜨는 방식으로 뜨는 로그인 인증 기능 = 비활성화
-                .headers().frameOptions().sameOrigin()
-                .and()
-                .cors()
-                .and()
-                .csrf().disable()
-//                .cors().configurationSource(corsConfigurationSource())
-//                .and() // 아래의 corsCofiguartionSource 소환 APP간의 출처가 다른경우 http통신을 통한 리소스 접근이 제한됨
-                .formLogin().disable() //기본으로 제공하는 form 로그인 인증 기능 = 비활성화
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .formLogin().disable() // 기본으로 제공하는 form 로그인 인증 기능 -> 비활성화
+                .httpBasic().disable() // Headers에 id,pw를 담아 인증하는 방식 -> 비활성화
+                .headers().frameOptions().sameOrigin()
+                .and()
+                // 인증이 필요하지 않은 페이지에 대해서 @CrossOrigin, 인증이 필요한 페이지에 대해 Security Filter Chain으로 검증.
+//                .cors().configurationSource(corsConfigurationSource())
+//                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new UserAuthenticationEntryPoint()) //Oauth2에서는 인증에서 실패했을때 처리하는 로직
                 .accessDeniedHandler(new UserAccessDeniedHandler()) //인가 에러 핸들링
                 .and()
+                // customFilterConfigurer 내에서 JwtAuthenticationFilter와 VerificationFilter를 추가
                 .apply(new CustomFilterConfigurer())
                 .and()
                 // v1
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .authorizeRequests().anyRequest().permitAll() // jwt를 사용하지 않고 있는거네?
+                .and()
                 // v2
 //                .authorizeHttpRequests(authorize -> authorize
 //                        .antMatchers("/*/login").permitAll()
@@ -144,7 +132,7 @@ public class SecurityConfig { // https 적용
      *
      * CORS 관련 설정
      */
-    @Bean
+    @Bean // Source 객체
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:3000","https://66challenge.shop"
@@ -163,7 +151,6 @@ public class SecurityConfig { // https 적용
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
-//            builder.addFilter(new CustomFilter(authenticationManager));
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, userService);
             jwtAuthenticationFilter.setFilterProcessesUrl("/login");

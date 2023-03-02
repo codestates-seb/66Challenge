@@ -36,41 +36,27 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final UserService userService;
 
     @SneakyThrows
-    @Override
+    @Override // 로그인 인증을 시도한다.
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        // v1
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
-//        UserDto.LoginRequest loginDto = objectMapper.readValue(request.getInputStream(), UserDto.LoginRequest.class);
-
-        // 2023.2.1(수) 10h10 v2 = # attemptAuthentication : loginDto.getEmail=null, login.getPassword=null (controller에서는 createdUser.username = 세번째user 찍힘)
-//        LoginDto loginDto = LoginDto.builder()
-//                .username(request.getParameter("username"))
-//                .password(request.getParameter("password"))
-//                .build();
-
-        // 10h35 v3 = https://velog.io/@chullll/Spring-Security-JWT-필터-적용-과정
         ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
         LoginDto loginDto = null;
 
         try {
-            loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class); // 여전히 여기서 정보를 못 읽긴 하다.. 그런데 login 할 때 제외하고는 여기를 거칠 필요가 없는데, 왜 자꾸 여기로 오는 것일까?
+            loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class); // Todo 여전히 여기서 정보를 못 읽긴 하다.. 그런데 login 할 때 제외하고는 여기를 거칠 필요가 없는데, 왜 자꾸 여기로 오는 것일까?
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         log.info("# attemptAuthentication : loginDto.getEmail={}, login.getPassword={}",
                 loginDto.getUsername(), loginDto.getPassword());
-//        System.out.println(request.getParameter("username") + request.getParameter("password"));
-
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         return authenticationManager.authenticate(authenticationToken);
     }
 
-    @Override
+    @Override // 인증 성공 시 실행되는 메서드
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws ServletException, IOException {
-        User user = (User) authResult.getPrincipal();
+
+        User user = (User) authResult.getPrincipal(); // TODO why CustomUserDetails 타입이 아닌지, 이미 여기서 유저 DB 상에 존재하는 유저임을 확인함.
         System.out.println("email = " + user.getEmail() + ", username = " + user.getUsername() + ", password = " + user.getPassword()); // email = user1@naver.com, username = user1@naver.com, password = {bcrypt}$2a$10$EQKLOa1LlHu.jmw.yw3RR.gGKiLwAMcF2reXXu.2fmIk.SVqI6DUy
 
         String accessToken = delegateAccessToken(user);
@@ -80,6 +66,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
 
+        // 로그인 시 유저상태(quit, banned) 검증 & refreshToken 발급해 저장
         User findUser = userService.verifyLoginUser(user.getEmail(), user.getPassword(), refreshToken);
 
         Map<String, Object> body = new HashMap<>();

@@ -172,7 +172,7 @@ public class UserService {
     // 일반 로그인 시
     @Transactional
     public User verifyLoginUser(String email, String password, String refreshToken) {
-        // 로그인 시도하는 이메일 회원이 있는지 확인
+        // TOOD 유저 이메일로 유저를 찾기(JwtAuthenticationFilter에서 CustomUserDetails로 변경하기)
         User findUser = findLoginUserByEmail(email);
 
         // quit이나 banned 상태인 회원은 로그인 불가능 = active 상태인 회원만 로그인 가능
@@ -180,18 +180,14 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_USER);
         }
 
-        // 비밀번호가 맞아야만 로그인 가능
-//        if (!passwordEncoder.matches(password, findUser.getPassword())) {
-//            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_USER);
-//        }
         if (!password.equals(findUser.getPassword())) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_USER);
         }
 
         // 위 조건들을 모두 만족해서 로그인 대상 회원인 경우
-        findUser.saveRefreshToken(refreshToken);
-
-        return findVerifiedUser(findUser.getUserId());
+        findUser.saveRefreshToken(refreshToken); // dirty checking에 의해 저장됨.
+        return findUser;
+//        return findVerifiedUser(findUser.getUserId());
     }
 
     // OAuth2 로그인 시 -> 이 메서드 사용 안 하기로 함

@@ -18,10 +18,16 @@ public class ChatMessageController {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     // 1. 메시지 발행
-    @MessageMapping("/chatroom/message") // "publish/chatroom/message" 경로로 메시지 발행 시 매핑
+    @MessageMapping("/message") // "publish/message" 경로로 메시지 발행 시 매핑
     public void sendMessage(ChatMessageDto.Request messageDto) {
         ChatMessageDto.Response response = chatService.saveMessage(messageDto);
-        simpMessagingTemplate.convertAndSend("/subscribe/chatroom/" + messageDto.getChatRoomId(), response);
+        // TODO ENTER, LEAVE일 때 시스템 메시지 형식으로 응답하기
+        simpMessagingTemplate.convertAndSend("/subscribe/"+messageDto.getChatRoomId(), response);
+    }
+
+    @MessageMapping("/test")
+    public ResponseEntity test(ChatMessageDto.Request messageDto) {
+        return new ResponseEntity(messageDto,HttpStatus.OK);
     }
 
     // 2. 전체 채팅 조회
@@ -35,14 +41,6 @@ public class ChatMessageController {
         return new ResponseEntity(chatService.findAllChatsByChatRoomId(chatRoomId, lastChatMessageId, size), HttpStatus.OK);
     }
 
-//    // 3. 채팅방 목록 조회 - 전체
-//    @GetMapping("/chatrooms/all")
-//    public ResponseEntity getAllChatRooms() {
-//        // 1. chatService에서 lastChats를 찾기
-//        // 2. mapper로 전환하여 리턴
-//        return new ResponseEntity(chatService.findAllChatRooms(), HttpStatus.OK);
-//    }
-
     // 4. 채팅방 목록 조회 - 특정 유저가 참여 중인 채팅방
     @GetMapping("/chatrooms")
     public ResponseEntity getChatRoomsByUserId(@RequestParam Long userId) {
@@ -51,11 +49,5 @@ public class ChatMessageController {
         // Controller -> chatService -> QchatMessageRepo => chatRoomService => userService => 끝
         return new ResponseEntity(chatService.findChatRoomsByUserId(userId), HttpStatus.OK);
     }
-
-//    // 5. 특정 채팅방 내 채팅 검색 (전체 채팅방 내 채팅 검색 - 로그인한 유저의 방 범위로)
-//    @GetMapping("/chats/search")
-//    public ResponseEntity searchChats(@RequestParam("keyword") String keyword) {
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 
 }

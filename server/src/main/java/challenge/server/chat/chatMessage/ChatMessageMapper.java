@@ -24,14 +24,14 @@ public class ChatMessageMapper {
 
     public ChatMessageDto.Response chatMessageToDto(ChatMessage chatMessage) {
         return ChatMessageDto.Response.builder()
-                .chatRoomId(chatMessage.getChatRoom().getChatRoomId())
+                .chatMessageId(chatMessage.getChatMessageId())
                 .userId(chatMessage.getSender().getUserId())
                 .nickname(chatMessage.getSender().getUsername())
                 .profileImg(chatMessage.getSender().getProfileImageUrl())
-                .status(chatMessage.getStatus().toString()) // enum -> string
+//              .status(chatMessage.getStatus().toString()) // enum -> string
                 .content(chatMessage.getContent())
                 // TODO 시간 이쁘게 받기
-                .createdAt(chatMessage.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME))
+                .createdAt(chatMessage.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .build();
     }
 

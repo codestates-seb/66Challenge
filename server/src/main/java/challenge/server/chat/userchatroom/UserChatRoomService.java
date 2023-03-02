@@ -1,11 +1,9 @@
 package challenge.server.chat.userchatroom;
 
 import challenge.server.chat.chatroom.ChatRoom;
-import challenge.server.chat.chatroom.ChatRoomDto;
-import challenge.server.chat.chatroom.ChatRoomService;
-import challenge.server.user.dto.UserDto;
+import challenge.server.exception.BusinessLogicException;
+import challenge.server.exception.ExceptionCode;
 import challenge.server.user.entity.User;
-import challenge.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,10 +28,13 @@ public class UserChatRoomService {
 
     // 특정 채팅방 + 특정 유저로
     public UserChatRoom findByChatRoomIdAndUserId(Long chatRoomId, Long userId) {
-        return qUserChatRoomRepository.findByChatRoomIdAndUserId(chatRoomId, userId);
+        UserChatRoom userChatRoom = qUserChatRoomRepository.findByChatRoomIdAndUserId(chatRoomId, userId);
+        if(userChatRoom == null) throw new BusinessLogicException(ExceptionCode.USER_NOT_PARTICIPATE);
+        return userChatRoom;
     }
 
     // 특정 채팅방 + 특정 유저로 삭제
+    @Transactional
     public void delete(Long chatRoomId, Long userId) {
         qUserChatRoomRepository.delete(findByChatRoomIdAndUserId(chatRoomId, userId));
     }
