@@ -22,26 +22,18 @@ public class ChatMessageDto {
         private String status;
 
         private String content;
-
-        private String createdAt;
     }
 
     @Getter
     @Setter
     @Builder
     public static class Response {
-        private Long chatRoomId;
-
+        private Long chatMessageId; // 채팅방 전체 채팅 조회 시 헷갈림 방지
         private Long userId;
-
         private String nickname;
-
         private String profileImg;
-
-        private String status;
-
+//        private String status;
         private String content;
-
         private String createdAt;
     }
 }

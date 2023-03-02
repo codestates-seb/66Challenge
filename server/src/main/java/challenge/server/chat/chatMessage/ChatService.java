@@ -21,6 +21,7 @@ public class ChatService {
     private final ChatRoomService chatRoomService;
     private final UserChatRoomService userChatRoomService;
     private final QChatMessageRepository qChatMessageRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final ChatMessageMapper chatMessageMapper;
 
     @Transactional
@@ -28,28 +29,33 @@ public class ChatService {
 
         User sender = userService.findUser(message.getUserId());
         ChatRoom chatRoom = chatRoomService.findByChatRoomId(message.getChatRoomId());
+        changeContent(message, sender.getUsername());
 
-        String status = message.getStatus();
-        String nickname = sender.getUsername();
+//      ChatMessage chatMessage = chatMessageMapper.dtoToChatMessage(changeContent(message, sender.getUsername()));
+        ChatMessage chatMessage = ChatMessage.builder()
+                .chatRoom(chatRoom)
+                .sender(sender)
+                .status(ChatMessage.Status.valueOf(message.getStatus()))
+                .content(message.getContent())
+                .build();
 
-        switch (status) {
-            case "ENTER":
-                message.setContent(nickname+"님이 입장하셨습니다.");
-                break;
-            case "LEAVE":
-                message.setContent(nickname+"님이 나가셨습니다.");
-                break;
-            default:
-        }
+//      chatMessageMapper.dtoToChatMessage(changeContent(message, sender.getUsername()));
+        ChatMessage savedChatMessage = chatMessageRepository.save(chatMessage); // transactional이 붙어있어서 저장이 제대로 안된 상태라서 createdAt이 null이 되나?
 
-        ChatMessage chatMessage = chatMessageMapper.dtoToChatMessage(message);
-        chatMessage.changeSender(sender);
-        chatMessage.changeChatRoom(chatRoom);
-
-        ChatMessageDto.Response response = chatMessageMapper.chatMessageToDto(chatMessage);
-        response.setNickname(nickname);
+        ChatMessageDto.Response response = chatMessageMapper.chatMessageToDto(savedChatMessage);
 
         return response;
+    }
+
+    // message status에 따라 content를 변경하는 메서드
+    private ChatMessageDto.Request changeContent(ChatMessageDto.Request message, String nickname) {
+
+        String status = message.getStatus();
+
+        if (status.equals("ENTER")) message.setContent(nickname + "님이 입장하셨습니다.");
+        else if (status.equals("LEAVE")) message.setContent(nickname + "님이 나가셨습니다.");
+
+        return message;
     }
 
     // 2. 특정 채팅방의 모든 채팅을 리턴

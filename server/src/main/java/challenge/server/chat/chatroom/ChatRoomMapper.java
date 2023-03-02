@@ -4,6 +4,7 @@ import challenge.server.chat.chatMessage.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,8 @@ public class ChatRoomMapper {
                 .chatRoomId(chatMessage.getChatRoom().getChatRoomId())
                 .title(chatMessage.getChatRoom().getTitle())
                 .lastChat(chatMessage.getContent())
-                .lastChatAt(chatMessage.getCreatedAt())
+                .lastChatAt(chatMessage.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:MM")))
+
                 .build();
     }
 

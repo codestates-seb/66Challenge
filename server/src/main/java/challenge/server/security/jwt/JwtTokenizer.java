@@ -31,10 +31,13 @@ public class JwtTokenizer {
     @Value("${jwt.refresh-token-expiration-minutes}")
     private int refreshTokenExpirationMinutes;
 
+    // 1. secret key의 byte[]를 base64 형식의 문자열로 인코딩한다.
     public String encodeBase64SecretKey(String secretKey) {
+        // plain text를 secret key로 활용하는 것을 권장하지 않는다.
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
+    // 2. Access Token 생성 메서드
     public String generateAccessToken(Map<String, Object> claims, String subject, Date expiration, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
@@ -47,6 +50,7 @@ public class JwtTokenizer {
                 .compact();
     }
 
+    // 3. Refresh Token 생성 메서드
     public String generateRefreshToken(String subject, Date expiration, String based64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(based64EncodedSecretKey);
 
@@ -56,6 +60,13 @@ public class JwtTokenizer {
                 .setExpiration(expiration)
                 .signWith(key)
                 .compact();
+    }
+
+    // 4. JWT 서명에 사용할 secret key를 생성
+    private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
+        byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
+        Key key = Keys.hmacShaKeyFor(keyBytes); // HMAC알고리즘을 적용한 key객체를 생성한다.
+        return key;
     }
 
     public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
@@ -84,12 +95,6 @@ public class JwtTokenizer {
         Date expiration = calendar.getTime();
 
         return expiration;
-    }
-
-    private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
-        byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
-        Key key = Keys.hmacShaKeyFor(keyBytes);
-        return key;
     }
 
     // 토큰 정보 검증

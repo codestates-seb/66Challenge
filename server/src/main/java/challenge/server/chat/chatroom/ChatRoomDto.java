@@ -40,6 +40,6 @@ public class ChatRoomDto {
         private String title;
         private List<UserDto.ChatUser> participants;
         private String lastChat;
-        private LocalDateTime lastChatAt;
+        private String lastChatAt;
     }
 }
