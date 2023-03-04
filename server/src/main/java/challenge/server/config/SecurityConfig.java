@@ -138,7 +138,7 @@ public class SecurityConfig { // https 적용
         configuration.setAllowedOrigins(List.of("http://localhost:3000","https://66challenge.shop"
                 ,"http://66challenge.shop","https://66challenge-server.store","http://66challenge-server.store"));
         configuration.setExposedHeaders(Arrays.asList("Refresh", "Authorization","Access-Control-Allow-Origin"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
 
