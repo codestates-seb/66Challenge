@@ -43,23 +43,26 @@ public class SecurityConfig { // https 적용
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .formLogin().disable() // 기본으로 제공하는 form 로그인 인증 기능 -> 비활성화
                 .httpBasic().disable() // Headers에 id,pw를 담아 인증하는 방식 -> 비활성화
                 .headers().frameOptions().sameOrigin()
                 .and()
-                // 인증이 필요하지 않은 페이지에 대해서 @CrossOrigin, 인증이 필요한 페이지에 대해 Security Filter Chain으로 검증.
-//                .cors().configurationSource(corsConfigurationSource())
-//                .and()
                 .exceptionHandling()
+                // 인증이 필요하지 않은 페이지에 대해서 @CrossOrigin, 인증이 필요한 페이지에 대해 Security Filter Chain으로 검증.
                 .authenticationEntryPoint(new UserAuthenticationEntryPoint()) //Oauth2에서는 인증에서 실패했을때 처리하는 로직
                 .accessDeniedHandler(new UserAccessDeniedHandler()) //인가 에러 핸들링
                 .and()
                 // customFilterConfigurer 내에서 JwtAuthenticationFilter와 VerificationFilter를 추가
                 .apply(new CustomFilterConfigurer())
                 .and()
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll()
+                )
                 // v1
-                .authorizeRequests().anyRequest().permitAll() // jwt를 사용하지 않고 있는거네?
-                .and()
+//                .authorizeRequests().anyRequest().permitAll() // jwt를 사용하지 않고 있는거네?
+//                .and()
                 // v2
 //                .authorizeHttpRequests(authorize -> authorize
 //                        .antMatchers("/*/login").permitAll()
