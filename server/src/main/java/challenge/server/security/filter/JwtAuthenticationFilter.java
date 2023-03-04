@@ -51,8 +51,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 //        String str = new String(arr);
 //        log.info("str={}",str);
 
-//        LoginDto loginDto = objectMapper.readValue(inputStream, LoginDto.class); // Todo 여전히 여기서 정보를 못 읽긴 하다.. 그런데 login 할 때 제외하고는 여기를 거칠 필요가 없는데, 왜 자꾸 여기로 오는 것일까?
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("guest@mail.com", "guest123!");
+        LoginDto loginDto = objectMapper.readValue(request.getReader(), LoginDto.class); // Todo 여전히 여기서 정보를 못 읽긴 하다.. 그런데 login 할 때 제외하고는 여기를 거칠 필요가 없는데, 왜 자꾸 여기로 오는 것일까?
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
 //
 //        byte[] arr2 = inputStream.readAllBytes();
 //        String str2 = new String(arr2);
