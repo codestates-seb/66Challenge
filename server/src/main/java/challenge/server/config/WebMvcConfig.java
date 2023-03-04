@@ -11,7 +11,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods("HEAD","GET","PUT","POST","OPTIONS")
-                .allowedOrigins("https://66challenge.shop/","http://66challenge.shop/",
+                .allowedOrigins("https://66challenge.shop","http://66challenge.shop",
                         "https://66challenge-server.store/","http://66challenge-server.store/",
                         "http://localhost:3000", "http://13.209.179.193:8080", "http://localhost:8080",
                         "http://52.78.183.39:443","http://52.78.183.39:80")
