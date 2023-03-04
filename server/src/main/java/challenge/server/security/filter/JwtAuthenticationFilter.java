@@ -5,6 +5,7 @@ import challenge.server.user.dto.LoginDto;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.service.UserService;
+import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +40,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @SneakyThrows
     @Override // 로그인 인증을 시도한다.
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
+    public synchronized Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
-        LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class); // Todo 여전히 여기서 정보를 못 읽긴 하다.. 그런데 login 할 때 제외하고는 여기를 거칠 필요가 없는데, 왜 자꾸 여기로 오는 것일까?
+
+//        InputStream inputStream = request.getInputStream();
+//
+//        byte[] arr = inputStream.readAllBytes();
+//        String str = new String(arr);
+//        log.info("str={}",str);
+//
+//        byte[] arr2 = inputStream.readAllBytes();
+//        String str2 = new String(arr2);
+//        log.info("str={}",str2);
+
+        String json = IOUtils.toString(request.getInputStream());
+        LoginDto loginDto = objectMapper.readValue(json, LoginDto.class); // Todo 여전히 여기서 정보를 못 읽긴 하다.. 그런데 login 할 때 제외하고는 여기를 거칠 필요가 없는데, 왜 자꾸 여기로 오는 것일까?
         System.out.println("username: " + loginDto.getUsername() + " password: " + loginDto.getPassword());
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
