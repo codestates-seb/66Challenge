@@ -45,23 +45,24 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
 
-//        InputStream inputStream = request.getInputStream();
-//
-//        byte[] arr = inputStream.readAllBytes();
-//        String str = new String(arr);
-//        log.info("str={}",str);
+        InputStream inputStream = request.getInputStream();
+
+        byte[] arr = inputStream.readAllBytes();
+        String str = new String(arr);
+        log.info("str={}",str);
+
+        LoginDto loginDto = objectMapper.readValue(inputStream, LoginDto.class); // Todo 여전히 여기서 정보를 못 읽긴 하다.. 그런데 login 할 때 제외하고는 여기를 거칠 필요가 없는데, 왜 자꾸 여기로 오는 것일까?
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
 //
 //        byte[] arr2 = inputStream.readAllBytes();
 //        String str2 = new String(arr2);
 //        log.info("str={}",str2);
 
 //        String json = IOUtils.toString(request.getInputStream());
-//        LoginDto loginDto = objectMapper.readValue(json, LoginDto.class); // Todo 여전히 여기서 정보를 못 읽긴 하다.. 그런데 login 할 때 제외하고는 여기를 거칠 필요가 없는데, 왜 자꾸 여기로 오는 것일까?
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(request.getParameter("username"), request.getParameter("password"), Collections.emptyList());
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(request.getParameter("username"), request.getParameter("password"), Collections.emptyList());
 
 //        System.out.println("username: " + loginDto.getUsername() + " password: " + loginDto.getPassword());
-//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         return authenticationManager.authenticate(authenticationToken);
     }
 
