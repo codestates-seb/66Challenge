@@ -11,7 +11,8 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws/chat").setAllowedOrigins("chrome-extension://ggnhohnkfcpcanfekomdkjffnfcjnjam").withSockJS();
+        String[] arr = {"chrome-extension://ggnhohnkfcpcanfekomdkjffnfcjnjam","https://66challenge.shop"};
+        registry.addEndpoint("/ws/chat").setAllowedOrigins(arr).withSockJS();
     }
 
     @Override
