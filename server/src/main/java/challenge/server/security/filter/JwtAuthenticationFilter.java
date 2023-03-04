@@ -5,6 +5,7 @@ import challenge.server.user.dto.LoginDto;
 import challenge.server.user.dto.UserDto;
 import challenge.server.user.entity.User;
 import challenge.server.user.service.UserService;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override // 로그인 인증을 시도한다.
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
         LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class); // Todo 여전히 여기서 정보를 못 읽긴 하다.. 그런데 login 할 때 제외하고는 여기를 거칠 필요가 없는데, 왜 자꾸 여기로 오는 것일까?
         System.out.println("username: " + loginDto.getUsername() + " password: " + loginDto.getPassword());
 
