@@ -39,16 +39,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override // 로그인 인증을 시도한다.
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         ObjectMapper objectMapper = new ObjectMapper();
-        LoginDto loginDto = null;
+        LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class); // Todo 여전히 여기서 정보를 못 읽긴 하다.. 그런데 login 할 때 제외하고는 여기를 거칠 필요가 없는데, 왜 자꾸 여기로 오는 것일까?
+        System.out.println("username: " + loginDto.getUsername() + " password: " + loginDto.getPassword());
 
-        try {
-            loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class); // Todo 여전히 여기서 정보를 못 읽긴 하다.. 그런데 login 할 때 제외하고는 여기를 거칠 필요가 없는데, 왜 자꾸 여기로 오는 것일까?
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        log.info("# attemptAuthentication : loginDto.getEmail={}, login.getPassword={}",
-                loginDto.getUsername(), loginDto.getPassword());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         return authenticationManager.authenticate(authenticationToken);
     }
