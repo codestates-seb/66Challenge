@@ -1,5 +1,7 @@
 package challenge.server.firebase;
 
+import challenge.server.chat.chatroom.ChatRoomService;
+import challenge.server.chat.userchatroom.UserChatRoomService;
 import challenge.server.user.entity.User;
 import challenge.server.user.service.UserService;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -23,6 +25,8 @@ import java.util.List;
 public class FCMService {
     private final UserService userService;
     private final NoticeService noticeService;
+    private final ChatRoomService chatRoomService;
+    private final UserChatRoomService userChatRoomService;
 
     @Async  // 비동기로 동작하도록 설정
     public void sendNotification(User user, String title, String body, String link) {
@@ -69,20 +73,37 @@ public class FCMService {
     @Scheduled(cron = "${cron.cron2}")
     public void sendMotivationNotice() {
         List<User> users = userService.findAllByFcmTokenNotNull();
+        String title = "66Challenge를 시작해볼까요?";
+        String body = "더 나은 나를 만드는 66일, 지금 시작해보세요!";
+        String link = "https://66challenge.shop";
 
         for (User user : users) {
-            sendNotification(user,
-                    "66Challenge를 시작해볼까요?",
-                    "더 나은 나를 만드는 66일, 지금 시작해보세요!",
-                    "https://66challenge.shop");
+            sendNotification(user, title, body, link);
         }
     }
 
     @Async
     public void sendReviewNotice(User user, String body, Long habitId, String username) {
-        sendNotification(user,
-                username + "님이 후기를 등록했어요!",
-                body,
-                "https://66challenge.shop/habit/detail/" + habitId + "/review");
+        String title = username + "님이 후기를 등록했어요!";
+        String link = "https://66challenge.shop/habit/detail/" + habitId + "/review";
+
+        sendNotification(user, title, body, link);
+    }
+
+    @Async
+    public void sendChatNotice(Long chatRoomId, Long userId, String content) {
+        List<User> users = userChatRoomService.findUsersByChatRoomId(chatRoomId);
+        String username = userService.findUser(userId).getUsername();
+        Long habitId = chatRoomService.findChatRoom(chatRoomId).getHabitId();
+
+        String title = username + "님의 메세지가 도착했습니다.";
+        String body = content.substring(10) + "...";
+        String link = "https://66challenge.shopchat/rooms/" + chatRoomId
+                + " + https://66challenge.shopchat/chatrooms/" + habitId + "/chats";
+
+        // 채팅창에 들어가기 위해서 2개의 api 요청이 필요
+        for (User user : users) {
+            sendNotification(user, title, body, link);
+        }
     }
 }
