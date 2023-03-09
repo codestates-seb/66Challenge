@@ -28,14 +28,14 @@ public interface ChallengeMapper {
     List<ChallengeDto.Response> toDtos(List<Challenge> challenges);
 
     default Integer countUsedWildcards(Challenge challenge) {
-        if(challenge.getWildcards() == null) return 0;
+        if (challenge.getWildcards() == null) return 0;
         return challenge.getWildcards().size();
     }
 
     default List<Long> getAuthIds(Challenge challenge) {
-        if(challenge.getAuths() == null) return new ArrayList<>();
+        if (challenge.getAuths() == null) return new ArrayList<>();
         return challenge.getAuths().stream().map(
-                 auth -> auth.getAuthId()
-                ).collect(Collectors.toList());
+                auth -> auth.getAuthId()
+        ).collect(Collectors.toList());
     }
 }

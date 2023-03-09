@@ -56,7 +56,7 @@ public class Challenge extends BaseTimeEntity {
         this.lastAuthAt = localDateTime;
     }
 
-    public Boolean successCheck() {
+    public Boolean isSuccess() {
         return this.getCreatedAt().toLocalDate().plusDays(66).equals(this.lastAuthAt.toLocalDate());
     }
 
@@ -78,6 +78,10 @@ public class Challenge extends BaseTimeEntity {
         }
     }
 
+    public boolean hasWildcard() {
+        return this.wildcards.size() < 2;
+    }
+
     public enum Status {
         CHALLENGE(1),
         SUCCESS(2),
@@ -90,10 +94,4 @@ public class Challenge extends BaseTimeEntity {
             this.type = type;
         }
     }
-
-    // 2023.1.24(화) 6h UserServiceTest 관련 추가
-//    private LocalDateTime createdAt;
-//    public void setCreatedAt(LocalDateTime createdAt) {
-//        this.createdAt = createdAt;
-//    }
 }
