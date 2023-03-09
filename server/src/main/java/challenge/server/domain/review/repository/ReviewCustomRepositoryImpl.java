@@ -1,6 +1,5 @@
 package challenge.server.domain.review.repository;
 
-import challenge.server.domain.review.entity.QReview;
 import challenge.server.domain.review.entity.Review;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

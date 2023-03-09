@@ -1,7 +1,6 @@
 package challenge.server.domain.auth.repository;
 
 import challenge.server.domain.auth.entity.Auth;
-import challenge.server.domain.auth.entity.QAuth;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
