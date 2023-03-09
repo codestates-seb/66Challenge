@@ -1,6 +1,6 @@
 package challenge.server.security.handler;
 
-import challenge.server.response.ErrorResponse;
+import challenge.server.common.exception.ErrorResponse;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

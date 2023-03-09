@@ -1,7 +1,7 @@
 package challenge.server.file.service;
 
-import challenge.server.exception.BusinessLogicException;
-import challenge.server.exception.ExceptionCode;
+import challenge.server.common.exception.BusinessLogicException;
+import challenge.server.common.exception.ExceptionCode;
 import challenge.server.file.storage.AmazonS3ResourceStorage;
 import challenge.server.file.util.MultipartUtil;
 import com.amazonaws.SdkBaseException;
