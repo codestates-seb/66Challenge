@@ -1,6 +1,7 @@
 package challenge.server.domain.habit.repository;
 
 import challenge.server.domain.habit.entity.Habit;
+import challenge.server.domain.habit.entity.QHabit;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static challenge.server.habit.entity.QHabit.habit;
+import static challenge.server.domain.habit.entity.QHabit.habit;
+
 
 @Repository
 @RequiredArgsConstructor

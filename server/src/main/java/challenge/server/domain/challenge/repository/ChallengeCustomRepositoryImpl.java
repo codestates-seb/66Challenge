@@ -14,10 +14,10 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static challenge.server.auth.entity.QAuth.auth;
+import static challenge.server.domain.auth.entity.QAuth.auth;
 import static challenge.server.domain.challenge.entity.Challenge.Status.CHALLENGE;
-import static challenge.server.challenge.entity.QChallenge.challenge;
-import static challenge.server.habit.entity.QHabit.habit;
+import static challenge.server.domain.challenge.entity.QChallenge.challenge;
+import static challenge.server.domain.habit.entity.QHabit.habit;
 
 @Repository
 @RequiredArgsConstructor

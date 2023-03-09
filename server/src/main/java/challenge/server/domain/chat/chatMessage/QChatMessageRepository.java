@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static challenge.server.chat.chatMessage.QChatMessage.chatMessage;
+import static challenge.server.domain.chat.chatMessage.QChatMessage.chatMessage;
+
 
 @Repository
 @RequiredArgsConstructor

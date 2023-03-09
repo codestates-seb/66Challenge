@@ -1,7 +1,6 @@
 package challenge.server.domain.chat.userchatroom;
 
 import challenge.server.domain.chat.chatroom.ChatRoom;
-import challenge.server.chat.userchatroom.QUserChatRoom;
 import challenge.server.domain.user.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +9,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static challenge.server.chat.chatroom.QChatRoom.chatRoom;
-import static challenge.server.chat.userchatroom.QUserChatRoom.userChatRoom;
-import static challenge.server.user.entity.QUser.user;
+import static challenge.server.domain.chat.chatroom.QChatRoom.chatRoom;
+import static challenge.server.domain.chat.userchatroom.QUserChatRoom.userChatRoom;
+import static challenge.server.domain.user.entity.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
