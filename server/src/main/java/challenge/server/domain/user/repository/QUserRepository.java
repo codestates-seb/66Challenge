@@ -1,5 +1,6 @@
 package challenge.server.domain.user.repository;
 
+import challenge.server.domain.user.entity.QUser;
 import challenge.server.domain.user.entity.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
