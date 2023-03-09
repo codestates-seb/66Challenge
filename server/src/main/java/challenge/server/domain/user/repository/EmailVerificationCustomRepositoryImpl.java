@@ -1,6 +1,7 @@
 package challenge.server.domain.user.repository;
 
 import challenge.server.domain.user.entity.EmailVerification;
+import challenge.server.domain.user.entity.QEmailVerification;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static challenge.server.user.entity.QEmailVerification.emailVerification;
+import static challenge.server.domain.user.entity.QEmailVerification.emailVerification;
 
 
 @Repository

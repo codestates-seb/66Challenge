@@ -29,13 +29,6 @@ public class ChallengeController {
     private final FileUploadService fileUploadService;
     private final AuthMapper authMapper;
 
-//    @GetMapping("/{challenge-id}")
-//    public ResponseEntity findChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
-//        Challenge challenge = challengeService.findChallenge(challengeId);
-//
-//        return new ResponseEntity<>(mapper.toDto(challenge), HttpStatus.OK);
-//    }
-
     @GetMapping("/users/{user-id}/challenge")
     public ResponseEntity findAllByChallenge(@PathVariable("user-id") @Positive Long userId,
                                              @RequestParam(required = false) @Positive Long lastId,
@@ -54,38 +47,6 @@ public class ChallengeController {
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
-//    @GetMapping
-//    public ResponseEntity findAll(
-//                                  @RequestParam @Positive int size) {
-//        List<Challenge> findAll = challengeService.findAll(size);
-//
-//        return new ResponseEntity<>(mapper.toDtos(findAll), HttpStatus.OK);
-//    }
-
-//    @GetMapping("/challenge")
-//    public ResponseEntity findAllByChallenge(
-//                                          @RequestParam @Positive int size) {
-//        List<Challenge> findAllByChallenge = challengeService.findAllStatus(CHALLENGE, size);
-//
-//        return new ResponseEntity<>(mapper.toDtos(findAllByChallenge), HttpStatus.OK);
-//    }
-
-//    @GetMapping("/success")
-//    public ResponseEntity findAllBySuccess(
-//                                        @RequestParam @Positive int size) {
-//        List<Challenge> findAllBySuccess = challengeService.findAllStatus(SUCCESS, size);
-//
-//        return new ResponseEntity<>(mapper.toDtos(findAllBySuccess), HttpStatus.OK);
-//    }
-
-//    @GetMapping("/fail")
-//    public ResponseEntity findAllByFail(
-//                                          @RequestParam @Positive int size) {
-//        List<Challenge> findAllByFail = challengeService.findAllStatus(FAIL, size);
-//
-//        return new ResponseEntity<>(mapper.toDtos(findAllByFail), HttpStatus.OK);
-//    }
-
     @PostMapping("/{chaellenge-id}/auths")
     public ResponseEntity createAuth(@PathVariable("chaellenge-id") @Positive Long challengeId,
                                      @RequestPart("file") MultipartFile multipartFile,
@@ -97,29 +58,4 @@ public class ChallengeController {
 
         return new ResponseEntity<>(authService.createAuth(auth, challengeId), HttpStatus.CREATED);
     }
-
-//    @GetMapping("/{challenge-id}/auths/{auth-id}")
-//    public ResponseEntity findAuth(@PathVariable("auth-id") @Positive Long authId) {
-//        Auth auth = authService.findAuth(authId);
-//
-//        return new ResponseEntity<>(authMapper.toDto(auth), HttpStatus.OK);
-//    }
-
-//    @GetMapping("/{chaellenge-id}/auths")
-//    public ResponseEntity findAuthsByChallenge(@PathVariable("chaellenge-id") @Positive Long challengeId,
-//                                               
-//                                               @RequestParam @Positive int size) {
-//        List<Auth> findAuths = authService.findAllByChallenge(challengeId, size); // 쿼리문 비교1
-//        challengeService.findAuthsByChallengeId(challengeId);   // 쿼리문 비교2
-//
-//        return new ResponseEntity<>(authMapper.toDtos(findAuths), HttpStatus.CREATED);
-//    }
-
-
-//    @GetMapping("/{challenge-id}/wildcards")
-//    public ResponseEntity findWildcardsByChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
-//        List<Wildcard> wildcards = wildcardService.findAllByChallenge(challengeId);
-//
-//        return new ResponseEntity<>(mapper.toWildcardDtos(wildcards), HttpStatus.OK);
-//    }
 }

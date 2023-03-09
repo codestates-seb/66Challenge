@@ -1,5 +1,6 @@
 package challenge.server.domain.report.repository;
 
+import challenge.server.domain.report.entity.QReport;
 import challenge.server.domain.report.entity.Report;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static challenge.server.report.entity.QReport.report;
+import static challenge.server.domain.report.entity.QReport.report;
 
 @Repository
 @RequiredArgsConstructor

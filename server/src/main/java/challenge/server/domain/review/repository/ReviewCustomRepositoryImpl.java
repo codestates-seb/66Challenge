@@ -1,5 +1,6 @@
 package challenge.server.domain.review.repository;
 
+import challenge.server.domain.review.entity.QReview;
 import challenge.server.domain.review.entity.Review;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -7,8 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static challenge.server.habit.entity.QHabit.habit;
-import static challenge.server.review.entity.QReview.review;
+import static challenge.server.domain.habit.entity.QHabit.habit;
+import static challenge.server.domain.review.entity.QReview.review;
 
 @Repository
 public class ReviewCustomRepositoryImpl implements ReviewCustomRepository {

@@ -25,6 +25,12 @@ import java.util.Optional;
 
 import static challenge.server.domain.challenge.entity.Challenge.Status.*;
 
+/**
+ * 작성자: 김찬빈
+ * 작성일자: 2023-01-23
+ *
+ *
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,7 +43,6 @@ public class ChallengeService {
             = DateTimeFormatter.ofPattern("mm:ss:SSS");
     private final WildcardService wildcardService;
     private final ChallengeMapper mapper;
-    private final UserRepository userRepository;
 
     @Transactional
     public Challenge createChallenge(Long userId, Long habitId, Challenge challenge) {

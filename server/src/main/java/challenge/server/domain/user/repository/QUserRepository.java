@@ -1,5 +1,6 @@
 package challenge.server.domain.user.repository;
 
+import challenge.server.domain.user.entity.QUser;
 import challenge.server.domain.user.entity.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -9,7 +10,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static challenge.server.user.entity.QUser.user;
+import static challenge.server.domain.user.entity.QUser.user;
+
 
 @Repository
 @RequiredArgsConstructor

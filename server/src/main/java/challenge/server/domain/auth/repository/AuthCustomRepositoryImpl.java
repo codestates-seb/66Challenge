@@ -1,6 +1,7 @@
 package challenge.server.domain.auth.repository;
 
 import challenge.server.domain.auth.entity.Auth;
+import challenge.server.domain.auth.entity.QAuth;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static challenge.server.auth.entity.QAuth.auth;
+import static challenge.server.domain.auth.entity.QAuth.auth;
+
 
 @Repository
 @RequiredArgsConstructor

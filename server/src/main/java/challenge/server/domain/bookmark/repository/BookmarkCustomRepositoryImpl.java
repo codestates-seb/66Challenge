@@ -8,8 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static challenge.server.bookmark.entity.QBookmark.bookmark;
-import static challenge.server.habit.entity.QHabit.habit;
+import static challenge.server.domain.bookmark.entity.QBookmark.bookmark;
+import static challenge.server.domain.habit.entity.QHabit.habit;
+
 
 @Repository
 @RequiredArgsConstructor
