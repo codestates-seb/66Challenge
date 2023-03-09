@@ -1,13 +1,11 @@
 package challenge.server.security.filter;
 
-import challenge.server.exception.BusinessLogicException;
-import challenge.server.exception.ExceptionCode;
-import challenge.server.security.jwt.JwtAuthenticationToken;
+import challenge.server.common.exception.BusinessLogicException;
+import challenge.server.common.exception.ExceptionCode;
 import challenge.server.security.jwt.JwtTokenizer;
 import challenge.server.security.utils.CustomAuthorityUtils;
-import challenge.server.user.entity.LogoutList;
-import challenge.server.user.service.LogoutListService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import challenge.server.domain.user.entity.LogoutList;
+import challenge.server.domain.user.service.LogoutListService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -16,9 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -120,7 +116,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private String delegateAccessToken(challenge.server.user.entity.User user) {
+    private String delegateAccessToken(challenge.server.domain.user.entity.User user) {
         Map<String, Object> claims = new HashMap<>();
 //        claims.put("userId", user.getUserId());
         claims.put("username", user.getUsername());
@@ -133,7 +129,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         return accessToken;
     }
 
-    private String delegateRefreshToken(challenge.server.user.entity.User user) {
+    private String delegateRefreshToken(challenge.server.domain.user.entity.User user) {
         String subject = user.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration((jwtTokenizer.getRefreshTokenExpirationMinutes()));
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
@@ -141,7 +137,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         return refreshToken;
     }
 
-    public String reissueRefreshToken(challenge.server.user.entity.User user, HttpServletResponse response) throws ServletException, IOException {
+    public String reissueRefreshToken(challenge.server.domain.user.entity.User user, HttpServletResponse response) throws ServletException, IOException {
         String refreshToken = delegateRefreshToken(user);
 
         response.setHeader("Refresh", refreshToken);
@@ -157,7 +153,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         return refreshToken;
     }
 
-    public String reissueAccessToken(challenge.server.user.entity.User user, HttpServletResponse response) {
+    public String reissueAccessToken(challenge.server.domain.user.entity.User user, HttpServletResponse response) {
         String accessToken = delegateAccessToken(user);
         response.setHeader("Authorization", "Bearer " + accessToken);
 

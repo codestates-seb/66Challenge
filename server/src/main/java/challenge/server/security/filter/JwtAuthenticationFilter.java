@@ -1,13 +1,10 @@
 package challenge.server.security.filter;
 
 import challenge.server.security.jwt.JwtTokenizer;
-import challenge.server.user.dto.LoginDto;
-import challenge.server.user.dto.UserDto;
-import challenge.server.user.entity.User;
-import challenge.server.user.service.UserService;
-import com.amazonaws.util.IOUtils;
+import challenge.server.domain.user.dto.LoginDto;
+import challenge.server.domain.user.entity.User;
+import challenge.server.domain.user.service.UserService;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -18,15 +15,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

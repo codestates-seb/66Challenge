@@ -1,10 +1,10 @@
 package challenge.server.security.userdetails;
 
-import challenge.server.exception.BusinessLogicException;
-import challenge.server.exception.ExceptionCode;
+import challenge.server.common.exception.BusinessLogicException;
+import challenge.server.common.exception.ExceptionCode;
 import challenge.server.security.utils.CustomAuthorityUtils;
-import challenge.server.user.entity.User;
-import challenge.server.user.repository.UserRepository;
+import challenge.server.domain.user.entity.User;
+import challenge.server.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

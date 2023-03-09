@@ -1,6 +1,6 @@
 package challenge.server.security.utils;
 
-import challenge.server.response.ErrorResponse;
+import challenge.server.common.exception.ErrorResponse;
 import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
