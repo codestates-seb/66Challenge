@@ -39,7 +39,7 @@ public class AuthService {
 
         // 챌린지 성공 여부 확인
         // TODO: 인증성 발급 방법 논의 필요
-        if (challenge.successCheck()) {
+        if (challenge.isSuccess()) {
             challenge.changeStatus(SUCCESS);
         }
         Auth saveAuth = authRepository.save(auth);

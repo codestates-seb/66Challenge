@@ -25,12 +25,6 @@ import java.util.Optional;
 
 import static challenge.server.domain.challenge.entity.Challenge.Status.*;
 
-/**
- * 작성자: 김찬빈
- * 작성일자: 2023-01-23
- *
- *
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -75,35 +69,28 @@ public class ChallengeService {
 
     // 특정 챌린지의 모든 인증 게시글 조회
     public List<Auth> findAuthsByChallengeId(Long challengeId) {
-        // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
         return challengeRepository.findAuthsByChallengeId(challengeId);
     }
 
     // 특정 회원의 모든 챌린지 조회
     public List<Challenge> findAllByUser(Long lastChallengeId, Long userId, int size) {
-        // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
         return challengeRepository.findAllByUserUserId(lastChallengeId, userId, size);
     }
 
     // 특정 상태의 모든 챌린지 조회
     public List<Challenge> findAllStatus(Long lastChallengeId, Challenge.Status status, int size) {
-        // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
         return challengeRepository.findAllByStatus(lastChallengeId, status, size);
     }
 
-    public Challenge todayAuthCheck(Long challengeId) {
+    public void todayAuthCheck(Long challengeId) {
         Challenge challenge = findChallenge(challengeId);
         challenge.todayAuthCheck(LocalDateTime.now());
-
-        return challenge;
     }
 
     // 특정 회원의 특정 상태의 모든 챌린지 조회
     public List<ChallengeDto.Response> findAllByUserAndStatus(Long lastChallengeId, Long userId, Challenge.Status status, int size) {
-        // TODO: QueryDSL 페이지네이션 구현 방식 결정 후 수정
         List<Challenge> challenges = challengeRepository.findAllByUserUserIdAndStatus(lastChallengeId, userId, status, size);
-        List<ChallengeDto.Response> responses = mapper.toDtos(challenges);
-        return responses;
+        return mapper.toDtos(challenges);
     }
 
     public List<Challenge> findAll(Long lastChallengeId, int size) {
@@ -120,29 +107,24 @@ public class ChallengeService {
      */
     @Transactional
     @Scheduled(cron = "${cron.cron1}")
-    public List<Challenge> notAuthTodayCheck() {
+    public List<Challenge> manageUnauthedChallengesOnTheDay() {
         log.info("로직 실행시간 - {}", formatter.format(LocalDateTime.now()));
         LocalDateTime startDatetime = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(0, 0, 0));     // 익일 00:00:00
         LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(23, 59, 59));    // 익일 23:59:59
 
-        List<Challenge> challenges = challengeRepository.
+        List<Challenge> unauthedChallenges = challengeRepository.
                 findAllByNotAuthToday(CHALLENGE, startDatetime, endDatetime);
 
-        challenges.forEach(challenge ->
-        {
-            int wildcardCount = challenge.getWildcards() == null ? 0 : challenge.getWildcards().size();
-
-            if (wildcardCount >= 2) {
-                challenge.changeStatus(FAIL);
-            } else {
+        for (Challenge challenge : unauthedChallenges) {
+            if (challenge.hasWildcard()) {
                 wildcardService.useWildcard(challenge);
                 challenge.updatePostedAt(LocalDateTime.now().minusDays(1));
-                if (challenge.getCreatedAt() != null) { // createdAt 추가해줘야함
-                    if (challenge.successCheck()) challenge.changeStatus(SUCCESS);
-                }
+                if (challenge.isSuccess()) challenge.changeStatus(SUCCESS);
+            } else {
+                challenge.changeStatus(FAIL);
             }
-        });
-        return challenges;
+        }
+        return unauthedChallenges;
     }
 
     public Challenge findVerifiedChallenge(Long challengeId) {
@@ -151,12 +133,12 @@ public class ChallengeService {
     }
 
     public Challenge findByUserIdAndHabitId(Long userId, Long habitId) {
-        return challengeRepository.findByUserUserIdAndHabitHabitId(userId,habitId)
+        return challengeRepository.findByUserUserIdAndHabitHabitId(userId, habitId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
     }
 
     public void verifyExistsChallenge(Long userId, Long habitId) {
         Optional<Challenge> challenge = challengeRepository.findByUserUserIdAndHabitHabitId(userId, habitId);
-        if(challenge.isPresent()) throw new BusinessLogicException(ExceptionCode.CHALLENEGE_EXISTS);
+        if (challenge.isPresent()) throw new BusinessLogicException(ExceptionCode.CHALLENEGE_EXISTS);
     }
 }
